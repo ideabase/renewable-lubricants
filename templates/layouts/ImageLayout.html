@@ -1,0 +1,4 @@
+
+    {% for image in entry.featureImage.all() %}
+        <img data-scr="{{ image.url() }}" </img>
+    {% endfor %}
