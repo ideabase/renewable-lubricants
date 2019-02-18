@@ -1,14 +1,10 @@
-{% block subcontent %}
+<h4>Contact Information</h4>
 
-    <h4>Contact</h4>
+{{ entry.address }}
+{{ entry.email }}
+{{ entry.phoneNumber }}
+{{ entry.copyrightText }}
 
-    {{ entry.address }}
-    {{ entry.email }}
-    {{ entry.phoneNumber }}
-    {{ entry.copyrightText }}
+<h4>Working Hours</h4>
 
-    <h4>Hours</h4>
-
-    {{ entry.hours }}
-
-{% endblock %}
+{{ entry.hours }}

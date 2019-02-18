@@ -1,4 +1,5 @@
 
-    {% for image in entry.featureImage.all() %}
-        <img data-scr="{{ image.url() }}" </img>
-    {% endfor %}
+{% if entry.featureImage | length %}
+    {% set featureImg = entry.featureImage.one().getUrl() %}
+    <img src="{{ featureImg }}"/>
+{% endif %}

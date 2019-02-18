@@ -1,18 +1,8 @@
 <h1>About Us</h1>
 
-<!-- Displays feature image of webpage. -->
-
-{#    {% include 'layouts/ImageLayout.html'%} #}
-
-
+{% include 'layouts/ImageLayout.html'%} <!-- Displays feature image of webpage. -->
 
 {{ entry.subHeadline }}
-
 {{ entry.body }}
 
-
-
-<!-- Displays footer layout and footer information. -->
-{% block subcontent %}
-    {% include 'layouts/footer.html'%}
-{% endblock %}
+{% include 'layouts/footer.html'%} <!-- Displays footer layout and footer information. -->
