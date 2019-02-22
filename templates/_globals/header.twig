@@ -1,3 +1,14 @@
 <header>
+  {# header image #}
+  <img src="{{header.logo.one().getUrl()}}"/>
 
+  {# <nav role="navigation">
+			<ul class="group">
+				{% for block in header.navigationItems.all() %}
+					<li{% if block.itemUrl == craft.app.request.segments|first %} class="active"{% endif %}>
+						<a href="{{ siteUrl ~ block.itemUrl }}">{{ block.itemTitle }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</nav> #}
 </header>

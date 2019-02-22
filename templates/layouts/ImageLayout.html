@@ -1,5 +1,0 @@
-
-{% if entry.featureImage | length %}
-    {% set featureImg = entry.featureImage.one().getUrl() %}
-    <img src="{{ featureImg }}"/>
-{% endif %}
