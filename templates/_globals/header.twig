@@ -2,6 +2,13 @@
   {# header image #}
   <img src="{{header.logo.one().getUrl()}}"/>
 
+  {# The form tag below is the code that displays the seach bar and button #}
+  <form action="{{ url('search/results') }}">
+      <input type="search" placeholder="Search" name="q">
+      <input class="search-button" type="submit" value="Go">
+  </form>
+
+  {# The below code will display the navigation of the website once the fields in craft have been made. #}
   {# <nav role="navigation">
 			<ul class="group">
 				{% for block in header.navigationItems.all() %}
