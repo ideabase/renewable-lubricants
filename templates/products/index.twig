@@ -1,0 +1,62 @@
+{% extends "_layout" %}
+
+{% block content %}
+  <p>{{entry.body}}</p>
+
+<hr>
+<div id="featured-products">
+    <h3> Featured Products </h3>
+  {% for entry in craft.entries.section('products') %}
+    <a href="{{entry.url}}">{{entry.title}}
+      {% for image in entry.productImage.limit(1) %}
+        <img src="{{image.url}}">
+      {% endfor %}
+    </a>
+  {% endfor %}
+</div>
+
+<hr>
+
+<div>
+  <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of  is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </p>
+  <button href="/">View All Products</button>
+</div>
+<hr>
+
+<div>
+<h3> FIND YOUR PERFECT PRODUCT </h3>
+  <ul>
+    <li>Choose Your Location
+      <select>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+      </select>
+    </li>
+
+
+    <li>Choose Your Application
+      <select>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+      </select>
+    </li>
+
+    <li>Choose Your Iso-Grade
+      <select>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+      </select>
+    </li>
+  </ul>
+
+  <button>Search</button>
+
+
+</div>
+{% endblock %}
