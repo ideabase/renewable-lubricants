@@ -7,11 +7,13 @@
 <div id="featured-products">
     <h3> Featured Products </h3>
   {% for entry in craft.entries.section('products') %}
+  <div>
     <a href="{{entry.url}}">{{entry.title}}
       {% for image in entry.productImage.limit(1) %}
         <img src="{{image.url}}">
       {% endfor %}
     </a>
+  </div>
   {% endfor %}
 </div>
 
