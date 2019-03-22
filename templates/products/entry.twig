@@ -6,12 +6,9 @@
 
 <h1>Go with the best. Protect the environment</h1>
 
+  <img src="{{ entry.productImage.one().url }}">
 
-  {% for image in entry.productImage.limit(1) %}
-    <img src="{{image.url}}">
-  {% endfor %}
-
-<p>{{entry.body}}</p>
+<p>{{ entry.body }}</p>
 
 <hr>
 
@@ -19,12 +16,12 @@
   <h3>Available Grades / Sizes</h3>
   <ul>
     <li>8 oz.
-      {% for file in entry.files %}
+      {% for file in entry.files.all() %}
         <a href="{{file.url}}">SDS Sheet (PDF)</a>
       {% endfor %}
     </li>
     <li>16 oz.
-      {% for file in entry.files %}
+      {% for file in entry.files.all() %}
         <a href="{{file.url}}">SDS Sheet (PDF)</a>
       {% endfor %}
     </li>

@@ -1,17 +1,15 @@
 {% extends "_layout" %}
 
 {% block content %}
-  <p>{{entry.body}}</p>
+  <p>{{ entry.body }}</p>
 
 <hr>
 <div id="featured-products">
     <h3> Featured Products </h3>
-  {% for entry in craft.entries.section('products') %}
+  {% for entry in craft.entries.section('products').all() %}
   <div>
-    <a href="{{entry.url}}">{{entry.title}}
-      {% for image in entry.productImage.limit(1) %}
-        <img src="{{image.url}}">
-      {% endfor %}
+    <a href="{{ entry.url }}">{{ entry.title }}
+      <img src="{{ entry.productImage.one().url }}">
     </a>
   </div>
   {% endfor %}

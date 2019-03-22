@@ -34,7 +34,7 @@ return [
   'dev' => [
     // Base site URL
     // e.g. http://ideabase.web
-    'siteUrl' => 'renew.web',
+    'siteUrl' => 'http://renew.web',
 
     // Dev Mode (see https://craftcms.com/support/dev-mode)
     'devMode' => true,
@@ -43,7 +43,7 @@ return [
   // Staging environment settings
   'staging' => [
     // Base site URL
-    'siteUrl' => null,
+    'siteUrl' => 'http://renewablelubricants.ideabase.cci.kent.edu/',
   ],
 
   // Production environment settings
