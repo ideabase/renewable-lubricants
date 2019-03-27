@@ -10,7 +10,9 @@
 
     {% for entry in craft.entries.section('news').all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
-            <img src="{{ entry.featureImage.one().url }}" height="50px" width="50px"> {# Remove the height and width attributes to style the images with css. #}
+            <a href="{{ entry.url }}">
+                <img src="{{ entry.featureImage.one().url }}" height="50px" width="50px"> {# Remove the height and width attributes to style the images with css. #}
+            </a>
         {% endif %}
         {{ entry.title }}
         {{ entry.imageDescription }}
@@ -26,7 +28,9 @@
 
     {% for entry in craft.entries.section('blogs').all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
-            <img src="{{ entry.featureImage.one().url }}" height="50px" width="50px"> {# Remove the height and width attributes to style the images with css. #}
+            <a href="{{ entry.url }}">
+                <img src="{{ entry.featureImage.one().url }}" height="50px" width="50px"> {# Remove the height and width attributes to style the images with css. #}
+            </a>
         {% endif %}
         {{ entry.title }}
         {{ entry.imageDescription }}
@@ -35,5 +39,5 @@
     {% endfor %}
 
     <input type="button" name="" value="View All Blog Posts">
-    
+
 {% endblock %}
