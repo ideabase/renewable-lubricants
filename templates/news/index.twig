@@ -3,5 +3,37 @@
 {% extends "_layout" %}
 
 {% block content %}
-  {{ entry.body }}
+
+    {# News article section of news landing page #}
+    <h2>Latest News</h2>
+    <p>Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
+
+    {% for entry in craft.entries.section('news').all() %}
+        {% if entry.featureImage | length %} {# Checking for not null fields. #}
+            <img src="{{ entry.featureImage.one().url }}" height="50px" width="50px"> {# Remove the height and width attributes to style the images with css. #}
+        {% endif %}
+        {{ entry.title }}
+        {{ entry.imageDescription }}
+        {{ entry.body }}
+        <hr>
+    {% endfor %}
+
+    <input type="button" value="View All News"></input>
+
+    {# Blog article section of news landing page #}
+    <h2>Blog Posts</h2>
+    <p>Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
+
+    {% for entry in craft.entries.section('blogs').all() %}
+        {% if entry.featureImage | length %} {# Checking for not null fields. #}
+            <img src="{{ entry.featureImage.one().url }}" height="50px" width="50px"> {# Remove the height and width attributes to style the images with css. #}
+        {% endif %}
+        {{ entry.title }}
+        {{ entry.imageDescription }}
+        {{ entry.body }}
+        <hr>
+    {% endfor %}
+
+    <input type="button" name="" value="View All Blog Posts">
+    
 {% endblock %}
