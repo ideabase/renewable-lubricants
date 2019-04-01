@@ -3,15 +3,46 @@
 {% extends "_layout" %}
 
 {% block content %}
-  {{ entry.body }}
+  <div class="contact-form">
+    {% macro errorList(errors) %}
+      {% if errors %}
+        <ul class="errors">
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endmacro %}
 
-  <form action="/"> <!-- fix later -->
-    Name: <input type="text" name="username"><br>
-    Email: <input type="text" name="email"><br>
-    Title: <input type="text" name="title"><br>
-    Address: <input type="text" name="title"><br>
-    Phone: <input type="number" name="phone"><br>
-    <input type="submit" value="Submit">
-  </form>
+    {% from _self import errorList %}
 
+    <form method="post" action="" accept-charset="UTF-8" name="contact-form">
+      {{ csrfInput() }}
+      <div class="contact-form__column">
+        <input type="hidden" name="action" value="contact-form/send">
+        {{ redirectInput('/success') }}
+
+        <input placeholder="Name" id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}" required>
+        {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
+
+        <input placeholder="Email" id="from-email" type="email" name="fromEmail" value="{{ message.fromEmail ?? '' }}" required>
+        {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
+      </div>
+      <div class="contact-form__column">
+        <input placeholder="Company Name" id="subject" type="text" name="subject" value="{{ message.subject ?? '' }}">
+        {{ message is defined and message ? errorList(message.getErrors('subject')) }}
+
+        <input placeholder="Phone" id="phone" type="text" name="message[Phone]" value="{{ message.phone ?? '' }}">
+        {{ message is defined and message ? errorList(message.getErrors('phone')) }}
+      </div>
+
+      <textarea placeholder="Message" rows="10" cols="40" id="message" name="message[body]" required>{{ message.message ?? '' }}</textarea>
+      {{ message is defined and message ? errorList(message.getErrors('message')) }}
+
+      <p>This contact form uses reCAPTCHA, which is subject to Google's <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://policies.google.com/terms">terms and conditions</a></p>
+
+      {{ craft.contactFormExtensions.recaptcha | raw }} {# TODO #}
+      <input type="submit" value="Submit">
+    </form>
+  </div>
 {% endblock %}
