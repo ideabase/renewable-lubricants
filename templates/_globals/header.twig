@@ -1,11 +1,20 @@
 <header>
   {# header image #}
-  <img src="{{header.logo.one().getUrl()}}"/>
+  <a href="{{ siteUrl }}"><img src="{{header.logo.one().getUrl()}}"/></a>
+
+  {# top nav #}
+  <ul class="nav">
+    <li class="nav-item"><a href="/products">Products</a></li>
+    <li class="nav-item"><a href="/distributors">Distributors</a></li>
+    <li class="nav-item"><a href="/news">News & Blog</a></li>
+    <li class="nav-item"><a href="/about">About</a></li>
+    <li class="nav-item"><a href="/contact">Contact</a></li>
+  </ul>
 
   {# The form tag below is the code that displays the seach bar and button #}
   <form action="{{ url('search/results') }}">
-      <input type="search" placeholder="Search" name="q">
-      <input class="search-button" type="submit" value="Go">
+    <input type="search" placeholder="Search" name="q">
+    <input class="search-button" type="submit" value="Go">
   </form>
 
   {# The below code will display the navigation of the website once the fields in craft have been made. #}
