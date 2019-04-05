@@ -62,29 +62,6 @@ return array (
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://github.com/craftcms/redactor',
   ),
-  'craftcms/contact-form' => 
-  array (
-    'class' => 'craft\\contactform\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/contact-form/src',
-    'handle' => 'contact-form',
-    'aliases' => 
-    array (
-      '@craft/contactform' => $vendorDir . '/craftcms/contact-form/src',
-    ),
-    'name' => 'Contact Form',
-    'version' => '2.2.3',
-    'description' => 'Add a simple contact form to your Craft CMS site',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://pixelandtonic.com/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/craftcms/contact-form',
-    'changelogUrl' => 'https://raw.githubusercontent.com/craftcms/contact-form/v2/CHANGELOG.md',
-    'downloadUrl' => 'https://github.com/craftcms/contact-form/archive/v2.zip',
-    'components' => 
-    array (
-      'mailer' => 'craft\\contactform\\Mailer',
-    ),
-  ),
   'rias/craft-contact-form-extensions' => 
   array (
     'class' => 'rias\\contactformextensions\\ContactFormExtensions',
@@ -107,6 +84,27 @@ return array (
     'components' => 
     array (
       'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
+    ),
+  ),
+  'craftcms/contact-form' => 
+  array (
+    'class' => 'craft\\contactform\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/contact-form/src',
+    'handle' => 'contact-form',
+    'aliases' => 
+    array (
+      '@craft/contactform' => $vendorDir . '/craftcms/contact-form/src',
+    ),
+    'name' => 'Contact Form',
+    'version' => '2.2.4',
+    'description' => 'Add a simple contact form to your Craft CMS site',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://pixelandtonic.com/',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://github.com/craftcms/contact-form/blob/v2/README.md',
+    'components' => 
+    array (
+      'mailer' => 'craft\\contactform\\Mailer',
     ),
   ),
 );
