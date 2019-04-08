@@ -5,6 +5,7 @@
 <h1>Check out our global partners.</h1>
 <p>{{entry.body}}</p>
 
+{#
 <div>
 <p>Username</p>
 <input/>
@@ -14,9 +15,25 @@
 <a href="#">Become a distributor</a>
 <button>Log in</button>
 </div>
+#}
 {# craft map plugin here, see Treno #}
+{#
+{% set options = {
+    height: 300,
+    zoom: 4,
+    draggable: false,
+    markerOptions: {
+        icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+    },
+    infoWindowOptions: {
+        maxWidth: 200
+    }
+} %}
 
 
+{{ craft.smartMap.map(craft.entries.section('distributors').find(), options) }}
+
+#}
 
 {# see studentmedia advertising accordion, close to identical #}
 
