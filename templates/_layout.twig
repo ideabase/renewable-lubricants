@@ -1,14 +1,14 @@
-{# layout for most of the singles #}
-
+{# main layout #}
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+  {# include footer #}
   {% include '_globals/head' %}
   {% block head %}{% endblock %}
 </head>
 
 <body>
-  {# include the site header #}
+  {# include header #}
   {% include '_globals/header'%}
 
   <main>
@@ -27,7 +27,7 @@
     {% block content %}{% endblock %}
   </main>
 
-  {# include the site footer #}
+  {# include footer #}
   {% include '_globals/footer' %}
 </body>
 </html>
