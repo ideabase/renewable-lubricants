@@ -4,4 +4,36 @@
 
 {% block content %}
   {{ entry.body }}
+
+<div id="featured-products">
+  <h1>Featured Products</h1>
+  <hr>
+    {% for product in craft.products.type('clothing').all() %}
+        {% if product.featuredProduct %}
+        <div id="featured-product">
+          {% for image in product.productImage %}
+            <img src="{{image.url}}"alt="{{image.title}}">
+          {% endfor %}
+          <a href="#"><h1>{{product.title}}</h1></a>
+        {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div id="testimonials">
+<h1> Testimonials </h1>
+<hr>
+
+  {% for test in craft.entries.section('testimonials').all() %}
+  <div id="testimonial">
+    <h1>{{test.title}}</h1>
+    <p>" {{test.body}} "</p>
+  </div>
+  {% endfor %}
+
+
+</div>
+
+
+
 {% endblock %}
