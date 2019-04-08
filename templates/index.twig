@@ -11,7 +11,7 @@
     {% for product in craft.products.type('clothing').all() %}
         {% if product.featuredProduct %}
         <div id="featured-product">
-          {% for image in product.productImage %}
+          {% for image in product.productImage.one() %}
             <img src="{{image.url}}"alt="{{image.title}}">
           {% endfor %}
           <a href="#"><h1>{{product.title}}</h1></a>
