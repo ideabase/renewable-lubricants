@@ -404,18 +404,26 @@ class VariantQuery extends ElementQuery
             $this->subQuery->andWhere(Db::parseParam('commerce_variants.stock', $this->stock));
         }
 
-        if (null !== $this->hasStock && $this->hasStock === true) {
+        if (null !== $this->hasStock && (bool) $this->hasStock === true) {
             $hasStockCondition = ['or', '(commerce_variants.stock > 0 AND commerce_variants.hasUnlimitedStock != 1)', 'commerce_variants.hasUnlimitedStock = 1'];
             $this->subQuery->andWhere($hasStockCondition);
         }
 
-        if (null !== $this->hasStock && $this->hasStock === false) {
+        if (null !== $this->hasStock && (bool) $this->hasStock === false) {
             $hasStockCondition = ['and', 'commerce_variants.stock < 1', 'commerce_variants.hasUnlimitedStock != 1'];
             $this->subQuery->andWhere($hasStockCondition);
         }
 
         if (null !== $this->hasSales) {
+
+            // We can't just clone the query as it may be modifying the select statement etc (i.e in the product query‘s hasVariant param)
+            // But we want to use the same conditions so that we improve performance over searching all variants
             $query = Variant::find();
+            foreach($this->criteriaAttributes() as $attribute)
+            {
+                $query->$attribute = $this->$attribute;
+            }
+
             $query->hasSales = null;
             $query->limit = null;
             $variants = $query->all();

@@ -30,7 +30,7 @@ class ShippingCategoriesController extends BaseShippingSettingsController
     public function actionIndex(): Response
     {
         $shippingCategories = Plugin::getInstance()->getShippingCategories()->getAllShippingCategories();
-        return $this->renderTemplate('commerce/settings/shippingcategories/index', compact('shippingCategories'));
+        return $this->renderTemplate('commerce/shipping/shippingcategories/index', compact('shippingCategories'));
     }
 
     /**
@@ -43,7 +43,8 @@ class ShippingCategoriesController extends BaseShippingSettingsController
     {
         $variables = [
             'id' => $id,
-            'shippingCategory' => $shippingCategory
+            'shippingCategory' => $shippingCategory,
+            'productTypes' => Plugin::getInstance()->getProductTypes()->getAllProductTypes()
         ];
 
         if (!$variables['shippingCategory']) {
@@ -64,7 +65,7 @@ class ShippingCategoriesController extends BaseShippingSettingsController
             $variables['title'] = Craft::t('commerce', 'Create a new shipping category');
         }
 
-        return $this->renderTemplate('commerce/settings/shippingcategories/_edit', $variables);
+        return $this->renderTemplate('commerce/shipping/shippingcategories/_edit', $variables);
     }
 
     /**
@@ -82,6 +83,18 @@ class ShippingCategoriesController extends BaseShippingSettingsController
         $shippingCategory->handle = Craft::$app->getRequest()->getBodyParam('handle');
         $shippingCategory->description = Craft::$app->getRequest()->getBodyParam('description');
         $shippingCategory->default = (bool)Craft::$app->getRequest()->getBodyParam('default');
+
+        // Set the new product types
+        $productTypes = [];
+        foreach (Craft::$app->getRequest()->getBodyParam('productTypes', []) as $productTypeId)
+        {
+            if($productTypeId && $productType = Plugin::getInstance()->getProductTypes()->getProductTypeById($productTypeId))
+            {
+                $productTypes[] = $productType;
+            }
+        }
+        $shippingCategory->setProductTypes($productTypes);
+
 
         // Save it
         if (Plugin::getInstance()->getShippingCategories()->saveShippingCategory($shippingCategory)) {

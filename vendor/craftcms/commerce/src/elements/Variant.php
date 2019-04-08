@@ -22,6 +22,7 @@ use craft\commerce\models\Sale;
 use craft\commerce\Plugin;
 use craft\commerce\records\Variant as VariantRecord;
 use craft\db\Query;
+use craft\db\Table;
 use craft\elements\db\ElementQueryInterface;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -185,6 +186,12 @@ class Variant extends Purchasable
     public $maxQty;
 
     /**
+     * @var bool Whether the variant was deleted along with its product
+     * @see beforeDelete()
+     */
+    public $deletedWithProduct = false;
+
+    /**
      * @var Product The product that this variant is associated with.
      * @see getProduct()
      * @see setProduct()
@@ -298,7 +305,14 @@ class Variant extends Purchasable
             throw new InvalidConfigException('Variant is missing its product');
         }
 
-        if (($product = Plugin::getInstance()->getProducts()->getProductById($this->productId, $this->siteId)) === null) {
+        $product = Product::find()
+            ->id($this->productId)
+            ->siteId($this->siteId)
+            ->anyStatus()
+            ->trashed(null)
+            ->one();
+
+        if ($product === null) {
             throw new InvalidConfigException('Invalid product ID: ' . $this->productId);
         }
 
@@ -554,7 +568,24 @@ class Variant extends Purchasable
      */
     public function hasFreeShipping(): bool
     {
-        return (bool)$this->getProduct()->freeShipping;
+        $isShippable = $this->getIsShippable();
+        return $isShippable && $this->getProduct()->freeShipping;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsShippable(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsTaxable(): bool
+    {
+        return true;
     }
 
     /**
@@ -760,19 +791,22 @@ class Variant extends Purchasable
      */
     public function afterOrderComplete(Order $order, LineItem $lineItem)
     {
-        // Update the qty in the db directly
-        Craft::$app->getDb()->createCommand()->update('{{%commerce_variants}}',
-            ['stock' => new Expression('stock - :qty', [':qty' => $lineItem->qty])],
-            ['id' => $this->id])->execute();
+        // Don't reduce stock of unlimited items.
+        if (!$this->hasUnlimitedStock) {
+            // Update the qty in the db directly
+            Craft::$app->getDb()->createCommand()->update('{{%commerce_variants}}',
+                ['stock' => new Expression('stock - :qty', [':qty' => $lineItem->qty])],
+                ['id' => $this->id])->execute();
 
-        // Update the stock
-        $this->stock = (new Query())
-            ->select(['stock'])
-            ->from('{{%commerce_variants}}')
-            ->where('id = :variantId', [':variantId' => $this->id])
-            ->scalar();
+            // Update the stock
+            $this->stock = (new Query())
+                ->select(['stock'])
+                ->from('{{%commerce_variants}}')
+                ->where('id = :variantId', [':variantId' => $this->id])
+                ->scalar();
 
-        Craft::$app->getTemplateCaches()->deleteCachesByElementId($this->id);
+            Craft::$app->getTemplateCaches()->deleteCachesByElementId($this->id);
+        }
     }
 
     /**
@@ -854,7 +888,7 @@ class Variant extends Purchasable
     /**
      * @inheritdoc
      */
-    public function beforeValidate(): bool
+    public function beforeValidate()
     {
         $product = $this->getProduct();
 
@@ -869,6 +903,68 @@ class Variant extends Purchasable
         $this->fieldLayoutId = $product->getType()->variantFieldLayoutId;
 
         return parent::beforeValidate();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeDelete(): bool
+    {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
+
+        Craft::$app->getDb()->createCommand()
+            ->update('{{%commerce_variants}}', [
+                'deletedWithProduct' => $this->deletedWithProduct,
+            ], ['id' => $this->id], [], false)
+            ->execute();
+
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeRestore(): bool
+    {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
+
+        // Check to see if any other purchasable has the same SKU and update this one before restore
+        $found = (new Query())->select(['[[p.sku]]', '[[e.id]]'])
+            ->from('{{%commerce_purchasables}} p')
+            ->leftJoin(Table::ELEMENTS . ' e', '[[p.id]]=[[e.id]]')
+            ->where(['[[e.dateDeleted]]' => null, '[[p.sku]]' => $this->getSku()])
+            ->andWhere(['not', ['[[e.id]]' => $this->getId()]])
+            ->count();
+
+        if ($found) {
+            // Set new SKU in memory
+            $this->sku = $this->getSku() . '-1';
+
+            // Update variant table with new SKU
+            Craft::$app->getDb()->createCommand()->update('{{%commerce_variants}}',
+                ['sku' => $this->sku],
+                ['id' => $this->getId()]
+            )->execute();
+
+            if ($this->isDefault) {
+                Craft::$app->getDb()->createCommand()->update('{{%commerce_products}}',
+                    ['defaultSku' => $this->sku],
+                    ['id' => $this->productId]
+                )->execute();
+            }
+
+            // Update purchasable table with new SKU
+            Craft::$app->getDb()->createCommand()->update('{{%commerce_purchasables}}',
+                ['sku' => $this->sku],
+                ['id' => $this->getId()]
+            )->execute();
+        }
+
+        return true;
     }
 
     // Protected Methods

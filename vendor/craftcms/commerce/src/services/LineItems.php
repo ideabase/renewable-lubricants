@@ -39,7 +39,7 @@ class LineItems extends Component
      * use craft\commerce\services\LineItems;
      * use yii\base\Event;
      *
-     * Event::on(LineItems::class, LineItems::EVENT_DEFAULT_ORDER_STATUS, function(LineItemEvent $e) {
+     * Event::on(LineItems::class, LineItems::EVENT_BEFORE_SAVE_LINE_ITEM, function(LineItemEvent $e) {
      *     // Do something - perhaps let a 3rd party service know about changes to an order
      * });
      * ```
@@ -56,7 +56,7 @@ class LineItems extends Component
      * use craft\commerce\services\LineItems;
      * use yii\base\Event;
      *
-     * Event::on(LineItems::class, LineItems::EVENT_DEFAULT_ORDER_STATUS, function(LineItemEvent $e) {
+     * Event::on(LineItems::class, LineItems::EVENT_AFTER_SAVE_LINE_ITEM, function(LineItemEvent $e) {
      *     // Do something - perhaps reserve the stock
      * });
      * ```
@@ -96,14 +96,13 @@ class LineItems extends Component
             $results = $this->_createLineItemQuery()
                 ->where(['orderId' => $orderId])
                 ->all();
-            $lineItems = [];
+
+            $this->_lineItemsByOrderId[$orderId] = [];
 
             foreach ($results as $result) {
                 $result['snapshot'] = Json::decodeIfJson($result['snapshot']);
-                $lineItems[] = new LineItem($result);
+                $this->_lineItemsByOrderId[$orderId][] = new LineItem($result);
             }
-
-            $this->_lineItemsByOrderId[$orderId] = $lineItems;
         }
 
         return $this->_lineItemsByOrderId[$orderId];
@@ -118,8 +117,6 @@ class LineItems extends Component
      * @param int $orderId
      * @param int $purchasableId the purchasable's ID
      * @param array $options Options for the line item
-     * @param int $qty
-     * @param string $note
      * @return LineItem
      */
     public function resolveLineItem(int $orderId, int $purchasableId, array $options = []): LineItem

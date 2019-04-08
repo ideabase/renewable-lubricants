@@ -8,6 +8,7 @@
 namespace craft\commerce\services;
 
 use Craft;
+use craft\base\Field;
 use craft\commerce\base\Plan;
 use craft\commerce\base\SubscriptionGatewayInterface;
 use craft\commerce\elements\Subscription;
@@ -23,8 +24,11 @@ use craft\commerce\models\subscriptions\SubscriptionPayment;
 use craft\commerce\models\subscriptions\SwitchPlansForm;
 use craft\commerce\records\Subscription as SubscriptionRecord;
 use craft\elements\User;
+use craft\events\ConfigEvent;
+use craft\events\FieldEvent;
 use craft\events\ModelEvent;
 use craft\helpers\Db;
+use craft\models\FieldLayout;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 
@@ -232,8 +236,70 @@ class Subscriptions extends Component
      */
     const EVENT_RECEIVE_SUBSCRIPTION_PAYMENT = 'receiveSubscriptionPayment';
 
+    const CONFIG_FIELDLAYOUT_KEY = 'commerce.subscriptions.fieldLayouts';
+
     // Public Methods
     // =========================================================================
+
+    /**
+     * Handle field layout change
+     *
+     * @param ConfigEvent $event
+     */
+    public function handleChangedFieldLayout(ConfigEvent $event)
+    {
+        $data = $event->newValue;
+        $fieldsService = Craft::$app->getFields();
+
+        if (empty($data) || empty($config = reset($data))) {
+            // Delete the field layout
+            $fieldsService->deleteLayoutsByType(Subscription::class);
+            return;
+        }
+
+        // Save the field layout
+        $layout = FieldLayout::createFromConfig(reset($data));
+        $layout->id = $fieldsService->getLayoutByType(Subscription::class)->id;
+        $layout->type = Subscription::class;
+        $layout->uid = key($data);
+        $fieldsService->saveLayout($layout);
+    }
+
+    /**
+     * Prune a deleted field from subscription field layouts.
+     *
+     * @param FieldEvent $event
+     */
+    public function pruneDeletedField(FieldEvent $event)
+    {
+        /** @var Field $field */
+        $field = $event->field;
+        $fieldUid = $field->uid;
+
+        $projectConfig = Craft::$app->getProjectConfig();
+        $layoutData = $projectConfig->get(self::CONFIG_FIELDLAYOUT_KEY);
+
+        // Prune the UID from field layouts.
+        if (is_array($layoutData)) {
+            foreach ($layoutData as $layoutUid => $layout) {
+                if (!empty($layout['tabs'])) {
+                    foreach ($layout['tabs'] as $tabUid => $tab) {
+                        $projectConfig->remove(self::CONFIG_FIELDLAYOUT_KEY . '.' . $layoutUid . '.tabs.' . $tabUid . '.fields.' . $fieldUid);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle field layout being deleted
+     *
+     * @param ConfigEvent $event
+     */
+    public function handleDeletedFieldLayout(ConfigEvent $event)
+    {
+        Craft::$app->getFields()->deleteLayoutsByType(Subscription::class);
+    }
 
     /**
      * Prevent deleting a user if they have any subscriptions - active or otherwise.
@@ -314,11 +380,7 @@ class Subscriptions extends Component
         $gateway = $plan->getGateway();
 
         // fire a 'beforeCreateSubscription' event
-        $event = new CreateSubscriptionEvent([
-            'user' => $user,
-            'plan' => $plan,
-            'parameters' => $parameters
-        ]);
+        $event = new CreateSubscriptionEvent(compact('user', 'plan', 'parameters'));
         $this->trigger(self::EVENT_BEFORE_CREATE_SUBSCRIPTION, $event);
 
         if (!$event->isValid) {
@@ -365,7 +427,9 @@ class Subscriptions extends Component
      * @param Subscription $subscription
      * @return bool
      * @throws InvalidConfigException if the gateway does not support subscriptions
-     * @throws SubscriptionException  if something went wrong when reactivating subscription
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\base\Exception
      */
     public function reactivateSubscription(Subscription $subscription): bool
     {
@@ -498,10 +562,7 @@ class Subscriptions extends Component
         }
 
         // fire a 'beforeCancelSubscription' event
-        $event = new CancelSubscriptionEvent([
-            'subscription' => $subscription,
-            'parameters' => $parameters
-        ]);
+        $event = new CancelSubscriptionEvent(compact('subscription', 'parameters'));
         $this->trigger(self::EVENT_BEFORE_CANCEL_SUBSCRIPTION, $event);
 
         if (!$event->isValid) {
@@ -536,10 +597,7 @@ class Subscriptions extends Component
 
                 // fire an 'afterCancelSubscription' event
                 if ($this->hasEventHandlers(self::EVENT_AFTER_CANCEL_SUBSCRIPTION)) {
-                    $this->trigger(self::EVENT_AFTER_CANCEL_SUBSCRIPTION, new CancelSubscriptionEvent([
-                        'subscription' => $subscription,
-                        'parameters' => $parameters
-                    ]));
+                    $this->trigger(self::EVENT_AFTER_CANCEL_SUBSCRIPTION, new CancelSubscriptionEvent(compact('subscription', 'parameters')));
                 }
             } catch (\Throwable $exception) {
                 Craft::warning('Failed to cancel subscription ' . $subscription->reference . ': ' . $exception->getMessage());
@@ -586,11 +644,7 @@ class Subscriptions extends Component
     {
 
         if ($this->hasEventHandlers(self::EVENT_RECEIVE_SUBSCRIPTION_PAYMENT)) {
-            $this->trigger(self::EVENT_RECEIVE_SUBSCRIPTION_PAYMENT, new SubscriptionPaymentEvent([
-                'subscription' => $subscription,
-                'payment' => $payment,
-                'paidUntil' => $paidUntil
-            ]));
+            $this->trigger(self::EVENT_RECEIVE_SUBSCRIPTION_PAYMENT, new SubscriptionPaymentEvent(compact('subscription', 'payment', 'paidUntil')));
         }
 
         $subscription->nextPaymentDate = $paidUntil;

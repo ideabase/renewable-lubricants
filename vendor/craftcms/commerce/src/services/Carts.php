@@ -8,7 +8,6 @@
 namespace craft\commerce\services;
 
 use Craft;
-use craft\commerce\base\CartsDeprecatedTrait;
 use craft\commerce\elements\Order;
 use craft\commerce\Plugin;
 use craft\db\Query;
@@ -55,10 +54,10 @@ class Carts extends Component
         if (null === $this->_cart) {
             $number = $this->getSessionCartNumber();
 
-            $cart = Order::find()->isCompleted(false)->number($number)->one();
+            $cart = Order::find()->isCompleted(false)->number($number)->trashed(null)->one();
             if ($this->_cart = $cart) {
                 // We do not want to use the same order number as a completed order.
-                if ($this->_cart->isCompleted) {
+                if ($this->_cart->isCompleted || $this->_cart->trashed) {
                     $this->forgetCart();
                     Plugin::getInstance()->getCustomers()->forgetCustomer();
                     return $this->getCart();
@@ -84,20 +83,16 @@ class Carts extends Component
         // Has the customer in session changed?
         if ($this->_cart->customerId != $originalCustomerId) {
 
-            if ($this->_cart->billingAddressId) {
-                // Don't lose the data from the address, just drop the ID
-                if ($address = Plugin::getInstance()->getAddresses()->getAddressById($this->_cart->billingAddressId)) {
-                    $address->id = null;
-                    $this->_cart->setBillingAddress($address);
-                }
+            // Don't lose the data from the address, just drop the ID
+            if ($this->_cart->billingAddressId && $address = Plugin::getInstance()->getAddresses()->getAddressById($this->_cart->billingAddressId)) {
+                $address->id = null;
+                $this->_cart->setBillingAddress($address);
             }
 
-            if ($this->_cart->shippingAddressId) {
-                // Don't lose the data from the address, just drop the ID
-                if ($address = Plugin::getInstance()->getAddresses()->getAddressById($this->_cart->shippingAddressId)) {
-                    $address->id = null;
-                    $this->_cart->setShippingAddress($address);
-                }
+            // Don't lose the data from the address, just drop the ID
+            if ($this->_cart->shippingAddressId && $address = Plugin::getInstance()->getAddresses()->getAddressById($this->_cart->shippingAddressId)) {
+                $address->id = null;
+                $this->_cart->setShippingAddress($address);
             }
         }
 
@@ -110,10 +105,8 @@ class Carts extends Component
             if ($changedCurrency || $changedOrderLanguage || $changedIp || $changedCustomerId) {
                 Craft::$app->getElements()->saveElement($this->_cart, false);
             }
-        } else {
-            if ($forceSave) {
-                Craft::$app->getElements()->saveElement($this->_cart, false);
-            }
+        } else if ($forceSave) {
+            Craft::$app->getElements()->saveElement($this->_cart, false);
         }
 
         return $this->_cart;

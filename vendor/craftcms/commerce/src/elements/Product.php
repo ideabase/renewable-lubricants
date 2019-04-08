@@ -23,11 +23,13 @@ use craft\commerce\Plugin;
 use craft\commerce\records\Product as ProductRecord;
 use craft\db\Query;
 use craft\elements\actions\CopyReferenceTag;
+use craft\elements\actions\Restore;
 use craft\elements\actions\SetStatus;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\ElementHelper;
 use craft\helpers\UrlHelper;
 use craft\validators\DateTimeValidator;
 use yii\base\Exception;
@@ -43,6 +45,8 @@ use yii\base\InvalidConfigException;
  * @property string $snapshot allow the variant to ask the product what data to snapshot
  * @property int $totalStock
  * @property bool $hasUnlimitedStock whether at least one variant has unlimited stock
+ * @property \craft\commerce\elements\Variant $cheapestVariant
+ * @property \craft\commerce\models\ProductType $type
  * @property Variant[]|array $variants an array of the product's variants
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @since 2.0
@@ -164,11 +168,6 @@ class Product extends Element
      */
     private $_cheapestVariant;
 
-    /**
-     * @var array The variant IDs to delete
-     */
-    private $_variantIdsToDelete = [];
-
     // Public Methods
     // =========================================================================
 
@@ -244,9 +243,9 @@ class Product extends Element
     public function getIsEditable(): bool
     {
         if ($this->getType()) {
-            $id = $this->getType()->id;
+            $uid = $this->getType()->uid;
 
-            return Craft::$app->getUser()->checkPermission('commerce-manageProductType:' . $id);
+            return Craft::$app->getUser()->checkPermission('commerce-manageProductType:' . $uid);
         }
 
         return false;
@@ -439,6 +438,10 @@ class Product extends Element
         $this->_variants = [];
         $count = 1;
         $this->_defaultVariant = null;
+
+        if (empty($variants)) {
+            return;
+        }
 
         foreach ($variants as $key => $variant) {
             if (!$variant instanceof Variant) {
@@ -706,15 +709,15 @@ class Product extends Element
                     $variant->siteId = $this->siteId;
                 }
 
-                // We already have set the default to the correct variant in beforeSave()
-                if ($variant->isDefault) {
-                    $this->defaultVariantId = $variant->id;
-                    Craft::$app->getDb()->createCommand()->update('{{%commerce_products}}', ['defaultVariantId' => $variant->id], ['id' => $this->id])->execute();;
-                }
-
                 $keepVariantIds[] = $variant->id;
 
                 Craft::$app->getElements()->saveElement($variant, false);
+
+                // We already have set the default to the correct variant in beforeSave()
+                if ($variant->isDefault) {
+                    $this->defaultVariantId = $variant->id;
+                    Craft::$app->getDb()->createCommand()->update('{{%commerce_products}}', ['defaultVariantId' => $variant->id], ['id' => $this->id])->execute();
+                }
             }
 
             foreach (array_diff($oldVariantIds, $keepVariantIds) as $deleteId) {
@@ -728,7 +731,19 @@ class Product extends Element
     /**
      * @inheritdoc
      */
-    public function beforeValidate(): bool
+    public function beforeRestore(): bool
+    {
+        $variants = Variant::find()->trashed(null)->productId($this->id)->status(null)->all();
+        Craft::$app->getElements()->restoreElements($variants);
+        $this->setVariants($variants);
+
+        return parent::beforeRestore();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeValidate()
     {
         // We need to generate all variant sku formats before validating the product,
         // since the product validates the uniqueness of all variants in memory.
@@ -750,23 +765,46 @@ class Product extends Element
     /**
      * @inheritdoc
      */
-    public function beforeDelete(): bool
+    public function afterDelete()
     {
-        $this->_variantIdsToDelete = Variant::find()->product($this)->ids();
+        $variants = Variant::find()
+            ->productId($this->id)
+            ->all();
 
-        return true;
+        $elementsService = Craft::$app->getElements();
+
+        foreach ($variants as $variant) {
+            $variant->deletedWithProduct = true;
+            $elementsService->deleteElement($variant);
+        }
+
+        parent::afterDelete();
     }
 
     /**
      * @inheritdoc
      */
-    public function afterDelete(): bool
+    public function afterRestore()
     {
-        foreach ($this->_variantIdsToDelete as $id) {
-            Craft::$app->getElements()->deleteElementById($id, Variant::class);
+        // Also restore any variants for this element
+        $elementsService = Craft::$app->getElements();
+        foreach (ElementHelper::supportedSitesForElement($this) as $siteInfo) {
+            $variants = Variant::find()
+                ->anyStatus()
+                ->siteId($siteInfo['siteId'])
+                ->productId($this->id)
+                ->trashed()
+                ->andWhere(['commerce_variants.deletedWithProduct' => true])
+                ->all();
+
+            foreach ($variants as $variant) {
+                $elementsService->restoreElement($variant);
+            }
         }
 
-        return true;
+        $this->setVariants($variants);
+
+        parent::afterRestore();
     }
 
     /**
@@ -846,18 +884,18 @@ class Product extends Element
         foreach ($this->getVariants() as $variant) {
             // Make the first variant (or the last one that isDefault) the default.
             if ($defaultVariant === null || $variant->isDefault) {
-                $defaultVariant = $variant;
+                $this->_defaultVariant = $variant;
             }
         }
-
-        $this->_defaultVariant = $defaultVariant;
 
         // Make sure the field layout is set correctly
         $this->fieldLayoutId = $this->getType()->fieldLayoutId;
 
         if ($this->enabled && !$this->postDate) {
             // Default the post date to the current date/time
-            $this->postDate = DateTimeHelper::currentUTCDateTime();
+            $this->postDate = new \DateTime();
+            // ...without the seconds
+            $this->postDate->setTimestamp($this->postDate->getTimestamp() - ($this->postDate->getTimestamp() % 60));
         }
 
         return parent::beforeSave($isNew);
@@ -900,8 +938,8 @@ class Product extends Element
         $sources[] = ['heading' => Craft::t('commerce', 'Product Types')];
 
         foreach ($productTypes as $productType) {
-            $key = 'productType:' . $productType->id;
-            $canEditProducts = Craft::$app->getUser()->checkPermission('commerce-manageProductType:' . $productType->id);
+            $key = 'productType:' . $productType->uid;
+            $canEditProducts = Craft::$app->getUser()->checkPermission('commerce-manageProductType:' . $productType->uid);
 
             $sources[$key] = [
                 'key' => $key,
@@ -937,23 +975,37 @@ class Product extends Element
                         if ($productType) {
                             $productTypes = [$productType];
                         }
+                    } else if (preg_match('/^productType:(.+)$/', $source, $matches)) {
+                        $productType = Plugin::getInstance()->getProductTypes()->getProductTypeByUid($matches[1]);
+
+                        if ($productType) {
+                            $productTypes = [$productType];
+                        }
                     }
                 }
         }
 
         $actions = [];
 
-        $actions[] = [
-            'type' => CopyReferenceTag::class,
-            'elementType' => static::class,
-        ];
+        // Copy Reference Tag
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => CopyReferenceTag::class
+        ]);
+
+        // Restore
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => Restore::class,
+            'successMessage' => Craft::t('commerce', 'Products restored.'),
+            'partialSuccessMessage' => Craft::t('commerce', 'Some products restored.'),
+            'failMessage' => Craft::t('commerce', 'Products not restored.'),
+        ]);
 
         if (!empty($productTypes)) {
             $userSession = Craft::$app->getUser();
             $canManage = false;
 
             foreach ($productTypes as $productType) {
-                $canManage = $userSession->checkPermission('commerce-manageProductType:' . $productType->id);
+                $canManage = $userSession->checkPermission('commerce-manageProductType:' . $productType->uid);
             }
 
             if ($canManage) {

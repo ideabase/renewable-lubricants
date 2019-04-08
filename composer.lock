@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2d9d88fa1ac21975eeafb258d8b337e",
+    "content-hash": "bab2157a5c9053f5fb39b366903051f7",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -410,17 +410,17 @@
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.0.0-beta.15",
+            "version": "2.1.3",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/be232001cb98e7d49318e43bb774238570f23e40",
-                "reference": "be232001cb98e7d49318e43bb774238570f23e40",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/76249e1b87e7baf2daaba47f6aa8b59e3c0bdc47",
+                "reference": "76249e1b87e7baf2daaba47f6aa8b59e3c0bdc47",
                 "shasum": ""
             },
             "require": {
-                "craftcms/cms": "^3.0.31",
-                "dannyvankooten/vat.php": "^1.1.2",
+                "craftcms/cms": "^3.1.20",
                 "dompdf/dompdf": "~0.8.2",
+                "ibericode/vat": "^1.1.2",
                 "moneyphp/money": "^3.1.3",
                 "phpoffice/phpspreadsheet": "^1.4"
             },
@@ -429,7 +429,8 @@
                 "handle": "commerce",
                 "name": "Craft Commerce",
                 "description": "An amazingly powerful and flexible e-commerce platform for Craft CMS.",
-                "developer": "Pixel & Tonic"
+                "developer": "Pixel & Tonic",
+                "documentationUrl": "https://docs.craftcms.com/commerce/v2/"
             },
             "autoload": {
                 "psr-4": {
@@ -452,10 +453,10 @@
                 "issues": "https://github.com/craftcms/commerce/issues?state=open",
                 "forum": "https://craftcms.stackexchange.com/",
                 "source": "https://github.com/craftcms/commerce",
-                "docs": "https://github.com/craftcms/commerce-docs",
+                "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2018-12-27T07:18:11+00:00"
+            "time": "2019-04-03T18:39:44+00:00"
         },
         {
             "name": "craftcms/contact-form",
@@ -1261,6 +1262,44 @@
             "time": "2018-12-04T20:46:45+00:00"
         },
         {
+            "name": "ibericode/vat",
+            "version": "1.1.3",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ibericode/vat/zipball/c6ead632e04124461c5f2c824873223bb600ecaa",
+                "reference": "c6ead632e04124461c5f2c824873223bb600ecaa",
+                "shasum": ""
+            },
+            "require": {
+                "ext-soap": "*",
+                "php": ">=5.6",
+                "psr/simple-cache": "^1.0"
+            },
+            "provide": {
+                "psr/simple-cache-implementation": "1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DvK\\Vat\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Danny van Kooten",
+                    "email": "hi@dvk.co"
+                }
+            ],
+            "description": "PHP library for dealing with VAT in Europe",
+            "keywords": [
+                "vat"
+            ],
+            "time": "2019-01-07T13:31:19+00:00"
+        },
+        {
             "name": "illuminate/contracts",
             "version": "v5.5.44",
             "dist": {
@@ -1701,14 +1740,15 @@
         },
         {
             "name": "moneyphp/money",
-            "version": "v3.2.0",
+            "version": "v3.2.1",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moneyphp/money/zipball/53ce6e4b9a2aac6e5194a0a633b7a556a6b04b07",
-                "reference": "53ce6e4b9a2aac6e5194a0a633b7a556a6b04b07",
+                "url": "https://api.github.com/repos/moneyphp/money/zipball/f6085de6c565e98d2f9a7311a605987b54e06d5e",
+                "reference": "f6085de6c565e98d2f9a7311a605987b54e06d5e",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
                 "php": ">=5.6"
             },
             "suggest": {
@@ -1755,7 +1795,7 @@
                 "money",
                 "vo"
             ],
-            "time": "2018-12-05T12:17:01+00:00"
+            "time": "2019-02-07T18:01:35+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -3792,9 +3832,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "craftcms/commerce": 10
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

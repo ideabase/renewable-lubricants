@@ -3,7 +3,7 @@
 To add something to the cart, submit the ID of a [purchasable](purchasables.md) element as a `purchasableId` param to the `commerce/cart/update-cart` action.
 
 ::: tip
-Products are not purchasable on their own; all products have at one default variant. See [Products](products.md) for more information.
+Products are not purchasable on their own; all products have at least one default variant. See [Products](products.md) for more information.
 :::
 
 The following is an example of getting the first product found in your store. We then get the product’s default variant and use its ID in the form that will add that item to the cart:
@@ -42,7 +42,12 @@ The above is a simple example, if your product’s type has multiple variants yo
 ```
 
 ::: warning
-When using the `commerce/cart/updateCart` form action, the redirect is only followed if *all* updates submitted succeed.
+In the Lite edition of Craft Commerce only single line item can exist in the cart. Whenever a customer adds something to the cart, it replaces whatever item was in the cart.
+If multiple items are added to the cart in a single request, only the last item submitted is added to the cart.    
+:::
+
+::: warning
+When using the `commerce/cart/update-cart` form action, the redirect is only followed if *all* updates submitted succeed.
 :::
 
 ## Line item options and notes
@@ -93,7 +98,7 @@ Once the order is complete, the notes and options can be found on the View Order
 
 ## Options uniqueness
 
-The options data submitted to the line item are hashed into an `optionsSignature` for uniqueness. If you submit the same purchasable ID to the cart with different option data, two line items with be created.
+The options data submitted to the line item are hashed into an `optionsSignature` for uniqueness. If you submit the same purchasable ID to the cart with different option data, two line items will be created.
 
 Another way to think about it is that each line item is unique based on the combination of `purchasableId` and `optionsSignature`.
 

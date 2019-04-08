@@ -43,7 +43,7 @@ class BaseFrontEndController extends BaseController
         $data['itemSubtotal'] = $cart->getItemSubtotal();
         $data['totalPaid'] = $cart->getTotalPaid();
         $data['email'] = $cart->getEmail();
-        $data['isCompleted'] = $cart->isCompleted;
+        $data['isCompleted'] = (bool)$cart->isCompleted;
         $data['dateOrdered'] = $cart->dateOrdered;
         $data['datePaid'] = $cart->datePaid;
         $data['currency'] = $cart->currency;
@@ -56,6 +56,8 @@ class BaseFrontEndController extends BaseController
         $data['shippingMethod'] = $cart->shippingMethodHandle;
         $data['shippingMethodId'] = $cart->getShippingMethodId();
         $data['paymentMethodId'] = $cart->gatewayId;
+        $data['gatewayId'] = $cart->gatewayId;
+        $data['paymentSourceId'] = $cart->paymentSourceId;
         $data['customerId'] = $cart->customerId;
         $data['isPaid'] = $cart->getIsPaid();
         $data['paidStatus'] = $cart->getPaidStatus();
@@ -64,13 +66,19 @@ class BaseFrontEndController extends BaseController
         $data['isEmpty'] = $cart->getIsEmpty();
         $data['itemSubtotal'] = $cart->getItemSubtotal();
         $data['totalWeight'] = $cart->getTotalWeight();
+        $data['total'] = $cart->getTotal();
         $data['totalPrice'] = $cart->getTotalPrice();
 
-        $data['availableShippingMethods'] = $cart->getAvailableShippingMethods();
+        $availableShippingMethods = $cart->getAvailableShippingMethods();
+        $data['availableShippingMethods'] = [];
+        foreach ($availableShippingMethods as $shippingMethod) {
+            $data['availableShippingMethods'][$shippingMethod->getHandle()] = $shippingMethod->toArray();
+            $data['availableShippingMethods'][$shippingMethod->getHandle()]['price'] = $shippingMethod->getPriceForOrder($cart);
+        }
 
         $data['shippingAddressId'] = $cart->shippingAddressId;
         if ($cart->getShippingAddress()) {
-            $data['shippingAddress'] = $cart->shippingAddress->attributes;
+            $data['shippingAddress'] = $cart->shippingAddress->toArray();
             if ($cart->shippingAddress->getErrors()) {
                 $lineItems['shippingAddress']['errors'] = $cart->getShippingAddress()->getErrors();
             }
@@ -80,7 +88,7 @@ class BaseFrontEndController extends BaseController
 
         $data['billingAddressId'] = $cart->billingAddressId;
         if ($cart->getBillingAddress()) {
-            $data['billingAddress'] = $cart->billingAddress->attributes;
+            $data['billingAddress'] = $cart->billingAddress->toArray();
             if ($cart->billingAddress->getErrors()) {
                 $lineItems['billingAddress']['errors'] = $cart->getBillingAddress()->getErrors();
             }

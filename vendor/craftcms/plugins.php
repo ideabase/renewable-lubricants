@@ -28,23 +28,6 @@ return array (
       'editLinks' => 'wbrowar\\adminbar\\services\\EditLinks',
     ),
   ),
-  'craftcms/commerce' => 
-  array (
-    'class' => 'craft\\commerce\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/commerce/src',
-    'handle' => 'commerce',
-    'aliases' => 
-    array (
-      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
-    ),
-    'name' => 'Craft Commerce',
-    'version' => '2.0.0-beta.15',
-    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://craftcommerce.com',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/craftcms/commerce-docs',
-  ),
   'craftcms/redactor' => 
   array (
     'class' => 'craft\\redactor\\Plugin',
@@ -106,5 +89,22 @@ return array (
     array (
       'mailer' => 'craft\\contactform\\Mailer',
     ),
+  ),
+  'craftcms/commerce' => 
+  array (
+    'class' => 'craft\\commerce\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/commerce/src',
+    'handle' => 'commerce',
+    'aliases' => 
+    array (
+      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
+    ),
+    'name' => 'Craft Commerce',
+    'version' => '2.1.3',
+    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://craftcommerce.com',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
   ),
 );

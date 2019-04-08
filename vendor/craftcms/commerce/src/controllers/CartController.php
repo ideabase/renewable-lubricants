@@ -185,13 +185,17 @@ class CartController extends BaseFrontEndController
             }
 
             $lineItem->note = $note;
+
             $this->_cart->addLineItem($lineItem);
         }
 
         // Add multiple items to the cart
         if ($purchasables = $request->getParam('purchasables')) {
             foreach ($purchasables as $key => $purchasable) {
-                $purchasableId = $request->getRequiredParam("purchasables.{$key}.id");
+                $purchasableId = $request->getParam("purchasables.{$key}.id");
+                if (!$purchasableId) {
+                    continue;
+                }
                 $note = $request->getParam("purchasables.{$key}.note", '');
                 $options = $request->getParam("purchasables.{$key}.options") ?: [];
                 $qty = (int)$request->getParam("purchasables.{$key}.qty", 1);
@@ -241,7 +245,11 @@ class CartController extends BaseFrontEndController
                     $lineItem->setOptions($options);
                 }
 
-                if ($removeLine || $qty == 0) {
+                if ($qty !== null && $qty == 0) {
+                    $removeLine = true;
+                }
+
+                if ($removeLine) {
                     $this->_cart->removeLineItem($lineItem);
                 } else {
                     $this->_cart->addLineItem($lineItem);
@@ -254,6 +262,11 @@ class CartController extends BaseFrontEndController
         // Set guest email address onto guest customer and order.
         if (Craft::$app->getUser()->isGuest && $email = $request->getParam('email')) {
             $this->_cart->setEmail($email);
+        }
+
+        // Set if the customer should be registered on order completion
+        if ($registerUserOnOrderComplete = $request->getBodyParam('registerUserOnOrderComplete')) {
+            $this->_cart->registerUserOnOrderComplete = true;
         }
 
         // Set payment currency on cart
@@ -399,8 +412,8 @@ class CartController extends BaseFrontEndController
             $this->_cart->setBillingAddress($billingAddress);
         }
 
-        $this->_cart->billingSameAsShipping = $billingIsShipping;
-        $this->_cart->shippingSameAsBilling = $shippingIsBilling;
+        $this->_cart->billingSameAsShipping = (bool)$billingIsShipping;
+        $this->_cart->shippingSameAsBilling = (bool)$shippingIsBilling;
 
         // Set primary addresses
         if ($request->getBodyParam('makePrimaryShippingAddress')) {

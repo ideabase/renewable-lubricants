@@ -7,7 +7,7 @@ module.exports = {
                 title: 'Introduction',
                 collapsable: false,
                 children: [
-                    '',
+                    'editions',
                 ]
             },
             {
@@ -24,6 +24,7 @@ module.exports = {
                 collapsable: false,
                 children: [
                     'configuration',
+                    'project-config'
                 ]
             },
             {
@@ -34,6 +35,7 @@ module.exports = {
                     'orders',
                     'products',
                     'product-types',
+                    'donations',
                     'customers',
                     'sales',
                     'discounts',
@@ -79,9 +81,11 @@ module.exports = {
                 title: 'Template Guides',
                 collapsable: false,
                 children: [
+                    'example-templates',
                     'available-variables',
                     'adding-to-and-updating-the-cart',
                     'update-cart-addresses',
+                    'coupon-codes',
                     'customer-address-management',
                     'twig-filters',
                     'making-payments',

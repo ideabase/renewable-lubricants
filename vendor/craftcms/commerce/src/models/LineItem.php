@@ -56,17 +56,17 @@ class LineItem extends Model
     public $id;
 
     /**
-     * @var float Price
+     * @var float Price is the original price of the purchasable
      */
     public $price = 0;
 
     /**
-     * @var float Sale amount
+     * @var float Sale amount off the price, based on the sales applied to the purchasable.
      */
     public $saleAmount = 0;
 
     /**
-     * @var float Sale price
+     * @var float Sale price is the price of the line item. Sale price is price + saleAmount
      */
     public $salePrice = 0;
 
@@ -347,11 +347,11 @@ class LineItem extends Model
     }
 
     /**
-     * @param \craft\commerce\base\Element $purchasable
+     * @param PurchasableInterface $purchasable
      */
-    public function setPurchasable(Element $purchasable)
+    public function setPurchasable(PurchasableInterface $purchasable)
     {
-        $this->purchasableId = $purchasable->id;
+        $this->purchasableId = $purchasable->getId();
         $this->_purchasable = $purchasable;
     }
 
@@ -482,7 +482,11 @@ class LineItem extends Model
         $adjustments = $this->getOrder()->getAdjustments();
 
         foreach ($adjustments as $adjustment) {
-            if ($adjustment->lineItemId == $this->id) {
+            // Since the line item may not yet be saved and won't have an ID, we need to check the adjuster references this as it's line item.
+            $hasLineItemId = (bool) $adjustment->lineItemId;
+            $hasLineItem = (bool) $adjustment->getLineItem();
+
+            if (($hasLineItemId && $adjustment->lineItemId == $this->id) || ($hasLineItem && $adjustment->getLineItem() === $this)) {
                 $lineItemAdjustments[] = $adjustment;
             }
         }

@@ -233,8 +233,8 @@ class Discounts extends Component
         if ($discount->perUserLimit > 0 && $user) {
             // The 'Per User Limit' can only be tracked against logged in users since guest customers are re-generated often
             $usage = (new Query())
-                ->select('uses')
-                ->from('{{%commerce_customer_discountuses}}')
+                ->select(['uses'])
+                ->from(['{{%commerce_customer_discountuses}}'])
                 ->where(['customerId' => $customer->id, 'discountId' => $discount->id])
                 ->scalar();
 
@@ -247,16 +247,10 @@ class Discounts extends Component
             }
         }
 
-        if ($discount->perEmailLimit > 0 && !$order->getEmail()) {
-            $explanation = Craft::t('commerce', 'Discount is limited in use to those who have supplied their email address.');
-
-            return false;
-        }
-
-        if ($discount->perEmailLimit > 0) {
+        if ($discount->perEmailLimit > 0 && $order->getEmail()) {
             $usage = (new Query())
-                ->select('uses')
-                ->from('{{%commerce_email_discountuses}}')
+                ->select(['uses'])
+                ->from(['{{%commerce_email_discountuses}}'])
                 ->where(['email' => $order->getEmail(), 'discountId' => $discount->id])
                 ->scalar();
 
@@ -300,6 +294,10 @@ class Discounts extends Component
      */
     public function matchLineItem(LineItem $lineItem, Discount $discount): bool
     {
+        if (!$this->matchOrder($lineItem->order, $discount)) {
+            return false;
+        }
+
         if ($lineItem->onSale && $discount->excludeOnSale) {
             return false;
         }
@@ -332,14 +330,45 @@ class Discounts extends Component
         }
 
         // Raise the 'beforeMatchLineItem' event
-        $event = new MatchLineItemEvent([
-            'lineItem' => $lineItem,
-            'discount' => $discount
-        ]);
+        $event = new MatchLineItemEvent(compact('lineItem', 'discount'));
 
         $this->trigger(self::EVENT_BEFORE_MATCH_LINE_ITEM, $event);
 
         return $event->isValid;
+    }
+
+    /**
+     * @param Order $order
+     * @param Discount $discount
+     * @return bool
+     */
+    public function matchOrder(Order $order, Discount $discount): bool
+    {
+        // If the discount is no longer enabled don't use
+        if (!$discount->enabled) {
+            return false;
+        }
+
+        // If the discount does not have a coupon code, it is available
+        if ($discount->code == null) {
+            return true;
+        }
+
+        // If we have a coupon code on the order and it matches the discount coupon code
+        if ($order->couponCode && (strcasecmp($order->couponCode, $discount->code) == 0)) {
+            $explanation = '';
+
+            // Only use the discount is it it still available (it may have expired since being valid on the order)
+            if (Plugin::getInstance()->getDiscounts()->orderCouponAvailable($order, $explanation)) {
+                return true;
+            }
+
+            // Remove it from the order if it is no longer valid.
+            // Yes, this is an order mutation, which we normally shouldn't do in an adjuster
+            $order->couponCode = null;
+        }
+
+        return false;
     }
 
     /**
@@ -381,7 +410,8 @@ class Discounts extends Component
         $record->perItemDiscount = $model->perItemDiscount;
         $record->percentDiscount = $model->percentDiscount;
         $record->percentageOffSubject = $model->percentageOffSubject;
-        $record->freeShipping = $model->freeShipping;
+        $record->hasFreeShippingForMatchingItems = $model->hasFreeShippingForMatchingItems;
+        $record->hasFreeShippingForOrder = $model->hasFreeShippingForOrder;
         $record->excludeOnSale = $model->excludeOnSale;
         $record->perUserLimit = $model->perUserLimit;
         $record->perEmailLimit = $model->perEmailLimit;
@@ -532,7 +562,7 @@ class Discounts extends Component
                 $customerDiscountUseRecord->save();
             } else {
                 Craft::$app->getDb()->createCommand()
-                    ->update('{{%commerce_customer_discountuse}}', [
+                    ->update('{{%commerce_customer_discountuses}}', [
                         'uses' => new Expression('[[uses]] + 1')
                     ], [
                         'customerId' => $order->customerId,
@@ -594,7 +624,8 @@ class Discounts extends Component
                 'discounts.percentDiscount',
                 'discounts.percentageOffSubject',
                 'discounts.excludeOnSale',
-                'discounts.freeShipping',
+                'discounts.hasFreeShippingForMatchingItems',
+                'discounts.hasFreeShippingForOrder',
                 'discounts.allGroups',
                 'discounts.allPurchasables',
                 'discounts.allCategories',

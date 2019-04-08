@@ -76,6 +76,10 @@ class ProductTypesController extends BaseAdminController
                 'label' => Craft::t('commerce', 'Settings'),
                 'url' => '#product-type-settings',
             ],
+            'taxAndShipping' => [
+                'label' => Craft::t('commerce', 'Tax & Shipping'),
+                'url' => '#tax-and-shipping',
+            ],
             'productFields' => [
                 'label' => Craft::t('commerce', 'Product Fields'),
                 'url' => '#product-fields',
@@ -143,9 +147,6 @@ class ProductTypesController extends BaseAdminController
         }
 
         $productType->setSiteSettings($allSiteSettings);
-
-        $productType->setTaxCategories(Craft::$app->getRequest()->getBodyParam('taxCategories'));
-        $productType->setShippingCategories(Craft::$app->getRequest()->getBodyParam('shippingCategories'));
 
         // Set the product type field layout
         $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
