@@ -116,6 +116,10 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         array (
             'enshrined\\svgSanitize\\' => 22,
         ),
+        'd' => 
+        array (
+            'doublesecretagency\\smartmap\\' => 28,
+        ),
         'c' => 
         array (
             'creocoder\\nestedsets\\' => 21,
@@ -300,6 +304,10 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'enshrined\\svgSanitize\\' => 
         array (
             0 => __DIR__ . '/..' . '/enshrined/svg-sanitize/src',
+        ),
+        'doublesecretagency\\smartmap\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src',
         ),
         'creocoder\\nestedsets\\' => 
         array (
@@ -3959,6 +3967,40 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'craftcms\\oauth2\\client\\provider\\CraftIdUser' => __DIR__ . '/..' . '/craftcms/oauth2-craftid/src/provider/CraftIdUser.php',
         'creocoder\\nestedsets\\NestedSetsBehavior' => __DIR__ . '/..' . '/creocoder/yii2-nested-sets/src/NestedSetsBehavior.php',
         'creocoder\\nestedsets\\NestedSetsQueryBehavior' => __DIR__ . '/..' . '/creocoder/yii2-nested-sets/src/NestedSetsQueryBehavior.php',
+        'doublesecretagency\\smartmap\\SmartMap' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/SmartMap.php',
+        'doublesecretagency\\smartmap\\controllers\\DebugController' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/controllers/DebugController.php',
+        'doublesecretagency\\smartmap\\controllers\\LookupController' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/controllers/LookupController.php',
+        'doublesecretagency\\smartmap\\controllers\\ModalController' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/controllers/ModalController.php',
+        'doublesecretagency\\smartmap\\enums\\MapApi' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/enums/MapApi.php',
+        'doublesecretagency\\smartmap\\enums\\MeasurementUnit' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/enums/MeasurementUnit.php',
+        'doublesecretagency\\smartmap\\events\\DetectLocationEvent' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/events/DetectLocationEvent.php',
+        'doublesecretagency\\smartmap\\fields\\Address' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/fields/Address.php',
+        'doublesecretagency\\smartmap\\listeners\\GetAddressFieldSchema' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/listeners/GetAddressFieldSchema.php',
+        'doublesecretagency\\smartmap\\migrations\\Install' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/Install.php',
+        'doublesecretagency\\smartmap\\migrations\\m140330_000000_smartMap_addCountrySubfield' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m140330_000000_smartMap_addCountrySubfield.php',
+        'doublesecretagency\\smartmap\\migrations\\m140330_000001_smartMap_autofillCountryForExistingAddresses' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m140330_000001_smartMap_autofillCountryForExistingAddresses.php',
+        'doublesecretagency\\smartmap\\migrations\\m140811_000001_smartMap_changeHandleToFieldId' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m140811_000001_smartMap_changeHandleToFieldId.php',
+        'doublesecretagency\\smartmap\\migrations\\m150329_000000_smartMap_splitGoogleApiKeys' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m150329_000000_smartMap_splitGoogleApiKeys.php',
+        'doublesecretagency\\smartmap\\migrations\\m150331_000000_smartMap_reorganizeGeolocationOptions' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m150331_000000_smartMap_reorganizeGeolocationOptions.php',
+        'doublesecretagency\\smartmap\\migrations\\m180207_000000_smartMap_updateFieldType' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m180207_000000_smartMap_updateFieldType.php',
+        'doublesecretagency\\smartmap\\migrations\\m181124_000000_smartMap_replaceFreegeoipWithIpstack' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m181124_000000_smartMap_replaceFreegeoipWithIpstack.php',
+        'doublesecretagency\\smartmap\\migrations\\m190310_000000_smartMap_addPositionToFieldLayouts' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/migrations/m190310_000000_smartMap_addPositionToFieldLayouts.php',
+        'doublesecretagency\\smartmap\\models\\Address' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/models/Address.php',
+        'doublesecretagency\\smartmap\\models\\FilterCriteria' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/models/FilterCriteria.php',
+        'doublesecretagency\\smartmap\\models\\Settings' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/models/Settings.php',
+        'doublesecretagency\\smartmap\\records\\Address' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/records/Address.php',
+        'doublesecretagency\\smartmap\\services\\Ipstack' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/services/Ipstack.php',
+        'doublesecretagency\\smartmap\\services\\Main' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/services/Main.php',
+        'doublesecretagency\\smartmap\\services\\MaxMind' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/services/MaxMind.php',
+        'doublesecretagency\\smartmap\\services\\SmartMapService' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/services/SmartMapService.php',
+        'doublesecretagency\\smartmap\\services\\Variables' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/services/Variables.php',
+        'doublesecretagency\\smartmap\\variables\\SmartMapVariable' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/variables/SmartMapVariable.php',
+        'doublesecretagency\\smartmap\\web\\assets\\DebugAssets' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/web/assets/DebugAssets.php',
+        'doublesecretagency\\smartmap\\web\\assets\\FieldInputAssets' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/web/assets/FieldInputAssets.php',
+        'doublesecretagency\\smartmap\\web\\assets\\FieldSettingsAssets' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/web/assets/FieldSettingsAssets.php',
+        'doublesecretagency\\smartmap\\web\\assets\\FrontEndAssets' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/web/assets/FrontEndAssets.php',
+        'doublesecretagency\\smartmap\\web\\assets\\GoogleMapsAssets' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/web/assets/GoogleMapsAssets.php',
+        'doublesecretagency\\smartmap\\web\\assets\\SettingsAssets' => __DIR__ . '/..' . '/doublesecretagency/craft-smartmap/src/web/assets/SettingsAssets.php',
         'enshrined\\svgSanitize\\Sanitizer' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/Sanitizer.php',
         'enshrined\\svgSanitize\\data\\AllowedAttributes' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/data/AllowedAttributes.php',
         'enshrined\\svgSanitize\\data\\AllowedTags' => __DIR__ . '/..' . '/enshrined/svg-sanitize/src/data/AllowedTags.php',

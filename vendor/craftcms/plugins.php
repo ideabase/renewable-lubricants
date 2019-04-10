@@ -107,4 +107,20 @@ return array (
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
   ),
+  'doublesecretagency/craft-smartmap' => 
+  array (
+    'class' => 'doublesecretagency\\smartmap\\SmartMap',
+    'basePath' => $vendorDir . '/doublesecretagency/craft-smartmap/src',
+    'handle' => 'smart-map',
+    'aliases' => 
+    array (
+      '@doublesecretagency/smartmap' => $vendorDir . '/doublesecretagency/craft-smartmap/src',
+    ),
+    'name' => 'Smart Map',
+    'version' => '3.2.2.1',
+    'description' => 'The most comprehensive proximity search and mapping tool for Craft.',
+    'developer' => 'Double Secret Agency',
+    'developerUrl' => 'https://www.doublesecretagency.com/plugins',
+    'documentationUrl' => 'https://www.doublesecretagency.com/plugins/smart-map/docs',
+  ),
 );
