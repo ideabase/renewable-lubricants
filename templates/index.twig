@@ -11,10 +11,10 @@
     {% for product in craft.products.type('clothing').all() %}
         {% if product.featuredProduct %}
         <div id="featured-product">
-          {% for image in product.productImage.one() %}
-            <img src="{{image.url}}"alt="{{image.title}}">
+          {% for image in product.productImage %}
+             <img src="{{image.url}}"alt="{{image.title}}">
           {% endfor %}
-          <a href="#"><h1>{{product.title}}</h1></a>
+          <a href="{{product.url}}"><h1>{{product.title}}</h1></a>
         {% endif %}
     {% endfor %}
   </div>
@@ -26,8 +26,11 @@
 
   {% for test in craft.entries.section('testimonials').all() %}
   <div id="testimonial">
-    <h1>{{test.title}}</h1>
-    <p>" {{test.body}} "</p>
+    <ul>
+      <li>
+        <h1>{{test.title}}</h1>
+        <p>"{{test.body |striptags('<br>')}}" - {{test.testAuthor}}</p>
+      </li>
   </div>
   {% endfor %}
 
