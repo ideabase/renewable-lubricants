@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3406f0ed15fdf227ead67e20d7fdb4b6",
+    "content-hash": "e7d2ce5646b5d921012707aaa7a47c83",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -326,11 +326,11 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.1.21.1",
+            "version": "3.1.22",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/f2ef5da6693a3aa89bd2585b3a8c366ee5d7ab70",
-                "reference": "f2ef5da6693a3aa89bd2585b3a8c366ee5d7ab70",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/868202831139e51b9d60d9738147ac9635bc760c",
+                "reference": "868202831139e51b9d60d9738147ac9635bc760c",
                 "shasum": ""
             },
             "require": {
@@ -406,15 +406,15 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2019-04-04T19:07:09+00:00"
+            "time": "2019-04-10T17:10:47+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.1.3",
+            "version": "2.1.3.1",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/76249e1b87e7baf2daaba47f6aa8b59e3c0bdc47",
-                "reference": "76249e1b87e7baf2daaba47f6aa8b59e3c0bdc47",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/94a97b0245927e6f9c6f532ad827e80db83ee1bb",
+                "reference": "94a97b0245927e6f9c6f532ad827e80db83ee1bb",
                 "shasum": ""
             },
             "require": {
@@ -456,7 +456,7 @@
                 "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2019-04-03T18:39:44+00:00"
+            "time": "2019-04-10T23:45:08+00:00"
         },
         {
             "name": "craftcms/contact-form",

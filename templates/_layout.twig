@@ -20,9 +20,12 @@
     {% if entry.subtitle|length %}
       {{ entry.subtitle }}
     {% endif %}
-  
+
     {# content block #}
     {% block content %}{% endblock %}
+
+    {# include newsletter #}
+    {% include '_includes/newsletter' %}
   </main>
 
   {# include footer #}

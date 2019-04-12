@@ -8,35 +8,31 @@
 <div id="featured-products">
   <h1>Featured Products</h1>
   <hr>
-    {% for product in craft.products.type('clothing').all() %}
-        {% if product.featuredProduct %}
-        <div id="featured-product">
-          {% for image in product.productImage %}
-             <img src="{{image.url}}"alt="{{image.title}}">
-          {% endfor %}
-          <a href="{{product.url}}"><h1>{{product.title}}</h1></a>
-        {% endif %}
-    {% endfor %}
-  </div>
+
+  {% for product in craft.products.type('clothing').all() %}
+      {% if product.featuredProduct %}
+        {% for image in product.productImage.all() %}
+            <img src="{{ image.url }}"alt="{{ image.title }}">
+        {% endfor %}
+        <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
+      {% endif %}
+  {% endfor %}
 </div>
 
 <div id="testimonials">
 <h1> Testimonials </h1>
 <hr>
 
-  {% for test in craft.entries.section('testimonials').all() %}
+  {% for testimonial in craft.entries.section('testimonials').all() %}
   <div id="testimonial">
     <ul>
-      <li>
-        <h1>{{test.title}}</h1>
-        <p>"{{test.body |striptags('<br>')}}" - {{test.testAuthor}}</p>
-      </li>
+      <li>{{ testimonial.testimonialBody }}</li>
+      <li><p>{{ testimonial.author }}</p></li>
+      <li><p>{{ testimonial.authorDescription }}</p></li>
+    </ul>
   </div>
   {% endfor %}
 
-
 </div>
-
-
 
 {% endblock %}

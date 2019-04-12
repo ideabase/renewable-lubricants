@@ -331,12 +331,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.1.21.1",
-        "version_normalized": "3.1.21.1",
+        "version": "3.1.22",
+        "version_normalized": "3.1.22.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/f2ef5da6693a3aa89bd2585b3a8c366ee5d7ab70",
-            "reference": "f2ef5da6693a3aa89bd2585b3a8c366ee5d7ab70",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/868202831139e51b9d60d9738147ac9635bc760c",
+            "reference": "868202831139e51b9d60d9738147ac9635bc760c",
             "shasum": ""
         },
         "require": {
@@ -388,7 +388,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2019-04-04T19:07:09+00:00",
+        "time": "2019-04-10T17:10:47+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -417,12 +417,12 @@
     },
     {
         "name": "craftcms/commerce",
-        "version": "2.1.3",
-        "version_normalized": "2.1.3.0",
+        "version": "2.1.3.1",
+        "version_normalized": "2.1.3.1",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/commerce/zipball/76249e1b87e7baf2daaba47f6aa8b59e3c0bdc47",
-            "reference": "76249e1b87e7baf2daaba47f6aa8b59e3c0bdc47",
+            "url": "https://api.github.com/repos/craftcms/commerce/zipball/94a97b0245927e6f9c6f532ad827e80db83ee1bb",
+            "reference": "94a97b0245927e6f9c6f532ad827e80db83ee1bb",
             "shasum": ""
         },
         "require": {
@@ -432,7 +432,7 @@
             "moneyphp/money": "^3.1.3",
             "phpoffice/phpspreadsheet": "^1.4"
         },
-        "time": "2019-04-03T18:39:44+00:00",
+        "time": "2019-04-10T23:45:08+00:00",
         "type": "craft-plugin",
         "extra": {
             "handle": "commerce",
