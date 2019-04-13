@@ -1,0 +1,7 @@
+/* main Sass file, only use this for extendable properties */
+
+%example-extendable {
+  display: flex;
+  flex-flow: row-nowrap;
+  justify-content: space-between;
+}

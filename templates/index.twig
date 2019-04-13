@@ -20,19 +20,18 @@
 </div>
 
 <div id="testimonials">
-<h1> Testimonials </h1>
-<hr>
+  <h1> Testimonials </h1>
+  <hr>
 
-  {% for testimonial in craft.entries.section('testimonials').all() %}
-  <div id="testimonial">
-    <ul>
-      <li>{{ testimonial.testimonialBody }}</li>
-      <li><p>{{ testimonial.author }}</p></li>
-      <li><p>{{ testimonial.authorDescription }}</p></li>
-    </ul>
-  </div>
-  {% endfor %}
-
+    {% for testimonial in craft.entries.section('testimonials').all() %}
+    <div id="testimonial">
+      <ul>
+        <li>{{ testimonial.testimonialBody }}</li>
+        <li><p>{{ testimonial.testimonialAuthor }}</p></li>
+        <li><p>{{ testimonial.authorDescription }}</p></li>
+      </ul>
+    </div>
+    {% endfor %}
 </div>
 
 {% endblock %}
