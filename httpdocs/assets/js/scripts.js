@@ -10,52 +10,54 @@
 //         });
 //     });
 
+
 // Wrap all JQuery functions in this function, which will pause execution until the document is ready.  No need to repeat these. //
 $(document).ready(function() {
 
-  // Check Animation and Start Animation on Home Page //
 
+
+  // Check Animation and Start Animation on Home Page //
 
   $(".hero-image-caption").addClass("animation");
 
-	// Initialize Carousels on Home Page //
-
-	$('.home-carousel').owlCarousel({
-			items:1,
-      autoplayTimeout: 10000,
-			autoplay:true,
-			center: true,
-			loop: true,
-			smartSpeed: 1500,
-	});
-
-	setTimeout(function() {
-	$('.brand-logo-grid').owlCarousel({
-			items:5,
-			nav: true,
-			loop: false,
-			center: false,
-	    responsive: {
-          0:{
-              items:3,
-              nav: true,
-              loop: false,
-
-          },
-	        600:{
-	            items:4,
-							nav: true,
-							loop: false,
-	        },
-          900:{
-	            items:5,
-							nav: true,
-							loop: false,
-							center: false,
-	        },
-	    }
-		}, 3000);
-	});
+	//Initialize Carousels on Home Page //
+  //
+	// $('.home-carousel').owlCarousel({
+	// 		items:1,
+  //     autoplayTimeout: 10000,
+	// 		autoplay:true,
+	// 		center: true,
+	// 		loop: true,
+	// 		smartSpeed: 1500,
+	// });
+  //
+	// setTimeout(function() {
+	// $('.brand-logo-grid').owlCarousel({
+	// 		items:5,
+	// 		nav: true,
+	// 		loop: false,
+	// 		center: false,
+	//     responsive: {
+  //         0:{
+  //             items:3,
+  //             nav: true,
+  //             loop: false,
+  //
+  //         },
+	//         600:{
+	//             items:4,
+	// 						nav: true,
+	// 						loop: false,
+	//         },
+  //         900:{
+	//             items:5,
+	// 						nav: true,
+	// 						loop: false,
+	// 						center: false,
+	//         },
+	//     }
+	// 	}, 3000);
+	// });
 
 	// Sticky Navigation //
 
@@ -98,7 +100,7 @@ $(document).ready(function() {
   var navBody = document.getElementById('body');
 
 	// Navigation Menu Open/Close //
-	navTrigger.addEventListener('click', navToggle);
+	//navTrigger.addEventListener('click', navToggle);
 
 	function navToggle(e) {
 	  var closed = (navTrigger.className.indexOf('close') > 0);
@@ -174,30 +176,6 @@ $(document).ready(function() {
 	}
 	var accordion = new Accordion($('#accordion'), false);
 
-// Second advertising accordion
-  var Accordion2 = function(el, multiple) {
-    this.el = el || {};
-    this.multiple = multiple || false;
-
-    // Variables privadas
-    var links = this.el.find('.link');
-    // Evento
-    links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
-  }
-
-  Accordion2.prototype.dropdown = function(e) {
-    var $el = e.data.el;
-      $this = $(this),
-      $next = $this.next();
-
-    $next.slideToggle();
-    $this.parent().toggleClass('open');
-
-    if (!e.data.multiple) {
-      $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
-    };
-  }
-  var accordion2 = new Accordion2($('#accordion2'), false);
 
 	// Show more/less text in FAQ //
 	$(".more-link").click(function(e){
