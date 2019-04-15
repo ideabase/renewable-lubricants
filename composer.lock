@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7d2ce5646b5d921012707aaa7a47c83",
+    "content-hash": "bf7b44cee01c756bdce87aaaf04257f3",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -2325,11 +2325,11 @@
         },
         {
             "name": "rias/craft-contact-form-extensions",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Rias500/craft-contact-form-extensions/zipball/83fe865a901da61494610e3beef693b9a72ee4ba",
-                "reference": "83fe865a901da61494610e3beef693b9a72ee4ba",
+                "url": "https://api.github.com/repos/Rias500/craft-contact-form-extensions/zipball/37900c33cff0487534375dd8390199fa9e40abe8",
+                "reference": "37900c33cff0487534375dd8390199fa9e40abe8",
                 "shasum": ""
             },
             "require": {
@@ -2376,7 +2376,7 @@
                 "docs": "https://github.com/Rias500/craft-contact-form-extensions/blob/master/README.md",
                 "issues": "https://github.com/Rias500/craft-contact-form-extensions/issues"
             },
-            "time": "2019-04-01T14:51:05+00:00"
+            "time": "2019-04-15T14:11:09+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",

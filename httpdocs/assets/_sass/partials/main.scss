@@ -1,7 +1,7 @@
-/* main Sass file, only use this for extendable properties */
+/** main Sass file
+  * this file should contain properties that can apply to every page
+  */
 
-%example-extendable {
+.flex {
   display: flex;
-  flex-flow: row-nowrap;
-  justify-content: space-between;
 }

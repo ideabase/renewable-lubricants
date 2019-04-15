@@ -45,30 +45,6 @@ return array (
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://github.com/craftcms/redactor',
   ),
-  'rias/craft-contact-form-extensions' => 
-  array (
-    'class' => 'rias\\contactformextensions\\ContactFormExtensions',
-    'basePath' => $vendorDir . '/rias/craft-contact-form-extensions/src',
-    'handle' => 'contact-form-extensions',
-    'aliases' => 
-    array (
-      '@rias/contactformextensions' => $vendorDir . '/rias/craft-contact-form-extensions/src',
-    ),
-    'name' => 'Contact Form Extensions',
-    'version' => '1.1.4',
-    'schemaVersion' => '1.0.0',
-    'description' => 'Adds extensions to the Craft CMS contact form plugin.',
-    'developer' => 'Rias',
-    'developerUrl' => 'https://rias.be',
-    'documentationUrl' => 'https://github.com/Rias500/craft-contact-form-extensions/blob/master/README.md',
-    'changelogUrl' => 'https://raw.githubusercontent.com/Rias500/craft-contact-form-extensions/master/CHANGELOG.md',
-    'hasCpSettings' => true,
-    'hasCpSection' => true,
-    'components' => 
-    array (
-      'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
-    ),
-  ),
   'craftcms/contact-form' => 
   array (
     'class' => 'craft\\contactform\\Plugin',
@@ -122,5 +98,29 @@ return array (
     'developerUrl' => 'https://craftcommerce.com',
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
+  ),
+  'rias/craft-contact-form-extensions' => 
+  array (
+    'class' => 'rias\\contactformextensions\\ContactFormExtensions',
+    'basePath' => $vendorDir . '/rias/craft-contact-form-extensions/src',
+    'handle' => 'contact-form-extensions',
+    'aliases' => 
+    array (
+      '@rias/contactformextensions' => $vendorDir . '/rias/craft-contact-form-extensions/src',
+    ),
+    'name' => 'Contact Form Extensions',
+    'version' => '1.1.5',
+    'schemaVersion' => '1.0.0',
+    'description' => 'Adds extensions to the Craft CMS contact form plugin.',
+    'developer' => 'Rias',
+    'developerUrl' => 'https://rias.be',
+    'documentationUrl' => 'https://github.com/Rias500/craft-contact-form-extensions/blob/master/README.md',
+    'changelogUrl' => 'https://raw.githubusercontent.com/Rias500/craft-contact-form-extensions/master/CHANGELOG.md',
+    'hasCpSettings' => true,
+    'hasCpSection' => true,
+    'components' => 
+    array (
+      'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
+    ),
   ),
 );
