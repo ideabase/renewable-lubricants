@@ -55,6 +55,9 @@
   				{% endif %}
 				<div class = "platform-content-container">
           <div class = "platform-content">
+            {% for image in distrib.logo %}
+              <img src="{{image.url}}" alt="{{image.title}}">
+            {% endfor %}
           <h2 class="platform-content-header">TEST HEADER</h2>
           <p class="platform-description">TEST DESCRIPTION</p>
 				</div>
