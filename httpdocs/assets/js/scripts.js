@@ -121,10 +121,6 @@ $(document).ready(function() {
 
   const mq = window.matchMedia( "(min-width: 900px)" );
 
-  if (mq.matches) {
-    nav.setAttribute('aria-hidden', 'false');
-  }
-
 	// Drop Down / Accordion Open/Close //
 
 	var $menuTrigger = $('.nav > .has-children > a');
@@ -183,7 +179,5 @@ $(document).ready(function() {
 	  e.preventDefault();
 	});
 
-	// Load the Embedded Video on Click //
-		$('.video-thumb').smartVimeoEmbed();
 
 }); // Ends the document ready function.  Be careful not to remove this!
