@@ -1,0 +1,26 @@
+// mixins partial
+
+// adds a slant to the selected element
+  // $pos: left or right side
+  // $angle: angle of the slant
+  // $color: background color
+@mixin slant($pos, $angle, $color) {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $color;
+    @if ($pos == right and not ($angle < 0)) or ($pos == left and $angle < 0) {
+      transform-origin: 0 100%;
+    } @else {
+      transform-origin: 100% 0;
+    }
+    transform: skew($angle);
+    z-index: -1;
+  }
+}

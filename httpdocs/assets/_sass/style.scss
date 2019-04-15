@@ -1,7 +1,9 @@
-/* @import Sass partials here */
+// @import Sass partials here
 
-@import 'partials/main.scss';
+@import 'partials/normalize';
+@import 'partials/variables';
+@import 'partials/includes';
 
+@import 'partials/main';
 @import 'partials/header';
-@import 'partials/newsletter';
 @import 'partials/footer';

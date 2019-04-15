@@ -1,7 +1,27 @@
-/* footer partial */
+// footer partial
+
+#newsletter-sub {
+  h2 {
+    color: $color-yellow;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    margin-left: 10em;
+    line-height: .7em;
+  }
+
+  form {
+    max-width: 800px;
+    display: flex;
+    padding: 1em 5em 1em 1em;
+    @include slant(right, 45deg, $color-yellow);
+  }
+}
 
 .flex {
+  max-width: 750px;
   justify-content: space-around;
+  padding: 0 7em 0 0;
+  @include slant(right, 45deg, $color-gray);
 
   ul {
     padding: 0;

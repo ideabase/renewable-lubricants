@@ -1,10 +1,20 @@
-/* header partial */
+// header partial
 
-nav ul {
-  display: flex;
-  justify-content: space-around;
+nav {
+  ul {
+    max-width: 800px;
+    padding: 1em 4em 1em 1em;
+    display: flex;
+    justify-content: space-around;
+    text-transform: uppercase;
+    @include slant(right, -45deg, $color-yellow);
 
-  li {
-    list-style-type: none;
+    li {
+      list-style-type: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
   }
 }
