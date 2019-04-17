@@ -21,15 +21,17 @@
 {# craft map plugin here, see Treno #}
 
 {% set options = {
+    markerInfo: '_includes/infoBubble',
     height: 300,
     zoom: 4,
-    draggable: false,
+    draggable: true,
     markerOptions: {
         icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
     },
     infoWindowOptions: {
         maxWidth: 200
     }
+
 } %}
 
 
