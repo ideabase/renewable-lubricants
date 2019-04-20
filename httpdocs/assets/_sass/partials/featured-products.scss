@@ -1,1 +1,17 @@
-// add css here
+
+
+#products-categories a{
+  max-width:300px;
+  min-width:200px;
+  padding-right:20px;
+  text-decoration: none;
+  list-style: none;
+
+
+}
+
+#products-featured h2, #products-categories h2{
+  text-align: center;
+  background-color: #94d0b8;
+  padding: 10px 0px 10px 0px;
+}
