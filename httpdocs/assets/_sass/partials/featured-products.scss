@@ -1,17 +1,30 @@
 
+#products-featured {
+    background-color: $color-gray;
+  }
 
-#products-categories a{
-  max-width:300px;
-  min-width:200px;
-  padding-right:20px;
-  text-decoration: none;
-  list-style: none;
+//** list style not working - bullets wont go away **//
+#products-categories {
 
+  a {
+    list-style: none;
+    min-width: 200px;
+    max-width: 300px;
+    padding-right: 20px;
+    text-decoration: none;
+  }
+
+  ul {
+    list-style-type: none;
+    text-align: center;
+    display:grid;
+    grid-column: 1fr 1fr 1fr;
+  }
 
 }
 
 #products-featured h2, #products-categories h2{
   text-align: center;
   background-color: #94d0b8;
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0px;
 }
