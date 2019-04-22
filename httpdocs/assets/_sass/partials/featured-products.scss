@@ -1,27 +1,44 @@
 
 #products-featured {
-    background-color: $color-gray;
-  }
+
+    ul {
+       @include slant(left, 45deg, $color-gray);
+       list-style: none;
+       text-align: center;
+    }
+    
+    a {
+      text-decoration:none;
+    }
+}
 
 //** list style not working - bullets wont go away **//
 #products-categories {
 
   a {
-    list-style: none;
+    color: #000;
     min-width: 200px;
     max-width: 300px;
     padding-right: 20px;
     text-decoration: none;
   }
-
-  ul {
+  .flex-container{
     list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+
+  }
+
+  .flex-container li{
+    width: 200px;
+    margin: 10px;
     text-align: center;
-    display:grid;
-    grid-column: 1fr 1fr 1fr;
+    line-height: 75px;
+    font-size: 20px;
   }
 
 }
+
 
 #products-featured h2, #products-categories h2{
   text-align: center;

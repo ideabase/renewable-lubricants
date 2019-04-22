@@ -1,5 +1,31 @@
 // footer partial
 
+#products-find{
+
+// need div added into html code inorder to create the slant 45 left
+// div{  @include slant(left, 45deg, $color-yellow);}
+
+  h2 {
+    color: $color-yellow;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    margin-left: 5em;
+    line-height: .7em;
+  }
+  ul {
+    list-style-type: none;
+    text-transform: uppercase;
+    display: flex;
+  }
+
+  a {
+    text-decoration: none;
+    padding-right: 50px;
+  //  color: white;
+  }
+}
+
+
 #newsletter-sub {
   h2 {
     color: $color-yellow;

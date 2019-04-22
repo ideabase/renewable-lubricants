@@ -5,7 +5,7 @@
 
   <div id="products-featured">
     <h2>Featured Products</h2>
-    
+
     <ul>
       {% for entry in craft.entries.section('products').all() %}
         <li>
@@ -20,7 +20,7 @@
   <div id="products-categories">
     <h2>Product Categories</h2>
 
-    <ul>
+    <ul class="flex-container">
       {% for category in craft.categories.group('productCategories').all() %}
         <li>
           <a href="{{ category.url }}">{{ category.title }}
