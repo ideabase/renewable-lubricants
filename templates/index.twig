@@ -9,8 +9,6 @@
   <h1>Featured Products</h1>
   <hr>
 
-<h1>Hi</h1>
-
   {% for product in craft.products.type('clothing').all() %}
       {% if product.featuredProduct %}
         {% for image in product.productImage.all() %}
