@@ -1,20 +1,18 @@
+// featured products partial
 
 #products-featured {
+  ul {
+    @include slant(left, 45deg, $color-gray);
+    list-style: none;
+    text-align: center;
+  }
 
-    ul {
-       @include slant(left, 45deg, $color-gray);
-       list-style: none;
-       text-align: center;
-    }
-
-    a {
-      text-decoration:none;
-    }
-
+  a {
+    text-decoration:none;
+  }
 }
 
 #products-categories {
-
   a {
     color: #000;
     min-width: 200px;
@@ -22,23 +20,20 @@
     padding-right: 20px;
     text-decoration: none;
   }
-  .flex-container{
+
+  .flex-container {
     list-style-type: none;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap:10px;
-
   }
 
-  .flex-container li{
-background-color: $color-yellow;
+  .flex-container li {
+    background-color: $color-yellow;
     text-align: center;
-
     font-size: 20px;
   }
-
 }
-
 
 #products-featured h2, #products-categories h2{
   text-align: center;
