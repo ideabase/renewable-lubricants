@@ -21,7 +21,11 @@
     {% for product in products %}
         <div class="md:flex product bg-white mb-4 p-8 rounded items-center text-center md:text-left">
             <div class="md:w-1/6 md:p-4">
-                {% include "shop/_images/product" with { number: '3' } %}
+              {% if product.productImage %}
+                {% for image in product.productImage %}
+                  <img src="{{image.url}}" alt="{{image.title}}">
+                {% endfor %}
+              {% endif %}
             </div>
             <div class="md:w-2/6 md:p-4">
                 <h3>{% if product.url %}{{ product.link }}{% else %}{{ product.title }}{% endif %}</h3>
