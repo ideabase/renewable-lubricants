@@ -99,10 +99,6 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
             'yii\\' => 4,
             'yii2tech\\ar\\softdelete\\' => 23,
         ),
-        'w' => 
-        array (
-            'wbrowar\\adminbar\\' => 17,
-        ),
         'r' => 
         array (
             'rias\\contactformextensions\\' => 27,
@@ -284,10 +280,6 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'yii2tech\\ar\\softdelete\\' => 
         array (
             0 => __DIR__ . '/..' . '/yii2tech/ar-softdelete/src',
-        ),
-        'wbrowar\\adminbar\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/wbrowar/adminbar/src',
         ),
         'rias\\contactformextensions\\' => 
         array (
@@ -4020,15 +4012,6 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'rias\\contactformextensions\\models\\Settings' => __DIR__ . '/..' . '/rias/craft-contact-form-extensions/src/models/Settings.php',
         'rias\\contactformextensions\\services\\ContactFormExtensionsService' => __DIR__ . '/..' . '/rias/craft-contact-form-extensions/src/services/ContactFormExtensionsService.php',
         'rias\\contactformextensions\\variables\\ContactFormExtensionsVariable' => __DIR__ . '/..' . '/rias/craft-contact-form-extensions/src/variables/ContactFormExtensionsVariable.php',
-        'wbrowar\\adminbar\\AdminBar' => __DIR__ . '/..' . '/wbrowar/adminbar/src/AdminBar.php',
-        'wbrowar\\adminbar\\assetbundles\\AdminBar\\AdminBarAsset' => __DIR__ . '/..' . '/wbrowar/adminbar/src/assetbundles/adminbar/AdminBarAsset.php',
-        'wbrowar\\adminbar\\console\\controllers\\DefaultController' => __DIR__ . '/..' . '/wbrowar/adminbar/src/console/controllers/DefaultController.php',
-        'wbrowar\\adminbar\\controllers\\BarController' => __DIR__ . '/..' . '/wbrowar/adminbar/src/controllers/BarController.php',
-        'wbrowar\\adminbar\\events\\AdminBarRenderEvent' => __DIR__ . '/..' . '/wbrowar/adminbar/src/events/AdminBarRenderEvent.php',
-        'wbrowar\\adminbar\\models\\Settings' => __DIR__ . '/..' . '/wbrowar/adminbar/src/models/Settings.php',
-        'wbrowar\\adminbar\\services\\Bar' => __DIR__ . '/..' . '/wbrowar/adminbar/src/services/Bar.php',
-        'wbrowar\\adminbar\\services\\EditLinks' => __DIR__ . '/..' . '/wbrowar/adminbar/src/services/EditLinks.php',
-        'wbrowar\\adminbar\\twigextensions\\AdminBarTwigExtension' => __DIR__ . '/..' . '/wbrowar/adminbar/src/twigextensions/AdminBarTwigExtension.php',
         'yii2tech\\ar\\softdelete\\SoftDeleteBehavior' => __DIR__ . '/..' . '/yii2tech/ar-softdelete/src/SoftDeleteBehavior.php',
         'yii2tech\\ar\\softdelete\\SoftDeleteQueryBehavior' => __DIR__ . '/..' . '/yii2tech/ar-softdelete/src/SoftDeleteQueryBehavior.php',
         'yii\\BaseYii' => __DIR__ . '/..' . '/yiisoft/yii2/BaseYii.php',
