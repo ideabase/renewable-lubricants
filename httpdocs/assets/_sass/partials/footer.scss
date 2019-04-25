@@ -32,6 +32,11 @@
 }
 
 #newsletter-sub {
+  .flex {
+    display: flex;
+    justify-content: flex-start;
+  }
+
   h2 {
     color: $color-green-light;
     text-transform: uppercase;
@@ -41,27 +46,29 @@
   }
 
   form {
+    background-color: $color-green-light;
+    flex-grow: 1;
     max-width: 800px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     color: $color-white;
-    padding: 1em 5em 1em 1em;
-    @include slant(right, 45deg, $color-green-light);
+    padding: 1em;
   }
 
   input[type="submit"] {
     text-transform: uppercase;
     margin-left: 1rem;
   }
+
+  .triangle {
+    @include triangle(bottom, right, 62px, 62px, $color-green-light);
+  }
 }
 
 .footer-info {
   display: flex;
-  max-width: 750px;
-  justify-content: space-around;
-  padding: 0 7em 0 0;
-  @include slant(right, 45deg, $color-gray);
+  justify-content: flex-start;
 
   ul {
     padding: 0;
@@ -70,5 +77,17 @@
       list-style-type: none;
       line-height: 2rem;
     }
+  }
+
+  .flex {
+    flex-grow: 1;
+    background-color: $color-gray;
+    display: flex;
+    justify-content: space-around;
+    max-width: 750px;
+  }
+
+  .triangle {
+    @include triangle(bottom, right, 170px, 170px, $color-gray);
   }
 }

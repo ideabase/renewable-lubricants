@@ -6,14 +6,17 @@
 
 nav {
   margin-bottom: 3rem;
+  display: flex;
+  justify-content: flex-start;
 
   ul {
+    flex-grow: 1;
+    background-color: $color-yellow;
     max-width: 800px;
     margin: 0;
-    padding: 1em 4em 1em 1em;
+    padding: 1rem .5rem;
     display: flex;
     justify-content: space-around;
-    @include slant(right, -45deg, $color-yellow);
 
     li {
       list-style-type: none;
@@ -25,5 +28,9 @@ nav {
         text-decoration: none;
       }
     }
+  }
+
+  .triangle {
+    @include triangle(top, right, 50px, 50px, $color-yellow);
   }
 }
