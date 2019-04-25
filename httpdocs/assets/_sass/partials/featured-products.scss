@@ -1,14 +1,39 @@
 // featured products partial
+@media screen and (max-width: 890px){
 
+  body, ul, p, h1, h2, h3, a{
+    font-size: 90%;
+  }
+
+
+}
 #products-featured {
+
+div{
+  @include slant(right, 45deg, $color-gray);
+  width: 50%;
+
+}
   ul {
-    @include slant(left, 45deg, $color-gray);
+
     list-style: none;
     text-align: center;
+    display: flex;
+    justify-content: space-between;
+
   }
 
   a {
-    text-decoration:none;
+    text-decoration: none;
+  }
+
+  li img{
+    width:100px;
+  }
+
+  h1{
+    font-size: 15px;
+    color: #000;
   }
 }
 
@@ -39,4 +64,5 @@
   text-align: center;
   background-color: #94d0b8;
   padding: 10px 0px;
+  text-transform: uppercase;
 }

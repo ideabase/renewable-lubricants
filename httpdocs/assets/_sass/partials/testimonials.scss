@@ -11,6 +11,9 @@
     text-align: right;
     display: flex;
     width: auto;
-
+  }
+  li{
+    padding-right: 10px;
+    @include slant(left, 45deg, $color-yellow);
   }
 }

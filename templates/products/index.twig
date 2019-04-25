@@ -6,7 +6,7 @@
   <div id="products-featured">
     <h2>Featured Products</h2>
 
-
+      <div>
         <ul>
         {% for product in craft.products.type('clothing').all() %}
             <li>
@@ -19,7 +19,7 @@
             {% endif %}
         {% endfor %}
 
-
+      </div>
   </div>
 
   <div id="products-categories">
