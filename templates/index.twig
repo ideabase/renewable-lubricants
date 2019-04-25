@@ -3,25 +3,23 @@
 {% extends "_layout" %}
 
 {% block content %}
-  {{ entry.body }}
-
 <div id="featured-products">
   <h1>Featured Products</h1>
-  <hr>
+
+  {{ entry.body }}
 
   {% for product in craft.products.type('clothing').all() %}
-      {% if product.featuredProduct %}
-        {% for image in product.productImage.all() %}
-            <img src="{{ image.url }}"alt="{{ image.title }}">
-        {% endfor %}
-        <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
-      {% endif %}
+    {% if product.featuredProduct %}
+      {% for image in product.productImage.all() %}
+        <img src="{{ image.url }}"alt="{{ image.title }}">
+      {% endfor %}
+      <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
+    {% endif %}
   {% endfor %}
 </div>
 
 <div id="testimonials">
-  <h1> Testimonials </h1>
-  <hr>
+  <h1>Testimonials</h1>
 
     {% for testimonial in craft.entries.section('testimonials').all() %}
     <div id="testimonial">

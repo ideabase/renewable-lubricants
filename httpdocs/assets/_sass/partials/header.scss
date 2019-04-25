@@ -1,8 +1,15 @@
 // header partial
 
+.img-header {
+  max-width: 200px;
+}
+
 nav {
+  margin-bottom: 3rem;
+
   ul {
     max-width: 800px;
+    margin: 0;
     padding: 1em 4em 1em 1em;
     display: flex;
     justify-content: space-around;
