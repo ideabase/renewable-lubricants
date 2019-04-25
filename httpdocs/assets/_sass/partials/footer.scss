@@ -6,27 +6,27 @@
 // div{  @include slant(left, 45deg, $color-yellow);}
 #find-container{
   margin-left:100px;
-  @include slant(left, 45deg, $color-yellow);
+  @include slant(left, -45deg, $color-yellow);
 }
   h2 {
     color: $color-yellow;
     text-transform: uppercase;
     margin-bottom: 0px;
-    margin-left: 5em;
+    margin-left: 6.3em;
     line-height: .7em;
   }
   ul {
     margin-top:0px;
     padding: 1em 5em 1em 5em;
-
     list-style-type: none;
     text-transform: uppercase;
     display: flex;
+    justify-content: space-between;
   }
 
   a {
     text-decoration: none;
-    padding-right: 50px;
+    padding-right: 60px;
     color: white;
   }
 }
