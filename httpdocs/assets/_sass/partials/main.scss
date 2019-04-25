@@ -1,6 +1,49 @@
 // main partial
 // this file should contain properties that can apply to every page
 
-.flex {
-  display: flex;
+body {
+  box-sizing: border-box;
+  font-family: $font-roboto-slab;
+  color: $color-black;
+}
+
+a {
+  color: $color-black;
+  transition: color .15s ease-in-out;
+  text-decoration: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:visited {
+    color: $color-black;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+button, input[type="submit"] {
+  background-color: $color-yellow;
+  font-family: $font-josefin-sans;
+  border: none;
+  padding: .375rem .75rem;
+  transition: color .15s ease-in-out, border .15s ease-in-out, background-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  @include focus($color-yellow);
+
+  &:hover {
+    background-color: darken($color-yellow, 15);
+    cursor: pointer;
+  }
+}
+
+input[type="text"], input[type="email"], input[type="search"]  {
+  background-color: $color-white;
+  font-family: $font-josefin-sans;
+  border: none;
+  padding: .375rem .75rem;
+  transition: box-shadow .15s ease-in-out;
+  @include focus($color-yellow);
 }

@@ -15,18 +15,8 @@
     {% endif %}
 
     <div class="field-line">
-      <label>First name:</label>
-      <input type="text" name="mcvars[FNAME]" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.vars.FNAME }}{% endif %}" />
-    </div>
-
-    <div class="field-line">
-      <label>Last name:</label>
-      <input type="text" name="mcvars[LNAME]" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.vars.LNAME }}{% endif %}" />
-    </div>
-
-    <div class="field-line">
-      <label {% if (mailchimpSubscribe is defined) and (mailchimpSubscribe.errorCode == '1000') %} class="error" {% endif %}>Email:</label>
-      <input type="text" name="email" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.email }}{% endif %}" />
+      <label {% if (mailchimpSubscribe is defined) and (mailchimpSubscribe.errorCode == '1000') %} class="error" {% endif %}></label>
+      <input type="email" name="email" placeholder="Email Address" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.email }}{% endif %}" />
     </div>
 
     <input name="" type="submit" value="Subscribe!" />

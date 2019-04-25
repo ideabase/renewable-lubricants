@@ -1,10 +1,5 @@
 // footer partial
 
-*{
-
-
-}
-
 #products-find{
 
 // need div added into html code inorder to create the slant 45 left
@@ -36,10 +31,9 @@
   }
 }
 
-
 #newsletter-sub {
   h2 {
-    color: $color-yellow;
+    color: $color-green-light;
     text-transform: uppercase;
     margin-bottom: 0;
     margin-left: 10em;
@@ -49,12 +43,21 @@
   form {
     max-width: 800px;
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: $color-white;
     padding: 1em 5em 1em 1em;
-    @include slant(right, 45deg, $color-yellow);
+    @include slant(right, 45deg, $color-green-light);
+  }
+
+  input[type="submit"] {
+    text-transform: uppercase;
+    margin-left: 1rem;
   }
 }
 
-.flex {
+.footer-info {
+  display: flex;
   max-width: 750px;
   justify-content: space-around;
   padding: 0 7em 0 0;
@@ -62,10 +65,11 @@
 
   ul {
     padding: 0;
-  }
 
-  li {
-    list-style-type: none;
+    li {
+      list-style-type: none;
+      line-height: 2rem;
+    }
   }
 
   a{

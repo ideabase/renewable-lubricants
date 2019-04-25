@@ -1,19 +1,16 @@
-// add code
+// testimonials partial
 
 #testimonials{
   h1 {
-      background-color: #94d0b8;
-      padding: 10px 0px;
-      text-align: center;
+    background-color: #94d0b8;
+    padding: 10px 0px;
+    text-align: center;
   }
+
   ul{
     list-style: none;
     text-align: right;
     display: flex;
     width: auto;
-  }
-  li{
-    padding-right: 10px;
-    @include slant(left, 45deg, $color-yellow);
   }
 }

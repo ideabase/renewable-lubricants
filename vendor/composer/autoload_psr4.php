@@ -21,7 +21,6 @@ return array(
     'yii\\composer\\' => array($vendorDir . '/yiisoft/yii2-composer'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'yii2tech\\ar\\softdelete\\' => array($vendorDir . '/yii2tech/ar-softdelete/src'),
-    'wbrowar\\adminbar\\' => array($vendorDir . '/wbrowar/adminbar/src'),
     'rias\\contactformextensions\\' => array($vendorDir . '/rias/craft-contact-form-extensions/src'),
     'modules\\' => array($baseDir . '/modules'),
     'mikehaertl\\shellcommand\\' => array($vendorDir . '/mikehaertl/php-shellcommand/src'),

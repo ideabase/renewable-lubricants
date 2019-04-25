@@ -1,7 +1,18 @@
 // variables partial
 
 // colors
-$color-yellow: #ffc700;
-$color-gray: #ccc;
+$color-white: #fafafa;
+$color-yellow: #f9c546;
+$color-green-light: #649f7b;
+$color-green: #31674d;
+$color-gray: #bdbdbd;
+$color-black: #212121;
 
 // fonts
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Roboto+Slab:400,700');
+
+$font-roboto-slab: 'Roboto Slab', serif;
+$font-josefin-sans: 'Josefin Sans', sans-serif;
+
+// breakpoints
+// TODO

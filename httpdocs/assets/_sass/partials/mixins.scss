@@ -24,3 +24,11 @@
     z-index: -1;
   }
 }
+
+// adds a box shadow to the element on focus and removes default outline
+@mixin focus($color) {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 .2rem lighten($color, 15)
+  }
+}
