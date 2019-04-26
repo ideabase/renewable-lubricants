@@ -39,7 +39,26 @@
   <h2 class="subhead">Distributors</h2>
   {% set distributors = craft.entries.section('distributors') %}
 	{% cache %}
-	<div id="accordion">
+
+  {% for distrib in distributors.all() %}
+  <div class="tab">
+    <input id="tab-input" type="checkbox" name="tabs" />
+    <label for="tab-label">{{distrib.title}}</label>
+    <div class="tab-content">
+      {% if distrib.body | length %}
+        <p>{{distrib.body}}</p>
+      {% endif %}
+      <div class="tab-content-image">
+          {% for image in distrib.logo.all() %}
+            <img src="{{image.url}}" alt="{{image.title}}" class="tab-image">
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+
+	<!-- <div id="accordion">
   {% for distrib in distributors.all() %}
     <div class="accordion">
     	<div class="link platform-dropdown">
@@ -60,7 +79,7 @@
 		  	</div>
       </div>
     </div>
-  {% endfor %}
+  {% endfor %} -->
 
 	{% endcache %}
 </section>

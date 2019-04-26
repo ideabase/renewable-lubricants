@@ -1,15 +1,17 @@
-// featured products partial
-// ul p a 890px screen changes all here
-@media screen and (max-width: 890px){
 
-   ul, p, a{
-    font-size: 80%;
-    line-height: 20px;
-  }
-
-
-}
 #products-featured {
+
+  // featured products partial
+  // ul p a 890px screen changes all here
+  @media screen and (max-width: 890px){
+
+    ul, p, a{ // took ul out for nav
+      font-size: 80%;
+      line-height: 20px;
+    }
+
+
+  }
 
 div{
   @include slant(right, 45deg, $color-gray);

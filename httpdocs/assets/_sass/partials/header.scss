@@ -1,7 +1,7 @@
 // header partial
 
 .img-header {
-  max-width: 200px;
+  max-width: 100px;
 }
 
 nav {
@@ -12,7 +12,7 @@ nav {
   ul {
     flex-grow: 1;
     background-color: $color-yellow;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0;
     padding: 1rem .5rem;
     display: flex;
