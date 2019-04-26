@@ -47,3 +47,7 @@ input[type="text"], input[type="email"], input[type="search"]  {
   transition: box-shadow .15s ease-in-out;
   @include focus($color-yellow);
 }
+
+.flex {
+  display: flex;
+}
