@@ -1,8 +1,10 @@
 // featured products partial
+// ul p a 890px screen changes all here
 @media screen and (max-width: 890px){
 
-  body, ul, p, h1, h2, h3, a{
-    font-size: 90%;
+   ul, p, a{
+    font-size: 80%;
+    line-height: 20px;
   }
 
 
