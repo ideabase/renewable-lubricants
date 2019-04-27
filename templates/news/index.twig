@@ -6,6 +6,7 @@
 
     {# News article section of news landing page #}
     <h2 id="h2news">Latest News</h2>
+    <hr class="greenunderline">
     <p id="pnews">Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
 
     {% for entry in craft.entries.section('news').all() %}
@@ -24,6 +25,7 @@
 
     {# Blog article section of news landing page #}
     <h2 id="h2news">Blog Posts</h2>
+    <hr class="greenunderline">
     <p id="pnews">Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
 
     {% for entry in craft.entries.section('blogs').all() %}

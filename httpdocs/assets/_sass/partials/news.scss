@@ -1,13 +1,19 @@
 #h2news, #pnews{
   color: $color-green-dark;
+  padding-left: 20px;
 }
 
-hr{
+.greenunderline{
   border: 1px solid $color-green-dark;
+  margin: 20px;
   width: 200px;
+  padding-left: none;
+  display: block;
+
+
 }
 
 #pnews{
   font-family: helvetica, arial, sans-serif;
-
+  font-size: 15px;
 }
