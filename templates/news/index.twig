@@ -5,8 +5,8 @@
 {% block content %}
 
     {# News article section of news landing page #}
-    <h2>Latest News</h2>
-    <p>Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
+    <h2 id="h2news">Latest News</h2>
+    <p id="pnews">Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
 
     {% for entry in craft.entries.section('news').all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
@@ -23,8 +23,8 @@
     <input type="button" value="View All News"></input>
 
     {# Blog article section of news landing page #}
-    <h2>Blog Posts</h2>
-    <p>Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
+    <h2 id="h2news">Blog Posts</h2>
+    <p id="pnews">Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
 
     {% for entry in craft.entries.section('blogs').all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
