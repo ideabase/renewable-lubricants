@@ -1,36 +1,55 @@
 // header partial
+header {
+  .top-row {
+    justify-content: space-between;
 
-.img-header {
-  max-width: 100px;
-}
-
-nav {
-  margin-bottom: 3rem;
-  display: flex;
-  justify-content: flex-start;
-
-  ul {
-    flex-grow: 1;
-    background-color: $color-yellow;
-    max-width: 900px;
-    margin: 0;
-    padding: 1rem .5rem;
-    display: flex;
-    justify-content: space-around;
-
-    li {
-      list-style-type: none;
-      text-transform: uppercase;
-      font-weight: bold;
-
-      a:hover {
-        color: $color-white;
-        text-decoration: none;
-      }
+    .img-header {
+      max-width: 150px;
     }
+
+    .info-right {
+      align-items: center;
+    }
+
+    .triangle {
+      @include triangle(bottom, left, 50px, 50px, $color-yellow);
+    }
+
+    .cart {
+      background-color: $color-yellow;
+      align-items: center;
+    }
+
   }
 
-  .triangle {
-    @include triangle(top, right, 50px, 50px, $color-yellow);
+  nav {
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: flex-start;
+
+    ul {
+      flex-grow: 1;
+      background-color: $color-yellow;
+      max-width: 900px;
+      margin: 0;
+      padding: 1rem .5rem;
+      display: flex;
+      justify-content: space-around;
+
+      li {
+        list-style-type: none;
+        text-transform: uppercase;
+        font-weight: bold;
+
+        a:hover {
+          color: $color-white;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .triangle {
+      @include triangle(top, right, 50px, 50px, $color-yellow);
+    }
   }
 }

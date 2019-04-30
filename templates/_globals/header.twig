@@ -1,11 +1,35 @@
 <header>
-  {# header image #}
-  <a class="a-header-img" href="{{ siteUrl }}"><img class="img-header" src="{{ header.logo.one().getUrl() }}"/></a>
+  <div class="flex top-row">
+    {# header image #}
+    <a class="a-header-img" href="{{ url() }}"><img class="img-header" src="{{ header.logo.one().getUrl() }}"/></a>
+
+    <div class="flex info-right">
+      <div>
+        <a href="tel:1-800-837-5823">1-800-837-LUBE</a>
+      </div>
+
+      <div class="flex">
+        <div class="triangle"></div>
+        <div class="flex column cart">
+          <div></div>
+          {% if cart is defined %}
+            {% set cartItemCount = craft.orders.number(cart.number).one().totalQty ?? 0 %}
+            {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+              {% set page = craft.app.request.getSegment(3) %}
+              <div>
+                <a class="{% if page == 'cart' %}active{% endif %}" href="{{ url('shop/cart') }}">View Cart{# TODO: cart icon #}</a>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 
   {# top nav #}
   <nav>
     <ul>
-      <li><a href="{{ siteUrl }}">Home</a></li>
+      <li><a href="{{ url() }}">Home</a></li>
       <li><a href="/products">Products</a></li>
       <li><a href="/distributors">Distributors</a></li>
       <li><a href="/news">News & Blog</a></li>

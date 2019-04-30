@@ -8,6 +8,10 @@
 </head>
 
 <body>
+  {% if cart is not defined %}
+    {% set cart = craft.commerce.carts.cart %}
+  {% endif %}
+
   {# include header #}
   {% include '_globals/header'%}
 

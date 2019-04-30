@@ -33,7 +33,6 @@
 
 #newsletter-sub {
   .flex {
-    display: flex;
     justify-content: flex-start;
   }
 
@@ -82,7 +81,6 @@
   .flex {
     flex-grow: 1;
     background-color: $color-gray;
-    display: flex;
     justify-content: space-around;
     max-width: 750px;
   }
