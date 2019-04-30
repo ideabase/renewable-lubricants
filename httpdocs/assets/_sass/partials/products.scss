@@ -1,0 +1,58 @@
+.popular-products {
+	padding: 2.5em;
+}
+
+.popular-products h2 {
+  text-align: center;
+}
+
+.row {
+	display: flex;
+  display: -ms-flexbox;
+	flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+}
+
+.col {
+	position: relative;
+  width: 100%;
+	padding: 1em;
+}
+
+.col a img {
+  width: .25em;
+}
+
+@media (min-width: 768px) {
+	.col {
+		-ms-flex: 0 0 30%;
+		flex: 0 0 30%;
+		max-width: 30%;
+		flex-direction: column;
+	}
+}
+
+.product-title {
+  font-weight: bold;
+	font-family: $font-roboto-slab, serif;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	margin-bottom: .3em;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.learn-more-product {
+	font-family: $font-josefin-sans, sans-serif;
+	font-size: .9em;
+	text-decoration: none;
+	color: $color-black;
+	transition: .2s ease-in-out;
+
+	&:hover {
+		color: $color-green-dark;
+		text-decoration: underline;
+	}
+}

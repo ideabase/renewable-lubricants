@@ -22,22 +22,17 @@
       </div>
   </div>
 
-  <div id="products-categories">
-    <h2>Product Categories</h2>
-
-    <ul class="flex-container">
+  <div class="popular-products">
+    <h2>Popular Product Categories</h2>
+    <div class="row">
       {% for category in craft.categories.group('productCategories').all() %}
-        <li>
-          <a href="{{ category.url }}">{{ category.title }}
-            {# <img src="{{ category.image.one().url }}"> #}
-          </a>
-        </li>
+		  <div class="col">
+			  <a href="#"><img src="{{ category.image }}"/></a> {# image needs fixed so it appears #}
+  			<h4 class="product-title">{{ category.title }}</h4>
+  			<a href="{{ category.url }}" class="learn-more-product">Learn More</a>
+		  </div>
       {% endfor %}
-
-      <li>
-        <a href="{# TODO #}">View All Products</a>
-      </li>
-    </ul>
+    </div>
   </div>
 
   <div id="products-find">
