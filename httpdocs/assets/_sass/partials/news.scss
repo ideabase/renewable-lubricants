@@ -23,17 +23,20 @@
 
   background-color: blue;
   padding-left: 20px;
+  display: flex;
+  width: 500px;
 
   img{
     z-index: 0;
     background-color: red;
-    max-width:200px;
+    max-width: 100px;
+
   }
   p{
     color:white;
     z-index: 1;
   }
   .a p{
-    display:flex;
+
   }
 }

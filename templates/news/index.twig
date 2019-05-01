@@ -8,7 +8,7 @@
     <h2 id="h2news">Latest News</h2>
     <hr class="greenunderline">
     <p id="pnews">Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
-      <div id="news-container">
+<div id="news-container">
     {% for entry in craft.entries.section('news').all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
 
@@ -22,7 +22,7 @@
         <hr>
 
     {% endfor %}
-
+</div>
     <input type="button" value="View All News"></input>
 
     {# Blog article section of news landing page #}
@@ -43,7 +43,7 @@
         <hr>
 
     {% endfor %}
-  <div>
+</div>
     <input type="button" name="" value="View All Blog Posts">
 
 {% endblock %}
