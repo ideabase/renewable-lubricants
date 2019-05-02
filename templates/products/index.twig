@@ -27,7 +27,9 @@
     <div class="row">
       {% for category in craft.categories.group('productCategories').all() %}
 		  <div class="col">
-			  <a href="#"><img src="{{ category.image }}"/></a> {# image needs fixed so it appears #}
+        {% for img in category.productImage %}
+			  <a href="#"><img src="{{ img.getUrl() }}"/></a> 
+        {% endfor %}
   			<h4 class="product-title">{{ category.title }}</h4>
   			<a href="{{ category.url }}" class="learn-more-product">Learn More</a>
 		  </div>

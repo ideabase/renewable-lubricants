@@ -18,22 +18,25 @@
   font-family: helvetica, arial, sans-serif;
   font-size: 15px;
 }
-
+//issue is that the whole group is being triggered rather than each element
 #news-container{
 
   background-color: blue;
   padding-left: 20px;
-
+  display: flex;
+  list-style: none;
   img{
     z-index: 0;
     background-color: red;
-    max-width:200px;
+
+    min-width: 100px;
+
   }
   p{
     color:white;
     z-index: 1;
   }
   .a p{
-    display:flex;
+
   }
 }

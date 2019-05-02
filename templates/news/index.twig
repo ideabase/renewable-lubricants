@@ -8,20 +8,26 @@
     <h2 id="h2news">Latest News</h2>
     <hr class="greenunderline">
     <p id="pnews">Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
-      <div id="news-container">
-    {% for entry in craft.entries.section('news').all() %}
-        {% if entry.featureImage | length %} {# Checking for not null fields. #}
 
+
+  <ul id="news-container">
+    {% for entry in craft.entries.section('news').limit(3) %}
+        {% if entry.featureImage | length %} {# Checking for not null fields. #}
+<li>
             <a href="{{ entry.url }}">
-                <img src="{{ entry.featureImage.one().url }}" height="50px" width="50px"> {# Remove the height and width attributes to style the images with css. #}
-            </a>
+                <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}" > {# Remove the height and width attributes to style the images with css. #}
+
         {% endif %}
         {{ entry.title }}
         {{ entry.imageDescription }}
+        </a>
         {{ entry.body }}
-        <hr>
 
+
+</li>
     {% endfor %}
+  </ul>
+
 
     <input type="button" value="View All News"></input>
 
@@ -29,21 +35,21 @@
     <h2 id="h2news">Blog Posts</h2>
     <hr class="greenunderline">
     <p id="pnews">Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
-<div id="news-container">
-    {% for entry in craft.entries.section('blogs').all() %}
+<ul id="news-container">
+    {% for entry in craft.entries.section('blogs').limit(3) %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
-
+<li>
             <a href="{{ entry.url }}">
-                <img src="{{ entry.featureImage.one().url }}"> {# Remove the height and width attributes to style the images with css. #}
+                <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}"> {# Remove the height and width attributes to style the images with css. #}
             </a>
         {% endif %}
         {{ entry.title }}
         {{ entry.imageDescription }}
         {{ entry.body }}
-        <hr>
 
+</li>
     {% endfor %}
-  <div>
+</ul>
     <input type="button" name="" value="View All Blog Posts">
 
 {% endblock %}
