@@ -3,23 +3,6 @@
 $vendorDir = dirname(__DIR__);
 
 return array (
-  'craftcms/redactor' => 
-  array (
-    'class' => 'craft\\redactor\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/redactor/src',
-    'handle' => 'redactor',
-    'aliases' => 
-    array (
-      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
-    ),
-    'name' => 'Redactor',
-    'version' => '2.3.2',
-    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://pixelandtonic.com/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/craftcms/redactor',
-  ),
   'craftcms/contact-form' => 
   array (
     'class' => 'craft\\contactform\\Plugin',
@@ -57,23 +40,6 @@ return array (
     'developerUrl' => 'https://www.doublesecretagency.com/plugins',
     'documentationUrl' => 'https://www.doublesecretagency.com/plugins/smart-map/docs',
   ),
-  'craftcms/commerce' => 
-  array (
-    'class' => 'craft\\commerce\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/commerce/src',
-    'handle' => 'commerce',
-    'aliases' => 
-    array (
-      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
-    ),
-    'name' => 'Craft Commerce',
-    'version' => '2.1.3.1',
-    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://craftcommerce.com',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
-  ),
   'rias/craft-contact-form-extensions' => 
   array (
     'class' => 'rias\\contactformextensions\\ContactFormExtensions',
@@ -97,5 +63,39 @@ return array (
     array (
       'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
     ),
+  ),
+  'craftcms/commerce' => 
+  array (
+    'class' => 'craft\\commerce\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/commerce/src',
+    'handle' => 'commerce',
+    'aliases' => 
+    array (
+      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
+    ),
+    'name' => 'Craft Commerce',
+    'version' => '2.1.4',
+    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://craftcommerce.com',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
+  ),
+  'craftcms/redactor' => 
+  array (
+    'class' => 'craft\\redactor\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/redactor/src',
+    'handle' => 'redactor',
+    'aliases' => 
+    array (
+      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
+    ),
+    'name' => 'Redactor',
+    'version' => '2.3.3.2',
+    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://pixelandtonic.com/',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
   ),
 );
