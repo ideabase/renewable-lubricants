@@ -5,24 +5,34 @@ body {
   box-sizing: border-box;
   font-family: $font-roboto-slab;
   color: $color-black;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+  a {
+    color: $color-black;
+    transition: color .15s ease-in-out;
+    text-decoration: none;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:visited {
+      color: $color-black;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
 }
 
-a {
-  color: $color-black;
-  transition: color .15s ease-in-out;
-  text-decoration: none;
+p {
+  font-family: $font-josefin-sans;
+  line-height: 1.5;
+}
 
-  &:focus {
-    outline: none;
-  }
-
-  &:visited {
-    color: $color-black;
-  }
-
-  &:hover {
-    text-decoration: underline;
-  }
+.feature-img {
+  width: 100%;
 }
 
 button, input[type="submit"] {

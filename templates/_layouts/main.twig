@@ -18,7 +18,7 @@
   <main>
     {# feature image #}
     {% if entry.featureImage|length %}
-      <img src="{{ entry.featureImage.one().getUrl() }}"/>
+      <img src="{{ entry.featureImage.one().getUrl() }}" class="feature-img"/>
     {% endif %}
 
     {% if entry.subtitle|length %}
