@@ -5,19 +5,6 @@
 <h1>Check out our global partners.</h1>
 <p>{{entry.body}}</p>
 
-{#
-<div>
-<p>Username</p>
-<input/>
-<p>Password</p>
-<input/>
-<a href="#">Forgot password</a>
-<a href="#">Become a distributor</a>
-<button>Log in</button>
-</div>
-#}
-{# craft map plugin here, see Treno #}
-
 {% set options = {
   markerInfo: '_includes/infoBubble',
   height: 300,
@@ -28,7 +15,7 @@
   },
   infoWindowOptions: {
     maxWidth: 200
-  }
+  },
 } %}
 
 {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
@@ -41,20 +28,20 @@
 	{% cache %}
 
   {% for distrib in distributors.all() %}
-  <div class="tab">
-    <input id="tab-input" type="checkbox" name="tabs" />
-    <label for="tab-label">{{distrib.title}}</label>
-    <div class="tab-content">
-      {% if distrib.body | length %}
-        <p>{{distrib.body}}</p>
-      {% endif %}
-      <div class="tab-content-image">
+    <div class="tab">
+      <input id="tab-input" type="checkbox" name="tabs" />
+      <label for="tab-label">{{ distrib.title }}</label>
+      <div class="tab-content">
+        {% if distrib.body|length %}
+          <p>{{ distrib.body }}</p>
+        {% endif %}
+        <div class="tab-content-image">
           {% for image in distrib.logo.all() %}
-            <img src="{{image.url}}" alt="{{image.title}}" class="tab-image">
+            <img src="{{ image.url }}" alt="{{ image.title }}" class="tab-image">
           {% endfor %}
+        </div>
       </div>
     </div>
-  </div>
   {% endfor %}
 
 
