@@ -6,10 +6,10 @@
 // div{  @include slant(left, 45deg, $color-yellow);}
 #find-container{
   margin-left:100px;
-  @include slant(left, -45deg, $color-yellow);
+  @include slant(left, -45deg, $color-green-dark);
 }
   h2 {
-    color: $color-yellow;
+    color: $color-green-dark;
     text-transform: uppercase;
     margin-bottom: 0px;
     margin-left: 6.3em;
@@ -27,7 +27,12 @@
   a {
     text-decoration: none;
     padding-right: 60px;
-    color: white;
+    color: $color-white;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -37,7 +42,7 @@
   }
 
   h2 {
-    color: $color-green-light;
+    color: $color-yellow;
     text-transform: uppercase;
     margin-bottom: 0;
     margin-left: 10em;
@@ -45,7 +50,7 @@
   }
 
   form {
-    background-color: $color-green-light;
+    background-color: $color-yellow;
     flex-grow: 1;
     max-width: 800px;
     display: flex;
@@ -61,7 +66,7 @@
   }
 
   .triangle {
-    @include triangle(bottom, right, 62px, 62px, $color-green-light);
+    @include triangle(bottom, right, 63px, 63px, $color-yellow);
   }
 }
 
