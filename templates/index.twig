@@ -21,7 +21,7 @@
 <div id="testimonials">
   <h1>Testimonials</h1>
 
-    {% for testimonial in craft.entries.section('testimonials').limit(3) %}
+    {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
     <div id="testimonial">
       <img src="" alt="image"/>
 
