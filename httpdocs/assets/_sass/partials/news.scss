@@ -1,6 +1,7 @@
 #h2news, #pnews{
   color: $color-green-dark;
   padding-left: 20px;
+  min-width: 60%;
 ;
 }
 
@@ -22,21 +23,43 @@
 #news-container{
 
   background-color: blue;
-  padding-left: 20px;
+  margin-left: 20px;
+  padding-left:0;
   display: flex;
   list-style: none;
+  max-width: 1350px;
   img{
     z-index: 0;
     background-color: red;
 
-    min-width: 100px;
 
   }
   p{
-    color:white;
+    color: black;
     z-index: 1;
+    text-align: center;
   }
-  .a p{
+  a{
+    color:white;
+    z-index:1;
+  }
+}
+#blogbuttonset{
+  display:flex;
+}
+#blogbutton{
+  color: $color-green-dark;
+  border-style: none;
+  font-size: 22px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-left: 1000px;
+}
 
-  }
+#blogsbuttonline{
+  background-color: $color-green-dark;
+  height: 30px;
+  min-width: 15%;
+
+
 }
