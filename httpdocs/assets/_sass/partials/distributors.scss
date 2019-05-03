@@ -1,26 +1,25 @@
-.subhead {
+.subheading {
   text-align: center;
   background-color: $color-green-dark;
   color: #fff;
 }
 
-.tab {
+.accordion {
   position: relative;
   margin-bottom: 10px;
   width: 100%;
   color: $color-green-dark;
-  overflow: hidden;
   max-width: 900px;
   margin: 0 auto;
 }
 
-.tab input {
+.accordion input {
   position: absolute;
   opacity: 0;
   z-index: -1;
 }
 
-.tab label {
+.accordion label {
   position: relative;
   display: block;
   padding: 0 0 0 1em;
@@ -33,16 +32,15 @@
 }
 
 @media only screen and (min-width: 600px) {
-  .tab-content {
+  .accordion-content {
     display: flex;
     flex-wrap: nowrap;
   }
 }
 
-.tab-content {
+.accordion-content {
+  display: none;
   padding: 1em;
-  max-height: 0; // take out when testing for the accordion
-  overflow: hidden;
   background: #fff;
   font-family: $font-josefin-sans;
   -webkit-transition: max-height .35s;
@@ -51,26 +49,26 @@
   transition: max-height .35s;
 }
 
-.tab-content p {
+.accordion-content p {
   margin: 1em;
   color: $color-black;
 }
 
-.tab-content-image {
+.accordion-content-image {
   margin-top: 1.5em;
 }
 
-.tab-image {
+.accordion-image {
   width: 150px;
 }
 
 /* :checked */
-.tab input:checked ~ .tab-content {
+.accordion input:checked ~ .accordion-content {
   max-height: 100vh;
 }
 
 /* Icon */
-.tab label::after {
+.accordion label::after {
   position: absolute;
   right: 0;
   top: 0;
@@ -84,10 +82,10 @@
   transition: all .35s;
 }
 
-.tab input[type=checkbox] + label::after {
+.accordion input[type=checkbox] + label::after {
   content: "+";
 }
 
-.tab input[type=checkbox]:checked + label::after {
+.accordion input[type=checkbox]:checked + label::after {
   transform: rotate(315deg);
 }
