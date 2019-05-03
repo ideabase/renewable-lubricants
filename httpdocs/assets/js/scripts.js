@@ -181,3 +181,14 @@ $(document).ready(function() {
 
 
 }); // Ends the document ready function.  Be careful not to remove this!
+
+
+// Mobile Navigation
+
+$(document).ready(function() {
+	$(".mobile-menu").on('click', function(){
+		$(".mobile-dropdown").slideToggle("fast");
+	});
+});
+
+// End Mobile Navigation
