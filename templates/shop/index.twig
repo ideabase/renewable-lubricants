@@ -8,37 +8,37 @@
 
       <div>
         <ul>
-        {% for product in craft.products.type('clothing').all() %}
+          {% for product in craft.products.type('clothing').all() %}
             <li>
               {% if product.featuredProduct %}
-              {% for image in product.productImage.all() %}
+                {% for image in product.productImage.all() %}
                   <img src="{{ image.url }}"alt="{{ image.title }}">
-              {% endfor %}
-              <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
+                {% endfor %}
+                <a href="{{ product.url }}">
+                <h1>{{ product.title }}</h1></a>
+              {% endif %}
             </li>
-            {% endif %}
-        {% endfor %}
-
+          {% endfor %}
+        </ul>
       </div>
   </div>
 
   <div class="popular-products">
     <h2>Popular Product Categories</h2>
     <div class="row">
+
       {% for category in craft.categories.group('productCategories').all() %}
-		  <div class="col">
-        {% for img in category.productImage %}
-        <a href="#"><img src="{{ img.getUrl() }}"/></a>
-        {% endfor %}
-  			<h4 class="product-title">{{ category.title }}</h4>
-  			<a href="{{ category.url }}" class="learn-more-product">Learn More</a>
-		  </div>
+        <div class="col">
+
+          {% for img in category.productImage.all() %}
+            <a href="#"><img src="{{ img.getUrl() }}"/></a>
+          {% endfor %}
+
+          <h4 class="product-title">{{ category.title }}</h4>
+          <a href="{{ category.url }}" class="learn-more-product">Learn More</a>
+        </div>
       {% endfor %}
 
-      <li>
-        <a href="/shop">View All Products</a>
-      </li>
-    </ul>
     </div>
   </div>
 

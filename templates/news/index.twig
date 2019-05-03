@@ -11,7 +11,7 @@
 
 
   <ul id="news-container">
-    {% for entry in craft.entries.section('news').limit(3) %}
+    {% for entry in craft.entries.section('news').limit(3).all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
 <li>
             <a href="{{ entry.url }}">
@@ -37,7 +37,7 @@
     <hr class="greenunderline">
     <p id="pnews">Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
 <ul id="news-container">
-    {% for entry in craft.entries.section('blogs').limit(3) %}
+    {% for entry in craft.entries.section('blogs').limit(3).all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
 <li>
             <a href="{{ entry.url }}">

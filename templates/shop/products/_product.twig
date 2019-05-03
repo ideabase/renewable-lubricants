@@ -1,4 +1,4 @@
-{% extends 'shop/_layouts/main' %}
+{% extends '_layouts/shop' %}
 
 {% block content %}
   <div class="mt-8">
@@ -28,7 +28,7 @@
         </div>
         <div class="buttons">
           <input type="submit" value="{{ "Add to cart"|t }}" class="button"/>
-          <p>{{product.body}}</p>
+          <p>{{ product.body }}</p>
         </div>
       </form>
     </div>
