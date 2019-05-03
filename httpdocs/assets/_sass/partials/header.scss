@@ -13,12 +13,16 @@ header {
     }
 
     .triangle {
-      @include triangle(bottom, left, 50px, 50px, $color-yellow);
+      @include triangle(bottom, left, 60px, 60px, $color-yellow);
     }
 
     .cart {
       background-color: $color-yellow;
       align-items: center;
+      padding: 1.25em;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: .8em;
     }
 
   }
@@ -52,5 +56,107 @@ header {
     .triangle {
       @include triangle(top, right, 50px, 50px, $color-yellow);
     }
+  }
+}
+
+@media only screen and (min-width: $mobile-breakpoint) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $mobile-breakpoint) {
+  header nav {
+    display: none;
+  }
+
+  header {
+    .top-row {
+      .img-header {
+        max-width: 100px;
+        margin: .5em;
+      }
+
+      .triangle {
+        @include triangle(bottom, left, 40px, 50px, $color-yellow);
+      }
+
+      .cart {
+        background-color: $color-yellow;
+        align-items: center;
+        padding: .8em;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: .8em;
+      }
+    }
+  }
+
+  .mobile-menu {
+    width: auto;
+    position: relative;
+    padding: 0;
+    height: 50px;
+    line-height: 50px;
+    /* disable text selection by clicking */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .mobile-menu a.dropdown-link {
+    display: block;
+    height: 50px;
+    padding: 0 20px;
+    color: $color-black;
+    font-size: 1em;
+    cursor: pointer;
+    background: $color-yellow;
+  }
+
+  .mobile-menu a.dropdown-link:hover{
+  	text-decoration: none;
+  }
+  .mobile-menu a.dropdown-link i{
+  	float: right;
+  	position: relative;
+  	top: 15px;
+  }
+
+  .mobile-dropdown {
+    display: none;
+    list-style-type: none;
+    background: $color-green-dark;
+    padding: 0;
+    min-width: 125px;
+    position: relative;
+    z-index: 100;
+    margin: 0;
+  }
+
+  .mobile-dropdown li {
+    padding: 0;
+    height: auto;
+  }
+
+  .mobile-dropdown li a {
+    padding: 0;
+    color: $color-white;
+    display: block;
+    padding: 0 20px;
+    height: 45px;
+    line-height: 45px;
+    font-size: .8em;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .mobile-dropdown li a:hover{
+    text-decoration: none;
+    background: $color-green-light;
   }
 }
