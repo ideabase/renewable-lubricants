@@ -59,7 +59,7 @@ header {
   }
 }
 
-@media only screen and (min-width: $mobile-breakpoint) {
+@media only screen and (min-width: 769px) {
   .mobile-menu {
     display: none;
   }
@@ -150,7 +150,7 @@ header {
     padding: 0 20px;
     height: 45px;
     line-height: 45px;
-    font-size: .8em;
+    font-size: .9em;
     text-decoration: none;
     text-align: center;
   }

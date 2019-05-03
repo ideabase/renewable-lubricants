@@ -68,6 +68,12 @@
 .footer-info {
   display: flex;
   justify-content: flex-start;
+  margin-top: 2em;
+
+  h3 {
+    font-family: $font-roboto-slab;
+    text-transform: uppercase;
+  }
 
   ul {
     padding: 0;
@@ -75,6 +81,7 @@
     li {
       list-style-type: none;
       line-height: 2rem;
+      font-family: $font-josefin-sans;
     }
   }
 
@@ -87,5 +94,26 @@
 
   .triangle {
     @include triangle(bottom, right, 170px, 170px, $color-gray);
+  }
+}
+
+@media only screen and (max-width: $mobile-breakpoint) {
+
+  .footer-info {
+
+    .triangle {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: $footer-breakpoint) {
+  .footer-info {
+
+    .flex {
+      display: flex;
+      flex-direction: column;
+      padding: 1em;
+    }
   }
 }
