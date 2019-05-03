@@ -15,7 +15,7 @@
           {% if cart is defined %}
             {% set cartItemCount = craft.orders.number(cart.number).one().totalQty ?? 0 %}
             {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
-              {% set page = craft.app.request.getSegment(3) %}
+              {% set page = craft.app.request.getSegment(2) %}
               <div>
                 <a class="{% if page == 'cart' %}active{% endif %}" href="{{ url('shop/cart') }}">View Cart{# TODO: cart icon #}</a>
               </div>
@@ -30,7 +30,7 @@
   <nav>
     <ul>
       <li><a href="{{ url() }}">Home</a></li>
-      <li><a href="/products">Products</a></li>
+      <li><a href="/shop/products">Products</a></li>
       <li><a href="/distributors">Distributors</a></li>
       <li><a href="/news">News & Blog</a></li>
       <li><a href="/about">About</a></li>

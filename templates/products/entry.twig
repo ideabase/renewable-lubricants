@@ -1,48 +1,43 @@
-{% extends "_layout" %}
-
-
+{% extends "_layouts/main" %}
 
 {% block content %}
 
-<h1>Go with the best. Protect the environment</h1>
+  <h1>Go with the best. Protect the environment</h1>
 
   <img src="{{ entry.productImage.one().url }}">
 
-<p>{{ entry.body }}</p>
+  <p>{{ entry.body }}</p>
 
-<hr>
+  <hr>
 
-<div>
-  <h3>Available Grades / Sizes</h3>
-  <ul>
-    <li>8 oz.
-      {% for file in entry.files.all() %}
-        <a href="{{file.url}}">SDS Sheet (PDF)</a>
-      {% endfor %}
-    </li>
-    <li>16 oz.
-      {% for file in entry.files.all() %}
-        <a href="{{file.url}}">SDS Sheet (PDF)</a>
-      {% endfor %}
-    </li>
-  </ul>
-  <button>Add To Cart>></button>
-</div>
+  <div>
+    <h3>Available Grades / Sizes</h3>
+    <ul>
+      <li>8 oz.
+        {% for file in entry.files.all() %}
+          <a href="{{file.url}}">SDS Sheet (PDF)</a>
+        {% endfor %}
+      </li>
+      <li>16 oz.
+        {% for file in entry.files.all() %}
+          <a href="{{file.url}}">SDS Sheet (PDF)</a>
+        {% endfor %}
+      </li>
+    </ul>
+    <button>Add To Cart>></button>
+  </div>
 
-<hr>
+  <hr>
 
-{# need javascript to switch between the different tabs #}
-<div>
-<a href"#">Specifications</a>
-<a href"#">Reviews</a>
-<a href"#">The Renewable Advantage</a>
+  {# need javascript to switch between the different tabs #}
+  <div>
+    <a href"#">Specifications</a>
+    <a href"#">Reviews</a>
+    <a href"#">The Renewable Advantage</a>
+  </div>
 
-</div>
-
-<div class="related-products">
-{# how to find related products? same type of product, similar price? #}
-
-</div>
-
+  <div class="related-products">
+  {# how to find related products? same type of product, similar price? #}
+  </div>
 
 {% endblock %}

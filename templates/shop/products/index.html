@@ -1,9 +1,8 @@
-{% extends 'shop/_layouts/main' %}
+{% extends '_layouts/shop' %}
 
 {% set products = craft.products.limit(5).all() %}
-{% set product_categories = craft.categories.group('productCategories').all() %}
 
-{% block main %}
+{% block content %}
   <h1>Products</h1>
 
   <div id="product-specifications">
@@ -12,11 +11,11 @@
     <h3>Filter By Category</h3>
     <ul id="product-categories">
       <li>
-        <input type="radio" name="radio-category" id="radio-all" checked>{{ ' ' ~ 'Show All'}}</input>
+        <input type="radio" name="radio-category" id="radio-all" checked>{{'Show All'}}</input>
       </li>
-      {% for category in product_categories %}
+      {% for category in craft.categories.group('productCategories').orderBy('title').all() %}
         <li>
-          <input type="radio" name="radio-category" id="radio-{{ category.title|replace({' ': ''}) }}">{{ ' ' ~ category.title }}</input>
+          <input type="radio" name="radio-category" id="radio-{{ category.title|replace({' ': ''}) }}">{{category.title }}</input>
         </li>
       {% endfor %}
     </ul>
@@ -31,7 +30,7 @@
 
       {# get only titles of the categories #}
       {% set category_names = [] %}
-      {% for category in product_categories %}
+      {% for category in craft.categories.group('productCategories').all() %}
         {% set category_names = category_names|merge([category.title|replace({' ': ''})]) %}
       {% endfor %}
 
@@ -50,7 +49,6 @@
         });
       }
     {% endjs %}
-
   </div>
 
   <form method="POST" class="text-center">
