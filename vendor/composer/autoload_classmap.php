@@ -3171,6 +3171,7 @@ return array(
     'craft\\redactor\\events\\RegisterPluginPathsEvent' => $vendorDir . '/craftcms/redactor/src/events/RegisterPluginPathsEvent.php',
     'craft\\redactor\\migrations\\Install' => $vendorDir . '/craftcms/redactor/src/migrations/Install.php',
     'craft\\redactor\\migrations\\m180430_204710_remove_old_plugins' => $vendorDir . '/craftcms/redactor/src/migrations/m180430_204710_remove_old_plugins.php',
+    'craft\\redactor\\migrations\\m190225_003922_split_cleanup_html_settings' => $vendorDir . '/craftcms/redactor/src/migrations/m190225_003922_split_cleanup_html_settings.php',
     'craft\\search\\SearchQuery' => $vendorDir . '/craftcms/cms/src/search/SearchQuery.php',
     'craft\\search\\SearchQueryTerm' => $vendorDir . '/craftcms/cms/src/search/SearchQueryTerm.php',
     'craft\\search\\SearchQueryTermGroup' => $vendorDir . '/craftcms/cms/src/search/SearchQueryTermGroup.php',

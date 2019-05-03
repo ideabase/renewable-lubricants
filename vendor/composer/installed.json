@@ -331,12 +331,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.1.24",
-        "version_normalized": "3.1.24.0",
+        "version": "3.1.25",
+        "version_normalized": "3.1.25.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/aa862bd7f2ee3a81c692f0b6c4d0aa9f20e85373",
-            "reference": "aa862bd7f2ee3a81c692f0b6c4d0aa9f20e85373",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/d63676d829074e257492f010fdcd7ccc7fe895a9",
+            "reference": "d63676d829074e257492f010fdcd7ccc7fe895a9",
             "shasum": ""
         },
         "require": {
@@ -388,7 +388,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2019-04-23T17:11:18+00:00",
+        "time": "2019-04-30T18:40:25+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -417,12 +417,12 @@
     },
     {
         "name": "craftcms/commerce",
-        "version": "2.1.3.1",
-        "version_normalized": "2.1.3.1",
+        "version": "2.1.4",
+        "version_normalized": "2.1.4.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/commerce/zipball/94a97b0245927e6f9c6f532ad827e80db83ee1bb",
-            "reference": "94a97b0245927e6f9c6f532ad827e80db83ee1bb",
+            "url": "https://api.github.com/repos/craftcms/commerce/zipball/10026287664826c8a81f0d5bb61a11725e484fa6",
+            "reference": "10026287664826c8a81f0d5bb61a11725e484fa6",
             "shasum": ""
         },
         "require": {
@@ -432,7 +432,7 @@
             "moneyphp/money": "^3.1.3",
             "phpoffice/phpspreadsheet": "^1.4"
         },
-        "time": "2019-04-10T23:45:08+00:00",
+        "time": "2019-04-30T06:02:45+00:00",
         "type": "craft-plugin",
         "extra": {
             "handle": "commerce",
@@ -609,22 +609,23 @@
     },
     {
         "name": "craftcms/redactor",
-        "version": "2.3.2",
-        "version_normalized": "2.3.2.0",
+        "version": "2.3.3.2",
+        "version_normalized": "2.3.3.2",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/redactor/zipball/e4d96d805af031f4a80e5742e5651f30b55e6bca",
-            "reference": "e4d96d805af031f4a80e5742e5651f30b55e6bca",
+            "url": "https://api.github.com/repos/craftcms/redactor/zipball/55ee76494f6332ba5709003d2082e51d56ae8b1a",
+            "reference": "55ee76494f6332ba5709003d2082e51d56ae8b1a",
             "shasum": ""
         },
         "require": {
             "craftcms/cms": "^3.1.0"
         },
-        "time": "2019-02-21T13:34:33+00:00",
+        "time": "2019-04-29T21:39:05+00:00",
         "type": "craft-plugin",
         "extra": {
             "name": "Redactor",
-            "handle": "redactor"
+            "handle": "redactor",
+            "documentationUrl": "https://github.com/craftcms/redactor/blob/v2/README.md"
         },
         "installation-source": "dist",
         "autoload": {
@@ -653,7 +654,8 @@
             "email": "support@craftcms.com",
             "issues": "https://github.com/craftcms/redactor/issues?state=open",
             "source": "https://github.com/craftcms/redactor",
-            "docs": "https://github.com/craftcms/redactor"
+            "docs": "https://github.com/craftcms/redactor/blob/v2/README.md",
+            "rss": "https://github.com/craftcms/redactor/commits/v2.atom"
         }
     },
     {
@@ -3668,12 +3670,12 @@
     },
     {
         "name": "yiisoft/yii2-debug",
-        "version": "2.1.2",
-        "version_normalized": "2.1.2.0",
+        "version": "2.1.3",
+        "version_normalized": "2.1.3.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/ad90eeea4312daa5d02d9ca043743fca03571874",
-            "reference": "ad90eeea4312daa5d02d9ca043743fca03571874",
+            "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/27e36a045069e6e195a28cd4314b6e125ddcc0f9",
+            "reference": "27e36a045069e6e195a28cd4314b6e125ddcc0f9",
             "shasum": ""
         },
         "require": {
@@ -3681,7 +3683,7 @@
             "php": ">=5.4",
             "yiisoft/yii2": "~2.0.13"
         },
-        "time": "2019-04-23T13:17:21+00:00",
+        "time": "2019-04-30T15:21:32+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
