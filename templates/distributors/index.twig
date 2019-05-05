@@ -2,50 +2,53 @@
 
 {% block content %}
 
-<h1>Check out our global partners.</h1>
-<p>{{entry.body}}</p>
-
-{% set options = {
-  markerInfo: '_includes/infoBubble',
-  height: 300,
-  zoom: 4,
-  draggable: true,
-  markerOptions: {
-    icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
-  },
-  infoWindowOptions: {
-    maxWidth: 200
-  },
-} %}
-
-{{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
-
-{# see studentmedia advertising accordion, close to identical #}
-
-<section>
-  <h2 class="subheading">Our Distribution Network</h2>
-  {% set distributors = craft.entries.section('distributors') %}
-	{% cache %}
-
-  {% for distrib in distributors.all() %}
-    <div class="accordion">
-      <input type="checkbox" name="tabs" />
-      <label>{{ distrib.title }}</label>
-      <div class="accordion-content">
-        <div class="accordion-content-image">
-          {% for image in distrib.logo.all() %}
-            <img src="{{ image.url }}" alt="{{ image.title }}" class="accordion-image">
-          {% endfor %}
-        </div>
-        {% if distrib.body|length %}
-          <p>{{ distrib.body }}</p>
-        {% endif %}
-      </div>
+<div id="distributors">
+  <section id="distributors-map">
+    <div class="flex">
+      <h2>Check out our global partners.</h2>
+      <p>{{entry.body}}</p>
     </div>
-  {% endfor %}
 
-	{% endcache %}
-</section>
+    {% set options = {
+      markerInfo: '_includes/infoBubble',
+      height: 300,
+      zoom: 4,
+      draggable: true,
+      markerOptions: {
+        icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+      },
+      infoWindowOptions: {
+        maxWidth: 200
+      },
+    } %}
 
+    {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
+  </section>
+
+  <section id="distributors-network">
+    <div class="flex">
+      <div class="triangle"></div>
+      <h1>Our Distribution Network</h1>
+      <div class="fill"></div>
+    </div>
+    {% set distributors = craft.entries.section('distributors') %}
+    {% cache %}
+
+    {% for distrib in distributors.all() %}
+      <div class="accordion">
+        <input type="radio" name="tabs">
+        <label>{{ distrib.title }}</label>
+        <div class="accordion-content">
+          <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="accordion-image">
+          {% if distrib.body|length %}
+            <p>{{ distrib.body }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    {% endcache %}
+  </section>
+</div>
 
 {% endblock %}

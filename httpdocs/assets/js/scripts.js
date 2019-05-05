@@ -3,15 +3,20 @@
  */
 
  // mobile menu dropdown
-$(".mobile-menu").on('click', function() {
-	$(".mobile-dropdown").slideToggle("fast");
+$('.mobile-menu').on('click', function() {
+	$('.mobile-dropdown').slideToggle('fast');
 });
 
 // accordion
 $(".accordion label").on('click', function() {
-	// toggle clicked label's content
-	$(this).next().slideToggle();
+	// toggle accordion content
+	$(this).next().slideToggle('fast');
 
-	// close other accordion content
-	$(".accordion-content").not($(this).next()).slideUp();
+	// set checkbox to checked
+	$(this).prev().prop('checked')
+		? $(this).prev().prop('checked', false)
+		: $(this).prev().prop('checked', true);
+
+	// close other accordions' content
+	$(".accordion-content").not($(this).next()).slideUp('fast');
 });
