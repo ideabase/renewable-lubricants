@@ -20,8 +20,8 @@
 
     {% js %}
       {# 'Show All' filter button event listener #}
-      document.getElementById('radio-all').addEventListener('click', () => {
-        document.querySelectorAll('#product').forEach(c => {
+      document.getElementById('radio-all').addEventListener('click', function() {
+        document.querySelectorAll('#product').forEach(function(c) {
           c.style.display = '';
         });
       });
@@ -33,15 +33,15 @@
       {% endfor %}
 
       {# loop through filter buttons and add event listeners #}
-      for (let i of {{ category_names|json_encode|raw }}) {
-        document.getElementById('radio-' + i).addEventListener('click', () => {
-          let toShow = document.querySelectorAll(`#product.${i}`);
-          let toHide = document.querySelectorAll(`#product:not(.${i})`);
+      for (var i of {{ category_names|json_encode|raw }}) {
+        document.getElementById('radio-' + i).addEventListener('click', function() {
+          var toShow = document.querySelectorAll(`#product.${i}`);
+          var toHide = document.querySelectorAll(`#product:not(.${i})`);
 
-          toShow.forEach(c => {
+          toShow.forEach(function(c) {
             c.style.display = '';
           });
-          toHide.forEach(c => {
+          toHide.forEach(function(c) {
             c.style.display = 'none';
           });
         });
