@@ -1,28 +1,21 @@
-
 {% block content %}
-
 
 <h1>{{category.title}}</h1>
 
   <div>
-        <ul>
-        {% for product in craft.products.type('clothing').all() %}
-          {% for cat in product.productCategory %}
-            {% if cat.id == category.id %}
-              <li>
-                  {% for image in product.productImage.all() %}
-                      <img src="{{ image.url }}"alt="{{ image.title }}">
-                  {% endfor %}
-                  <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
-              </li>
-              {% endif %}
-            {% endfor %}
-        {% endfor %}
-
-
-  </div>
-
-
+    <ul>
+      {% for product in craft.products.type('clothing').all() %}
+        {% for cat in product.productCategory.all() %}
+          {% if cat.id == category.id %}
+            <li>
+              {% for image in product.productImage.all() %}
+                <img src="{{ image.url }}"alt="{{ image.title }}">
+              {% endfor %}
+              <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
+            </li>
+            {% endif %}
+          {% endfor %}
+      {% endfor %}
       <li>
         <a href="/shop">View All Products</a>
       </li>

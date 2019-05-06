@@ -20,7 +20,6 @@
       <h2>Contact Us</h2>
 
       {{ csrfInput() }}
-      <!-- <div class="contact-form__column"> -->
       <div class="form-field-group">
         <input type="hidden" name="action" value="contact-form/send">
         {{ redirectInput('/success') }}
@@ -36,7 +35,7 @@
         </div>
 
         <div class="form-div">
-          <input class="form-text" placeholder="Company Name" id="subject" type="text" name="subject" value="{{ message.subject ?? '' }}">
+          <input class="form-text" placeholder="Company Name" id="company" type="text" name="message[Company]" value="{{ message.company ?? '' }}">
           {{ message is defined and message ? errorList(message.getErrors('subject')) }}
         </div>
 
@@ -49,11 +48,11 @@
       <textarea class="form-text" placeholder="Message" rows="10" cols="40" id="message" name="message[body]" required>{{ message.message ?? '' }}</textarea>
       {{ message is defined and message ? errorList(message.getErrors('message')) }}
 
-      <p>This contact form uses reCAPTCHA, which is subject to Google's <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://policies.google.com/terms">terms and conditions.</a></p>
-
       {# TODO: setup recaptcha on google for staging and live sites #}
       {# {{ craft.contactFormExtensions.recaptcha | raw }}  #}
-      <input type="submit" value="SEND MESSAGE">
+      <input type="submit" value="Send">
+
+      <p>This contact form uses reCAPTCHA, which is subject to Google's <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://policies.google.com/terms">terms and conditions.</a></p>
     </form>
   </div>
 {% endblock %}
