@@ -31,7 +31,7 @@
         <div class="col">
 
           {% for img in category.productImage.all() %}
-            <a href="#"><img src="{{ img.getUrl() }}"/></a>
+            <a href="{{category.url}}"><img src="{{ img.getUrl() }}"/></a>
           {% endfor %}
 
           <h4 class="product-title">{{ category.title }}</h4>

@@ -7,13 +7,13 @@
     text-align: center;
   }
   #testimonial{
-    display: flex;
+    margin: auto;
     padding: 20px 10px 20px 25px;
     @include slant(left, -20deg, rgba(250, 190, 71, .3));
-    max-width: 1350px;
+    width: 300px;
   }
 
-  
+
   ul{
     list-style: none;
     text-align: right;
@@ -25,4 +25,12 @@
   li{
 
   }
+}
+
+@media screen and (min-width: 780px){
+
+  #testimonial{
+    display:flex;
+  }
+
 }
