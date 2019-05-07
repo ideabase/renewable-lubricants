@@ -1,4 +1,8 @@
 
+#banana{
+  @include triangle(bottom, left, 40px, 50px, $color-yellow);
+}
+
 #h2news, #pnews{
   color: $color-green-dark;
   padding-left: 20px;

@@ -1,6 +1,6 @@
 {# news and blog page #}
-
 {% extends "_layouts/main" %}
+
 
 {% block content %}
 
@@ -18,11 +18,11 @@
                 <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}" > {# Remove the height and width attributes to style the images with css. #}
 
         {% endif %}
-              <h1>{{ entry.title }}</h1>
+              <div id="banana"><h1>{{ entry.title }}</h1></div>
             </a>
         {% if entry.imageDescription | length > 50 %}
           <p>{{ entry.imageDescription | slice(0,50) }}</p>
-          <a href="{{entry.url}}"> Read More </a>
+          <a href="{{entry.url}}"> Read More ...</a>
         {% else %}
           <p>{{ entry.imageDescription}}</p>
         {% endif %}
@@ -50,7 +50,7 @@
         {{ entry.title }}
         {% if entry.imageDescription | length > 50 %}
           <p>{{ entry.imageDescription | slice(0,50) }}</p>
-          <a href="{{entry.url}}"> Read More >></a>
+          <a href="{{entry.url}}"> Read More ...a</a>
         {% else %}
             <p>{{ entry.imageDescription}}</p>
         {% endif %}
