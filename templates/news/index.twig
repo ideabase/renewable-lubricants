@@ -18,11 +18,14 @@
                 <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}" > {# Remove the height and width attributes to style the images with css. #}
 
         {% endif %}
-        {{ entry.title }}
-        {{ entry.imageDescription }}
-        </a>
-        {{ entry.body }}
-
+              <h1>{{ entry.title }}</h1>
+            </a>
+        {% if entry.imageDescription | length > 50 %}
+          <p>{{ entry.imageDescription | slice(0,50) }}</p>
+          <a href="{{entry.url}}"> Read More </a>
+        {% else %}
+          <p>{{ entry.imageDescription}}</p>
+        {% endif %}
 
 </li>
     {% endfor %}
@@ -45,9 +48,13 @@
 
         {% endif %}
         {{ entry.title }}
-        {{ entry.imageDescription }}
+        {% if entry.imageDescription | length > 50 %}
+          <p>{{ entry.imageDescription | slice(0,50) }}</p>
+          <a href="{{entry.url}}"> Read More >></a>
+        {% else %}
+            <p>{{ entry.imageDescription}}</p>
+        {% endif %}
         </a>
-        {{ entry.body }}
 
 </li>
     {% endfor %}
