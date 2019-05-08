@@ -40,47 +40,6 @@ return array (
     'developerUrl' => 'https://www.doublesecretagency.com/plugins',
     'documentationUrl' => 'https://www.doublesecretagency.com/plugins/smart-map/docs',
   ),
-  'rias/craft-contact-form-extensions' => 
-  array (
-    'class' => 'rias\\contactformextensions\\ContactFormExtensions',
-    'basePath' => $vendorDir . '/rias/craft-contact-form-extensions/src',
-    'handle' => 'contact-form-extensions',
-    'aliases' => 
-    array (
-      '@rias/contactformextensions' => $vendorDir . '/rias/craft-contact-form-extensions/src',
-    ),
-    'name' => 'Contact Form Extensions',
-    'version' => '1.1.5',
-    'schemaVersion' => '1.0.0',
-    'description' => 'Adds extensions to the Craft CMS contact form plugin.',
-    'developer' => 'Rias',
-    'developerUrl' => 'https://rias.be',
-    'documentationUrl' => 'https://github.com/Rias500/craft-contact-form-extensions/blob/master/README.md',
-    'changelogUrl' => 'https://raw.githubusercontent.com/Rias500/craft-contact-form-extensions/master/CHANGELOG.md',
-    'hasCpSettings' => true,
-    'hasCpSection' => true,
-    'components' => 
-    array (
-      'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
-    ),
-  ),
-  'craftcms/commerce' => 
-  array (
-    'class' => 'craft\\commerce\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/commerce/src',
-    'handle' => 'commerce',
-    'aliases' => 
-    array (
-      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
-    ),
-    'name' => 'Craft Commerce',
-    'version' => '2.1.4',
-    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://craftcommerce.com',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
-  ),
   'craftcms/redactor' => 
   array (
     'class' => 'craft\\redactor\\Plugin',
@@ -116,5 +75,46 @@ return array (
     'documentationUrl' => 'https://github.com/digitalpros/commerce-authorize',
     'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
     'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
+  ),
+  'craftcms/commerce' => 
+  array (
+    'class' => 'craft\\commerce\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/commerce/src',
+    'handle' => 'commerce',
+    'aliases' => 
+    array (
+      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
+    ),
+    'name' => 'Craft Commerce',
+    'version' => '2.1.5.2',
+    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://craftcommerce.com',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
+  ),
+  'rias/craft-contact-form-extensions' => 
+  array (
+    'class' => 'rias\\contactformextensions\\ContactFormExtensions',
+    'basePath' => $vendorDir . '/rias/craft-contact-form-extensions/src',
+    'handle' => 'contact-form-extensions',
+    'aliases' => 
+    array (
+      '@rias/contactformextensions' => $vendorDir . '/rias/craft-contact-form-extensions/src',
+    ),
+    'name' => 'Contact Form Extensions',
+    'version' => '1.1.6',
+    'schemaVersion' => '1.0.0',
+    'description' => 'Adds extensions to the Craft CMS contact form plugin.',
+    'developer' => 'Rias',
+    'developerUrl' => 'https://rias.be',
+    'documentationUrl' => 'https://github.com/Rias500/craft-contact-form-extensions/blob/master/README.md',
+    'changelogUrl' => 'https://raw.githubusercontent.com/Rias500/craft-contact-form-extensions/master/CHANGELOG.md',
+    'hasCpSettings' => true,
+    'hasCpSection' => true,
+    'components' => 
+    array (
+      'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
+    ),
   ),
 );

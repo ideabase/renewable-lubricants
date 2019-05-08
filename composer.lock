@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "34dead02dc6d673d5b1f156e24d6d3c2",
+    "content-hash": "aaccec874cb52ef639b95b0394293cea",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -326,11 +326,11 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.1.25",
+            "version": "3.1.26",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/d63676d829074e257492f010fdcd7ccc7fe895a9",
-                "reference": "d63676d829074e257492f010fdcd7ccc7fe895a9",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/64297dc7367bd6faf2ec8139096344f66b219bb1",
+                "reference": "64297dc7367bd6faf2ec8139096344f66b219bb1",
                 "shasum": ""
             },
             "require": {
@@ -406,15 +406,15 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2019-04-30T18:40:25+00:00"
+            "time": "2019-05-08T17:55:55+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.1.4",
+            "version": "2.1.5.2",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/10026287664826c8a81f0d5bb61a11725e484fa6",
-                "reference": "10026287664826c8a81f0d5bb61a11725e484fa6",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/a6a1c5d01008f978f0ea382b81cd5f5d2f2d1a58",
+                "reference": "a6a1c5d01008f978f0ea382b81cd5f5d2f2d1a58",
                 "shasum": ""
             },
             "require": {
@@ -456,7 +456,7 @@
                 "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2019-04-30T06:02:45+00:00"
+            "time": "2019-05-08T10:52:43+00:00"
         },
         {
             "name": "craftcms/commerce-omnipay",
@@ -2608,11 +2608,11 @@
         },
         {
             "name": "rias/craft-contact-form-extensions",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Rias500/craft-contact-form-extensions/zipball/37900c33cff0487534375dd8390199fa9e40abe8",
-                "reference": "37900c33cff0487534375dd8390199fa9e40abe8",
+                "url": "https://api.github.com/repos/Rias500/craft-contact-form-extensions/zipball/f95ea01041e2523861eccb2c4be932bcd8fb60e9",
+                "reference": "f95ea01041e2523861eccb2c4be932bcd8fb60e9",
                 "shasum": ""
             },
             "require": {
@@ -2659,7 +2659,7 @@
                 "docs": "https://github.com/Rias500/craft-contact-form-extensions/blob/master/README.md",
                 "issues": "https://github.com/Rias500/craft-contact-form-extensions/issues"
             },
-            "time": "2019-04-15T14:11:09+00:00"
+            "time": "2019-05-08T07:39:28+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",

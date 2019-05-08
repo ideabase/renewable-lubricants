@@ -163,6 +163,7 @@ class LineItem extends Model
      */
     public function setOrder(Order $order)
     {
+        $this->orderId = $order->id;
         $this->_order = $order;
     }
 
@@ -389,7 +390,8 @@ class LineItem extends Model
         ];
 
         // Add our purchasable data to the snapshot, save our sales.
-        $this->snapshot = array_merge($purchasable->getSnapshot(), $snapshot);
+        $purchasableSnapshot = $purchasable->getSnapshot();
+        $this->snapshot = array_merge($purchasableSnapshot, $snapshot);
 
         $purchasable->populateLineItem($this);
 

@@ -19,6 +19,7 @@ use craft\commerce\elements\db\OrderQuery;
 use craft\commerce\errors\OrderStatusException;
 use craft\commerce\events\LineItemEvent;
 use craft\commerce\helpers\Currency;
+use craft\commerce\helpers\Order as OrderHelper;
 use craft\commerce\models\Address;
 use craft\commerce\models\Customer;
 use craft\commerce\models\LineItem;
@@ -816,7 +817,7 @@ class Order extends Element
 
         // This is run in a validation, but need to run again incase the options
         // data was changed on population of the line item by a plugin.
-        if ($this->_mergeDuplicateLineItems()) {
+        if (OrderHelper::mergeDuplicateLineItems($this)) {
             $lineItemRemoved = true;
         }
 
@@ -1895,8 +1896,9 @@ class Order extends Element
             $criteriaStatus = ['orderStatusId' => $orderStatus->id];
 
             $count = (new Query())
-                ->where($criteriaStatus)
-                ->from(['{{%commerce_orders}}'])
+                ->where(['o.orderStatusId' => $orderStatus->id, 'e.dateDeleted' => null])
+                ->from(['{{%commerce_orders}} o'])
+                ->leftJoin(['{{%elements}} e'], '[[o.id]] = [[e.id]]')
                 ->count();
 
             $sources[] = [
@@ -2074,28 +2076,6 @@ class Order extends Element
     // =========================================================================
 
     /**
-     * Combines line items with the same purchasable ID and options signature.
-     */
-    private function _mergeDuplicateLineItems()
-    {
-        $lineItems = $this->getLineItems();
-        // Ensure no duplicate line items exist, and if they do, combine them.
-        $lineItemsByKey = [];
-        foreach ($lineItems as $lineItem) {
-            $key = $lineItem->orderId . '-' . $lineItem->purchasableId . '-' . $lineItem->getOptionsSignature();
-            if (isset($lineItemsByKey[$key])) {
-                $lineItemsByKey[$key]->qty += $lineItem->qty;
-            } else {
-                $lineItemsByKey[$key] = $lineItem;
-            }
-        }
-
-        $this->setLineItems($lineItemsByKey);
-
-        return $lineItems > $lineItemsByKey;
-    }
-
-    /**
      * Updates the adjustments, including deleting the old ones.
      *
      * @return null
@@ -2149,6 +2129,7 @@ class Order extends Element
         // Save the line items last, as we know that any possible duplicates are already removed.
         // We also need to re-save any adjustments that didn't have an line item ID for a line item if it's new.
         foreach ($this->getLineItems() as $lineItem) {
+            $lineItem->setOrder($this);
             // Don't run validation as validation of the line item should happen before saving the order
             Plugin::getInstance()->getLineItems()->saveLineItem($lineItem, false);
 
