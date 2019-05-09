@@ -1,0 +1,28 @@
+{% extends "_layouts/main" %}
+
+
+{% block content %}
+
+
+  <ul>
+    {% for entry in craft.entries.section('news').all() %}
+        {% if entry.featureImage | length %} {# Checking for not null fields. #}
+<li>
+            <a href="{{ entry.url }}">
+                <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}" > {# Remove the height and width attributes to style the images with css. #}
+
+        {% endif %}
+              <div id="banana"><h1>{{ entry.title }}</h1></div>
+            </a>
+        {% if entry.imageDescription | length > 50 %}
+          <p>{{ entry.imageDescription | slice(0,50) }}</p>
+          <a href="{{entry.url}}"> Read More ...</a>
+        {% else %}
+          <p>{{ entry.imageDescription}}</p>
+        {% endif %}
+
+</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}
