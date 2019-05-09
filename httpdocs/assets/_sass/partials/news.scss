@@ -1,7 +1,7 @@
 
-#banana{
-  @include triangle(bottom, left, 40px, 50px, $color-yellow);
-}
+//#banana{
+//  @include triangle(bottom, left, 40px, 50px, $color-yellow);
+//}
 
 #h2news, #pnews{
   color: $color-green-dark;
@@ -21,8 +21,6 @@
 ;
 }
 
-
-
 #pnews{
   font-family: helvetica, arial, sans-serif;
   font-size: 15px;
@@ -39,6 +37,11 @@
     display:block;
     margin: auto;
     width: 100%;
+
+  }
+  #banana, h1{
+    position: absolute; margin: 0px;
+    z-index: 1;
 
   }
 

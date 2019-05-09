@@ -50,7 +50,7 @@
         {{ entry.title }}
         {% if entry.imageDescription | length > 50 %}
           <p>{{ entry.imageDescription | slice(0,50) }}</p>
-          <a href="{{entry.url}}"> Read More ...a</a>
+          <a href="{{entry.url}}"> Read More ...</a>
         {% else %}
             <p>{{ entry.imageDescription}}</p>
         {% endif %}

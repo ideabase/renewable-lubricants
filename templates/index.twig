@@ -20,11 +20,13 @@
 
 <div id="testimonials">
   <h1>Testimonials</h1>
-
+<div id="testimonialset">
   {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
     <div id="testimonial">
+
       <a href="{{testimonial.url}}">
-        <img src="{{testimonial.productImage.one().url}}" alt="{{testimonial.productImage.one().title}}"/>
+        <img src="{{testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{testimonial.productImage.one().title}}"/>
+      
         <ul>
           <li>{{ testimonial.testimonialBody }}</li>
           <li><p>{{ testimonial.testimonialAuthor }}</p></li>
@@ -33,6 +35,7 @@
       </a>
     </div>
   {% endfor %}
+</div>
 </div>
 
 {% endblock %}
