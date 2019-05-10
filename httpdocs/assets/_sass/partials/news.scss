@@ -52,7 +52,8 @@ h1{
 
   #hexshape{
     height: 50px;
-    width: 400px;
+    min-width: 400px;
+    max-width: 690px;
     background-color: purple;
     z-index: 1;
 
