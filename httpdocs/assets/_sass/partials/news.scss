@@ -18,7 +18,7 @@
 #h2news, #pnews{
 
   min-width: 60%;
-;
+
 }
 
 #pnews{
@@ -29,25 +29,49 @@
 #news-container{
   margin: auto auto;
   list-style: none;
-
   text-align: center;
   padding-left:0;
-  img{
-    z-index: 0;
-    display:block;
-    margin: auto;
-    width: 100%;
 
+  #one{
+    position: relative;
   }
-  #banana, h1{
-    position: absolute; margin: 0px;
+  img{
+    z-index: -1;
+    display:block;
+    margin: 10px auto;
+    width: 100%;
+  }
+h1{
+  position: absolute;
+  bottom: -10px;
+  z-index:2;
+  text-align: center;
+}
+
+
+
+  #hexshape{
+    height: 50px;
+    width: 400px;
+    background-color: purple;
     z-index: 1;
 
   }
+#three{
+  position: absolute;
+  bottom: 0px;
+}
 
 }
+#newsparent{
+  position:relative;
+}
+
 #blogbuttonset{
   display:flex;
+  position:absolute;
+  right:180px;
+
 }
 #blogbutton{
   color: $color-green-dark;
@@ -61,7 +85,7 @@
 #blogsbuttonline{
   background-color: $color-green-dark;
   height: 30px;
-  min-width: 15%;
+  min-width: 100%;
 
 
 }
@@ -73,11 +97,9 @@
 
   //issue is that the whole group is being triggered rather than each element
   #news-container{
-
     margin-left: 20px;
     display: flex;
     max-width: 1350px;
-
 
   }
 

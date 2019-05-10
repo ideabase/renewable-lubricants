@@ -5,6 +5,7 @@
 {% block content %}
 
     {# News article section of news landing page #}
+  <div id="newsparent">
     <h2 id="h2news">Latest News</h2>
     <hr class="greenunderline">
     <p id="pnews">Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
@@ -14,28 +15,32 @@
     {% for entry in craft.entries.section('news').limit(3).all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
 <li>
-            <a href="{{ entry.url }}">
+            <a href="{{ entry.url }}"><div id="one">
                 <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}" > {# Remove the height and width attributes to style the images with css. #}
 
         {% endif %}
-              <div id="banana"><h1>{{ entry.title }}</h1></div>
-            </a>
+            <div id="three">  <div id="hexshape"></div>
+              <h1>{{ entry.title }}</h1></div>
+            </div></a>
+      <div id="two">
         {% if entry.imageDescription | length > 50 %}
           <p>{{ entry.imageDescription | slice(0,50) }}</p>
           <a href="{{entry.url}}"> Read More ...</a>
         {% else %}
           <p>{{ entry.imageDescription}}</p>
+      </div>
         {% endif %}
 
 </li>
     {% endfor %}
   </ul>
 
-<div id="blogbuttonset">
-    <a href="news/all-news"><input id="blogbutton" type="button" value="View All News"></input></a>
-    <div id="blogsbuttonline"> </div>
+
+    <a id="blogbuttonset" href="news/all-news"><input id="blogbutton" type="button" value="View All News"></input>
+    <div id="blogsbuttonline"> </div></a>
 </div>
     {# Blog article section of news landing page #}
+    <div id="newsparent">
     <h2 id="h2news">Blog Posts</h2>
     <hr class="greenunderline">
     <p id="pnews">Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
@@ -43,24 +48,28 @@
     {% for entry in craft.entries.section('blogs').limit(3).all() %}
         {% if entry.featureImage | length %} {# Checking for not null fields. #}
 <li>
-            <a href="{{ entry.url }}">
+            <a href="{{ entry.url }}"><div id="one">
                 <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}"> {# Remove the height and width attributes to style the images with css. #}
 
         {% endif %}
-        {{ entry.title }}
+          <div id="three">  <div id="hexshape"></div>
+        <h1>{{ entry.title }}</h1></div>
+        </div></a>
+      <div id="two">
         {% if entry.imageDescription | length > 50 %}
           <p>{{ entry.imageDescription | slice(0,50) }}</p>
           <a href="{{entry.url}}"> Read More ...</a>
         {% else %}
             <p>{{ entry.imageDescription}}</p>
+      </div>
         {% endif %}
-        </a>
+
 
 </li>
     {% endfor %}
 </ul>
-  <div id="blogbuttonset">
-      <a href="news/all-blog"><input id="blogbutton" type="button" name="" value="View All Blog Posts">
+
+      <a id="blogbuttonset" href="news/all-blog"><input id="blogbutton" type="button" name="" value="View All Blog Posts">
     <div id="blogsbuttonline"> </div></a>
-  </div>
+</div>
 {% endblock %}
