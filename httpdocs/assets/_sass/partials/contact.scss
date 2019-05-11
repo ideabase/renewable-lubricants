@@ -1,34 +1,38 @@
-.contact-form {
-  max-width: 500px;
-  display: block;
-  padding: 1em;
-}
+// contact partial
 
-@media screen and (min-width: 700px) {
-  .form-field-group {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
+#contact {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+
+  h2 {
+    margin-top: 0;
   }
-}
 
-@media screen and (min-width: 700px) {
-  .form-div {
-    width: 45%;
+  .contact-field-row {
+    flex-grow: 1;
+    display: flex;
+    margin-bottom: 1rem;
+
+    :first-child {
+      margin-right: 1rem;
+    }
+
+    input {
+      flex-grow: 1;
+    }
   }
-}
 
-.form-text {
-  margin-bottom: 20px;
-  padding: 6px 12px;
-  font-size: 16px;
-  width: 100%;
-}
+  textarea {
+    margin-bottom: 1rem;
+  }
 
-textarea {
-  background-color: $color-white;
-  font-family: $font-josefin-sans;
-  border: none;
-  transition: box-shadow .15s ease-in-out;
-  @include focus($color-yellow);
+  input[type="submit"] {
+    align-self: flex-start;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
 }

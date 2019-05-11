@@ -1,23 +1,23 @@
+// about partial
+
 @media only screen and (max-width: $mobile-breakpoint) {
-
-.about-title {
-font-size: 1.5em;
-}
-
+  .about-title {
+    font-size: 1.5em;
+  }
 }
 
 .about-h2-image {
-background-image: url('/assets/img/ui/header-2.svg');
-background-repeat: no-repeat;
-background-position: center;
-padding: 1px;
+  background-image: url('/assets/img/ui/header-2.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 1px;
 }
 
 .about-title {
-text-align: center;
+  text-align: center;
 }
 
 .about-content {
-text-align: center;
-padding: 1em;
+  text-align: center;
+  padding: 1em;
 }

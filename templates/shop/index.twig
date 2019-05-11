@@ -1,23 +1,20 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
-  <p>{{ entry.body }}</p>
-
   <div id="products-featured">
-    <h2>Featured Products</h2>
+    <h1>Featured Products</h1>
 
       <div>
-        <ul>
+        <ul class="flex">
           {% for product in craft.products.type('clothing').all() %}
-            <li>
-              {% if product.featuredProduct %}
-                {% for image in product.productImage.all() %}
-                  <img src="{{ image.url }}"alt="{{ image.title }}">
-                {% endfor %}
-                <a href="{{ product.url }}">
-                <h1>{{ product.title }}</h1></a>
-              {% endif %}
-            </li>
+            {% if product.featuredProduct %}
+              <li>
+                <a href="{{ product.url }}" class="flex">
+                  <img src="{{ product.productImage.one().getUrl() }}"alt="{{ product.productImage.one().title }}">
+                  {{- product.title -}}
+                </a>
+              </li>
+            {% endif %}
           {% endfor %}
         </ul>
       </div>
@@ -30,9 +27,7 @@
       {% for category in craft.categories.group('productCategories').all() %}
         <div class="col">
 
-          {% for img in category.productImage.all() %}
-            <a href="{{category.url}}"><img src="{{ img.getUrl() }}"/></a>
-          {% endfor %}
+          <a href="{{ category.url }}"><img src="{{ category.productImage.one().getUrl() }}"></a>
 
           <h4 class="product-title">{{ category.title }}</h4>
           <a href="{{ category.url }}" class="learn-more-product">Learn More</a>

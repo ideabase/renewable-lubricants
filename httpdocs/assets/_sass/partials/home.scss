@@ -1,0 +1,32 @@
+// home partial
+
+#testimonials {
+  h1 {
+    background-color: $color-green;
+    color: $color-black;
+    padding: 1rem 0;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  #testimonial-wrapper {
+    margin: auto;
+
+    @media screen and (min-width: $mobile-breakpoint) {
+      display: flex;
+    }
+  }
+
+  img {
+    z-index: -1;
+    width: 100%;
+  }
+
+  ul {
+    justify-content: space-between;
+    margin: 0;
+    background-color: rgba(250, 190, 71, .3);
+    list-style-type: none;
+    text-align: right;
+  }
+}

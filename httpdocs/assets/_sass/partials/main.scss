@@ -4,26 +4,13 @@
 body {
   box-sizing: border-box;
   font-family: $font-roboto-slab;
+  background-color: $color-white;
   color: $color-black;
   max-width: 100%;
-  overflow-x: hidden;
 }
-  a {
-    color: $color-black;
-    transition: color .15s ease-in-out;
-    text-decoration: none;
 
-    &:focus {
-      outline: none;
-    }
-
-    &:visited {
-      color: $color-black;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
+main {
+  margin-top: 2rem;
 }
 
 p {
@@ -31,8 +18,22 @@ p {
   line-height: 1.5;
 }
 
-.feature-img {
-  width: 100%;
+a {
+  color: $color-black;
+  transition: color .15s ease-in-out;
+  text-decoration: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:visited {
+    color: $color-black;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 button, input[type="submit"] {
@@ -49,8 +50,8 @@ button, input[type="submit"] {
   }
 }
 
-input[type="text"], input[type="email"], input[type="search"] {
-  background-color: $color-white;
+input[type="text"], input[type="email"], input[type="search"], textarea {
+  background-color: $color-white-pure;
   font-family: $font-josefin-sans;
   border: none;
   padding: .375rem .75rem;
@@ -58,6 +59,14 @@ input[type="text"], input[type="email"], input[type="search"] {
   @include focus($color-yellow);
 }
 
+textarea {
+  resize: none;
+}
+
 .flex {
   display: flex;
+}
+
+.feature-img {
+  width: 100%;
 }

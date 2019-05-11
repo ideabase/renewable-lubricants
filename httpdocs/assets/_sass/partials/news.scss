@@ -1,54 +1,51 @@
+// news partial
 
-//#banana{
-//  @include triangle(bottom, left, 40px, 50px, $color-yellow);
-//}
-
-#h2news, #pnews{
+#h2news, #pnews {
   color: $color-green-dark;
   padding-left: 20px;
 }
 
-
-.greenunderline{
+.greenunderline {
   border: 1px solid $color-green-dark;
   margin: 20px;
   width: 200px;
   padding-left: none;
 }
-#h2news, #pnews{
+#h2news, #pnews {
 
   min-width: 60%;
 
 }
 
-#pnews{
+#pnews {
   font-family: helvetica, arial, sans-serif;
   font-size: 15px;
   margin-right: 10px;
 }
-#news-container{
+
+#news-container {
   margin: auto auto;
   list-style: none;
   text-align: center;
   padding-left:0;
 
-  #one{
+  #one {
     position: relative;
   }
-  img{
+
+  img {
     z-index: -1;
     display:block;
     margin: 10px auto;
     width: 100%;
   }
-h1{
-  position: absolute;
-  bottom: -10px;
-  z-index:2;
-  text-align: center;
-}
 
-
+  h1 {
+    position: absolute;
+    bottom: -10px;
+    z-index:2;
+    text-align: center;
+  }
 
   #hexshape{
     height: 50px;
@@ -56,14 +53,14 @@ h1{
     max-width: 690px;
     background-color: purple;
     z-index: 1;
-
   }
-#three{
-  position: absolute;
-  bottom: 0px;
+
+  #three{
+    position: absolute;
+    bottom: 0px;
+  }
 }
 
-}
 #newsparent{
   position:relative;
 }
@@ -72,8 +69,8 @@ h1{
   display:flex;
   position:absolute;
   right:180px;
-
 }
+
 #blogbutton{
   color: $color-green-dark;
   border-style: none;
@@ -87,24 +84,14 @@ h1{
   background-color: $color-green-dark;
   height: 30px;
   min-width: 100%;
-
-
 }
-
 
 //desktop breakpoint
 @media screen and (min-width: 780px){
-
-
   //issue is that the whole group is being triggered rather than each element
   #news-container{
     margin-left: 20px;
     display: flex;
     max-width: 1350px;
-
   }
-
-
-
-
 }

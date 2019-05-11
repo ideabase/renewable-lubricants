@@ -1,12 +1,7 @@
-#distributors-network {
-  .flex {
-    margin: 1rem 0;
-    justify-content: flex-end;
-  }
+// distributors partial
 
-  .triangle {
-    @include triangle(bottom, left, 4.25rem, 4.25rem, $color-green-dark);
-  }
+#distributors-network {
+  margin: 1rem 0;
 
   h1 {
     background-color: $color-green-dark;
@@ -38,7 +33,6 @@
 
   label {
     display: block;
-    background: #fff;
     border-bottom: solid 2px $color-green-dark;
     text-transform: uppercase;
     font-size: 1.25rem;
@@ -65,22 +59,17 @@
     transform: rotate(360deg);
     content: '-';
   }
-}
 
-.accordion-content {
-  display: none;
-  padding: 1em;
-  background: #fff;
-  font-family: $font-josefin-sans;
-  transition: max-height .35s;
+  .accordion-content {
+    display: none;
+    padding: 1em;
+    background: #fff;
+    font-family: $font-josefin-sans;
+    transition: max-height .35s;
+  }
 
   .accordion-image {
     margin-top: 1.5em;
     width: 150px;
-  }
-
-  p {
-    margin: 1em;
-    color: $color-black;
   }
 }

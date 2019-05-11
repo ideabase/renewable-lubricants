@@ -2,18 +2,14 @@
 header {
   .top-row {
     justify-content: space-between;
+    margin: .5rem 0 .5rem .5rem;
 
     .img-header {
       max-width: 125px;
-      margin: .75em;
     }
 
     .info-right {
       align-items: center;
-    }
-
-    .triangle {
-      @include triangle(bottom, left, 5rem, 5rem, $color-yellow);
     }
 
     .cart {
@@ -25,17 +21,12 @@ header {
       font-size: 1rem;
       line-height: 1.5;
     }
-
   }
 
   nav {
-    margin-bottom: 3rem;
-    display: flex;
-    justify-content: flex-start;
     background-image: url('/assets/img/ui/shape-14.svg');
     background-repeat: no-repeat;
     background-position: center;
-    padding: 1px;
 
     ul {
       flex-grow: 1;
@@ -45,21 +36,17 @@ header {
       padding: 1rem .5rem;
       display: flex;
       justify-content: space-around;
-
-      li {
-        list-style-type: none;
-        text-transform: uppercase;
-        font-weight: bold;
-
-        a:hover {
-          color: $color-white;
-          text-decoration: none;
-        }
-      }
     }
 
-    .triangle {
-      @include triangle(top, right, 50px, 50px, $color-yellow);
+    li {
+      list-style-type: none;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    a:hover {
+      color: $color-white;
+      text-decoration: none;
     }
   }
 }
@@ -80,10 +67,6 @@ header {
       .img-header {
         max-width: 100px;
         margin: .5em;
-      }
-
-      .triangle {
-        @include triangle(bottom, left, 40px, 50px, $color-yellow);
       }
 
       .cart {
@@ -162,6 +145,6 @@ header {
 
   .mobile-dropdown li a:hover{
     text-decoration: none;
-    background: $color-green-light;
+    background: $color-green;
   }
 }

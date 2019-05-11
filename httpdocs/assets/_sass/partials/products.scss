@@ -57,3 +57,38 @@
 		text-decoration: underline;
 	}
 }
+
+#products-find{
+  #find-container{
+    margin-left:100px;
+    background-color: $color-green-dark;
+  }
+
+  h2 {
+    color: $color-green-dark;
+    text-transform: uppercase;
+    margin-bottom: 0px;
+    margin-left: 9.4rem;
+    line-height: .7;
+  }
+
+  ul {
+    margin-top:0px;
+    padding: 1em 5em 1em 5em;
+    list-style-type: none;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  a {
+    text-decoration: none;
+    padding-right: 60px;
+    color: $color-white;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

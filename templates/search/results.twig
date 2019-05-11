@@ -3,13 +3,13 @@
 {# There is a bug where you search once then you search again from the results page and errors happen. #}
 {% block content %}
 
-    {% set query = craft.app.request.getParam('q') %}
-    {% set entries = craft.entries.search(query).orderBy('score') %}
+{% set query = craft.app.request.getParam('q') %}
+{% set entries = craft.entries.search(query).orderBy('score') %}
 
-    {% paginate craft.entries.section([
-      'and', 'not primaryNavigation', 'not teamMembers', 'not secondaryNavigation'
-      ]).search(query).limit(10).orderBy('score') as pageInfo, pageEntries
-    %}
+{% paginate craft.entries.section([
+  'and', 'not primaryNavigation', 'not teamMembers', 'not secondaryNavigation'
+  ]).search(query).limit(10).orderBy('score') as pageInfo, pageEntries
+%}
 
 
 {% endblock %}

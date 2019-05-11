@@ -1,36 +1,25 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
+  <h2>Check out our global partners.</h2>
 
-<div id="distributors">
-  <section id="distributors-map">
-    <div class="flex">
-      <h2>Check out our global partners.</h2>
-      <p>{{entry.body}}</p>
-    </div>
+  {% set options = {
+    markerInfo: '_includes/infoBubble',
+    height: 300,
+    zoom: 4,
+    draggable: true,
+    markerOptions: {
+      icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+    },
+    infoWindowOptions: {
+      maxWidth: 200
+    },
+  } %}
 
-    {% set options = {
-      markerInfo: '_includes/infoBubble',
-      height: 300,
-      zoom: 4,
-      draggable: true,
-      markerOptions: {
-        icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
-      },
-      infoWindowOptions: {
-        maxWidth: 200
-      },
-    } %}
-
-    {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
-  </section>
+  {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
 
   <section id="distributors-network">
-    <div class="flex">
-      <div class="triangle"></div>
       <h1>Our Distribution Network</h1>
-      <div class="fill"></div>
-    </div>
     {% set distributors = craft.entries.section('distributors') %}
     {% cache %}
 
@@ -49,7 +38,6 @@
 
     {% endcache %}
   </section>
-</div>
 
 {% endblock %}
 
