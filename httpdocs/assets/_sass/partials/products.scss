@@ -1,61 +1,40 @@
-.popular-products {
-	padding: 2.5em;
-}
+#products-popular-categories {
+  margin-bottom: 2rem;
 
-.popular-products h2 {
-  text-align: center;
-}
-
-.row {
-	display: flex;
-  display: -ms-flexbox;
-	flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-	// text-align: center;
-}
-
-.col {
-	position: relative;
-  width: 100%;
-	padding: 1em;
-}
-
-.col a img {
-  width: 100px;
-}
-
-@media (min-width: 768px) {
-	.col {
-		-ms-flex: 0 0 30%;
-		flex: 0 0 30%;
-		max-width: 30%;
-		flex-direction: column;
-	}
-}
-
-.product-title {
-  font-weight: bold;
-	font-family: $font-roboto-slab, serif;
-	font-size: 1.1em;
-	text-transform: uppercase;
-	margin-bottom: .3em;
+  h1 {
+    background-color: $color-green;
+  }
 
   a {
-    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    img {
+      width: 100px;
+    }
+
+    @media screen and (min-width: $mobile-breakpoint) {
+      flex: 1 1 30%;
+    }
   }
-}
 
-.learn-more-product {
-	font-family: $font-josefin-sans, sans-serif;
-	font-size: 1em;
-	text-decoration: none;
-	color: $color-black;
-	transition: .2s ease-in-out;
+  .h1-wrapper {
+    justify-content: center;
+  }
 
-	&:hover {
-		color: $color-green-dark;
-		text-decoration: underline;
-	}
+  .flex {
+    flex-wrap: wrap;
+  }
+
+  .product-title {
+    font-weight: bold;
+    font-family: $font-roboto-slab, serif;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    margin-bottom: .3em;
+  }
 }
 
 #products-find{
@@ -67,28 +46,21 @@
   h2 {
     color: $color-green-dark;
     text-transform: uppercase;
-    margin-bottom: 0px;
-    margin-left: 9.4rem;
+    margin: 0 0 0 6.225rem;
     line-height: .7;
   }
 
   ul {
+    display: flex;
+    justify-content: space-between;
     margin-top:0px;
     padding: 1em 5em 1em 5em;
     list-style-type: none;
     text-transform: uppercase;
-    display: flex;
-    justify-content: space-between;
   }
 
   a {
-    text-decoration: none;
-    padding-right: 60px;
     color: $color-white;
     font-weight: bold;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }

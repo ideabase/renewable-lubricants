@@ -20,21 +20,22 @@
 </div>
 
 <section id="testimonials">
-  <h1>Testimonials</h1>
+  <div class="flex">
+    <h1>Testimonials</h1>
+  </div>
   <div id="testimonial-wrapper">
     {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
-      <div class="testimonial">
 
-        <a href="{{testimonial.url}}">
-          <img src="{{testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{testimonial.productImage.one().title}}">
+      <a href="{{ testimonial.url }}">
+        <img src="{{ testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{ testimonial.productImage.one().title }}">
 
-          <ul>
-            <li>{{ testimonial.testimonialBody }}</li>
-            <li><p>{{ testimonial.testimonialAuthor }}</p></li>
-            <li><p>{{ testimonial.authorDescription }}</p></li>
-          </ul>
-        </a>
-      </div>
+        <ul>
+          <li>{{ testimonial.testimonialBody }}</li>
+          <li><p>{{ testimonial.testimonialAuthor }}</p></li>
+          <li><p>{{ testimonial.authorDescription }}</p></li>
+        </ul>
+      </a>
+
     {% endfor %}
   </div>
 </section>

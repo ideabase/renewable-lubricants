@@ -1,32 +1,45 @@
 // home partial
 
 #testimonials {
+  .flex {
+    justify-content: center;
+  }
+
   h1 {
+    display: inline-block;
     background-color: $color-green;
-    color: $color-black;
     padding: 1rem 0;
-    margin-bottom: 0;
-    text-align: center;
+    margin: 0;
   }
 
   #testimonial-wrapper {
-    margin: auto;
-
     @media screen and (min-width: $mobile-breakpoint) {
       display: flex;
     }
   }
 
   img {
-    z-index: -1;
+    display: block;
     width: 100%;
   }
 
+  a {
+    flex: 1 1 0;
+    position: relative;
+    text-align: center;
+  }
+
   ul {
-    justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    right: 0;
     margin: 0;
-    background-color: rgba(250, 190, 71, .3);
+    background-color: transparentize($color-yellow, .2);
     list-style-type: none;
     text-align: right;
+  }
+
+  a:hover {
+    text-decoration: none;
   }
 }
