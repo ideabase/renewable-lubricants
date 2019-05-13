@@ -23,10 +23,6 @@
       <img src="{{ entry.featureImage.one().getUrl() }}" class="feature-img">
     {% endif %}
 
-    {% if entry.subtitle|length %}
-      <p>{{ entry.subtitle }}</p>
-    {% endif %}
-
     {# content block #}
     {% block content %}{% endblock %}
   </main>

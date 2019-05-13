@@ -1,21 +1,11 @@
 // home partial
 
 #testimonials {
-  .flex {
-    justify-content: center;
-  }
-
   h1 {
     display: inline-block;
     background-color: $color-green;
     padding: 1rem 0;
     margin: 0;
-  }
-
-  #testimonial-wrapper {
-    @media screen and (min-width: $mobile-breakpoint) {
-      display: flex;
-    }
   }
 
   img {
@@ -29,17 +19,40 @@
     text-align: center;
   }
 
-  ul {
+  a:hover {
+    text-decoration: none;
+  }
+
+  p {
+    margin: 0;
+    text-align: right;
+
+    &:first-child {
+      margin-bottom: auto;
+    }
+  }
+
+  #testimonial-wrapper {
+    display: flex;
+  }
+
+  .flex {
+    justify-content: center;
+  }
+
+  .testimonial-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     position: absolute;
     bottom: 0;
     right: 0;
-    margin: 0;
+    width: 100%;
+    height: 50%;
     background-color: transparentize($color-yellow, .2);
-    list-style-type: none;
-    text-align: right;
   }
 
-  a:hover {
-    text-decoration: none;
+  .p-author {
+    text-transform: uppercase;
   }
 }

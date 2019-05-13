@@ -1,6 +1,6 @@
 // header partial
 header {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 
   .top-row {
     justify-content: space-between;
@@ -26,10 +26,6 @@ header {
   }
 
   nav {
-    background-image: url('/assets/img/ui/shape-14.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-
     ul {
       flex-grow: 1;
       background-color: $color-yellow;
@@ -88,10 +84,6 @@ header {
     padding: 0;
     height: 50px;
     line-height: 50px;
-    /* disable text selection by clicking */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     margin-bottom: 2rem;
     text-transform: uppercase;

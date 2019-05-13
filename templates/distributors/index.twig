@@ -30,7 +30,7 @@
         <div class="accordion-content">
           <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="accordion-image">
           {% if distrib.body|length %}
-            <p>{{ distrib.body }}</p>
+            <p>{{- distrib.body -}}</p>
           {% endif %}
         </div>
       </div>
