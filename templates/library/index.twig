@@ -1,5 +1,5 @@
 <h1>{{ entry.title }}</h1>
-{{- entry.body -}}
+{{ entry.body }}
 
 {% for file in entry.files.all() %}
   <a href="{{ file.url }}">{{ file.title }}</a>

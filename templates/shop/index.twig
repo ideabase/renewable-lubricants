@@ -1,22 +1,7 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
-  <div id="products-featured">
-    <div class="flex">
-      <h1>Featured Products</h1>
-    </div>
-
-    <div class="flex">
-      {% for product in craft.products.type('clothing').all() %}
-        {% if product.featuredProduct %}
-          <a href="{{ product.url }}" class="flex">
-            <img src="{{ product.productImage.one().getUrl() }}"alt="{{ product.productImage.one().title }}">
-            {{- product.title -}}
-          </a>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </div>
+  {% include '_includes/featured-products.twig' %}
 
   <div id="products-popular-categories">
     <div class="flex h1-wrapper">
@@ -24,12 +9,19 @@
     </div>
     <div class="flex">
 
-      {% for category in craft.categories.group('productCategories').all() %}
-        <a href="{{ category.url }}"><img src="{{ category.productImage.one().getUrl() }}">
+      {% for category in craft.categories.group('productCategories').limit(8).all() %}
+        <a href="{{ category.url }}">
+          <img src="{{ category.productImage.one().getUrl() }}">
           <h4 class="product-title">{{ category.title }}</h4>
           <p>Learn More</p>
         </a>
       {% endfor %}
+
+      <a href="{{ url('shop/products') }}">
+        <img src="{{ url('assets/img/feature-images/ViewAllProducts-Icon-07.png') }}">
+        <h4 class="product-title">View All Products</h4>
+        <p>Learn More</p>
+      </a>
 
     </div>
   </div>

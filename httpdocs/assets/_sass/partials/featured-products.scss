@@ -1,6 +1,6 @@
 // featured products partial
 
-#products-featured {
+.featured-products {
   margin-bottom: 2rem;
 
   h1 {
@@ -24,5 +24,12 @@
 
   .flex {
     justify-content: center;
+  }
+
+  .featured-products-wrapper {
+    background-image: url('/assets/img/ui/both-gray.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 80%;
   }
 }

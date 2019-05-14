@@ -4,21 +4,7 @@
 
 {% block content %}
 
-<div id="featured-products">
-  <h1>Featured Products</h1>
-
-  {{- entry.body -}}
-
-  {% for product in craft.products.type('clothing').all() %}
-    {% if product.featuredProduct %}
-      {% for image in product.productImage.all() %}
-        <img src="{{ image.url }}"alt="{{ image.title }}">
-      {% endfor %}
-
-      <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
-    {% endif %}
-  {% endfor %}
-</div>
+{% include '_includes/featured-products.twig' %}
 
 <section id="testimonials">
   <div class="flex">

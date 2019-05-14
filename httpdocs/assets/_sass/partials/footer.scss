@@ -20,8 +20,13 @@
   }
 
   input[type="submit"] {
+    background-color: lighten($color-yellow, 10);
     text-transform: uppercase;
     margin-left: 1rem;
+
+    &:hover {
+      background-color: lighten($color-yellow, 20);
+    }
   }
 }
 

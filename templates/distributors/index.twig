@@ -4,7 +4,7 @@
   <h2>Check out our global partners.</h2>
 
   {% set options = {
-    markerInfo: '_includes/infoBubble',
+    markerInfo: '_includes/info-bubble',
     height: 300,
     zoom: 4,
     draggable: true,
@@ -30,7 +30,7 @@
         <div class="accordion-content">
           <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="accordion-image">
           {% if distrib.body|length %}
-            <p>{{- distrib.body -}}</p>
+            <p>{{ distrib.body }}</p>
           {% endif %}
         </div>
       </div>
