@@ -1,27 +1,23 @@
 <header>
   <div class="flex top-row">
     {# header image #}
-    <a class="a-header-img" href="{{ url() }}"><img class="img-header" src="{{ header.logo.one().getUrl() }}"/></a>
+    <a class="a-header-img" href="{{ url() }}"><img class="img-header" src="{{ header.logo.one().getUrl() }}"></a>
 
     <div class="flex info-right">
       <div>
-        <a href="tel:1-800-837-5823">1-800-837-LUBE</a>
+        <a href="tel:800-837-5823">800-837-LUBE</a>
       </div>
 
-      <div class="flex">
-        <div class="triangle"></div>
-        <div class="flex column cart">
-          <div></div>
-          {% if cart is defined %}
-            {% set cartItemCount = craft.orders.number(cart.number).one().totalQty ?? 0 %}
-            {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
-              {% set page = craft.app.request.getSegment(2) %}
-              <div>
-                <a class="{% if page == ' cart' %}active{% endif %}" href="{{ url('shop/cart') }}">View Cart{# TODO: cart icon #}</a>
-              </div>
-            {% endif %}
-          {% endif %}
-        </div>
+      <div class="flex cart">
+        {% set cartItemCount = cart.totalQty ?? 0 %}
+        {% set cartItemTotal = cart.itemTotal ?? 0 %}
+        <div>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</div>
+        {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+          {% set page = craft.app.request.getSegment(2) %}
+          <div>
+            <a class="{% if page == ' cart' %}active{% endif %}" href="{{ url('shop/cart') }}">View Cart{# TODO: cart icon #}</a>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -30,22 +26,21 @@
   <nav>
     <ul>
       <li><a href="{{ url() }}">Home</a></li>
-      <li><a href="/shop">Products</a></li> {# TODO: check link route #}
+      <li><a href="/shop">Products</a></li> {# TODO: change link to products #}
       <li><a href="/distributors">Distributors</a></li>
-      <li><a href="/news">News & Blog</a></li>
+      <li><a href="/news-and-blog">News & Blog</a></li>
       <li><a href="/about">About</a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>
-    <div class="triangle"></div>
   </nav>
 
   <div class="mobile-menu">
     <a class="dropdown-link">Menu</a>
     <ul class="mobile-dropdown">
       <li><a href="{{ url() }}">Home</a></li>
-      <li><a href="/shop">Products</a></li>
+      <li><a href="/shop">Products</a></li> {# TODO: change link to products #}
       <li><a href="/distributors">Distributos</a></li>
-      <li><a href="/news">News & Blog</a></li>
+      <li><a href="/news-and-blog">News & Blog</a></li>
       <li><a href="/about">About</a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>

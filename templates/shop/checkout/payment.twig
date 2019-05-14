@@ -51,22 +51,22 @@
 
       {% if cart.gatewayId or cart.paymentSourceId %}
         <form method="POST" class="form-horizontal paymentSource-form max-w-md" id="paymentForm">
-          <input type="hidden" name="action" value="commerce/payments/pay"/>
+          <input type="hidden" name="action" value="commerce/payments/pay">
           {{ redirectInput('/shop/customer/order?number='~cart.number) }}
-          <input type="hidden" name="cancelUrl" value="{{ '/shop/checkout/payment'|hash }}"/>
-          <input type="hidden" name="orderEmail" value="{{ cart.email }}"/>
+          <input type="hidden" name="cancelUrl" value="{{ '/shop/checkout/payment'|hash }}">
+          <input type="hidden" name="orderEmail" value="{{ cart.email }}">
 
           {{ csrfInput() }}
 
           <fieldset>
             {% if cart.gatewayId %}
-              <input type="hidden" name="gatewayId" value="{{ cart.gatewayId }}"/>
+              <input type="hidden" name="gatewayId" value="{{ cart.gatewayId }}">
               {{ cart.gateway.getPaymentFormHtml({})|raw }}
 
               {% if cart.gateway.supportsPaymentSources() and currentUser %}
                 <div class="checkbox">
-                  <label><input type="checkbox" name="savePaymentSource" value="1" /> {{ "Save card for future purchases"|t }}</label>
-                </div><br />
+                  <label><input type="checkbox" name="savePaymentSource" value="1"> {{ "Save card for future purchases"|t }}</label>
+                </div><br>
               {% endif %}
 
             {% else %}
@@ -76,7 +76,7 @@
             {% set user = craft.users.email(cart.email).one() %}
             {% if not user %}
             <label for="registerUserOnOrderComplete">
-              <input type="checkbox" id="registerUserOnOrderComplete" name="registerUserOnOrderComplete" value="1" /> {{ "Register me for a user account"|t }}
+              <input type="checkbox" id="registerUserOnOrderComplete" name="registerUserOnOrderComplete" value="1"> {{ "Register me for a user account"|t }}
             </label>
             {% endif %}
 
@@ -113,7 +113,7 @@
 
       $select.prop('disabled', 'disabled');
 
-      $('form#gateway').append('<input type="hidden" name="' + name + '" value="' + parts[1] + '" />').submit();
+      $('form#gateway').append('<input type="hidden" name="' + name + '" value="' + parts[1] + '">').submit();
     });
   {% endjs %}
 

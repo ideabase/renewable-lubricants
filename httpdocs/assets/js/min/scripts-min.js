@@ -1,1 +1,1 @@
-$(".mobile-menu").on("click",function(){$(".mobile-dropdown").slideToggle("fast")}),$(".accordion label").on("click",function(){$(this).next().slideToggle(),$(".accordion-content").not($(this).next()).slideUp()});
+$(".mobile-menu").on("click",function(){$(".mobile-dropdown").slideToggle("fast")});

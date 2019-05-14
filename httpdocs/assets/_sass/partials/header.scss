@@ -1,37 +1,31 @@
 // header partial
 header {
+  margin-bottom: 3rem;
+
   .top-row {
     justify-content: space-between;
+    margin: .5rem 0 .5rem .5rem;
 
     .img-header {
       max-width: 125px;
-      margin: .75em;
     }
 
     .info-right {
       align-items: center;
     }
 
-    .triangle {
-      @include triangle(bottom, left, 60px, 60px, $color-yellow);
-    }
-
     .cart {
+      flex-direction: column;
       background-color: $color-yellow;
-      align-items: center;
-      padding: 1.25em;
+      padding: 1rem 2rem;
       text-transform: uppercase;
       font-weight: bold;
-      font-size: .8em;
+      font-size: 1rem;
+      line-height: 1.5;
     }
-
   }
 
   nav {
-    margin-bottom: 3rem;
-    display: flex;
-    justify-content: flex-start;
-
     ul {
       flex-grow: 1;
       background-color: $color-yellow;
@@ -40,21 +34,17 @@ header {
       padding: 1rem .5rem;
       display: flex;
       justify-content: space-around;
-
-      li {
-        list-style-type: none;
-        text-transform: uppercase;
-        font-weight: bold;
-
-        a:hover {
-          color: $color-white;
-          text-decoration: none;
-        }
-      }
     }
 
-    .triangle {
-      @include triangle(top, right, 50px, 50px, $color-yellow);
+    li {
+      list-style-type: none;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    a:hover {
+      color: $color-white;
+      text-decoration: none;
     }
   }
 }
@@ -77,10 +67,6 @@ header {
         margin: .5em;
       }
 
-      .triangle {
-        @include triangle(bottom, left, 40px, 50px, $color-yellow);
-      }
-
       .cart {
         background-color: $color-yellow;
         align-items: center;
@@ -98,10 +84,6 @@ header {
     padding: 0;
     height: 50px;
     line-height: 50px;
-    /* disable text selection by clicking */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     margin-bottom: 2rem;
     text-transform: uppercase;
@@ -157,6 +139,6 @@ header {
 
   .mobile-dropdown li a:hover{
     text-decoration: none;
-    background: $color-green-light;
+    background: $color-green;
   }
 }

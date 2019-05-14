@@ -34,14 +34,14 @@
     {% set isPrimaryBilling = cart.customer.primaryBillingAddressId == addressId %}
     {% set isPrimaryShipping = cart.customer.primaryShippingAddressId == addressId %}
 
-    <hr />
+    <hr>
 
     <p>
-      <label for="makePrimaryShippingAddress"><input id="makePrimaryShippingAddress" name="makePrimaryShippingAddress" type="checkbox" {{ isPrimaryShipping ? 'checked' :'' }}/><span class="label-body">Make this the primary shipping address</span></label>
+      <label for="makePrimaryShippingAddress"><input id="makePrimaryShippingAddress" name="makePrimaryShippingAddress" type="checkbox" {{ isPrimaryShipping ? 'checked' :'' }}><span class="label-body">Make this the primary shipping address</span></label>
     </p>
 
     <p>
-      <label for="makePrimaryBillingAddress"><input id="makePrimaryBillingAddress" name="makePrimaryBillingAddress" type="checkbox" {{ isPrimaryBilling ? 'checked' :'' }}/><span class="label-body">Make this the primary billing address</span></label>
+      <label for="makePrimaryBillingAddress"><input id="makePrimaryBillingAddress" name="makePrimaryBillingAddress" type="checkbox" {{ isPrimaryBilling ? 'checked' :'' }}><span class="label-body">Make this the primary billing address</span></label>
     </p>
 
     <div class="mt-6">

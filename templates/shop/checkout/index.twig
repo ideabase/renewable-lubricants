@@ -16,7 +16,7 @@
         <div class="field">
           <label for="email">Email</label>
           <input id="email" class="w-full" type="text" value="{{ cart.email }}" name="email"
-               placeholder="email@site.com"/>
+               placeholder="email@site.com">
         </div>
 
         {% set emailErrors = cart.getErrors('email') %}
@@ -25,7 +25,7 @@
         {% endif %}
 
         <div class="buttons">
-          <input type="submit" value="Continue" class="button button-primary"/>
+          <input type="submit" value="Continue" class="button button-primary">
         </div>
       </form>
     </div>

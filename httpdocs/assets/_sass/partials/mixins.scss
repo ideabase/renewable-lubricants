@@ -1,48 +1,5 @@
 // mixins partial
 
-// TODO: Replace slant with triangle
-@mixin slant($pos, $angle, $color) {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: $color;
-    @if ($pos == right and not ($angle < 0)) or ($pos == left and $angle < 0) {
-      transform-origin: 0 100%;
-    } @else {
-      transform-origin: 100% 0;
-    }
-    transform: skew($angle);
-    z-index: -1;
-  }
-}
-
-// turns a div into a right triangle using transparent borders
-  // $vert   {top, bottom} places length of triangle on top or bottom
-  // $hori   {left, right} places height of triangle on left or right
-  // $height {<length>}    height of the triangle
-  // $length {<length>}    length of the triangle
-  // $color  {<color>}     background color of the triangle
-@mixin triangle($vert, $hori, $height, $length, $color) {
-  width: 0;
-  height: 0;
-  @if ($vert == top) {
-    border-top: $length solid $color;
-  } @else {
-    border-bottom: $length solid $color;
-  }
-  @if ($hori == left) {
-    border-left: $height solid transparent;
-  } @else {
-    border-right: $height solid transparent;
-  }
-}
-
 // adds a box shadow to the element on focus and removes default outline
   // $color - box shadow color
 @mixin focus($color) {

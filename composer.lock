@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eba4e09078d061dc2725e505ec2b164f",
+    "content-hash": "aaccec874cb52ef639b95b0394293cea",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -356,16 +356,16 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.1.25",
+            "version": "3.1.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/cms.git",
-                "reference": "d63676d829074e257492f010fdcd7ccc7fe895a9"
+                "reference": "64297dc7367bd6faf2ec8139096344f66b219bb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/d63676d829074e257492f010fdcd7ccc7fe895a9",
-                "reference": "d63676d829074e257492f010fdcd7ccc7fe895a9",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/64297dc7367bd6faf2ec8139096344f66b219bb1",
+                "reference": "64297dc7367bd6faf2ec8139096344f66b219bb1",
                 "shasum": ""
             },
             "require": {
@@ -441,20 +441,20 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2019-04-30T18:40:25+00:00"
+            "time": "2019-05-08T17:55:55+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.1.4",
+            "version": "2.1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/craftcms/commerce.git",
-                "reference": "10026287664826c8a81f0d5bb61a11725e484fa6"
+                "reference": "a6a1c5d01008f978f0ea382b81cd5f5d2f2d1a58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/10026287664826c8a81f0d5bb61a11725e484fa6",
-                "reference": "10026287664826c8a81f0d5bb61a11725e484fa6",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/a6a1c5d01008f978f0ea382b81cd5f5d2f2d1a58",
+                "reference": "a6a1c5d01008f978f0ea382b81cd5f5d2f2d1a58",
                 "shasum": ""
             },
             "require": {
@@ -496,7 +496,55 @@
                 "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2019-04-30T06:02:45+00:00"
+            "time": "2019-05-08T10:52:43+00:00"
+        },
+        {
+            "name": "craftcms/commerce-omnipay",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/craftcms/commerce-omnipay.git",
+                "reference": "58ca15b6823df1fffa1754838c963e9153b49840"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/craftcms/commerce-omnipay/zipball/58ca15b6823df1fffa1754838c963e9153b49840",
+                "reference": "58ca15b6823df1fffa1754838c963e9153b49840",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/commerce": "^2.0.0-beta.5",
+                "omnipay/common": "~2.3"
+            },
+            "type": "library",
+            "extra": {
+                "name": "Omnipay for Craft Commerce",
+                "handle": "commerce-omnipay",
+                "changelogUrl": "https://raw.githubusercontent.com/craftcms/commerce-omnipay/master/CHANGELOG.md",
+                "downloadUrl": "https://github.com/craftcms/commerce-omnipay/archive/master.zip"
+            },
+            "autoload": {
+                "psr-4": {
+                    "craft\\commerce\\omnipay\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pixel & Tonic",
+                    "homepage": "https://pixelandtonic.com/"
+                }
+            ],
+            "description": "Omnipay integration plugin for Craft Commerce 2",
+            "keywords": [
+                "commerce",
+                "craftcms",
+                "omnipay",
+                "yii2"
+            ],
+            "time": "2018-10-16T09:58:53+00:00"
         },
         {
             "name": "craftcms/contact-form",
@@ -829,6 +877,64 @@
                 "utils"
             ],
             "time": "2017-06-12T01:10:27+00:00"
+        },
+        {
+            "name": "digital-pros/commerce-authorize",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digital-pros/commerce-authorize.git",
+                "reference": "1ae9e6856fa75cdb7b6302e65762a3794ddd3491"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/digital-pros/commerce-authorize/zipball/1ae9e6856fa75cdb7b6302e65762a3794ddd3491",
+                "reference": "1ae9e6856fa75cdb7b6302e65762a3794ddd3491",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^3.0.0-RC1",
+                "craftcms/commerce": "^2.0.0-alpha.5",
+                "craftcms/commerce-omnipay": "^1.0.0",
+                "omnipay/authorizenet": "^2.6.0"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Authorize.net for Craft Commerce",
+                "handle": "commerce-authorize",
+                "changelogUrl": "https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md",
+                "downloadUrl": "https://github.com/digitalpros/commerce-authorize/archive/master.zip"
+            },
+            "autoload": {
+                "psr-4": {
+                    "digitalpros\\commerce\\authorize\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Digital Pros",
+                    "homepage": "https://digitalpros.co/"
+                }
+            ],
+            "description": "Authorize.net payment gateway plugin for Craft Commerce 2",
+            "keywords": [
+                "authorize",
+                "commerce",
+                "craftcms",
+                "omnipay",
+                "yii2"
+            ],
+            "support": {
+                "email": "support@craftcms.com",
+                "issues": "https://github.com/digitalpros/commerce-authorize/issues?state=open",
+                "source": "https://github.com/digitalpros/commerce-authorize",
+                "docs": "https://github.com/digitalpros/commerce-authorize",
+                "rss": "https://github.com/digitalpros/commerce-authorize/commits/master.atom"
+            },
+            "time": "2019-02-07T05:54:49+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1227,6 +1333,92 @@
                 "html"
             ],
             "time": "2018-02-23T01:58:20+00:00"
+        },
+        {
+            "name": "guzzle/guzzle",
+            "version": "v3.9.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle3.git",
+                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/0645b70d953bc1c067bbc8d5bc53194706b628d9",
+                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.3",
+                "symfony/event-dispatcher": "~2.1"
+            },
+            "replace": {
+                "guzzle/batch": "self.version",
+                "guzzle/cache": "self.version",
+                "guzzle/common": "self.version",
+                "guzzle/http": "self.version",
+                "guzzle/inflection": "self.version",
+                "guzzle/iterator": "self.version",
+                "guzzle/log": "self.version",
+                "guzzle/parser": "self.version",
+                "guzzle/plugin": "self.version",
+                "guzzle/plugin-async": "self.version",
+                "guzzle/plugin-backoff": "self.version",
+                "guzzle/plugin-cache": "self.version",
+                "guzzle/plugin-cookie": "self.version",
+                "guzzle/plugin-curlauth": "self.version",
+                "guzzle/plugin-error-response": "self.version",
+                "guzzle/plugin-history": "self.version",
+                "guzzle/plugin-log": "self.version",
+                "guzzle/plugin-md5": "self.version",
+                "guzzle/plugin-mock": "self.version",
+                "guzzle/plugin-oauth": "self.version",
+                "guzzle/service": "self.version",
+                "guzzle/stream": "self.version"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Guzzle 5 has moved to a new package name. The package you have installed, Guzzle 3, is deprecated."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Guzzle": "src/",
+                    "Guzzle\\Tests": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Guzzle Community",
+                    "homepage": "https://github.com/guzzle/guzzle/contributors"
+                }
+            ],
+            "description": "PHP HTTP client. This library is deprecated in favor of https://packagist.org/packages/guzzlehttp/guzzle",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "rest",
+                "web service"
+            ],
+            "abandoned": "guzzlehttp/guzzle",
+            "time": "2015-03-18T18:23:50+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2052,6 +2244,154 @@
             "time": "2019-04-19T10:27:42+00:00"
         },
         {
+            "name": "omnipay/authorizenet",
+            "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/omnipay-authorizenet.git",
+                "reference": "c2ed2361fc9b6dbd571b9e2d8ed00c731aa2ae2d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/omnipay-authorizenet/zipball/c2ed2361fc9b6dbd571b9e2d8ed00c731aa2ae2d",
+                "reference": "c2ed2361fc9b6dbd571b9e2d8ed00c731aa2ae2d",
+                "shasum": ""
+            },
+            "require": {
+                "omnipay/common": "~2.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\AuthorizeNet\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Macneil",
+                    "email": "adrian@adrianmacneil.com"
+                },
+                {
+                    "name": "Omnipay Contributors",
+                    "homepage": "https://github.com/thephpleague/omnipay-authorizenet/contributors"
+                }
+            ],
+            "description": "Authorize.Net gateway for the Omnipay payment processing library",
+            "homepage": "https://github.com/thephpleague/omnipay-authorizenet",
+            "keywords": [
+                "authorize",
+                "authorize net",
+                "authorize.net",
+                "gateway",
+                "merchant",
+                "omnipay",
+                "pay",
+                "payment"
+            ],
+            "time": "2018-01-13T18:47:39+00:00"
+        },
+        {
+            "name": "omnipay/common",
+            "version": "2.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/omnipay-common.git",
+                "reference": "54910f2ece6b1be64f5e53e2111dd1254d50ee49"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/omnipay-common/zipball/54910f2ece6b1be64f5e53e2111dd1254d50ee49",
+                "reference": "54910f2ece6b1be64f5e53e2111dd1254d50ee49",
+                "shasum": ""
+            },
+            "require": {
+                "guzzle/guzzle": "~3.9",
+                "php": ">=5.3.2",
+                "symfony/http-foundation": "~2.1|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5.x-dev"
+                },
+                "gateways": [
+                    "AuthorizeNet_AIM",
+                    "AuthorizeNet_SIM",
+                    "Buckaroo_CreditCard",
+                    "Buckaroo_Ideal",
+                    "Buckaroo_PayPal",
+                    "CardSave",
+                    "Coinbase",
+                    "Dummy",
+                    "Eway_Rapid",
+                    "FirstData_Connect",
+                    "GoCardless",
+                    "Manual",
+                    "Migs_ThreeParty",
+                    "Migs_TwoParty",
+                    "Mollie",
+                    "MultiSafepay",
+                    "Netaxept",
+                    "NetBanx",
+                    "PayFast",
+                    "Payflow_Pro",
+                    "PaymentExpress_PxPay",
+                    "PaymentExpress_PxPost",
+                    "PayPal_Express",
+                    "PayPal_Pro",
+                    "Pin",
+                    "SagePay_Direct",
+                    "SagePay_Server",
+                    "SecurePay_DirectPost",
+                    "Stripe",
+                    "TargetPay_Directebanking",
+                    "TargetPay_Ideal",
+                    "TargetPay_Mrcash",
+                    "WorldPay"
+                ]
+            },
+            "autoload": {
+                "psr-0": {
+                    "Omnipay\\Common\\": "src/"
+                },
+                "classmap": [
+                    "src/Omnipay/Omnipay.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Macneil",
+                    "email": "adrian@adrianmacneil.com"
+                },
+                {
+                    "name": "Omnipay Contributors",
+                    "homepage": "https://github.com/thephpleague/omnipay-common/contributors"
+                }
+            ],
+            "description": "Common components for Omnipay payment processing library",
+            "homepage": "https://github.com/thephpleague/omnipay-common",
+            "keywords": [
+                "gateway",
+                "merchant",
+                "omnipay",
+                "pay",
+                "payment",
+                "purchase"
+            ],
+            "time": "2016-11-07T06:10:23+00:00"
+        },
+        {
             "name": "paragonie/random_compat",
             "version": "v9.99.99",
             "source": {
@@ -2528,16 +2868,16 @@
         },
         {
             "name": "rias/craft-contact-form-extensions",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Rias500/craft-contact-form-extensions.git",
-                "reference": "37900c33cff0487534375dd8390199fa9e40abe8"
+                "url": "https://github.com/riasvdv/craft-contact-form-extensions.git",
+                "reference": "f95ea01041e2523861eccb2c4be932bcd8fb60e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Rias500/craft-contact-form-extensions/zipball/37900c33cff0487534375dd8390199fa9e40abe8",
-                "reference": "37900c33cff0487534375dd8390199fa9e40abe8",
+                "url": "https://api.github.com/repos/riasvdv/craft-contact-form-extensions/zipball/f95ea01041e2523861eccb2c4be932bcd8fb60e9",
+                "reference": "f95ea01041e2523861eccb2c4be932bcd8fb60e9",
                 "shasum": ""
             },
             "require": {
@@ -2584,7 +2924,7 @@
                 "docs": "https://github.com/Rias500/craft-contact-form-extensions/blob/master/README.md",
                 "issues": "https://github.com/Rias500/craft-contact-form-extensions/issues"
             },
-            "time": "2019-04-15T14:11:09+00:00"
+            "time": "2019-05-08T07:39:28+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -2950,6 +3290,58 @@
             "time": "2017-07-28T15:27:31+00:00"
         },
         {
+            "name": "symfony/event-dispatcher",
+            "version": "v2.8.50",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/event-dispatcher.git",
+                "reference": "a77e974a5fecb4398833b0709210e3d5e334ffb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/a77e974a5fecb4398833b0709210e3d5e334ffb0",
+                "reference": "a77e974a5fecb4398833b0709210e3d5e334ffb0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "suggest": {
+                "symfony/dependency-injection": "",
+                "symfony/http-kernel": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\EventDispatcher\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony EventDispatcher Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-11-21T14:20:20+00:00"
+        },
+        {
             "name": "symfony/filesystem",
             "version": "v3.3.6",
             "source": {
@@ -3046,6 +3438,55 @@
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
             "time": "2017-06-01T21:01:25+00:00"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "v3.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "49e8cd2d59a7aa9bfab19e46de680c76e500a031"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/49e8cd2d59a7aa9bfab19e46de680c76e500a031",
+                "reference": "49e8cd2d59a7aa9bfab19e46de680c76e500a031",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "symfony/polyfill-mbstring": "~1.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony HttpFoundation Component",
+            "homepage": "https://symfony.com",
+            "time": "2017-07-21T11:04:46+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

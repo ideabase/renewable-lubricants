@@ -1,4 +1,10 @@
 {# main layout #}
+{% spaceless %}
+
+{% if cart is not defined %}
+  {% set cart = craft.commerce.carts.cart %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -8,21 +14,13 @@
 </head>
 
 <body>
-  {% if cart is not defined %}
-    {% set cart = craft.commerce.carts.cart %}
-  {% endif %}
-
   {# include header #}
   {% include '_globals/header'%}
 
   <main>
     {# feature image #}
     {% if entry.featureImage|length %}
-      <img src="{{ entry.featureImage.one().getUrl() }}" class="feature-img"/>
-    {% endif %}
-
-    {% if entry.subtitle|length %}
-      {{ entry.subtitle }}
+      <img src="{{ entry.featureImage.one().getUrl() }}" class="feature-img">
     {% endif %}
 
     {# content block #}
@@ -35,3 +33,5 @@
   {% include '_globals/scripts' %}
 </body>
 </html>
+
+{% endspaceless %}

@@ -24,14 +24,14 @@
           {% else %}
             You are subscribed and your next payment is due on {{ subscription.nextPaymentDate|date('Y-m-d') }}
           {% endif %}
-          <br /><br />
+          <br><br>
 
-          <a href="{{ url('/shop/services/subscription', {subscription: subscription.id}) }}">Manage subscription</a><br /><br />
+          <a href="{{ url('/shop/services/subscription', {subscription: subscription.id}) }}">Manage subscription</a><br><br>
         {% endfor %}
       </div>
     </div>
     {% if loop.last %}
-      <hr />
+      <hr>
     {% endif %}
   {% endfor %}
   <div class="md:flex">

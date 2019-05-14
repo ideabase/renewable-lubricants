@@ -1,7 +1,20 @@
-.subheading {
-  text-align: center;
-  background-color: $color-green-dark;
-  color: #fff;
+// distributors partial
+
+#distributors-network {
+  margin: 1rem 0;
+
+  h1 {
+    background-color: $color-green-dark;
+    color: #fff;
+    margin: 0;
+    padding: .5em;
+  }
+
+  .fill {
+    flex-grow: 1;
+    height: auto;
+    background-color: $color-green-dark;
+  }
 }
 
 .accordion {
@@ -11,81 +24,52 @@
   color: $color-green-dark;
   max-width: 900px;
   margin: 0 auto;
-}
 
-.accordion input {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
-}
-
-.accordion label {
-  position: relative;
-  display: block;
-  padding: 0 0 0 1em;
-  background: #fff;
-  border-bottom: solid 2px $color-green-dark;
-  text-transform: uppercase;
-  font-weight: bold;
-  line-height: 3;
-  cursor: pointer;
-}
-
-@media only screen and (min-width: 600px) {
-  .accordion-content {
-    display: flex;
-    flex-wrap: nowrap;
+  input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
   }
-}
 
-.accordion-content {
-  display: none;
-  padding: 1em;
-  background: #fff;
-  font-family: $font-josefin-sans;
-  -webkit-transition: max-height .35s;
-  -moz-transition: max-height .35s;
-  -o-transition: max-height .35s;
-  transition: max-height .35s;
-}
+  label {
+    display: block;
+    border-bottom: solid 2px $color-green-dark;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 3;
+    cursor: pointer;
+  }
 
-.accordion-content p {
-  margin: 1em;
-  color: $color-black;
-}
+  input:checked + .accordion-content {
+    max-height: 100vh;
+  }
 
-.accordion-content-image {
-  margin-top: 1.5em;
-}
+  label::before {
+    content: '+';
+    display: inline-block;
+    font-size: 1.6rem;
+    position: absolute;
+    top: -.55rem;
+    left: -2rem;
+    transition: all .15s;
+  }
 
-.accordion-image {
-  width: 150px;
-}
+  input:checked + label::before {
+    transform: rotate(360deg);
+    content: '-';
+  }
 
-/* :checked */
-.accordion input:checked ~ .accordion-content {
-  max-height: 100vh;
-}
+  .accordion-content {
+    display: none;
+    padding: 1em;
+    background: #fff;
+    font-family: $font-josefin-sans;
+    transition: max-height .35s;
+  }
 
-/* Icon */
-.accordion label::after {
-  position: absolute;
-  right: 0;
-  top: 0;
-  display: block;
-  width: 3em;
-  height: 3em;
-  line-height: 3;
-  text-align: center;
-  -webkit-transition: all .35s;
-  -o-transition: all .35s;
-  transition: all .35s;
-}
-
-.accordion input[type=checkbox] + label::after {
-  content: "+";
-}
-
-.accordion input[type=checkbox]:checked + label::after {
-  transform: rotate(315deg);
+  .accordion-image {
+    margin-top: 1.5em;
+    width: 150px;
+  }
 }

@@ -1,42 +1,34 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
-  <p>{{ entry.body }}</p>
-
   <div id="products-featured">
-    <h2>Featured Products</h2>
+    <div class="flex">
+      <h1>Featured Products</h1>
+    </div>
 
-      <div>
-        <ul>
-          {% for product in craft.products.type('clothing').all() %}
-            <li>
-              {% if product.featuredProduct %}
-                {% for image in product.productImage.all() %}
-                  <img src="{{ image.url }}"alt="{{ image.title }}">
-                {% endfor %}
-                <a href="{{ product.url }}">
-                <h1>{{ product.title }}</h1></a>
-              {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
+    <div class="flex">
+      {% for product in craft.products.type('clothing').all() %}
+        {% if product.featuredProduct %}
+          <a href="{{ product.url }}" class="flex">
+            <img src="{{ product.productImage.one().getUrl() }}"alt="{{ product.productImage.one().title }}">
+            {{- product.title -}}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
   </div>
 
-  <div class="popular-products">
-    <h2>Popular Product Categories</h2>
-    <div class="row">
+  <div id="products-popular-categories">
+    <div class="flex h1-wrapper">
+      <h1>Popular Product Categories</h1>
+    </div>
+    <div class="flex">
 
       {% for category in craft.categories.group('productCategories').all() %}
-        <div class="col">
-
-          {% for img in category.productImage.all() %}
-            <a href="#"><img src="{{ img.getUrl() }}"/></a>
-          {% endfor %}
-
+        <a href="{{ category.url }}"><img src="{{ category.productImage.one().getUrl() }}">
           <h4 class="product-title">{{ category.title }}</h4>
-          <a href="{{ category.url }}" class="learn-more-product">Learn More</a>
-        </div>
+          <p>Learn More</p>
+        </a>
       {% endfor %}
 
     </div>
@@ -44,12 +36,13 @@
 
   <div id="products-find">
     <h2>Find Your Perfect Product</h2>
-      <div id="find-container">
-        <ul>
-          <li><a href="/contact">Request Quote</a></li>
-          <li><a href="/contact">Request Assistance</a></li>
-          <li><a href="{# TODO #}">Product Finder</a></li>
-        </ul>
-      </div>
+
+    <div id="find-container">
+      <ul>
+        <li><a href="/contact">Request Quote</a></li>
+        <li><a href="/contact">Request Assistance</a></li>
+        <li><a href="{# TODO #}">Product Finder</a></li>
+      </ul>
+    </div>
   </div>
 {% endblock %}

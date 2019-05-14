@@ -1,65 +1,97 @@
-#h2news, #pnews{
+// news partial
+
+#h2news, #pnews {
   color: $color-green-dark;
   padding-left: 20px;
-  min-width: 60%;
-;
 }
 
-.greenunderline{
+.greenunderline {
   border: 1px solid $color-green-dark;
   margin: 20px;
   width: 200px;
   padding-left: none;
+}
+#h2news, #pnews {
 
-
+  min-width: 60%;
 
 }
 
-#pnews{
+#pnews {
   font-family: helvetica, arial, sans-serif;
   font-size: 15px;
+  margin-right: 10px;
 }
-//issue is that the whole group is being triggered rather than each element
-#news-container{
 
-  background-color: blue;
-  margin-left: 20px;
-  padding-left:0;
-  display: flex;
+#news-container {
+  margin: auto auto;
   list-style: none;
-  max-width: 1350px;
-  img{
-    z-index: 0;
-    background-color: red;
+  text-align: center;
+  padding-left:0;
 
-
+  #one {
+    position: relative;
   }
-  p{
-    color: black;
-    z-index: 1;
+
+  img {
+    z-index: -1;
+    display:block;
+    margin: 10px auto;
+    width: 100%;
+  }
+
+  h1 {
+    position: absolute;
+    bottom: -10px;
+    z-index:2;
     text-align: center;
   }
-  a{
-    color:white;
-    z-index:1;
+
+  #hexshape{
+    height: 50px;
+    min-width: 400px;
+    max-width: 690px;
+    background-color: purple;
+    z-index: 1;
+  }
+
+  #three{
+    position: absolute;
+    bottom: 0px;
   }
 }
+
+#newsparent{
+  position:relative;
+}
+
 #blogbuttonset{
   display:flex;
+  position:absolute;
+  right:180px;
 }
+
 #blogbutton{
   color: $color-green-dark;
   border-style: none;
   font-size: 22px;
   text-transform: uppercase;
   font-weight: bold;
-  margin-left: 1000px;
+  margin-left: auto;
 }
 
 #blogsbuttonline{
   background-color: $color-green-dark;
   height: 30px;
-  min-width: 15%;
+  min-width: 100%;
+}
 
-
+//desktop breakpoint
+@media screen and (min-width: 780px){
+  //issue is that the whole group is being triggered rather than each element
+  #news-container{
+    margin-left: 20px;
+    display: flex;
+    max-width: 1350px;
+  }
 }

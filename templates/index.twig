@@ -3,36 +3,42 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
+
 <div id="featured-products">
   <h1>Featured Products</h1>
 
-  {{ entry.body }}
+  {{- entry.body -}}
 
   {% for product in craft.products.type('clothing').all() %}
     {% if product.featuredProduct %}
       {% for image in product.productImage.all() %}
         <img src="{{ image.url }}"alt="{{ image.title }}">
       {% endfor %}
+
       <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
     {% endif %}
   {% endfor %}
 </div>
 
-<div id="testimonials">
-  <h1>Testimonials</h1>
-
+<section id="testimonials">
+  <div class="flex">
+    <h1>Testimonials</h1>
+  </div>
+  <div id="testimonial-wrapper">
     {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
-    <div id="testimonial">
-      <img src="" alt="image"/>
 
-        <ul>
-          <li>{{ testimonial.testimonialBody }}</li>
-          <li><p>{{ testimonial.testimonialAuthor }}</p></li>
-          <li><p>{{ testimonial.authorDescription }}</p></li>
-        </ul>
+      <a href="{{ testimonial.url }}">
+        <img src="{{ testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{ testimonial.productImage.one().title }}">
 
-    </div>
+        <div class="testimonial-text">
+          <p>"{{ testimonial.quote }}"</p>
+          <p class="p-author">– {{ testimonial.testimonialAuthor }}</p>
+          <p>{{ testimonial.authorDescription }}</p>
+        </div>
+      </a>
+
     {% endfor %}
-</div>
+  </div>
+</section>
 
 {% endblock %}

@@ -461,7 +461,7 @@ class Variant extends Purchasable
         $data = [];
         $data['onSale'] = $this->getOnSale();
 
-        $data['cpEditUrl'] = $this->getProduct() ? $this->getProduct()->getCpEditUrl() : [];
+        $data['cpEditUrl'] = $this->getCpEditUrl();
 
         // Product Attributes
         $data['product'] = $this->getProduct() ? $this->getProduct()->getSnapshot() : [];
@@ -518,7 +518,7 @@ class Variant extends Purchasable
 
         $data['fields'] = $variantDataEvent->fieldData;
 
-        return array_merge($this->getAttributes(), $data);
+        return array_merge($this->toArray(), $data);
     }
 
     /**

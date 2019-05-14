@@ -3,57 +3,48 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
-  <div class="contact-form">
-    {% macro errorList(errors) %}
-      {% if errors %}
-        <ul class="errors">
-          {% for error in errors %}
-            <li>{{ error }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endmacro %}
+  {% macro errorList(errors) %}
+    {% if errors %}
+      <ul class="errors">
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endmacro %}
 
-    {% from _self import errorList %}
+  {% from _self import errorList %}
 
-    <form method="post" action="" accept-charset="UTF-8" name="contact-form" class="contact-form">
-      <h2>Contact Us</h2>
+  <form method="post" action="" accept-charset="UTF-8" name="contact-form" id="contact">
+    <h2>Contact Us</h2>
 
-      {{ csrfInput() }}
-      <!-- <div class="contact-form__column"> -->
-      <div class="form-field-group">
-        <input type="hidden" name="action" value="contact-form/send">
-        {{ redirectInput('/success') }}
+    {{ csrfInput() }}
+      <input type="hidden" name="action" value="contact-form/send">
+      {{ redirectInput('/success') }}
 
-        <div class="form-div">
-          <input class="form-text" placeholder="Name" id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}" required>
-          {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
-        </div>
+    <div class="contact-field-row">
+      <input placeholder="Name" id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}" required>
+      {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
 
-        <div class="form-div">
-          <input class="form-text" placeholder="Email" id="from-email" type="email" name="fromEmail" value="{{ message.fromEmail ?? '' }}" required>
-          {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
-        </div>
+      <input placeholder="Email" id="from-email" type="email" name="fromEmail" value="{{ message.fromEmail ?? '' }}" required>
+      {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
+    </div>
 
-        <div class="form-div">
-          <input class="form-text" placeholder="Company Name" id="subject" type="text" name="subject" value="{{ message.subject ?? '' }}">
-          {{ message is defined and message ? errorList(message.getErrors('subject')) }}
-        </div>
+    <div class="contact-field-row">
+      <input placeholder="Company Name" id="company" type="text" name="message[Company]" value="{{ message.company ?? '' }}">
+      {{ message is defined and message ? errorList(message.getErrors('subject')) }}
 
-        <div class="form-div">
-          <input class="form-text" placeholder="Phone" id="phone" type="text" name="message[Phone]" value="{{ message.phone ?? '' }}">
-          {{ message is defined and message ? errorList(message.getErrors('phone')) }}
-        </div>
-      </div>
+      <input placeholder="Phone" id="phone" type="text" name="message[Phone]" value="{{ message.phone ?? '' }}">
+      {{ message is defined and message ? errorList(message.getErrors('phone')) }}
+    </div>
 
-      <textarea class="form-text" placeholder="Message" rows="10" cols="40" id="message" name="message[body]" required>{{ message.message ?? '' }}</textarea>
-      {{ message is defined and message ? errorList(message.getErrors('message')) }}
+    <textarea placeholder="Message" rows="10" cols="40" id="message" name="message[body]" required>{{ message.message ?? '' }}</textarea>
+    {{ message is defined and message ? errorList(message.getErrors('message')) }}
 
-      <p>This contact form uses reCAPTCHA, which is subject to Google's <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://policies.google.com/terms">terms and conditions.</a></p>
+    {# TODO: setup recaptcha on google for staging and live sites #}
+    {# {{ craft.contactFormExtensions.recaptcha | raw }}  #}
+    <input type="submit" value="Send">
 
-      {# TODO: setup recaptcha on google for staging and live sites #}
-      {# {{ craft.contactFormExtensions.recaptcha | raw }}  #}
-      <input type="submit" value="SEND MESSAGE">
-    </form>
-  </div>
+    <p>This contact form uses reCAPTCHA, which is subject to Google's <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://policies.google.com/terms">terms and conditions.</a></p>
+  </form>
 {% endblock %}

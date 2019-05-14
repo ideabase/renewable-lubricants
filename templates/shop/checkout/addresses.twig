@@ -19,7 +19,7 @@
         {% if not cart.email %}
           <label for="email">Email</label>
           <input id="email" class="w-full" type="text" value="{{ cart.email }}" name="email"
-               placeholder="email@site.com"/>
+               placeholder="email@site.com">
 
           <span class="flash">{{ cart.getErrors('email')|join }}</span><br>
         {% endif %}
@@ -33,12 +33,12 @@
         <input type="hidden" name="billingAddressSameAsShipping" value="0">
         {#<input type="hidden" name="shippingAddressSameAsBilling" value="0">#}
 
-        <label for="billingAddressSameAsShipping"><input id="billingAddressSameAsShipping" name="billingAddressSameAsShipping" type="checkbox" checked="checked"/><span class="label-body">Use same address for
+        <label for="billingAddressSameAsShipping"><input id="billingAddressSameAsShipping" name="billingAddressSameAsShipping" type="checkbox" checked="checked"><span class="label-body">Use same address for
       billing</span></label>
 
-        <label for="makePrimaryShippingAddress"><input id="makePrimaryShippingAddress" name="makePrimaryShippingAddress" type="checkbox"/><span class="label-body">Make this the primary shipping address</span></label>
+        <label for="makePrimaryShippingAddress"><input id="makePrimaryShippingAddress" name="makePrimaryShippingAddress" type="checkbox"><span class="label-body">Make this the primary shipping address</span></label>
 
-        {#<label for="shippingAddressSameAsBilling"><input id="shippingAddressSameAsBilling" name="shippingAddressSameAsBilling" type="checkbox" checked="checked"/><span class="label-body">Use same address for#}
+        {#<label for="shippingAddressSameAsBilling"><input id="shippingAddressSameAsBilling" name="shippingAddressSameAsBilling" type="checkbox" checked="checked"><span class="label-body">Use same address for#}
         {#shipping</span></label>#}
 
         {% include 'shop/_includes/addresses/fieldset' with {
@@ -47,7 +47,7 @@
           name: 'billingAddress'
         } %}
 
-        <label for="makePrimaryBillingAddress"><input id="makePrimaryBillingAddress" name="makePrimaryBillingAddress" type="checkbox"/><span class="label-body">Make this the primary billing address</span></label>
+        <label for="makePrimaryBillingAddress"><input id="makePrimaryBillingAddress" name="makePrimaryBillingAddress" type="checkbox"><span class="label-body">Make this the primary billing address</span></label>
 
 
         <input type="submit" class="button button-primary" value="Confirm addresses">
