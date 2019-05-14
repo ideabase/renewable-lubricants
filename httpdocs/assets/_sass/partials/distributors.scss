@@ -1,9 +1,32 @@
 // distributors partial
 
+@media only screen and (max-width: $mobile-breakpoint) {
+  .distributors-title {
+    font-size: 1.5em;
+  }
+}
+
+.distributors-h2-svg {
+  background-image: url('/assets/img/ui/distributors.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  // background-size: 50%;
+  padding: 1.75rem;
+}
+
+.distributors-title {
+  text-align: center;
+}
+
+.smartmap-mapcanvas {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 #distributors-network {
   margin: 1rem 0;
 
-  h1 {
+  h2 {
     background-color: $color-green-dark;
     color: #fff;
     margin: 0;
