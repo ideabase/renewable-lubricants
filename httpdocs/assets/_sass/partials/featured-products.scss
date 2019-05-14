@@ -4,8 +4,14 @@
   margin-bottom: 2rem;
 
   h1 {
+    text-align: center;
     margin-top: 0;
-    background-color: $color-green;
+    margin-bottom: 2rem;
+    background-image: url('/assets/img/ui/polygon-up-light-green.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+    padding: .5rem 0;
   }
 
   ul {
@@ -27,7 +33,7 @@
   }
 
   .featured-products-wrapper {
-    background-image: url('/assets/img/ui/both-gray.svg');
+    background-image: url('/assets/img/ui/polygon-all-gray.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 80%;

@@ -1,36 +1,32 @@
 // distributors partial
 
-@media only screen and (max-width: $mobile-breakpoint) {
-  .distributors-title {
-    font-size: 1.5em;
+#distributors-map {
+  margin-bottom: 1rem;
+
+  h2 {
+    text-align: center;
+    margin-top: 0;
+    background-image: url('/assets/img/ui/polygon-down-light-green.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    padding: .5rem 0;
+  }
+
+  .smartmap-mapcanvas {
+    margin: 0 auto;
   }
 }
 
-.distributors-h2-svg {
-  background-image: url('/assets/img/ui/distributors.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  // background-size: 50%;
-  padding: 1.75rem;
-}
-
-.distributors-title {
-  text-align: center;
-}
-
-.smartmap-mapcanvas {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
 #distributors-network {
-  margin: 1rem 0;
-
   h2 {
-    background-color: $color-green-dark;
-    color: #fff;
-    margin: 0;
-    padding: .5em;
+    background-image: url('/assets/img/ui/polygon-left-green.svg');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+    color: $color-white;
+    margin-top: 0;
+    padding: .5rem 0;
   }
 
   .fill {
@@ -45,7 +41,6 @@
   margin-bottom: 10px;
   width: 100%;
   color: $color-green-dark;
-  max-width: 900px;
   margin: 0 auto;
 
   input {

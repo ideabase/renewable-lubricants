@@ -9,9 +9,11 @@
   }
 
   form {
-    background-color: $color-yellow;
+    background-image: url('/assets/img/ui/polygon-right-yellow.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: .5rem 0;
     flex-grow: 1;
-    max-width: 800px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -33,9 +35,11 @@
 #footer-info {
   margin-top: 2rem;
   flex-grow: 1;
-  background-color: $color-gray;
   justify-content: space-around;
-  max-width: 750px;
+  background-image: url('/assets/img/ui/polygon-right-gray.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: .5rem 0;
 
   h3 {
     font-family: $font-roboto-slab;

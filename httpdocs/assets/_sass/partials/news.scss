@@ -50,7 +50,6 @@
   #hexshape{
     height: 50px;
     min-width: 400px;
-    max-width: 690px;
     background-color: purple;
     z-index: 1;
   }
@@ -86,12 +85,10 @@
   min-width: 100%;
 }
 
-//desktop breakpoint
-@media screen and (min-width: 780px){
+@media screen and (min-width: $bp-md){
   //issue is that the whole group is being triggered rather than each element
   #news-container{
     margin-left: 20px;
     display: flex;
-    max-width: 1350px;
   }
 }

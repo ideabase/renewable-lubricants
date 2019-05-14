@@ -1,9 +1,9 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
-  <div class="distributors-h2-svg">
-    <h2 class="distributors-title">Check out our global partners.</h2> {# TODO - padding with the SVGs seem messed up and something needs adjusted #}
-  </div>
+
+<section id="distributors-map">
+  <h2>Check out our global partners.</h2>
 
   {% set options = {
     markerInfo: '_includes/info-bubble',
@@ -19,27 +19,29 @@
   } %}
 
   {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
+</section>
 
-  <section id="distributors-network">
-      <h2>Our Distribution Network</h2>
-    {% set distributors = craft.entries.section('distributors') %}
-    {% cache %}
+<section id="distributors-network">
+  <h2>Our Distribution Network</h2>
 
-    {% for distrib in distributors.all() %}
-      <div class="accordion">
-        <input type="radio" name="tabs">
-        <label>{{ distrib.title }}</label>
-        <div class="accordion-content">
-          <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="accordion-image">
-          {% if distrib.body|length %}
-            <p>{{ distrib.body }}</p>
-          {% endif %}
-        </div>
+  {% set distributors = craft.entries.section('distributors') %}
+  {% cache %}
+
+  {% for distrib in distributors.all() %}
+    <div class="accordion">
+      <input type="radio" name="tabs">
+      <label>{{ distrib.title }}</label>
+      <div class="accordion-content">
+        <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="accordion-image">
+        {% if distrib.body|length %}
+          <p>{{ distrib.body }}</p>
+        {% endif %}
       </div>
-    {% endfor %}
+    </div>
+  {% endfor %}
 
-    {% endcache %}
-  </section>
+  {% endcache %}
+</section>
 
 {% endblock %}
 

@@ -4,9 +4,7 @@
   {% include '_includes/featured-products.twig' %}
 
   <div id="products-popular-categories">
-    <div class="flex h1-wrapper">
-      <h1>Popular Product Categories</h1>
-    </div>
+    <h1>Popular Product Categories</h1>
     <div class="flex">
 
       {% for category in craft.categories.group('productCategories').limit(8).all() %}

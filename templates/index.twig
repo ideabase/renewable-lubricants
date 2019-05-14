@@ -7,9 +7,7 @@
 {% include '_includes/featured-products.twig' %}
 
 <section id="testimonials">
-  <div class="flex">
-    <h1>Testimonials</h1>
-  </div>
+  <h1>Testimonials</h1>
   <div id="testimonial-wrapper">
     {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
 

@@ -2,7 +2,13 @@
   margin-bottom: 2rem;
 
   h1 {
-    background-color: $color-green;
+    text-align: center;
+    margin-top: 0;
+    background-image: url('/assets/img/ui/polygon-down-light-green.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+    padding: .5rem 0;
   }
 
   a {
@@ -15,13 +21,9 @@
       width: 100px;
     }
 
-    @media screen and (min-width: $mobile-breakpoint) {
+    @media screen and (min-width: $bp-md) {
       flex: 1 1 30%;
     }
-  }
-
-  .h1-wrapper {
-    justify-content: center;
   }
 
   .flex {
@@ -39,8 +41,11 @@
 
 #products-find{
   #find-container{
-    margin-left:100px;
-    background-color: $color-green-dark;
+    margin-left: 100px;
+    background-image: url('/assets/img/ui/polygon-left-green.svg');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
   }
 
   h2 {
