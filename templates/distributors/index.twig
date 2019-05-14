@@ -1,7 +1,9 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
-  <h2>Check out our global partners.</h2>
+  <div class="distributors-h2-svg">
+    <h2 class="distributors-title">Check out our global partners.</h2> {# TODO - padding with the SVGs seem messed up and something needs adjusted #}
+  </div>
 
   {% set options = {
     markerInfo: '_includes/infoBubble',
@@ -19,7 +21,7 @@
   {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
 
   <section id="distributors-network">
-      <h1>Our Distribution Network</h1>
+      <h2>Our Distribution Network</h2>
     {% set distributors = craft.entries.section('distributors') %}
     {% cache %}
 
