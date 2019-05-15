@@ -18,11 +18,6 @@
   {% include '_globals/header'%}
 
   <main>
-    {# feature image #}
-    {% if entry.featureImage|length %}
-      <img src="{{ entry.featureImage.one().getUrl() }}" class="feature-img">
-    {% endif %}
-
     {# content block #}
     {% block content %}{% endblock %}
   </main>

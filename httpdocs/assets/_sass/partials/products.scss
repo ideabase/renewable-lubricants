@@ -4,10 +4,7 @@
   h1 {
     text-align: center;
     margin-top: 0;
-    background-image: url('/assets/img/ui/polygon-down-light-green.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 50% 100%;
+    background: url('/assets/img/ui/polygon-down-light-green.svg') no-repeat center/50% 100%;
     padding: .5rem 0;
   }
 
@@ -44,10 +41,7 @@
   margin: 0 auto;
 
   #find-container{
-    background-image: url('/assets/img/ui/polygon-left-green.svg');
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: cover;
+    background: url('/assets/img/ui/polygon-left-green.svg') no-repeat right/cover;
   }
 
   h2 {

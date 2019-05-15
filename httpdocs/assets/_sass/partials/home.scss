@@ -1,12 +1,21 @@
 // home partial
 
+.home-feature {
+  position: relative;
+}
+
+.request-a-quote {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 1rem 4rem;
+  background: url('/assets/img/ui/polygon-request.svg') no-repeat left/cover;
+}
+
 #testimonials {
   h1 {
     text-align: center;
-    background-image: url('/assets/img/ui/polygon-down-light-green.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 50% 100%;
+    background: url('/assets/img/ui/polygon-down-light-green.svg') no-repeat center/50% 100%;
     padding: .5rem 0;
     margin: 0;
   }
@@ -35,7 +44,7 @@
     }
   }
 
-  #testimonial-wrapper {
+  #testimonials-wrapper {
     display: flex;
   }
 
@@ -47,6 +56,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    // local variables for calculating the width of the background image
     $padding: 1rem;
     $padding-l: 30%;
     padding: $padding $padding $padding $padding-l;
@@ -55,9 +65,7 @@
     right: 0;
     width: calc(100% - #{$padding} - #{$padding-l});
     height: 50%;
-    background-image: url('/assets/img/ui/polygon-testimonial.svg');
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: url('/assets/img/ui/polygon-testimonial.svg') no-repeat left/cover;
   }
 
   .p-author {

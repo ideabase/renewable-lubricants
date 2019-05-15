@@ -6,10 +6,7 @@
   h1 {
     text-align: center;
     margin-top: 0;
-    background-image: url('/assets/img/ui/polygon-up-light-green.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 50% 100%;
+    background: url('/assets/img/ui/polygon-up-light-green.svg') no-repeat center/50% 100%;
     padding: .5rem 0;
   }
 
@@ -23,10 +20,7 @@
   max-width: $bp-xl;
 
   h1 {
-    background-image: url('/assets/img/ui/polygon-left-green.svg');
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: cover;
+    background: url('/assets/img/ui/polygon-left-green.svg') no-repeat right/cover;
     color: $color-white;
     margin-top: 0;
     padding: .5rem 0 .5rem 12rem;

@@ -4,11 +4,21 @@
 
 {% block content %}
 
+<div class="home-feature">
+  {# feature image #}
+  <img class="feature-img" src="{{ entry.featureImage.one().getUrl() }}">
+
+  {# request a quote button #}
+  <a class="request-a-quote" href="{{ url('contact') }}">Request a Quote</a>
+</div>
+
+{# featured products #}
 {% include '_includes/featured-products.twig' %}
 
+{# testimonials #}
 <section id="testimonials">
   <h1>Testimonials</h1>
-  <div id="testimonial-wrapper">
+  <div id="testimonials-wrapper">
     {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
 
       <a href="{{ testimonial.url }}">

@@ -17,9 +17,7 @@ header {
 
     .cart {
       flex-direction: column;
-      background-image: url('/assets/img/ui/polygon-cart.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
+      background: url('/assets/img/ui/polygon-cart.svg') no-repeat right/cover;
       padding: 1rem 2rem 1rem 5rem;
       text-transform: uppercase;
       font-weight: bold;
@@ -33,9 +31,7 @@ header {
       flex-grow: 1;
       display: flex;
       justify-content: space-around;
-      background-image: url('/assets/img/ui/polygon-nav.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
+      background: url('/assets/img/ui/polygon-nav.svg') no-repeat left/cover;
       margin: 0;
       padding: 1.25rem 5rem 1.25rem 1rem;
       list-style-type: none;

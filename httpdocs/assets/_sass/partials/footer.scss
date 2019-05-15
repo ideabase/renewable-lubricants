@@ -20,9 +20,7 @@ footer {
   }
 
   form {
-    background-image: url('/assets/img/ui/polygon-right-yellow.svg');
-    background-repeat: no-repeat;
-    background-size: 100%;
+    background: url('/assets/img/ui/polygon-right-yellow.svg') no-repeat left/cover;
     padding: 1rem 5rem 1rem 0;
     flex-grow: 1;
     display: flex;
@@ -45,9 +43,7 @@ footer {
 #footer-info {
   flex-grow: 1;
   justify-content: space-between;
-  background-image: url('/assets/img/ui/polygon-right-gray.svg');
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: url('/assets/img/ui/polygon-right-gray.svg') no-repeat left/cover;
   padding: .5rem 12rem .5rem 2rem;
 
   h3 {
