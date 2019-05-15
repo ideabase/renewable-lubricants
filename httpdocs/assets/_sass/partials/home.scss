@@ -47,12 +47,17 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    $padding: 1rem;
+    $padding-l: 30%;
+    padding: $padding $padding $padding $padding-l;
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 100%;
+    width: calc(100% - #{$padding} - #{$padding-l});
     height: 50%;
-    background-color: transparentize($color-yellow, .2);
+    background-image: url('/assets/img/ui/polygon-testimonial.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   .p-author {
