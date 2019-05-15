@@ -10,7 +10,7 @@
     background-image: url('/assets/img/ui/polygon-up-light-green.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 50%;
+    background-size: 50% 100%;
     padding: .5rem 0;
   }
 
@@ -33,6 +33,7 @@
   }
 
   .featured-products-wrapper {
+    justify-content: space-evenly;
     background-image: url('/assets/img/ui/polygon-all-gray.svg');
     background-repeat: no-repeat;
     background-position: center;

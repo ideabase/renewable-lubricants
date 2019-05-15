@@ -1,6 +1,17 @@
 // footer partial
 
+footer {
+  margin: 0 auto;
+  max-width: $bp-xl;
+}
+
+#footer-wrapper {
+  max-width: $bp-lg;
+}
+
 #newsletter-sub {
+  margin-bottom: 2rem;
+
   h2 {
     color: $color-yellow;
     text-transform: uppercase;
@@ -11,14 +22,13 @@
   form {
     background-image: url('/assets/img/ui/polygon-right-yellow.svg');
     background-repeat: no-repeat;
-    background-size: cover;
-    padding: .5rem 0;
+    background-size: 100%;
+    padding: 1rem 5rem 1rem 0;
     flex-grow: 1;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     color: $color-white;
-    padding: 1rem;
   }
 
   input[type="submit"] {
@@ -33,13 +43,12 @@
 }
 
 #footer-info {
-  margin-top: 2rem;
   flex-grow: 1;
-  justify-content: space-around;
+  justify-content: space-between;
   background-image: url('/assets/img/ui/polygon-right-gray.svg');
   background-repeat: no-repeat;
   background-size: cover;
-  padding: .5rem 0;
+  padding: .5rem 12rem .5rem 2rem;
 
   h3 {
     font-family: $font-roboto-slab;

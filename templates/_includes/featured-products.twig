@@ -6,7 +6,6 @@
       {% if product.featuredProduct %}
         <a href="{{ product.url }}" class="flex">
           <img src="{{ product.productImage.one().getUrl() }}"alt="{{ product.productImage.one().title }}">
-          {{ product.title }}
         </a>
       {% endif %}
     {% endfor %}

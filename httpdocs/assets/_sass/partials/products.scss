@@ -7,7 +7,7 @@
     background-image: url('/assets/img/ui/polygon-down-light-green.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 50%;
+    background-size: 50% 100%;
     padding: .5rem 0;
   }
 
@@ -40,8 +40,10 @@
 }
 
 #products-find{
+  max-width: $bp-xl;
+  margin: 0 auto;
+
   #find-container{
-    margin-left: 100px;
     background-image: url('/assets/img/ui/polygon-left-green.svg');
     background-repeat: no-repeat;
     background-position: right;
@@ -51,15 +53,16 @@
   h2 {
     color: $color-green-dark;
     text-transform: uppercase;
-    margin: 0 0 0 6.225rem;
+    margin: 0 0 0 12rem;
     line-height: .7;
   }
 
   ul {
     display: flex;
     justify-content: space-between;
-    margin-top:0px;
-    padding: 1em 5em 1em 5em;
+    margin: 0;
+    padding: 1.25rem 5rem 1.25rem 12rem;
+    font-size: 1.2rem;
     list-style-type: none;
     text-transform: uppercase;
   }

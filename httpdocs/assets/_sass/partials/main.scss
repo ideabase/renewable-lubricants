@@ -40,7 +40,7 @@ button, input[type="submit"] {
   border: none;
   padding: .375rem .75rem;
   transition: all .15s ease-in-out;
-  @include focus($color-yellow);
+  @include focus;
 
   &:hover {
     background-color: darken($color-yellow, 15);
@@ -54,7 +54,7 @@ input[type="text"], input[type="email"], input[type="search"], textarea {
   border: none;
   padding: .375rem .75rem;
   transition: box-shadow .15s ease-in-out;
-  @include focus($color-yellow);
+  @include focus;
 }
 
 textarea {

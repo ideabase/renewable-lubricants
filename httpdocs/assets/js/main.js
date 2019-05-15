@@ -1,5 +1,5 @@
 /**
- * main javascript file
+ * main js file
  */
 
  // mobile menu dropdown

@@ -3,13 +3,13 @@
 #distributors-map {
   margin-bottom: 1rem;
 
-  h2 {
+  h1 {
     text-align: center;
     margin-top: 0;
-    background-image: url('/assets/img/ui/polygon-down-light-green.svg');
+    background-image: url('/assets/img/ui/polygon-up-light-green.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: 50% 100%;
     padding: .5rem 0;
   }
 
@@ -19,14 +19,17 @@
 }
 
 #distributors-network {
-  h2 {
+  margin: 0 auto;
+  max-width: $bp-xl;
+
+  h1 {
     background-image: url('/assets/img/ui/polygon-left-green.svg');
     background-repeat: no-repeat;
     background-position: right;
     background-size: cover;
     color: $color-white;
     margin-top: 0;
-    padding: .5rem 0;
+    padding: .5rem 0 .5rem 12rem;
   }
 
   .fill {
@@ -41,7 +44,6 @@
   margin-bottom: 10px;
   width: 100%;
   color: $color-green-dark;
-  margin: 0 auto;
 
   input {
     position: absolute;
@@ -57,20 +59,20 @@
     font-weight: bold;
     line-height: 3;
     cursor: pointer;
+
+    &::before {
+      content: '+';
+      display: inline-block;
+      font-size: 1.6rem;
+      position: absolute;
+      top: -.55rem;
+      left: -2rem;
+      transition: all .15s;
+    }
   }
 
   input:checked + .accordion-content {
     max-height: 100vh;
-  }
-
-  label::before {
-    content: '+';
-    display: inline-block;
-    font-size: 1.6rem;
-    position: absolute;
-    top: -.55rem;
-    left: -2rem;
-    transition: all .15s;
   }
 
   input:checked + label::before {
