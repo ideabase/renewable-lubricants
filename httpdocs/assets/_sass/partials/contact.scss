@@ -16,10 +16,19 @@
   .contact-field-row {
     flex-grow: 1;
     display: flex;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    width: 100%;
 
-    :first-child {
-      margin-right: 1rem;
+    @media screen and (min-width: $bp-md) {
+      flex-direction: row;
+
+      :first-child {
+        margin-right: 1rem;
+      }
+    }
+
+    :nth-child(1n) {
+      margin: 0 1rem 1rem 1rem;
     }
 
     input {
@@ -28,14 +37,15 @@
   }
 
   textarea {
-    margin-bottom: 1rem;
+    margin: 0 1rem 1rem 1rem;
   }
 
   input[type="submit"] {
     align-self: flex-start;
+    margin: 0 1rem 1rem 1rem;
   }
 
   p {
-    margin-bottom: 0;
+    margin: 0 1rem 1rem 1rem;
   }
 }
