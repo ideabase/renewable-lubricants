@@ -40,6 +40,7 @@
     text-align: right;
 
     &:first-child {
+      text-align: left;
       margin-bottom: auto;
     }
   }
@@ -58,7 +59,7 @@
     justify-content: flex-end;
     // local variables for calculating the width of the background image
     $padding: 1rem;
-    $padding-l: 30%;
+    $padding-l: 35%;
     padding: $padding $padding $padding $padding-l;
     position: absolute;
     bottom: 0;
