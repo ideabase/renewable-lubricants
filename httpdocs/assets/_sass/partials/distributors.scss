@@ -1,6 +1,6 @@
 // distributors partial
 
-#distributors-map {
+.distributors-map {
   margin-bottom: 1rem;
 
   h1 {
@@ -16,9 +16,13 @@
   .smartmap-mapcanvas {
     margin: 0 auto;
   }
+
+  // .smartmap-mapcanvas div {
+  //   max-width: $bp-lg;
+  // } doesn't exactly work and won't center
 }
 
-#distributors-network {
+.distributors-network {
   margin: 0 auto;
   max-width: $bp-xl;
 

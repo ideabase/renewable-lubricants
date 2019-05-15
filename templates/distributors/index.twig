@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<section id="distributors-map">
+<section class="distributors-map">
   <h1>Check out our global partners.</h1>
 
   {% set options = {
@@ -21,7 +21,7 @@
   {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
 </section>
 
-<section id="distributors-network">
+<section class="distributors-network">
   <h1>Our Distribution Network</h1>
 
   {% set distributors = craft.entries.section('distributors') %}
