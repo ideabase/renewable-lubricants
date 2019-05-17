@@ -42,16 +42,22 @@
 
   h1 {
     position: absolute;
-    bottom: -10px;
+    bottom: 9%;
     z-index:2;
     text-align: center;
+    font-size: 20px;
+    left: 10%;
+    right: 10%;
   }
 
   #hexshape{
     height: 50px;
     min-width: 400px;
-    background-color: purple;
+    background-color: $color-yellow;
     z-index: 1;
+  }
+  #hexshape:hover{
+    background-color: $color-green-dark
   }
 
   #three{
@@ -66,8 +72,6 @@
 
 #blogbuttonset{
   display:flex;
-  position:absolute;
-  right:180px;
 }
 
 #blogbutton{
@@ -82,7 +86,7 @@
 #blogsbuttonline{
   background-color: $color-green-dark;
   height: 30px;
-  min-width: 100%;
+  min-width: 15%;
 }
 
 @media screen and (min-width: $bp-md){
