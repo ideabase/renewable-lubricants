@@ -5,11 +5,11 @@ footer {
   max-width: $bp-xl;
 }
 
-#footer-wrapper {
+.footer-wrapper {
   max-width: $bp-lg;
 }
 
-#newsletter-sub {
+.newsletter-sub {
   margin-bottom: 2rem;
 
   h2 {
@@ -35,12 +35,12 @@ footer {
     margin-left: 1rem;
 
     &:hover {
-      background-color: lighten($color-yellow, 20);
+      background-color: darken($color-yellow, 10);
     }
   }
 }
 
-#footer-info {
+.footer-info {
   flex-grow: 1;
   justify-content: space-between;
   background: url('/assets/img/ui/polygon-right-gray.svg') no-repeat left/cover;

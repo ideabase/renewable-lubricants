@@ -5,8 +5,8 @@
 {% block content %}
   <h1>Products</h1>
   <div id="product-specifications">
-
     <h3>Filter By Category</h3>
+
     <ul id="product-categories">
       <li>
         <input type="radio" name="radio-category" id="radio-all" checked>{{'Show All'}}</input>
@@ -17,37 +17,6 @@
         </li>
       {% endfor %}
     </ul>
-
-    {% js %}
-      {# 'Show All' filter button event listener #}
-      document.getElementById('radio-all').addEventListener('click', function() {
-        document.querySelectorAll('#product').forEach(function(c) {
-          c.style.display = '';
-        });
-      });
-
-      {# get only titles of the categories #}
-      {% set category_names = [] %}
-      {% for category in craft.categories.group('productCategories').all() %}
-        {% set category_names = category_names|merge([category.title|replace({' ': ''})]) %}
-      {% endfor %}
-
-      {# loop through filter buttons and add event listeners #}
-      for (var i of {{ category_names|json_encode|raw }}) {
-        document.getElementById('radio-' + i).addEventListener('click', function() {
-          var toShow = document.querySelectorAll(`#product.${i}`);
-          var toHide = document.querySelectorAll(`#product:not(.${i})`);
-
-          toShow.forEach(function(c) {
-            c.style.display = '';
-          });
-          toHide.forEach(function(c) {
-            c.style.display = 'none';
-          });
-        });
-      }
-    {% endjs %}
-
   </div>
 
   <form method="POST" class="text-center">
@@ -170,3 +139,33 @@
   {% endjs %}
 
 {% endblock %}
+
+{% js %}
+  {# 'Show All' filter button event listener #}
+  document.getElementById('radio-all').addEventListener('click', function() {
+    document.querySelectorAll('#product').forEach(function(c) {
+      c.style.display = '';
+    });
+  });
+
+  {# get only titles of the categories #}
+  {% set category_names = [] %}
+  {% for category in craft.categories.group('productCategories').all() %}
+    {% set category_names = category_names|merge([category.title|replace({' ': ''})]) %}
+  {% endfor %}
+
+  {# loop through filter buttons and add event listeners #}
+  for (var i of {{ category_names|json_encode|raw }}) {
+    document.getElementById('radio-' + i).addEventListener('click', function() {
+      var toShow = document.querySelectorAll(`#product.${i}`);
+      var toHide = document.querySelectorAll(`#product:not(.${i})`);
+
+      toShow.forEach(function(c) {
+        c.style.display = '';
+      });
+      toHide.forEach(function(c) {
+        c.style.display = 'none';
+      });
+    });
+  }
+{% endjs %}

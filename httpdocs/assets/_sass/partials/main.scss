@@ -61,12 +61,14 @@ textarea {
   resize: none;
 }
 
+img {
+  vertical-align: top;
+}
+
 .flex {
   display: flex;
 }
 
 .feature-img {
-  object-fit: cover;
   width: 100%;
-  height: 100%;
 }
