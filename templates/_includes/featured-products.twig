@@ -1,12 +1,14 @@
-<div class="featured-products flex">
+<div class="featured-products">
   <h1>Featured Products</h1>
 
   <div class="featured-products-wrapper flex">
     {% for product in craft.products.all() %}
       {% if product.featuredProduct %}
-        <a href="{{ product.url }}" class="flex">
-          <img src="{{ product.productImage.one().getUrl() }}"alt="{{ product.productImage.one().title }}">
-        </a>
+        <div>
+          <a href="{{ product.url }}">
+            <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}">
+          </a>
+        </div>
       {% endif %}
     {% endfor %}
   </div>
@@ -14,11 +16,14 @@
 
 {% js %}
 
-  {# add carousel to featured products wrapper #}
-  $('.featured-products-wrapper').slick({
-    dots: true,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-  });
+'use strict';
+
+{# add carousel to featured products wrapper #}
+$('.featured-products-wrapper').slick({
+  {# autoplay: true,
+  autoplaySpeed: 2000, #}
+  slidesToShow: 3,
+  slidesToScroll: 3,
+});
 
 {% endjs %}

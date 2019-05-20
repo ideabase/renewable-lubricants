@@ -1,1 +1,1 @@
-$(".mobile-menu").on("click",function(){$(".mobile-dropdown").slideToggle("fast")});
+"use strict";$(".mobile-menu").on("click",function(){$(".mobile-dropdown").slideToggle("fast")});

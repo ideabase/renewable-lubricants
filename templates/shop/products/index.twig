@@ -13,7 +13,7 @@
       </li>
       {% for category in craft.categories.group('productCategories').orderBy('title').all() %}
         <li>
-          <input type="radio" name="radio-category" id="radio-{{ category.title|replace({' ': ''}) }}">{{category.title }}</input>
+          <input type="radio" name="radio-category" id="radio-{{ category.title|replace({' ': ''}) }}">{{ category.title }}</input>
         </li>
       {% endfor %}
     </ul>
@@ -33,15 +33,15 @@
   </form>
 
   {% for product in products %}
-    {% for cat in product.productCategory.all() %}
-    <div id="product" class="md:flex product bg-white mb-4 p-8 rounded items-center text-center md:text-left {{ cat.title|replace({' ': ''}) }}">
+    {% for category in product.productCategory.all() %}
+    <div class="product {{ category.title|replace({' ': ''}) }}">
     {% endfor %}
-      <div class="md:w-1/6 md:p-4">
+      <div>
         {% if product.productImage|length %}
           <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}">
         {% endif %}
       </div>
-      <div class="md:w-2/6 md:p-4">
+      <div>
         <h3>{% if product.url %}{{ product.link }}{% else %}{{ product.title }}{% endif %}</h3>
         {% if product.getVariants()|length %}
           <form method="POST" class="add-to-cart-form">
@@ -72,10 +72,10 @@
           </form>
 
           {% if currentUser %}
-          {% set order = craft.orders.user(currentUser).hasPurchasables(product.defaultVariant).all() %}
-          {% if order|length %}
-            <strong>I already own this product: </strong> <a href="/shop/customer/order?number={{ order[0].number }}">Order #{{ order[0].shortNumber }}</a>
-          {% endif %}
+            {% set order = craft.orders.user(currentUser).hasPurchasables(product.defaultVariant).all() %}
+            {% if order|length %}
+              <strong>I already own this product: </strong> <a href="/shop/customer/order?number={{ order[0].number }}">Order #{{ order[0].shortNumber }}</a>
+            {% endif %}
           {% endif %}
 
           {%- for purchasable in product.getVariants() -%}
@@ -110,62 +110,61 @@
   </form>
   {% endif %}
 
-  {% js %}
-    $( ".purchasableId" ).change(function(e) {
-      $(".purchasableInfo").hide();
-      $("#"+($(this).find(":selected").data('info'))).toggle();
-    });
-
-    {# $('form.add-to-cart-form').submit(function(e){
-      e.preventDefault();
-      var purchasable = $(this).find('.purchasableId').val();
-      $.ajax({
-        type: "POST",
-        dataType: 'json',
-        headers: {
-          "X-CSRF-Token" : '{{ craft.app.request.csrfToken }}',
-        },
-        url: '',
-        data: {
-          'action' : 'commerce/cart/update-cart',
-          'purchasableId': purchasable,
-          'note' : 'from ajax'
-        },
-        success: function(data){
-          console.log(data);
-        }
-      });
-    }); #}
-  {% endjs %}
-
 {% endblock %}
 
 {% js %}
-  {# 'Show All' filter button event listener #}
-  document.getElementById('radio-all').addEventListener('click', function() {
-    document.querySelectorAll('#product').forEach(function(c) {
-      c.style.display = '';
+
+'use strict';
+
+$( ".purchasableId" ).change(function(e) {
+  $(".purchasableInfo").hide();
+  $("#"+($(this).find(":selected").data('info'))).toggle();
+});
+
+{# $('form.add-to-cart-form').submit(function(e){
+  e.preventDefault();
+  var purchasable = $(this).find('.purchasableId').val();
+  $.ajax({
+    type: "POST",
+    dataType: 'json',
+    headers: {
+      "X-CSRF-Token" : '{{ craft.app.request.csrfToken }}',
+    },
+    url: '',
+    data: {
+      'action' : 'commerce/cart/update-cart',
+      'purchasableId': purchasable,
+      'note' : 'from ajax'
+    },
+    success: function(data){
+      console.log(data);
+    }
+  });
+}); #}
+
+{# 'Show All' filter button event listener #}
+document.getElementById('radio-all').addEventListener('click', function() {
+  document.querySelectorAll('.product').forEach(function(productDiv) {
+    productDiv.style.display = '';
+  });
+});
+
+{# get only titles of the categories #}
+{% set category_names = [] %}
+{% for category in craft.categories.group('productCategories').all() %}
+  {% set category_names = category_names|merge([category.title|replace({' ': ''})]) %}
+{% endfor %}
+
+{# loop through filter buttons and add event listeners #}
+{{ category_names|json_encode|raw }}.forEach(function(categoryName) {
+  document.querySelector(`#radio-${categoryName}`).addEventListener('click', function() {
+    document.querySelectorAll(`.product.${categoryName}`).forEach(function(productDiv) {
+      productDiv.style.display = '';
+    });
+    document.querySelectorAll(`.product:not(.${categoryName})`).forEach(function(productDiv) {
+      productDiv.style.display = 'none';
     });
   });
+});
 
-  {# get only titles of the categories #}
-  {% set category_names = [] %}
-  {% for category in craft.categories.group('productCategories').all() %}
-    {% set category_names = category_names|merge([category.title|replace({' ': ''})]) %}
-  {% endfor %}
-
-  {# loop through filter buttons and add event listeners #}
-  for (var i of {{ category_names|json_encode|raw }}) {
-    document.getElementById('radio-' + i).addEventListener('click', function() {
-      var toShow = document.querySelectorAll(`#product.${i}`);
-      var toHide = document.querySelectorAll(`#product:not(.${i})`);
-
-      toShow.forEach(function(c) {
-        c.style.display = '';
-      });
-      toHide.forEach(function(c) {
-        c.style.display = 'none';
-      });
-    });
-  }
 {% endjs %}

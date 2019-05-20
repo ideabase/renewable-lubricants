@@ -9,30 +9,40 @@
   <img class="feature-img" src="{{ entry.featureImage.one().getUrl() }}">
 
   {# request a quote button #}
-  <a class="request-a-quote" href="{{ url('contact') }}">Request a Quote</a>
+  <div class="request-a-quote-wrapper">
+    <a class="request-a-quote" href="{{ url('contact') }}">Request a Quote</a>
+  </div>
+</div>
+
+<div class="home-body">
+  <h1>{{ entry.subtitle }}</h1>
+
+  {{ entry.body }}
 </div>
 
 {# featured products #}
 {% include '_includes/featured-products.twig' %}
 
 {# testimonials #}
-<section id="testimonials">
-  <h1>Testimonials</h1>
-  <div id="testimonials-wrapper">
-    {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
+{% if craft.entries.section('testimonials')|length > 2 %}
+  <section class="section-testimonials">
+    <h1>Testimonials</h1>
+    <div class="testimonials-wrapper">
+      {% for testimonial in craft.entries.section('testimonials').orderBy('RAND()').limit(3).all() %}
 
-      <a href="{{ testimonial.url }}">
-        <img src="{{ testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{ testimonial.productImage.one().title }}">
+        <a href="{{ testimonial.url }}">
+          <img src="{{ testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{ testimonial.productImage.one().title }}">
 
-        <div class="testimonial-text">
-          <p>"{{ testimonial.quote }}"</p>
-          <p class="p-author">– {{ testimonial.testimonialAuthor }}</p>
-          <p>{{ testimonial.authorDescription }}</p>
-        </div>
-      </a>
+          <div class="testimonial-text">
+            <p>"{{ testimonial.quote }}"</p>
+            <p class="p-author">– {{ testimonial.testimonialAuthor }}</p>
+            <p>{{ testimonial.authorDescription }}</p>
+          </div>
+        </a>
 
-    {% endfor %}
-  </div>
-</section>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
 
 {% endblock %}
