@@ -331,12 +331,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.1.27",
-        "version_normalized": "3.1.27.0",
+        "version": "3.1.28",
+        "version_normalized": "3.1.28.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/d5b2aa25fa2e7bb7527fca807b5229e99ea42218",
-            "reference": "d5b2aa25fa2e7bb7527fca807b5229e99ea42218",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/310a7d295eabe7b3691cb328efd9099d5dca29f5",
+            "reference": "310a7d295eabe7b3691cb328efd9099d5dca29f5",
             "shasum": ""
         },
         "require": {
@@ -367,7 +367,7 @@
             "true/punycode": "^2.1.0",
             "twig/twig": "~2.8.1",
             "yii2tech/ar-softdelete": "^1.0.2",
-            "yiisoft/yii2": "~2.0.17.0",
+            "yiisoft/yii2": "~2.0.19.0",
             "yiisoft/yii2-debug": "^2.0.10",
             "yiisoft/yii2-queue": "2.1.0",
             "yiisoft/yii2-swiftmailer": "^2.1.0",
@@ -388,7 +388,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2019-05-14T18:43:31+00:00",
+        "time": "2019-05-21T19:09:25+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1697,12 +1697,12 @@
     },
     {
         "name": "league/flysystem",
-        "version": "1.0.51",
-        "version_normalized": "1.0.51.0",
+        "version": "1.0.52",
+        "version_normalized": "1.0.52.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/755ba7bf3fb9031e6581d091db84d78275874396",
-            "reference": "755ba7bf3fb9031e6581d091db84d78275874396",
+            "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/c5a5097156387970e6f0ccfcdf03f752856f3391",
+            "reference": "c5a5097156387970e6f0ccfcdf03f752856f3391",
             "shasum": ""
         },
         "require": {
@@ -1728,7 +1728,7 @@
             "spatie/flysystem-dropbox": "Allows you to use Dropbox storage",
             "srmklive/flysystem-dropbox-v2": "Allows you to use Dropbox storage for PHP 5 applications"
         },
-        "time": "2019-03-30T13:22:34+00:00",
+        "time": "2019-05-20T20:21:14+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3908,17 +3908,17 @@
     },
     {
         "name": "yiisoft/yii2",
-        "version": "2.0.17",
-        "version_normalized": "2.0.17.0",
+        "version": "2.0.19",
+        "version_normalized": "2.0.19.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/b56159228c3b4990e38cf41ddd69af27ab015bea",
-            "reference": "b56159228c3b4990e38cf41ddd69af27ab015bea",
+            "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/3e74c7338dd83cea6ffc6f5c25202b9f2f271f89",
+            "reference": "3e74c7338dd83cea6ffc6f5c25202b9f2f271f89",
             "shasum": ""
         },
         "require": {
             "bower-asset/inputmask": "~3.2.2 | ~3.3.5",
-            "bower-asset/jquery": "3.3.*@stable | 3.2.*@stable | 3.1.*@stable | 2.2.*@stable | 2.1.*@stable | 1.11.*@stable | 1.12.*@stable",
+            "bower-asset/jquery": "3.4.*@stable | 3.3.*@stable | 3.2.*@stable | 3.1.*@stable | 2.2.*@stable | 2.1.*@stable | 1.11.*@stable | 1.12.*@stable",
             "bower-asset/punycode": "1.3.*",
             "bower-asset/yii2-pjax": "~2.0.1",
             "cebe/markdown": "~1.0.0 | ~1.1.0 | ~1.2.0",
@@ -3929,7 +3929,7 @@
             "php": ">=5.4.0",
             "yiisoft/yii2-composer": "~2.0.4"
         },
-        "time": "2019-03-22T21:26:26+00:00",
+        "time": "2019-05-21T16:01:16+00:00",
         "bin": [
             "yii"
         ],
@@ -4055,12 +4055,12 @@
     },
     {
         "name": "yiisoft/yii2-debug",
-        "version": "2.1.3",
-        "version_normalized": "2.1.3.0",
+        "version": "2.1.4",
+        "version_normalized": "2.1.4.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/27e36a045069e6e195a28cd4314b6e125ddcc0f9",
-            "reference": "27e36a045069e6e195a28cd4314b6e125ddcc0f9",
+            "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/4cc407f34fd90e410d806ea3264781a9fb4fd1ef",
+            "reference": "4cc407f34fd90e410d806ea3264781a9fb4fd1ef",
             "shasum": ""
         },
         "require": {
@@ -4068,7 +4068,7 @@
             "php": ">=5.4",
             "yiisoft/yii2": "~2.0.13"
         },
-        "time": "2019-04-30T15:21:32+00:00",
+        "time": "2019-05-14T13:39:56+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {

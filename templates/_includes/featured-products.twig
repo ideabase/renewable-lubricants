@@ -1,7 +1,9 @@
-<div class="featured-products">
-  <h1>Featured Products</h1>
+<div class="featured">
+  <div class="featured-h1-wrapper">
+    <h1>Featured Products</h1>
+  </div>
 
-  <div class="featured-products-wrapper flex">
+  <div class="featured-wrapper flex">
     {% for product in craft.products.all() %}
       {% if product.featuredProduct %}
         <div>
@@ -19,7 +21,7 @@
 'use strict';
 
 {# add carousel to featured products wrapper #}
-$('.featured-products-wrapper').slick({
+$('.featured-wrapper').slick({
   {# autoplay: true,
   autoplaySpeed: 2000, #}
   slidesToShow: 3,

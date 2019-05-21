@@ -5,23 +5,35 @@
   margin-bottom: 3rem;
 }
 
-// limit how far left the 'request a quote' button can move
 .request-a-quote-wrapper {
   position: absolute;
-  max-width: $bp-xl;
-  width: 100%;
-  height: 100%;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  max-width: $bp-xl;
 }
 
 .request-a-quote {
+  @include slant('brl', 'center', transparentize($color-yellow, .2), $color-black, 0, 4rem);
   position: absolute;
-  bottom: 0;
   left: 0;
-  padding: 1rem 4rem;
-  background: url('/assets/img/ui/polygon-request.svg') no-repeat left/cover;
+  bottom: 0;
+  width: 10rem;
+
+  span {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: color .15s ease-in-out;
+  }
+
+  &:hover {
+    span {
+      color: $color-white;
+    }
+  }
 }
 
 .home-body {
@@ -34,11 +46,14 @@
 }
 
 .section-testimonials {
+  .testimonials-h1-wrapper {
+    @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
+    width: 25rem;
+    margin: 0 auto;
+  }
+
   h1 {
     text-align: center;
-    background: url('/assets/img/ui/polygon-up-light-green.svg') no-repeat center/50% 100%;
-    padding: .5rem 0;
-    margin: 0;
   }
 
   img {

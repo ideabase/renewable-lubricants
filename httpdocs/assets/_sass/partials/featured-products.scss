@@ -1,14 +1,10 @@
 // featured products partial
 
-.featured-products {
+.featured {
   margin-bottom: 3rem;
 
   h1 {
     text-align: center;
-    margin-top: 0;
-    margin-bottom: 3rem;
-    background: url('/assets/img/ui/polygon-down-light-green.svg') no-repeat center/50% 100%;
-    padding: .5rem 0;
   }
 
   ul {
@@ -22,7 +18,13 @@
   }
 }
 
-.featured-products-wrapper {
+.featured-h1-wrapper {
+  @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
+  width: 25rem;
+  margin: 0 auto 3rem auto;
+}
+
+.featured-wrapper {
   justify-content: center;
   background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/80% 100%;
 }

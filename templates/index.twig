@@ -10,7 +10,9 @@
 
   {# request a quote button #}
   <div class="request-a-quote-wrapper">
-    <a class="request-a-quote" href="{{ url('contact') }}">Request a Quote</a>
+    <a class="request-a-quote" href="{{ url('contact') }}">
+      <span>Request a Quote</span>
+    </a>
   </div>
 </div>
 
@@ -26,7 +28,9 @@
 {# testimonials #}
 {% if craft.entries.section('testimonials')|length > 2 %}
   <section class="section-testimonials">
-    <h1>Testimonials</h1>
+    <div class="testimonials-h1-wrapper">
+      <h1>Testimonials</h1>
+    </div>
     <div class="testimonials-wrapper">
       {% for testimonial in craft.entries.section('testimonials').orderBy('RAND()').limit(3).all() %}
 

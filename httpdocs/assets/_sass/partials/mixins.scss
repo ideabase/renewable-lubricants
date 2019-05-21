@@ -1,10 +1,92 @@
 // mixins partial
 
 // adds a box shadow to the element on focus and removes default outline
-  // $color - box shadow color
+  // $color {color} [$color=$color-yellow] box shadow color
 @mixin focus($color: $color-yellow) {
   &:focus {
     outline: none;
     box-shadow: 0 0 0 .2rem lighten($color, 15)
+  }
+}
+
+// helper function for slant mixin
+@function str-split($str) {
+  $list: ();
+  $i: 1;
+
+  @for $i from 0 to str-length($str) {
+    $char: str-slice($str, $i + 1, $i + 1);
+    $list: append($list, $char);
+    $str: str-slice($str, $i);
+  }
+
+  @return $list;
+}
+
+// adds an angle to one or both sides of a div wrapping a text tag, and adjusts
+// the text positioning inside of the div
+  // $pos        {string}           the position of the borders on the div
+  // $text-pos   {string}           the position of the text within the div
+  // $bg-color   {color}            the color of the div
+  // $text-color {color}            the color of the text within the div
+  // $padding    {length}           the text's padding
+  // $h          {length}           the height of the div and the triangle at its end(s)
+  // $w          {length} [$w: $h]  the width of the triangle at the div's end(s)
+@mixin slant($pos, $text-pos, $bg-color, $text-color, $padding, $h, $w: $h) {
+  position: relative;
+  color: $text-color;
+  @if $pos == '' {
+    @error 'missing value for $pos';
+  } @else {
+    $split: str-split($pos);
+
+    @each $char in $split {
+      @if $char == 't' {
+        border-top: $h solid $bg-color;
+      } @else if $char == 'b' {
+        border-bottom: $h solid $bg-color;
+      } @else if $char == 'r' {
+        border-right: $w solid transparent;
+      } @else if $char == 'l' {
+        border-left: $w solid transparent;
+      } @else {
+        @error 'invalid value for $pos';
+      }
+    }
+  }
+
+  & > *:first-child {
+    position: absolute;
+    @if $padding != 0 {
+      width: calc(100% - 2 * #{$padding});
+    } @else {
+      width: 100%;
+    }
+    margin: 0;
+    padding: 0 $padding;
+    $yLength: calc(-.5 * #{$h} - 50%);
+
+    @if str-index($pos, 'b') {
+      $yLength: calc(.5 * #{$h} + 50%);
+    }
+
+    // text position
+    @if str-index($pos, 't') {
+      top: 0;
+    } @else if str-index($pos, 'b') {
+      bottom: 0;
+    }
+    @if $text-pos == 'center' {
+      left: 50%;
+      transform: translate(-50%, $yLength);
+    } @else if $text-pos == 'left' {
+      left: $w;
+      transform: translate(-#{$w}, $yLength);
+    } @else if $text-pos == 'right' {
+      right: -$w;
+      transform: translate(-#{$w}, $yLength);
+    } @else {
+      @error 'invalid value for $text-pos';
+    }
   }
 }

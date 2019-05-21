@@ -15,29 +15,36 @@ header {
       align-items: center;
     }
 
-    .cart {
+    .header-cart-wrapper {
+      @include slant('bl', 'left', $color-yellow, $color-black, 1rem, 5rem);
+      width: 10rem;
+    }
+
+    .header-cart {
       flex-direction: column;
-      background: url('/assets/img/ui/polygon-cart.svg') no-repeat right/cover;
-      padding: 1rem 2rem 1rem 5rem;
       text-transform: uppercase;
       font-weight: bold;
-      font-size: 1rem;
       line-height: 1.5;
     }
   }
 
   nav {
+    $height: 4rem;
+    @include slant('tr', 'center', $color-yellow, $color-black, 3rem, $height);
+
     ul {
-      flex-grow: 1;
-      display: flex;
-      justify-content: space-around;
-      background: url('/assets/img/ui/polygon-nav.svg') no-repeat left/cover;
-      margin: 0;
-      padding: 1.25rem 5rem 1.25rem 1rem;
+      justify-content: space-between;
+      height: $height;
       list-style-type: none;
       text-transform: uppercase;
       font-weight: bold;
       font-size: 1.2rem;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
 
     a:hover {
