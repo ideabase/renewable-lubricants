@@ -37,8 +37,10 @@
 }
 
 .home-body {
+  max-width: $bp-xl;
   text-align: center;
-  margin-bottom: 3rem;
+  margin: 0 auto 3rem auto;
+  padding: 0 1rem;
 
   h1 {
     margin-bottom: 2rem;
@@ -47,7 +49,7 @@
 
 .testimonials-h1-wrapper {
   @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
-  width: 25rem;
+  width: 30rem;
   margin: 0 auto;
   text-align: center;
 }
@@ -75,6 +77,8 @@
 
 .testimonials-container {
   display: flex;
+  max-width: $bp-xl;
+  margin: 0 auto;
 }
 
 .testimonial {

@@ -2,13 +2,16 @@
 
 {% block content %}
 
-{# feature image #}
-<img src="{{ entry.featureImage.one().getUrl() }}" class="feature-img">
+<section class="about">
+  <img src="{{ entry.featureImage.one().getUrl() }}" alt="{{ entry.featureImage.one().title }}">
 
-<section class="section-about">
-  <h1>About Us</h1>
+  <div class="about-h1-wrapper">
+    <h1>About Us</h1>
+  </div>
 
-  {{ entry.body }}
+  <div class="about-body">
+    {{ entry.body }}
+  </div>
 </section>
 
 {% endblock %}

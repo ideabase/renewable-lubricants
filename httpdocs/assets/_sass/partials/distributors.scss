@@ -1,22 +1,26 @@
 // distributors partial
 
 .distributors-map {
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
+}
 
-  h1 {
-    text-align: center;
-    margin-top: 0;
-    background: url('/assets/img/ui/polygon-up-light-green.svg') no-repeat center/50% 100%;
-    padding: .5rem 0;
-  }
+.distributors-map-h1-wrapper {
+  @include slant('trl', 'center', $color-green, $color-black, 0, 4rem);
+  width: 30rem;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+}
 
-  .smartmap-mapcanvas {
-    margin: 0 auto;
-  }
+.distributors-map-body {
+  max-width: $bp-md;
+  margin: 0 auto 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
 
-  // .smartmap-mapcanvas div {
-  //   max-width: $bp-lg;
-  // } doesn't exactly work and won't center
+.smartmap-mapcanvas {
+  max-width: $bp-xl;
+  margin: 0 auto;
 }
 
 .distributors-network {
@@ -24,11 +28,14 @@
   max-width: $bp-xl;
 
   h1 {
-    background: url('/assets/img/ui/polygon-left-green.svg') no-repeat right/cover;
-    color: $color-white;
     margin-top: 0;
-    padding: .5rem 0 .5rem 12rem;
   }
+}
+
+.distributors-network-h1-wrapper {
+  @include slant('bl', 'center', $color-green-dark, $color-white, 1rem, 4rem);
+  max-width: $bp-lg;
+  margin: 0 0 0 auto;
 }
 
 .accordion {

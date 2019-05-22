@@ -3,7 +3,13 @@
 {% block content %}
 
 <section class="distributors-map">
-  <h1>Check out our global partners.</h1>
+  <div class="distributors-map-h1-wrapper">
+    <h1>Check Out Our Global Partners</h1>
+  </div>
+
+  <div class="distributors-map-body">
+  {{ entry.body }}
+  </div>
 
   {% set options = {
     markerInfo: '_includes/info-bubble',
@@ -22,7 +28,9 @@
 </section>
 
 <section class="distributors-network">
-  <h1>Our Distribution Network</h1>
+  <div class="distributors-network-h1-wrapper">
+    <h1>Our Distribution Network</h1>
+  </div>
 
   {% set distributors = craft.entries.section('distributors') %}
   {% cache %}

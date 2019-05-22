@@ -20,13 +20,15 @@
 
 .featured-h1-wrapper {
   @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
-  width: 25rem;
+  width: 30rem;
   margin: 0 auto 3rem auto;
 }
 
 .featured-container {
   justify-content: center;
   background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/80% 100%;
+  max-width: $bp-xl;
+  margin: 0 auto;
 }
 
 // visible carousel view
