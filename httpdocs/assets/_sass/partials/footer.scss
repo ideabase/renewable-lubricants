@@ -5,22 +5,23 @@ footer {
   max-width: $bp-xl;
 }
 
-.footer-wrapper {
+.footer-container {
   max-width: $bp-lg;
 }
 
-.newsletter-sub {
+.newsletter {
   margin-bottom: 2rem;
+  $slant-length: 4rem;
 
   h2 {
     color: $color-yellow;
-    text-transform: uppercase;
-    margin: 0 0 0 15.9rem;
     line-height: .7;
+    text-align: right;
+    text-transform: uppercase;
+    margin: 0 $slant-length 0 0;
   }
 
   form {
-    background: url('/assets/img/ui/polygon-right-yellow.svg') no-repeat left/cover;
     padding: 1rem 5rem 1rem 0;
     flex-grow: 1;
     display: flex;
@@ -38,15 +39,23 @@ footer {
       background-color: darken($color-yellow, 10);
     }
   }
+
+  .newsletter-form-wrapper {
+    @include slant('br', 'right', $color-yellow, $color-black, 1rem, $slant-length);
+  }
+}
+
+.footer-info-wrapper {
+  $length: 12rem;
+  $padding: 2rem;
+  @include slant('br', 'center', $color-gray, $color-black, $padding, $length, $length, $padding);
 }
 
 .footer-info {
-  flex-grow: 1;
   justify-content: space-between;
-  background: url('/assets/img/ui/polygon-right-gray.svg') no-repeat left/cover;
-  padding: .5rem 12rem .5rem 2rem;
 
   h3 {
+    margin-top: 0;
     font-family: $font-roboto-slab;
     text-transform: uppercase;
   }

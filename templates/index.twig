@@ -27,22 +27,24 @@
 
 {# testimonials #}
 {% if craft.entries.section('testimonials')|length > 2 %}
-  <section class="section-testimonials">
+  <section class="testimonials">
     <div class="testimonials-h1-wrapper">
       <h1>Testimonials</h1>
     </div>
-    <div class="testimonials-wrapper">
+    <div class="testimonials-container">
       {% for testimonial in craft.entries.section('testimonials').orderBy('RAND()').limit(3).all() %}
 
-        <a href="{{ testimonial.url }}">
+        <div class="testimonial">
           <img src="{{ testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{ testimonial.productImage.one().title }}">
 
-          <div class="testimonial-text">
-            <p>"{{ testimonial.quote }}"</p>
-            <p class="p-author">– {{ testimonial.testimonialAuthor }}</p>
-            <p>{{ testimonial.authorDescription }}</p>
+          <div class="testimonial-text-wrapper">
+            <div class="testimonial-text">
+              <p>"{{ testimonial.quote }}"</p>
+              <p class="testimonial-author">– {{ testimonial.testimonialAuthor }}</p>
+              <p>{{ testimonial.authorDescription }}</p>
+            </div>
           </div>
-        </a>
+        </div>
 
       {% endfor %}
     </div>

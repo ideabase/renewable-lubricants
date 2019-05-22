@@ -1,28 +1,27 @@
 <header>
-  <div class="flex top-row">
+  <div class="flex header-top-row">
     {# header image #}
     <a href="{{ url() }}">
-      <img class="img-header" src="{{ header.logo.one().getUrl() }}">
+      <img class="header-img" src="{{ header.logo.one().getUrl() }}">
     </a>
 
-    <div class="flex info-right">
+    <div class="flex header-info-right">
       <div>
         <a href="tel:800-837-5823">800-837-LUBE</a>
       </div>
 
-      <div class="header-cart-wrapper">
-        <div class="flex header-cart">
-          {% set cartItemCount = cart.totalQty ?? 0 %}
-          {% set cartItemTotal = cart.itemTotal ?? 0 %}
-          <div>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</div>
-          {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
-            {% set page = craft.app.request.getSegment(2) %}
-            <div>
-              <a class="{% if page == ' cart' %}active{% endif %}" href="{{ url('shop/cart') }}">View Cart{# TODO: cart icon #}</a>
-            </div>
-          {% endif %}
-        </div>
-      </div>
+      {% set cartItemCount = cart.totalQty ?? 0 %}
+      {% set cartItemTotal = cart.itemTotal ?? 0 %}
+      {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+        <a class="header-cart-wrapper" href="{{ url('shop/cart') }}">
+          <div class="flex header-cart">
+            <span>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</span>
+              <div>
+                <span>View Cart{# TODO: cart icon #}</span>
+              </div>
+          </div>
+        </a>
+      {% endif %}
     </div>
   </div>
 

@@ -3,31 +3,6 @@ header {
   margin: 0 auto 3rem auto;
   max-width: $bp-xl;
 
-  .top-row {
-    justify-content: space-between;
-    margin: .5rem 0 .5rem .5rem;
-
-    .img-header {
-      max-width: 125px;
-    }
-
-    .info-right {
-      align-items: center;
-    }
-
-    .header-cart-wrapper {
-      @include slant('bl', 'left', $color-yellow, $color-black, 1rem, 5rem);
-      width: 10rem;
-    }
-
-    .header-cart {
-      flex-direction: column;
-      text-transform: uppercase;
-      font-weight: bold;
-      line-height: 1.5;
-    }
-  }
-
   nav {
     $height: 4rem;
     @include slant('tr', 'center', $color-yellow, $color-black, 3rem, $height);
@@ -54,6 +29,31 @@ header {
   }
 }
 
+.header-top-row {
+  justify-content: space-between;
+  margin: .5rem 0 .5rem .5rem;
+}
+
+.header-img {
+  max-width: 125px;
+}
+
+.header-info-right {
+  align-items: center;
+}
+
+.header-cart-wrapper {
+  @include slant('bl', 'left', $color-yellow, $color-black, 1rem, 5rem);
+  width: 10rem;
+}
+
+.header-cart {
+  flex-direction: column;
+  text-transform: uppercase;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
 @media only screen and (min-width: $bp-md) {
   .mobile-menu {
     display: none;
@@ -66,8 +66,8 @@ header {
   }
 
   header {
-    .top-row {
-      .img-header {
+    .header-top-row {
+      .header-img {
         max-width: 100px;
         margin: .5em;
       }

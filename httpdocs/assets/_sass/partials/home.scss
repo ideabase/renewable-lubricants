@@ -16,7 +16,7 @@
 }
 
 .request-a-quote {
-  @include slant('brl', 'center', transparentize($color-yellow, .2), $color-black, 0, 4rem);
+  @include slant('brl', 'center', transparentize($color-yellow, .1), $color-black, 0, 4rem);
   position: absolute;
   left: 0;
   bottom: 0;
@@ -45,26 +45,17 @@
   }
 }
 
-.section-testimonials {
-  .testimonials-h1-wrapper {
-    @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
-    width: 25rem;
-    margin: 0 auto;
-  }
+.testimonials-h1-wrapper {
+  @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
+  width: 25rem;
+  margin: 0 auto;
+  text-align: center;
+}
 
-  h1 {
-    text-align: center;
-  }
-
+.testimonials {
   img {
     display: block;
     width: 100%;
-  }
-
-  a {
-    flex: 1 1 0;
-    position: relative;
-    text-align: center;
   }
 
   a:hover {
@@ -80,32 +71,39 @@
       margin-bottom: auto;
     }
   }
+}
 
-  .testimonials-wrapper {
-    display: flex;
-  }
+.testimonials-container {
+  display: flex;
+}
 
-  .flex {
-    justify-content: center;
+.testimonial {
+  flex: 1 1 0;
+  position: relative;
+}
+
+.testimonial-text-wrapper {
+  $height: 10rem;
+  $width: $height / 2;
+  $padding: 1rem;
+  @include slant('bl', 'center', transparentize($color-yellow, .1), $color-black, $padding, $height, $width, $padding);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(100% - #{$width});
+
+  p:first-child {
+    align-self: flex-start;
   }
 
   .testimonial-text {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    // local variables for calculating the width of the background image
-    $padding: 1rem;
-    $padding-l: 35%;
-    padding: $padding $padding $padding $padding-l;
-    width: calc(100% - #{$padding} - #{$padding-l});
-    height: 50%;
-    background: url('/assets/img/ui/polygon-testimonial.svg') no-repeat left/cover;
+    align-items: flex-end;
+    height: $height - 2 * $padding;
   }
+}
 
-  .p-author {
-    text-transform: uppercase;
-  }
+.testimonial-author {
+  text-transform: uppercase;
 }

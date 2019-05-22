@@ -29,12 +29,6 @@
     margin-top: 0;
     padding: .5rem 0 .5rem 12rem;
   }
-
-  .fill {
-    flex-grow: 1;
-    height: auto;
-    background-color: $color-green-dark;
-  }
 }
 
 .accordion {
@@ -78,17 +72,17 @@
     transform: rotate(360deg);
     content: '-';
   }
+}
 
-  .accordion-content {
-    display: none;
-    padding: 1em;
-    background: #fff;
-    font-family: $font-josefin-sans;
-    transition: max-height .35s;
-  }
+.accordion-content {
+  display: none;
+  padding: 1em;
+  background: #fff;
+  font-family: $font-josefin-sans;
+  transition: max-height .35s;
+}
 
-  .accordion-image {
-    margin-top: 1.5em;
-    width: 150px;
-  }
+.accordion-image {
+  margin-top: 1.5em;
+  width: 150px;
 }
