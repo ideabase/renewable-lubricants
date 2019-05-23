@@ -9,11 +9,11 @@
 
     <ul id="product-categories">
       <li>
-        <input type="radio" name="radio-category" id="radio-all" checked>{{'Show All'}}</input>
+        <input type="radio" name="radio-category" class="radio" id="radio-all" checked>{{'Show All'}}</input>
       </li>
       {% for category in craft.categories.group('productCategories').orderBy('title').all() %}
         <li>
-          <input type="radio" name="radio-category" id="radio-{{ category.title|replace({' ': ''}) }}">{{ category.title }}</input>
+          <input type="radio" name="radio-category" class="radio" id="radio-{{ category.title|replace({' ': ''}) }}">{{ category.title }}</input>
         </li>
       {% endfor %}
     </ul>
