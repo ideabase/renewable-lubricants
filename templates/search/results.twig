@@ -1,15 +1,23 @@
-{% extends "_globals/header.twig" %}
+{% extends "_layouts/main" %}
 
-{# There is a bug where you search once then you search again from the results page and errors happen. #}
 {% block content %}
 
-{% set query = craft.app.request.getParam('q') %}
-{% set entries = craft.entries.search(query).orderBy('score') %}
+<h1>Search Results</h1>
 
-{% paginate craft.entries.section([
-  'and', 'not primaryNavigation', 'not teamMembers', 'not secondaryNavigation'
-  ]).search(query).limit(10).orderBy('score') as pageInfo, pageEntries
-%}
+{% set query = craft.app.request.getParam('q') %}
+{% set entries = craft.entries().search(query).orderBy('score').all() %}
+
+{% if entries|length %}
+  <p>{{ entries|length }} results:</p>
+
+  <ul>
+    {% for entry in entries %}
+      <li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Your search for “{{ query }}” didn’t return any results.</p>
+{% endif %}
 
 
 {% endblock %}

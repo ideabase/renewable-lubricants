@@ -3,7 +3,7 @@
 @import 'functions';
 
 // adds a box shadow to the element on focus and removes default outline
-  // $color {color} [$color=$color-yellow] box shadow color
+  // $color {color} [$color: $color-yellow] box shadow color
 @mixin focus($color: $color-yellow) {
   &:focus {
     outline: none;

@@ -1,0 +1,14 @@
+{% extends "_layouts/main" %}
+
+{% block content %}
+
+<div class="search">
+  <h1>Search Our Products</h1>
+
+  <form action="{{ url('search/results') }}">
+    <input type="search" name="q" placeholder="Search">
+    <input type="submit" value="Go">
+  </form>
+</div>
+
+{% endblock %}
