@@ -2,25 +2,25 @@
 
 @import 'functions';
 
-// adds a box shadow to the element on focus and removes default outline
+// adds a box shadow to the element in focus and removes the default outline
   // $color {color} [$color: $color-yellow] box shadow color
 @mixin focus($color: $color-yellow) {
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 .2rem lighten($color, 15)
+    box-shadow: 0 0 0 .2rem lighten($color, 15);
   }
 }
 
-// adds an angle to one or both sides of a div wrapping a text tag, and adjusts
-// the text positioning inside of the div
+// adds an angle to one or both sides of a div wrapping another element, and
+// adjusts the child element's positioning inside of the div
   // $pos        {string}                  the position of the borders on the div
   // $text-pos   {string}                  the position of the text within the div
   // $bg-color   {color}                   the color of the div
   // $text-color {color}                   the color of the text within the div
-  // $padding-lr {length}                  the text's left and right padding
+  // $padding-lr {length}                  the child element's left and right padding
   // $h          {length}                  the height of the div and the triangle at its end(s)
   // $w          {length} [$w: $h]         the width of the triangle at the div's end(s)
-  // $padding-tb {length} [$padding-tb: 0] the text's top and bottom padding
+  // $padding-tb {length} [$padding-tb: 0] the child element's top and bottom padding
 @mixin slant($pos, $text-pos, $bg-color, $text-color, $padding-lr, $h, $w: $h, $padding-tb: 0) {
   position: relative;
   color: $text-color;

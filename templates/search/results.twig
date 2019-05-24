@@ -1,23 +1,24 @@
-{% extends "_layouts/main" %}
+{% extends '_layouts/main' %}
 
 {% block content %}
 
-<h1>Search Results</h1>
+<div class="search-results">
+  <h1>Search Results</h1>
 
-{% set query = craft.app.request.getParam('q') %}
-{% set entries = craft.entries().search(query).orderBy('score').all() %}
+  {% set query = craft.app.request.getParam('q') %}
+  {% set products = craft.products.search(query).orderBy('score').all() %}
 
-{% if entries|length %}
-  <p>{{ entries|length }} results:</p>
+  {% if products|length %}
+    <p>{{ products|length }} results:</p>
 
-  <ul>
-    {% for entry in entries %}
-      <li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>Your search for “{{ query }}” didn’t return any results.</p>
-{% endif %}
-
+    <ul>
+      {% for product in products %}
+        <li><a href="{{ product.getUrl() }}">{{ product.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Your search for "{{ query }}" didn’t return any results.</p>
+  {% endif %}
+</div>
 
 {% endblock %}

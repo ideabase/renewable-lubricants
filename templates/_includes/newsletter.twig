@@ -4,7 +4,7 @@
   <h2>Sign Up to Recieve Our Weekly Newsletter</h2>
 
   <div class="newsletter-form-wrapper">
-    <form action="" method="POST">
+    <form action="" method="POST" name="newsletter-form">
       {{ csrfInput() }}
       <input name="action" type="hidden" value="mailchimp-subscribe/list/subscribe">
       <input type="hidden" name="redirect" value="{{ 'newsletter/receipt'|hash }}">
@@ -17,7 +17,7 @@
 
       <div class="field-line">
         <label{% if (mailchimpSubscribe is defined) and (mailchimpSubscribe.errorCode == '1000') %} class="error"{% endif %}></label>
-        <input type="email" name="email" placeholder="Email Address" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.email }}{% endif %}">
+        <input type="email" name="email" placeholder="Email Address" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.email }}{% endif %}" required>
       </div>
 
       <input name="" type="submit" value="Subscribe!">

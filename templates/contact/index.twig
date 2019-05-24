@@ -3,50 +3,54 @@
 {% extends "_layouts/main" %}
 
 {% block content %}
-  {% macro errorList(errors) %}
-    {% if errors %}
-      <ul class="errors">
-        {% for error in errors %}
-          <li>{{ error }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endmacro %}
 
-  {% from _self import errorList %}
+{% macro errorList(errors) %}
+  {% if errors %}
+    <ul class="errors">
+      {% for error in errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
 
-  <form method="post" action="" accept-charset="UTF-8" name="contact-form">
-    <div class="contact-form-h1-wrapper">
-      <h1>Contact Us</h1>
-    </div>
+{% from _self import errorList %}
 
-    {{ csrfInput() }}
-      <input type="hidden" name="action" value="contact-form/send">
-      {{ redirectInput('/success') }}
+<form method="post" action="" accept-charset="UTF-8" name="contact-form">
+  <div class="contact-form-h1-wrapper">
+    <h1>Contact Us</h1>
+  </div>
 
-    <div class="contact-field-row">
-      <input placeholder="Name" id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}" required>
-      {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
+  {{ csrfInput() }}
+    <input type="hidden" name="action" value="contact-form/send">
+    {{ redirectInput('/success') }}
 
-      <input placeholder="Email" id="from-email" type="email" name="fromEmail" value="{{ message.fromEmail ?? '' }}" required>
-      {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
-    </div>
+  <div class="contact-field-row">
+    <input placeholder="Name" id="from-name" type="text" name="fromName" value="{{ message.fromName ?? '' }}" autofocus required>
+    {{ message is defined and message ? errorList(message.getErrors('fromName')) }}
 
-    <div class="contact-field-row">
-      <input placeholder="Company Name" id="company" type="text" name="message[Company]" value="{{ message.company ?? '' }}">
-      {{ message is defined and message ? errorList(message.getErrors('subject')) }}
+    <input placeholder="Email" id="from-email" type="email" name="fromEmail" value="{{ message.fromEmail ?? '' }}" required>
+    {{ message is defined and message ? errorList(message.getErrors('fromEmail')) }}
+  </div>
 
-      <input placeholder="Phone" id="phone" type="text" name="message[Phone]" value="{{ message.phone ?? '' }}">
-      {{ message is defined and message ? errorList(message.getErrors('phone')) }}
-    </div>
+  <div class="contact-field-row">
+    <input placeholder="Company Name" id="company" type="text" name="message[Company]" value="{{ message.company ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('subject')) }}
 
-    <textarea placeholder="Message" rows="10" cols="40" id="message" name="message[body]" required>{{ message.message ?? '' }}</textarea>
-    {{ message is defined and message ? errorList(message.getErrors('message')) }}
+    <input placeholder="Phone" id="phone" type="text" name="message[Phone]" value="{{ message.phone ?? '' }}">
+    {{ message is defined and message ? errorList(message.getErrors('phone')) }}
+  </div>
 
-    {# TODO: setup recaptcha on google for staging and live sites #}
-    {# {{ craft.contactFormExtensions.recaptcha | raw }}  #}
-    <input type="submit" value="Send Message">
+  <textarea placeholder="Message" rows="10" cols="40" id="message" name="message[body]" required>{{ message.message ?? '' }}</textarea>
+  {{ message is defined and message ? errorList(message.getErrors('message')) }}
 
-    <p>This contact form uses reCAPTCHA, which is subject to Google's <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://policies.google.com/terms">terms and conditions.</a></p>
-  </form>
+  {# TODO: setup recaptcha on google for staging and live sites #}
+  {# {{ craft.contactFormExtensions.recaptcha | raw }}  #}
+  <input type="submit" value="Send Message">
+
+  <p>This contact form uses reCAPTCHA, which is subject to Google's <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://policies.google.com/terms">terms and conditions.</a></p>
+</form>
+
+{% include '_includes/check-invalid' %}
+
 {% endblock %}

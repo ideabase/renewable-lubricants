@@ -1,4 +1,4 @@
-{% extends "_layouts/main" %}
+{% extends '_layouts/main' %}
 
 {% block content %}
   {% include '_includes/featured-products.twig' %}
@@ -31,9 +31,9 @@
 
     <div class="products-find-wrapper">
       <ul>
-        <li><a href="/contact">Request Quote</a></li>
-        <li><a href="/contact">Request Assistance</a></li>
-        <li><a href="{# TODO #}">Product Finder</a></li>
+        <li><a href="{{ url('contact') }}">Request Quote</a></li>
+        <li><a href="{{ url('contact') }}">Request Assistance</a></li>
+        <li><a href="{{ url('search') }}">Product Finder</a></li>
       </ul>
     </div>
   </div>

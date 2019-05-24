@@ -1,0 +1,23 @@
+// search partial
+
+.search-h1-wrapper {
+  @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
+  width: 30rem;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
+
+form[name='search-form'] {
+  display: flex;
+  max-width: $bp-md;
+  margin: 0 auto;
+
+  input[type='search'] {
+    flex-grow: 1;
+    margin: 0 1rem;
+  }
+
+  input[type='submit'] {
+    margin: 0 1rem 0 0;
+  }
+}
