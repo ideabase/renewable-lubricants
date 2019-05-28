@@ -52,14 +52,13 @@
   }
 
   #hexshape{
-    height: 50px;
-    min-width: 400px;
-    background-color: $color-yellow;
+    @include slant('brl', 'center', $color-green-dark, $color-black, 1rem, 5rem);
+    width: 100%;
     z-index: 1;
+    margin: 0 auto;
   }
   #hexshape:hover{
-    background-color: $color-green-dark
-  }
+@include slant('brl', 'center', $color-yellow, $color-black, 1rem, 5rem);  }
 
   #three{
     position: absolute;
