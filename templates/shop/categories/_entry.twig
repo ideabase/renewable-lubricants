@@ -1,3 +1,4 @@
+<div class="category">
 {% block content %}
 
 <h1>{{category.title}}</h1>
@@ -24,7 +25,7 @@
 
   <div id="products-find">
     <h2>Find Your Perfect Product</h2>
-      <div id="find-container">
+      <div id="products-find-wrapper">
         <ul>
           <li><a href="{{ url('contact') }}">Request Quote</a></li>
           <li><a href="{{ url('contact') }}">Request Assistance</a></li>
@@ -33,3 +34,4 @@
       </div>
   </div>
 {% endblock %}
+</div>
