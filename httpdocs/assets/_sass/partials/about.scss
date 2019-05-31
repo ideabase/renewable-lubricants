@@ -6,13 +6,6 @@
   }
 }
 
-.about-h1-wrapper {
-  @include slant('trl', 'center', $color-green, $color-black, 0, 4rem);
-  width: 30rem;
-  margin: 0 auto 3rem auto;
-  text-align: center;
-}
-
 .about-body {
   max-width: $bp-md;
   margin: 0 auto;

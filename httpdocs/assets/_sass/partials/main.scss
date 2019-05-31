@@ -70,5 +70,28 @@ img {
 }
 
 .feature-img {
+  display: block;
   width: 100%;
+  max-width: 1600px;
+  max-height: 300px;
+  object-fit: cover;
+  margin: 0 auto;
+
+  @media screen and (min-width: $bp-md) {
+    max-height: 400px;
+  }
+}
+
+.h1-wrapper-top {
+  @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
+  width: 30rem;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+}
+
+.h1-wrapper-bottom {
+  @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
+  width: 30rem;
+  margin: 0 auto;
+  text-align: center;
 }

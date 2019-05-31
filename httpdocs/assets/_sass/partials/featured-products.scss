@@ -3,10 +3,6 @@
 .featured {
   margin-bottom: 3rem;
 
-  h1 {
-    text-align: center;
-  }
-
   ul {
     list-style: none;
     text-align: center;
@@ -16,12 +12,6 @@
     width: 200px;
     margin: 0 auto;
   }
-}
-
-.featured-h1-wrapper {
-  @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
-  width: 20rem;
-  margin: 0 auto 3rem auto;
 }
 
 .featured-container {

@@ -2,13 +2,10 @@
 
 .distributors-map {
   margin-bottom: 3rem;
-}
 
-.distributors-map-h1-wrapper {
-  @include slant('trl', 'center', $color-green, $color-black, 0, 4rem);
-  width: 30rem;
-  margin: 0 auto 3rem auto;
-  text-align: center;
+  .h1-wrapper-top > *:first-child {
+    padding: 0;
+  }
 }
 
 .distributors-map-body {
