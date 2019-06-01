@@ -49,7 +49,7 @@
 
 .testimonials-h1-wrapper {
   @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
-  width: 20rem;
+  width: 15rem;
   margin: 0 auto;
   text-align: center;
 }
@@ -116,7 +116,7 @@
   .home-feature {
 
     .feature-img{
-      
+
       max-height: 550px;
       max-width: 1200px;
     }

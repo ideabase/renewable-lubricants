@@ -5,6 +5,7 @@ body {
   box-sizing: border-box;
   font-family: $font-roboto-slab;
   color: $color-black;
+
 }
 
 main {
@@ -13,7 +14,8 @@ main {
 
 p {
   font-family: $font-josefin-sans;
-  line-height: 1.5;
+  line-height: 1.7;
+  
 }
 
 a {
@@ -71,4 +73,11 @@ img {
 
 .feature-img {
   width: 100%;
+}
+@media screen and (max-width: $bp-md){
+
+    h1{
+      font-size: 140%;
+    }
+
 }
