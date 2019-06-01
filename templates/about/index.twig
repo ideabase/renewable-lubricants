@@ -2,16 +2,16 @@
 
 {% block content %}
 
-<section class="about">
-  <img src="{{ entry.featureImage.one().getUrl() }}" alt="{{ entry.featureImage.one().title }}">
+<div class="about">
+  <img class="feature-img" src="{{ entry.featureImage.one().getUrl() }}" alt="{{ entry.featureImage.one().title }}">
 
-  <div class="about-h1-wrapper">
+  <div class="h1-wrapper-top">
     <h1>About Us</h1>
   </div>
 
   <div class="about-body">
     {{ entry.body }}
   </div>
-</section>
+</div>
 
 {% endblock %}

@@ -18,9 +18,15 @@
 .request-a-quote {
   @include slant('brl', 'center', transparentize($color-yellow, .1), $color-black, 0, 4rem);
   position: absolute;
-  left: 0;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 10rem;
+
+  @media screen and (min-width: $bp-md) {
+    left: 0;
+    transform: none;
+  }
 
   span {
     font-weight: bold;
@@ -45,13 +51,6 @@
   h1 {
     margin-bottom: 2rem;
   }
-}
-
-.testimonials-h1-wrapper {
-  @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
-  width: 15rem;
-  margin: 0 auto;
-  text-align: center;
 }
 
 .testimonials {
@@ -110,17 +109,4 @@
 
 .testimonial-author {
   text-transform: uppercase;
-}
-
-@media screen and (min-width: $bp-md){
-  .home-feature {
-
-    .feature-img{
-
-      max-height: 550px;
-      max-width: 1200px;
-    }
-  }
-
-
 }
