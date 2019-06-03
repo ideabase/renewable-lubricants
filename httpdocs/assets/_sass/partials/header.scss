@@ -45,6 +45,16 @@ header {
 .header-cart-wrapper {
   @include slant('bl', 'left', $color-yellow, $color-black, 1rem, 5rem);
   width: 10rem;
+
+  span {
+    transition: color .15s ease-in-out;
+  }
+
+  &:hover {
+    span {
+      color: $color-white;
+    }
+  }
 }
 
 .header-cart {

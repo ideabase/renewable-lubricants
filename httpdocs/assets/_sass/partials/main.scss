@@ -51,7 +51,7 @@ input[type='text'], input[type='email'], input[type='search'], textarea {
   font-family: $font-josefin-sans;
   border: none;
   padding: .375rem .75rem;
-  transition: box-shadow .15s ease-in-out;
+  transition: all .15s ease-in-out;
   @include focus;
 
   &.invalid-input {
