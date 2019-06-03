@@ -1,55 +1,55 @@
 <header>
-  <div class="flex header-top-row">
-    {# header image #}
-    <a href="{{ url() }}">
-      <img class="header-img" src="{{ header.logo.one().getUrl() }}">
-    </a>
+  <div class="header-container">
+    <div class="flex header-top-row">
+      {# header image #}
+      <a href="{{ url() }}">
+        <img class="header-img" src="{{ header.logo.one().getUrl() }}">
+      </a>
 
-    <div class="flex header-info-right">
-      <div>
-        <a href="tel:800-837-5823">800-837-LUBE</a>
+      <div class="flex header-info-right">
+        <span class="header-info-tel">800-837-LUBE</span>
+
+        {% set cartItemCount = cart.totalQty ?? 0 %}
+        {% set cartItemTotal = cart.itemTotal ?? 0 %}
+        {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+          <a class="header-cart-wrapper" href="{{ url('shop/cart') }}">
+            <div class="flex header-cart">
+              <span>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</span>
+                <div>
+                  <span>View Cart{# TODO: cart icon #}</span>
+                </div>
+            </div>
+          </a>
+        {% endif %}
       </div>
-
-      {% set cartItemCount = cart.totalQty ?? 0 %}
-      {% set cartItemTotal = cart.itemTotal ?? 0 %}
-      {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
-        <a class="header-cart-wrapper" href="{{ url('shop/cart') }}">
-          <div class="flex header-cart">
-            <span>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</span>
-              <div>
-                <span>View Cart{# TODO: cart icon #}</span>
-              </div>
-          </div>
-        </a>
-      {% endif %}
     </div>
-  </div>
 
-  {# top nav #}
-  <nav>
-    <ul class="flex">
-      <li><a href="{{ url() }}">Home</a></li>
-      <li><a href="{{ url('shop') }}">Products</a></li> {# TODO: change link to products #}
-      <li><a href="{{ url('distributors') }}">Distributors</a></li>
-      <li><a href="{{ url('news-and-blog') }}">News & Blog</a></li>
-      <li><a href="{{ url('about') }}">About</a></li>
-      <li><a href="{{ url('contact') }}">Contact</a></li>
-    </ul>
-  </nav>
+    {# top nav #}
+    <nav>
+      <ul class="flex">
+        <li><a href="{{ url() }}">Home</a></li>
+        <li><a href="{{ url('shop') }}">Products</a></li> {# TODO: change link to products #}
+        <li><a href="{{ url('distributors') }}">Distributors</a></li>
+        <li><a href="{{ url('news-and-blog') }}">News & Blog</a></li>
+        <li><a href="{{ url('about') }}">About</a></li>
+        <li><a href="{{ url('contact') }}">Contact</a></li>
+      </ul>
+    </nav>
 
-  <div class="mobile-menu">
-    <a class="dropdown-link">
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
-    </a>
-    <ul class="mobile-dropdown">
-      <li><a href="{{ url() }}">Home</a></li>
-      <li><a href="{{ url('shop') }}">Products</a></li> {# TODO: change link to products #}
-      <li><a href="{{ url('distributors') }}">Distributors</a></li>
-      <li><a href="{{ url('news-and-blog') }}">News & Blog</a></li>
-      <li><a href="{{ url('about') }}">About</a></li>
-      <li><a href="{{ url('contact') }}">Contact</a></li>
-    </ul>
+    <div class="mobile-menu">
+      <a class="dropdown-link">
+          <div class="hamburger"></div>
+          <div class="hamburger"></div>
+          <div class="hamburger"></div>
+      </a>
+      <ul class="mobile-dropdown">
+        <li><a href="{{ url() }}">Home</a></li>
+        <li><a href="{{ url('shop') }}">Products</a></li> {# TODO: change link to products #}
+        <li><a href="{{ url('distributors') }}">Distributors</a></li>
+        <li><a href="{{ url('news-and-blog') }}">News & Blog</a></li>
+        <li><a href="{{ url('about') }}">About</a></li>
+        <li><a href="{{ url('contact') }}">Contact</a></li>
+      </ul>
+    </div>
   </div>
 </header>

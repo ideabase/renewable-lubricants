@@ -514,18 +514,18 @@
     },
     {
         "name": "craftcms/contact-form",
-        "version": "2.2.4",
-        "version_normalized": "2.2.4.0",
+        "version": "2.2.5",
+        "version_normalized": "2.2.5.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/contact-form/zipball/f606446dd9f86cb98dd66ec2c7df081cdff73c7a",
-            "reference": "f606446dd9f86cb98dd66ec2c7df081cdff73c7a",
+            "url": "https://api.github.com/repos/craftcms/contact-form/zipball/a645df88d757d620bc29bc6dd3d748374b791093",
+            "reference": "a645df88d757d620bc29bc6dd3d748374b791093",
             "shasum": ""
         },
         "require": {
             "craftcms/cms": "^3.0.0-RC11"
         },
-        "time": "2019-04-03T16:45:22+00:00",
+        "time": "2019-05-31T22:56:39+00:00",
         "type": "craft-plugin",
         "extra": {
             "name": "Contact Form",

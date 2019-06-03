@@ -14,16 +14,18 @@
 </head>
 
 <body>
-  {# include header #}
-  {% include '_globals/header'%}
+  <div class="content-wrapper">
+    {# include header #}
+    {% include '_globals/header'%}
 
-  <main>
-    {# content block #}
-    {% block content %}{% endblock %}
-  </main>
+    <main>
+      {# content block #}
+      {% block content %}{% endblock %}
+    </main>
 
-  {# include footer #}
-  {% include '_globals/footer' %}
+    {# include footer #}
+    {% include '_globals/footer' %}
+  </div>
 
   {% include '_globals/scripts' %}
 </body>

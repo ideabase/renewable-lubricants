@@ -1,21 +1,32 @@
 // main partial
 // this file should contain properties that can apply to every page
 
+html {
+  height: 100%;
+}
+
 body {
+  height: calc(100% - .5rem);
   box-sizing: border-box;
   font-family: $font-roboto-slab;
   color: $color-black;
+  margin-top: .5rem;
+}
 
+.content-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
   margin-bottom: 3rem;
+  flex: 1 0 auto;
 }
 
 p {
   font-family: $font-josefin-sans;
-  line-height: 1.7;
-
+  line-height: 1.5;
 }
 
 a {
@@ -97,15 +108,17 @@ img {
   margin: 0 auto;
   text-align: center;
 }
+
 @media screen and (max-width: $bp-lg){
     .h1-wrapper-top {
       width: 15rem;
     }
+
     .h1-wrapper-bottom {
       width: 15rem;
     }
-    h1{
+
+    h1 {
       font-size: 140%;
     }
-
 }

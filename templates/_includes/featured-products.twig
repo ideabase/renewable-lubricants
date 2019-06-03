@@ -8,7 +8,7 @@
       {% if product.featuredProduct %}
         <div>
           <a href="{{ product.url }}">
-            <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}">
+            <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}" class="featured-product-img">
           </a>
         </div>
       {% endif %}

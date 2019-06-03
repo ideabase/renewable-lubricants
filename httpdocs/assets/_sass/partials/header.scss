@@ -1,7 +1,6 @@
 // header partial
 header {
-  margin: 0 auto 3rem auto;
-  max-width: $bp-xl;
+  margin-bottom: 3rem;
 
   nav {
     $height: 4rem;
@@ -29,9 +28,14 @@ header {
   }
 }
 
+.header-container {
+  max-width: $bp-xl;
+  margin: 0 auto;
+}
+
 .header-top-row {
   justify-content: space-between;
-  margin: .5rem 0 .5rem .5rem;
+  margin: 0 0 .5rem .5rem;
 }
 
 .header-img {
@@ -40,6 +44,11 @@ header {
 
 .header-info-right {
   align-items: center;
+}
+
+.header-info-tel {
+  color: $color-gray;
+  font-size: 1.2rem;
 }
 
 .header-cart-wrapper {

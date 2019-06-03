@@ -1,11 +1,15 @@
 // footer partial
 
 footer {
-  margin: 0 auto;
-  max-width: $bp-xl;
+  flex-shrink: 0;
 }
 
-.footer-container {
+.footer-container-outer {
+  max-width: $bp-xl;
+  margin: 0 auto;
+}
+
+.footer-container-inner {
   max-width: $bp-lg;
 }
 
@@ -46,9 +50,8 @@ footer {
 }
 
 .footer-info-wrapper {
-  $length: 12rem;
-  $padding: 2rem;
-  @include slant('br', 'center', $color-gray, $color-black, $padding, $length, $length, $padding);
+  max-width: $bp-lg;
+  @include slant('br', 'center', $color-gray, $color-black, 2rem, 12rem, 12rem, 2rem);
 }
 
 .footer-info {
@@ -78,5 +81,5 @@ footer {
 }
 
 .footer-social-icon {
-  width: 50px;
+  width: 35px;
 }
