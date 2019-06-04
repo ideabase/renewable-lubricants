@@ -10,7 +10,6 @@ body {
   box-sizing: border-box;
   font-family: $font-roboto-slab;
   color: $color-black;
-  margin-top: .5rem;
 }
 
 .content-wrapper {
@@ -85,7 +84,7 @@ img {
 .feature-img {
   display: block;
   width: 100%;
-  max-width: 1600px;
+  max-width: $bp-xl;
   max-height: 300px;
   object-fit: cover;
   margin: 0 auto;

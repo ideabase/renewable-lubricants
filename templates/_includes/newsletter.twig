@@ -1,9 +1,10 @@
 {# newsletter form #}
 
 <div class="newsletter">
-  <h2>Sign Up to Recieve Our Weekly Newsletter</h2>
+  <h2 class="newsletter-h2-md">Sign Up For Our Weekly Newsletter</h2>
+  <h2 class="newsletter-h2-sm">Newsletter</h2>
 
-  <div class="newsletter-form-wrapper">
+  <div class="newsletter-form-container">
     <form method="POST" action="" name="newsletter-form">
       {{ csrfInput() }}
       <input name="action" type="hidden" value="mailchimp-subscribe/list/subscribe">

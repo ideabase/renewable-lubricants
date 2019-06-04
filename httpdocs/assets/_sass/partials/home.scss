@@ -99,6 +99,10 @@
     align-self: flex-start;
   }
 
+  p {
+    overflow: hidden;
+  }
+
   .testimonial-text {
     display: flex;
     flex-direction: column;

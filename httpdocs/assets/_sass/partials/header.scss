@@ -1,6 +1,5 @@
 // header partial
 header {
-  margin-bottom: 3rem;
 
   nav {
     $height: 4rem;
@@ -26,6 +25,11 @@ header {
       text-decoration: none;
     }
   }
+
+  @media screen and (min-width: $bp-md) {
+    margin-top: .5rem;
+    margin-bottom: 3rem;
+  }
 }
 
 .header-container {
@@ -35,11 +39,19 @@ header {
 
 .header-top-row {
   justify-content: space-between;
-  margin: 0 0 .5rem .5rem;
+  align-items: center;
+
+  @media screen and (min-width: $bp-md) {
+    margin: 0 0 .5rem .5rem;
+  }
 }
 
 .header-img {
-  max-width: 125px;
+  max-width: 75px;
+
+  @media screen and (min-width: $bp-sm) {
+    max-width: 125px;
+  }
 }
 
 .header-info-right {
@@ -47,8 +59,13 @@ header {
 }
 
 .header-info-tel {
+  display: none;
   color: $color-gray;
-  font-size: 1.2rem;
+
+  @media screen and (min-width: 500px) {
+    display: inline;
+    font-size: 1.2rem;
+  }
 }
 
 .header-cart-wrapper {
@@ -84,21 +101,15 @@ header {
     display: none;
   }
 
-  header {
-    .header-top-row {
-      .header-img {
-        max-width: 100px;
-        margin: .5em;
-      }
+  .header-top-row {
 
-      .cart {
-        background-color: $color-yellow;
-        align-items: center;
-        padding: .8em;
-        text-transform: uppercase;
-        font-weight: bold;
-        font-size: .8em;
-      }
+    .cart {
+      background-color: $color-yellow;
+      align-items: center;
+      padding: .8em;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: .8em;
     }
   }
 
@@ -106,22 +117,20 @@ header {
     width: auto;
     position: relative;
     padding: 0;
-    height: 50px;
+    height: 60px;
     line-height: 50px;
     user-select: none;
-    margin-bottom: 2rem;
     text-transform: uppercase;
     font-weight: bold;
-  }
 
-  .mobile-menu a.dropdown-link {
-    display: block;
-    height: 40px;
-    padding: 10px 20px;
-    color: $color-black;
-    font-size: 1em;
-    cursor: pointer;
-    background: $color-yellow;
+    a.dropdown-link {
+      display: block;
+      height: 40px;
+      padding: 10px 20px;
+      color: $color-black;
+      font-size: 1em;
+      cursor: pointer;
+      background: $color-yellow;
 
       .hamburger {
         width: 35px;
@@ -130,17 +139,17 @@ header {
         margin: 6px 0;
         border-radius: 10px;
       }
+    }
 
-  }
+    a.dropdown-link:hover{
+      text-decoration: none;
+    }
 
-
-  .mobile-menu a.dropdown-link:hover{
-  	text-decoration: none;
-  }
-  .mobile-menu a.dropdown-link i{
-  	float: right;
-  	position: relative;
-  	top: 15px;
+    a.dropdown-link i{
+      float: right;
+      position: relative;
+      top: 15px;
+    }
   }
 
   .mobile-dropdown {
@@ -152,27 +161,27 @@ header {
     position: relative;
     z-index: 100;
     margin: 0;
-  }
 
-  .mobile-dropdown li {
-    padding: 0;
-    height: auto;
-  }
+    li {
+      padding: 0;
+      height: auto;
+    }
 
-  .mobile-dropdown li a {
-    padding: 0;
-    color: $color-white;
-    display: block;
-    padding: 0 20px;
-    height: 45px;
-    line-height: 45px;
-    font-size: .9em;
-    text-decoration: none;
-    text-align: center;
-  }
+    li a {
+      padding: 0;
+      color: $color-white;
+      display: block;
+      padding: 0 20px;
+      height: 45px;
+      line-height: 45px;
+      font-size: .9em;
+      text-decoration: none;
+      text-align: center;
+    }
 
-  .mobile-dropdown li a:hover{
-    text-decoration: none;
-    background: $color-green;
+    li a:hover{
+      text-decoration: none;
+      background: $color-green;
+    }
   }
 }

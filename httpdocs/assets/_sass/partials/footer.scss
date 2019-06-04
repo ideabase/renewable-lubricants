@@ -20,18 +20,28 @@ footer {
   h2 {
     color: $color-yellow;
     line-height: .7;
-    text-align: right;
+    text-align: center;
     text-transform: uppercase;
-    margin: 0 $slant-length 0 0;
+    margin: 0;
+
+    @media screen and (min-width: $bp-md) {
+      text-align: right;
+      margin: 0 $slant-length 0 0;
+    }
   }
 
   form {
-    padding: 1rem 5rem 1rem 0;
+    padding: 1rem 0;
     flex-grow: 1;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     color: $color-white;
+
+    @media screen and (min-width: $bp-md) {
+      padding: 1rem 5rem 1rem 0;
+      justify-content: flex-end;
+    }
   }
 
   input[type='submit'] {
@@ -44,18 +54,50 @@ footer {
     }
   }
 
-  .newsletter-form-wrapper {
-    @include slant('br', 'right', $color-yellow, $color-black, 1rem, $slant-length);
+  .newsletter-form-container {
+    background-color: $color-yellow;
+
+    @media screen and (min-width: $bp-md) {
+      background-color: unset;
+      @include slant('br', 'right', $color-yellow, $color-black, 1rem, $slant-length);
+    }
   }
 }
 
-.footer-info-wrapper {
+.newsletter-h2-md {
+  display: none;
+
+  @media screen and (min-width: $bp-sm) {
+    display: block;
+  }
+}
+
+.newsletter-h2-sm {
+  @media screen and (min-width: $bp-sm) {
+    display: none;
+  }
+}
+
+.footer-info-container {
+  background-color: $color-gray;
+  padding: 2rem;
   max-width: $bp-lg;
-  @include slant('br', 'center', $color-gray, $color-black, 2rem, 12rem, 12rem, 2rem);
+
+  @media screen and (min-width: 830px) {
+    background-color: unset;
+    padding: 0;
+    @include slant('br', 'center', $color-gray, $color-black, 2rem, 12rem, 12rem, 2rem);
+  }
 }
 
 .footer-info {
-  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  & > *:not(:last-child) {
+    margin-bottom: 2rem;
+  }
 
   h3 {
     margin-top: 0;
@@ -65,11 +107,23 @@ footer {
 
   ul {
     padding: 0;
+    margin: 0;
     list-style-type: none;
 
     li {
       line-height: 2rem;
       font-family: $font-josefin-sans;
+    }
+  }
+
+  @media screen and (min-width: 630px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+
+    & > *:not(:last-child) {
+      margin-right: 1rem;
+      margin-bottom: 0;
     }
   }
 }
