@@ -78,10 +78,16 @@ footer {
   }
 }
 
-.footer-info-container {
+.footer-info-container-outer {
+  display: flex;
+  justify-content: center;
   background-color: $color-gray;
   padding: 2rem;
   max-width: $bp-lg;
+
+  @media screen and (min-width: 630px) {
+    display: block;
+  }
 
   @media screen and (min-width: 830px) {
     background-color: unset;

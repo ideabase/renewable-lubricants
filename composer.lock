@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f9b49c07625e72358e48d34cdd2717b",
+    "content-hash": "cf8ca2a330adde3d01541e73ad3d4a0e",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -326,11 +326,11 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.1.28",
+            "version": "3.1.29",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/310a7d295eabe7b3691cb328efd9099d5dca29f5",
-                "reference": "310a7d295eabe7b3691cb328efd9099d5dca29f5",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/cb6e3054dd4351653329da508616c15dd0e69874",
+                "reference": "cb6e3054dd4351653329da508616c15dd0e69874",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "seld/cli-prompt": "^1.0.3",
                 "symfony/yaml": "^3.2|^4.0",
                 "true/punycode": "^2.1.0",
-                "twig/twig": "~2.8.1",
+                "twig/twig": "~2.11.0",
                 "yii2tech/ar-softdelete": "^1.0.2",
                 "yiisoft/yii2": "~2.0.19.0",
                 "yiisoft/yii2-debug": "^2.0.10",
@@ -406,7 +406,7 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2019-05-21T19:09:25+00:00"
+            "time": "2019-06-04T17:37:55+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -601,11 +601,11 @@
         },
         {
             "name": "craftcms/plugin-installer",
-            "version": "1.5.2",
+            "version": "1.5.4",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/plugin-installer/zipball/2b75646ce7091d24ef053e8d0b45f89cab04b16f",
-                "reference": "2b75646ce7091d24ef053e8d0b45f89cab04b16f",
+                "url": "https://api.github.com/repos/craftcms/plugin-installer/zipball/4989a9d57babdf53da0bd70cf6a3145635d653e8",
+                "reference": "4989a9d57babdf53da0bd70cf6a3145635d653e8",
                 "shasum": ""
             },
             "require": {
@@ -620,7 +620,6 @@
                     "craft\\composer\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -633,7 +632,7 @@
                 "installer",
                 "plugin"
             ],
-            "time": "2017-07-25T13:26:24+00:00"
+            "time": "2019-05-23T13:16:39+00:00"
         },
         {
             "name": "craftcms/redactor",
@@ -1068,11 +1067,11 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.7",
+            "version": "2.1.8",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/709f21f92707308cdf8f9bcfa1af4cb26586521e",
-                "reference": "709f21f92707308cdf8f9bcfa1af4cb26586521e",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/c26463ff9241f27907112fbcd0c86fa670cfef98",
+                "reference": "c26463ff9241f27907112fbcd0c86fa670cfef98",
                 "shasum": ""
             },
             "require": {
@@ -1110,7 +1109,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2018-12-04T22:38:24+00:00"
+            "time": "2019-05-16T22:02:54+00:00"
         },
         {
             "name": "elvanto/litemoji",
@@ -3617,11 +3616,11 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.8.1",
+            "version": "v2.11.2",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/91cc2594d3143761ce0399c1caffd0b500ffe5b9",
-                "reference": "91cc2594d3143761ce0399c1caffd0b500ffe5b9",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/84a463403da1c81afbcedda8f0e788c78bd25a79",
+                "reference": "84a463403da1c81afbcedda8f0e788c78bd25a79",
                 "shasum": ""
             },
             "require": {
@@ -3632,7 +3631,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "2.11-dev"
                 }
             },
             "autoload": {
@@ -3669,7 +3668,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-04-16T17:14:24+00:00"
+            "time": "2019-06-05T11:17:07+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -3906,11 +3905,11 @@
         },
         {
             "name": "yiisoft/yii2-debug",
-            "version": "2.1.4",
+            "version": "2.1.5",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/4cc407f34fd90e410d806ea3264781a9fb4fd1ef",
-                "reference": "4cc407f34fd90e410d806ea3264781a9fb4fd1ef",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/a6bbf55093e154e2eeb2c778af8717989495270e",
+                "reference": "a6bbf55093e154e2eeb2c778af8717989495270e",
                 "shasum": ""
             },
             "require": {
@@ -3948,7 +3947,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2019-05-14T13:39:56+00:00"
+            "time": "2019-06-04T14:21:49+00:00"
         },
         {
             "name": "yiisoft/yii2-queue",

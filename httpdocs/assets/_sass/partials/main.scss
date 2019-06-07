@@ -95,29 +95,37 @@ img {
 }
 
 .h1-wrapper-top {
-  @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
-  width: 30rem;
+  background-color: $color-green;
   margin: 0 auto 3rem auto;
+  padding: 1rem 0;
+  width: 100%;
   text-align: center;
+
+  @media screen and (min-width: $bp-sm) {
+    background-color: unset;
+    @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
+    width: 30rem;
+  }
+
+  h1 {
+    margin: 0;
+  }
 }
 
 .h1-wrapper-bottom {
-  @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
-  width: 30rem;
+  background-color: $color-green;
   margin: 0 auto;
+  padding: 1rem 0;
+  width: 100%;
   text-align: center;
-}
 
-@media screen and (max-width: $bp-lg){
-    .h1-wrapper-top {
-      width: 15rem;
-    }
+  @media screen and (min-width: $bp-sm) {
+    background-color: unset;
+    @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
+    width: 30rem;
+  }
 
-    .h1-wrapper-bottom {
-      width: 15rem;
-    }
-
-    h1 {
-      font-size: 140%;
-    }
+  h1 {
+    margin: 0;
+  }
 }

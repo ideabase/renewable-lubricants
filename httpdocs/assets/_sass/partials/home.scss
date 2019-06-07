@@ -76,8 +76,13 @@
 
 .testimonials-container {
   display: flex;
+  flex-direction: column;
   max-width: $bp-xl;
   margin: 0 auto;
+
+  @media screen and (min-width: 400px) {
+    flex-direction: row;
+  }
 }
 
 .testimonial {
@@ -88,26 +93,39 @@
 .testimonial-text-wrapper {
   $height: 10rem;
   $width: $height / 2;
-  $padding: 1rem;
-  @include slant('bl', 'center', transparentize($color-yellow, .1), $color-black, $padding, $height, $width, $padding);
+  $padding: .5rem;
+  background-color: transparentize($color-yellow, .1);
   position: absolute;
   bottom: 0;
   left: 0;
-  width: calc(100% - #{$width});
+  padding: $padding;
+  width: calc(100% - 2 * #{$padding});
+  height: calc(100% - 2 * #{$padding});
+
+  @media screen and (min-width: $bp-md) {
+    background-color: unset;
+    @include slant('bl', 'center', transparentize($color-yellow, .1), $color-black, $padding, $height, $width, $padding);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    width: calc(100% - #{$width});
+    height: unset;
+  }
 
   p:first-child {
     align-self: flex-start;
-  }
-
-  p {
-    overflow: hidden;
   }
 
   .testimonial-text {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    height: $height - 2 * $padding;
+    height: 100%;
+
+    @media screen and (min-width: $bp-md) {
+      height: $height - 2 * $padding;
+    }
   }
 }
 
