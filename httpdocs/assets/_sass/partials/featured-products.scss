@@ -3,35 +3,59 @@
 .featured {
   margin-bottom: 3rem;
 
-  ul {
-    list-style: none;
-    text-align: center;
+  img {
+    width: 200px;
   }
 
-  img {
-    object-fit: cover;
-    width: 200px;
-    margin: 0 auto;
+  a {
+    display: inline-block;
   }
 }
 
 .featured-container {
   justify-content: center;
-  background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/80% 100%;
+  background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/contain;
   max-width: $bp-xl;
+  height: 300px;
   margin: 0 auto;
 }
 
 // visible carousel view
 .slick-list {
-  max-width: $bp-md;
+  max-width: 950px;
+}
+
+.slick-track {
+  height: 300px;
+}
+
+.slick-list .slick-slide {
+  display: flex;
+}
+
+.slick-slide {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  img {
+    transition: all .15s ease-in-out;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.slick-center img {
+  transform: scale(1.5);
 }
 
 // carousel navigation buttons
 .slick-prev, .slick-next {
   background-color: transparent;
   color: transparent;
-  width: 5rem;
+  width: 6rem;
   height: 100%;
   font-size: 0;
   line-height: 0;
@@ -46,14 +70,15 @@
   }
 
   &:focus {
+    outline: none;
     box-shadow: none;
   }
 }
 
 .slick-prev {
-  left: 10%;
+  left: 0;
 }
 
 .slick-next {
-  right: 10%;
+  right: 0;
 }

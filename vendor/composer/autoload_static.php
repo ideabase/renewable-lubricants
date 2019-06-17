@@ -212,6 +212,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
             'DvK\\Vat\\' => 8,
             'Dotenv\\' => 7,
             'Dompdf\\' => 7,
+            'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Inflector\\' => 26,
         ),
         'C' => 
@@ -529,6 +530,10 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         array (
             0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
         ),
+        'Doctrine\\Common\\Lexer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
+        ),
         'Doctrine\\Common\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
@@ -612,13 +617,6 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
             'Guzzle' => 
             array (
                 0 => __DIR__ . '/..' . '/guzzle/guzzle/src',
-            ),
-        ),
-        'D' => 
-        array (
-            'Doctrine\\Common\\Lexer\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
             ),
         ),
     );
@@ -2309,6 +2307,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'PhpOffice\\PhpSpreadsheet\\Cell\\DefaultValueBinder' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/DefaultValueBinder.php',
         'PhpOffice\\PhpSpreadsheet\\Cell\\Hyperlink' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/Hyperlink.php',
         'PhpOffice\\PhpSpreadsheet\\Cell\\IValueBinder' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/IValueBinder.php',
+        'PhpOffice\\PhpSpreadsheet\\Cell\\StringValueBinder' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/StringValueBinder.php',
         'PhpOffice\\PhpSpreadsheet\\Chart\\Axis' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Axis.php',
         'PhpOffice\\PhpSpreadsheet\\Chart\\Chart' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Chart.php',
         'PhpOffice\\PhpSpreadsheet\\Chart\\DataSeries' => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/DataSeries.php',

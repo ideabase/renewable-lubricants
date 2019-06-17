@@ -1691,6 +1691,7 @@ return array(
     'PhpOffice\\PhpSpreadsheet\\Cell\\DefaultValueBinder' => $vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/DefaultValueBinder.php',
     'PhpOffice\\PhpSpreadsheet\\Cell\\Hyperlink' => $vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/Hyperlink.php',
     'PhpOffice\\PhpSpreadsheet\\Cell\\IValueBinder' => $vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/IValueBinder.php',
+    'PhpOffice\\PhpSpreadsheet\\Cell\\StringValueBinder' => $vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/StringValueBinder.php',
     'PhpOffice\\PhpSpreadsheet\\Chart\\Axis' => $vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Axis.php',
     'PhpOffice\\PhpSpreadsheet\\Chart\\Chart' => $vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Chart.php',
     'PhpOffice\\PhpSpreadsheet\\Chart\\DataSeries' => $vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/DataSeries.php',

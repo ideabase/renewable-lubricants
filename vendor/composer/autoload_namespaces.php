@@ -14,5 +14,4 @@ return array(
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
-    'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
 );
