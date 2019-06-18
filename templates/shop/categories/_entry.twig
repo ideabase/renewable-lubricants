@@ -1,37 +1,27 @@
-<div class="category">
+{% extends '_layouts/shop' %}
+
 {% block content %}
 
 <h1>{{category.title}}</h1>
 
-  <div>
-    <ul>
-      {% for product in craft.products.type('clothing').all() %}
-        {% for cat in product.productCategory.all() %}
-          {% if cat.id == category.id %}
-            <li>
-              {% for image in product.productImage.all() %}
-                <img src="{{ image.url }}"alt="{{ image.title }}">
-              {% endfor %}
-              <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
-            </li>
-            {% endif %}
-          {% endfor %}
-      {% endfor %}
-      <li>
-        <a href="/shop">View All Products</a>
-      </li>
-    </ul>
-  </div>
-
-  <div id="products-find">
-    <h2>Find Your Perfect Product</h2>
-      <div id="products-find-wrapper">
-        <ul>
-          <li><a href="{{ url('contact') }}">Request Quote</a></li>
-          <li><a href="{{ url('contact') }}">Request Assistance</a></li>
-          <li><a href="{{ url('search') }}">Product Finder</a></li>
-        </ul>
-      </div>
-  </div>
-{% endblock %}
+<div>
+  <ul>
+    {% for product in craft.products.type('general').all() %}
+      {% for cat in product.productCategories.all() %}
+        {% if cat.id == category.id %}
+          <li>
+            {% for image in product.productImage.all() %}
+              <img src="{{ image.url }}"alt="{{ image.title }}">
+            {% endfor %}
+            <a href="{{ product.url }}"><h1>{{ product.title }}</h1></a>
+          </li>
+          {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <li>
+      <a href="/shop">View All Products</a>
+    </li>
+  </ul>
 </div>
+
+{% endblock %}

@@ -1,40 +1,30 @@
-{% extends '_layouts/main' %}
+{% extends '_layouts/shop' %}
 
 {% block content %}
-  {% include '_includes/featured-products.twig' %}
 
-  <div class="products-categories-container">
-    <div class="h1-wrapper-bottom">
-      <h1>Popular Product Categories</h1>
-    </div>
-    <div class="flex product-categories">
+{% include '_includes/featured-products.twig' %}
 
-      {% for category in craft.categories.group('productCategories').limit(8).all() %}
-        <a href="{{ category.url }}">
-          <img src="{{ category.productImage.one().getUrl() }}">
-          <h3 class="product-title">{{ category.title }}</h3>
-          <p>Learn More</p>
-        </a>
-      {% endfor %}
+<div class="products-categories-container">
+  <div class="h1-wrapper-bottom">
+    <h1>Popular Product Categories</h1>
+  </div>
 
-      <a href="{{ url('shop/products') }}">
-        <img src="{{ url('assets/img/feature-images/ViewAllProducts-Icon-07.png') }}">
-        <h3 class="product-title">View All Products</h3>
+  <div class="flex product-categories">
+
+    {% for category in craft.categories.group('productCategories').limit(8).all() %}
+      <a href="{{ category.url }}">
+        <img src="{{ category.productImage.one().getUrl() }}">
+        <h3 class="product-title">{{ category.title }}</h3>
         <p>Learn More</p>
       </a>
+    {% endfor %}
 
-    </div>
+    <a href="{{ url('shop/products') }}">
+      <img src="{{ url('assets/img/feature-images/ViewAllProducts-Icon-07.png') }}">
+      <h3 class="product-title">View All Products</h3>
+      <p>Learn More</p>
+    </a>
   </div>
+</div>
 
-  <div class="products-find">
-    <h2>Find Your Perfect Product</h2>
-
-    <div class="products-find-wrapper">
-      <ul>
-        <li><a href="{{ url('contact') }}">Request Quote</a></li>
-        <li><a href="{{ url('contact') }}">Request Assistance</a></li>
-        <li><a href="{{ url('search') }}">Product Finder</a></li>
-      </ul>
-    </div>
-  </div>
 {% endblock %}

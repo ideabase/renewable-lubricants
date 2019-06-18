@@ -1,36 +1,41 @@
 {% extends '_layouts/shop' %}
 
 {% block content %}
-  <div class="mt-8">
-    <a href="{{ url('shop/products') }}"><p>&larr; All products</p></a>
+
+<div class="mt-8">
+  <a href="{{ url('shop/products') }}"><p>&larr; All products</p></a>
+</div>
+
+<div class="product-details">
+  {% if product.productImage|length %}
+    <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}" class="product-image">
+  {% endif %}
+
+  <div class="product-content">
+    <h1>{{ product.title }}</h1>
+    <p>{{ product.body }}</p>
+
+    <form method="POST">
+      <input type="hidden" name="action" value="commerce/cart/update-cart">
+      {{ redirectInput('shop/cart') }}
+      <input type="hidden" name="qty" value="1">
+      {{ csrfInput() }}
+
+      <div class="field">
+        <select name="purchasableId">
+
+          {% for variant in product.variants %}
+            <option {% if variant.stock <= 0 and variant.hasUnlimitedStock == false %}disabled {% endif %}value="{{ variant.id }}">{{ variant.sku }}: {{ variant.description }} - {{ variant.price|commerceCurrency(cart.currency) }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <input type="submit" value="{{ "Add to cart"|t }}" class="button">
+    </form>
   </div>
-  <div class="product-details">
-    {% if product.productImage|length %}
-      <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}" class="product-image">
-    {% endif %}
-    <div class="product-content">
-      <h1>{{ product.title }}</h1>
-      <p>{{ product.body }}</p>
-      <form method="POST">
-        <input type="hidden" name="action" value="commerce/cart/update-cart">
-        {{ redirectInput('shop/cart') }}
-        <input type="hidden" name="qty" value="1">
-        {{ csrfInput() }}
+</div>
 
-        <div class="field">
-          <select name="purchasableId">
-            {% for purchasable in product.variants %}
-              <option {% if purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false %}disabled {% endif %}value="{{ purchasable.id }}">{{ purchasable.sku }} {{ purchasable.description }} {{ purchasable.price|commerceCurrency(cart.currency) }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <input type="submit" value="{{ "Add to cart"|t }}" class="button">
-
-      </form>
-    </div>
-  </div>
-<div class="avaliablegrades">
+<div class="available-grades">
   <h3>Available Grades / Sizes</h3>
   <ul>
     <li>8 oz.
@@ -45,4 +50,5 @@
     </li>
   </ul>
 </div>
+
 {% endblock %}

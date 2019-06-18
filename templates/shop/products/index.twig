@@ -19,7 +19,8 @@
     </ul>
   </div>
 
-  <form method="POST" class="text-center">
+  {# add all products to cart button #}
+  {# <form method="POST" class="text-center">
     <input type="hidden" name="action" value="commerce/cart/update-cart">
     {{ redirectInput('shop/cart') }}
     {{ csrfInput() }}
@@ -30,10 +31,10 @@
       <input type="hidden" name="purchasables[{{ loop.index }}][options]" value="">
     {% endfor %}
     <input type="submit" value="Add all products to cart">
-  </form>
+  </form> #}
 
   {% for product in products %}
-    {% for category in product.productCategory.all() %}
+    {% for category in product.productCategories.all() %}
     <div class="product {{ category.title|replace({' ': ''}) }}">
     {% endfor %}
       <div>

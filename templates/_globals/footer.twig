@@ -1,5 +1,10 @@
 <footer>
   <div class="footer-container-outer">
+    {# include product finder on shop pages #}
+    {% if craft.app.request.segments|length and craft.app.request.segments[0] == 'shop' %} {# TODO: change to products #}
+      {% include '_includes/products-find' %}
+    {% endif %}
+
     <div class="footer-container-inner">
       {# include newsletter form #}
       {% include '_includes/newsletter' %}

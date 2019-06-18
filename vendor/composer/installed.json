@@ -331,12 +331,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.1.30",
-        "version_normalized": "3.1.30.0",
+        "version": "3.1.31",
+        "version_normalized": "3.1.31.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/de7d4488c065e42ff549d466b215ce392b395559",
-            "reference": "de7d4488c065e42ff549d466b215ce392b395559",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/2c2447caaed72c1edb443cfbea4d7cbc64e41675",
+            "reference": "2c2447caaed72c1edb443cfbea4d7cbc64e41675",
             "shasum": ""
         },
         "require": {
@@ -367,7 +367,7 @@
             "true/punycode": "^2.1.0",
             "twig/twig": "~2.11.0",
             "yii2tech/ar-softdelete": "^1.0.2",
-            "yiisoft/yii2": "~2.0.19.0",
+            "yiisoft/yii2": "~2.0.21.0",
             "yiisoft/yii2-debug": "^2.0.10",
             "yiisoft/yii2-queue": "2.1.0",
             "yiisoft/yii2-swiftmailer": "^2.1.0",
@@ -388,7 +388,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2019-06-11T17:04:05+00:00",
+        "time": "2019-06-18T18:46:14+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -3909,12 +3909,12 @@
     },
     {
         "name": "yiisoft/yii2",
-        "version": "2.0.19",
-        "version_normalized": "2.0.19.0",
+        "version": "2.0.21",
+        "version_normalized": "2.0.21.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/3e74c7338dd83cea6ffc6f5c25202b9f2f271f89",
-            "reference": "3e74c7338dd83cea6ffc6f5c25202b9f2f271f89",
+            "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/7e4622252c5f272373e1339a47d331e4a55e9591",
+            "reference": "7e4622252c5f272373e1339a47d331e4a55e9591",
             "shasum": ""
         },
         "require": {
@@ -3930,7 +3930,7 @@
             "php": ">=5.4.0",
             "yiisoft/yii2-composer": "~2.0.4"
         },
-        "time": "2019-05-21T16:01:16+00:00",
+        "time": "2019-06-18T14:25:08+00:00",
         "bin": [
             "yii"
         ],
