@@ -4,7 +4,7 @@
   </div>
 
   <div class="featured-container flex">
-    {% for product in craft.products.all() %}
+    {% for product in craft.products.orderBy('RAND()').all() %}
       {% if product.featuredProduct %}
         <div>
           <a href="{{ product.url }}">

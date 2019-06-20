@@ -2,53 +2,41 @@
 
 {% block content %}
 
-<div class="mt-8">
-  <a href="{{ url('shop/products') }}"><p>&larr; All products</p></a>
-</div>
+<div class="product-container">
+  <div class="product-details flex">
+    {% if product.productImage|length %}
+      <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}" class="product-image">
+    {% endif %}
 
-<div class="product-details">
-  {% if product.productImage|length %}
-    <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}" class="product-image">
-  {% endif %}
+    <div class="product-info">
+      <h1>{{ product.title }}</h1>
+      {{ product.body }}
+    </div>
+  </div>
 
-  <div class="product-content">
-    <h1>{{ product.title }}</h1>
-    <p>{{ product.body }}</p>
+  <form method="POST" name="product-add-form" class="flex">
+    <input type="hidden" name="action" value="commerce/cart/update-cart">
+    {{ redirectInput('shop/cart') }}
+    {{ csrfInput() }}
 
-    <form method="POST">
-      <input type="hidden" name="action" value="commerce/cart/update-cart">
-      {{ redirectInput('shop/cart') }}
-      <input type="hidden" name="qty" value="1">
-      {{ csrfInput() }}
-
-      <div class="field">
-        <select name="purchasableId">
-
+    <div>
+      <div class="product-opts">
+        <span>Product:</span>
+        <select name="purchasableId" id="product-select">
           {% for variant in product.variants %}
-            <option {% if variant.stock <= 0 and variant.hasUnlimitedStock == false %}disabled {% endif %}value="{{ variant.id }}">{{ variant.sku }}: {{ variant.description }} - {{ variant.price|commerceCurrency(cart.currency) }}</option>
+            <option {% if variant.stock <= 0 and variant.hasUnlimitedStock == false %}disabled {% endif %}value="{{ variant.id }}">{{ variant.sku }}: {{ variant.description }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ variant.size }})</option>
           {% endfor %}
         </select>
       </div>
 
-      <input type="submit" value="{{ "Add to cart"|t }}" class="button">
-    </form>
-  </div>
-</div>
+      <div class="product-opts">
+        <span>Quantity:</span>
+        <input type="number" name="qty" min="1" value="1" required>
+      </div>
 
-<div class="available-grades">
-  <h3>Available Grades / Sizes</h3>
-  <ul>
-    <li>8 oz.
-      {% for file in product.files.all() %}
-        <a href="{{file.url}}">SDS Sheet (PDF)</a>
-      {% endfor %}
-    </li>
-    <li>16 oz.
-      {% for file in product.files.all() %}
-        <a href="{{file.url}}">SDS Sheet (PDF)</a>
-      {% endfor %}
-    </li>
-  </ul>
+      <input type="submit" value="{{ "Add to cart"|t }}" class="button">
+    </div>
+  </form>
 </div>
 
 {% endblock %}
