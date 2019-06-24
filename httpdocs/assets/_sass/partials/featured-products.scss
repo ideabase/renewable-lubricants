@@ -7,9 +7,8 @@
     width: 200px;
   }
 
-  a {
-    position: relative;
-    top: .5rem;
+  .h1-wrapper-top {
+    margin-bottom: 1rem;
   }
 }
 
@@ -17,7 +16,6 @@
   justify-content: center;
   background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/contain;
   max-width: $bp-xl;
-  height: 300px;
   margin: 0 auto;
 }
 
@@ -28,8 +26,10 @@
 }
 
 .featured-title {
+  height: 0;
   opacity: 0;
-  transition: all .5s ease-in-out;
+  transition: all .5s linear;
+  text-transform: uppercase;
 }
 
 // visible carousel view
@@ -38,7 +38,7 @@
 }
 
 .slick-track {
-  height: 300px;
+  height: calc(300px + 8rem);
 }
 
 .slick-list .slick-slide {
@@ -50,7 +50,7 @@
   justify-content: center;
 
   img {
-    transition: all .5s ease-in-out;
+    transition: all .5s linear;
   }
 
   &:focus {
@@ -60,7 +60,7 @@
 
 .slick-center {
   img {
-    width: 250px;
+    width: 300px;
   }
 
   .featured-title {
