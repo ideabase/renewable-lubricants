@@ -4,14 +4,13 @@
   </div>
 
   <div class="featured-container flex">
-    {% for product in craft.products.orderBy('RAND()').all() %}
-      {% if product.featuredProduct %}
-        <div>
-          <a href="{{ product.url }}">
-            <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}" class="featured-product-img">
-          </a>
-        </div>
-      {% endif %}
+    {% for product in craft.products.featuredProduct(true).orderBy('RAND()').all() %}
+      <div>
+        <a class="featured-link" href="{{ product.url }}">
+          <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}" class="featured-product-img">
+        <div class="featured-title">{{ product.title }}</div>
+        </a>
+      </div>
     {% endfor %}
   </div>
 </div>
@@ -22,8 +21,8 @@
 
 {# add carousel to featured products container #}
 $('.featured-container').slick({
-  autoplay: true,
-  autoplaySpeed: 5000,
+  // autoplay: true,
+  // autoplaySpeed: 5000,
   centerMode: true,
   centerPadding: 0,
   slidesToShow: 3,

@@ -4,10 +4,8 @@
 }
 
 .product-details {
-  margin-bottom: 2rem;
-
   img {
-    align-self: center;
+    align-self: flex-start;
     flex-shrink: 0;
     width: 300px;
   }
@@ -25,9 +23,15 @@
   padding: 0 1rem;
 }
 
+.product-brands-grade {
+  & > * {
+    flex-basis: 50%;
+  }
+}
+
 form[name='product-add-form'] {
   flex-direction: column;
-  align-items: center;
+  margin-bottom: 2rem;
 
   input[name='qty'] {
     width: 50px;
