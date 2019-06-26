@@ -2,10 +2,6 @@
 
 .distributors-map {
   margin-bottom: 3rem;
-
-  .h1-wrapper-top > *:first-child {
-    padding: 0;
-  }
 }
 
 .distributors-map-body {
@@ -15,18 +11,8 @@
   text-align: center;
 }
 
-.smartmap-mapcanvas {
-  max-width: $bp-xl;
-  margin: 0 auto;
-}
-
-.distributors-network {
-  margin: 0 auto;
-  max-width: $bp-xl;
-
-  h1 {
-    margin-top: 0;
-  }
+.distributors-network h1 {
+  margin-top: 0;
 }
 
 .distributors-network-h1-wrapper {
@@ -35,10 +21,11 @@
   margin: 0 0 0 auto;
 }
 
-.accordion {
+.distributors-accordion {
   position: relative;
   margin-bottom: 10px;
-  width: 100%;
+  max-width: calc(#{$bp-lg} + 4rem);
+  margin: 0 0 0 auto;
   color: $color-green-dark;
 
   input {
@@ -78,7 +65,7 @@
   }
 }
 
-.accordion-content {
+.distributors-content {
   display: none;
   padding: 1em;
   background: #fff;
@@ -86,7 +73,7 @@
   transition: max-height .35s;
 }
 
-.accordion-image {
+.distributors-img {
   margin-top: 1.5em;
   width: 150px;
 }

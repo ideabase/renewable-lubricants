@@ -1,7 +1,7 @@
 // about partial
 
-.about {
-  img {
+.about img {
+  @media screen and (min-width: $bp-sm) {
     margin-bottom: 3rem;
   }
 }

@@ -36,11 +36,11 @@
   {% cache %}
 
   {% for distrib in distributors.all() %}
-    <div class="accordion">
+    <div class="distributors-accordion">
       <input type="radio" name="tabs">
       <label>{{ distrib.title }}</label>
-      <div class="accordion-content">
-        <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="accordion-image">
+      <div class="distributors-content">
+        <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="distributors-img">
         {% if distrib.body|length %}
           <p>{{ distrib.body }}</p>
         {% endif %}
@@ -55,8 +55,10 @@
 
 {% js %}
 
+'use strict';
+
 {# accordion toggle #}
-$(".accordion label").on('click', function() {
+$(".distributors-accordion label").on('click', function() {
 	// toggle accordion content
 	$(this).next().slideToggle('fast');
 

@@ -10,6 +10,8 @@ body {
   box-sizing: border-box;
   font-family: $font-roboto-slab;
   color: $color-black;
+  max-width: $bp-xl;
+  margin: 0 auto;
 }
 
 .content-wrapper {
@@ -84,10 +86,8 @@ img {
 .feature-img {
   display: block;
   width: 100%;
-  max-width: $bp-xl;
   max-height: 300px;
   object-fit: cover;
-  margin: 0 auto;
 
   @media screen and (min-width: $bp-md) {
     max-height: 400px;
@@ -108,6 +108,7 @@ img {
 
   h1 {
     margin: 0;
+    padding: 1rem 0;
   }
 }
 
@@ -125,5 +126,6 @@ img {
 
   h1 {
     margin: 0;
+    padding: 1rem 0;
   }
 }

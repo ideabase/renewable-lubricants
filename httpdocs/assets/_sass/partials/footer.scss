@@ -1,7 +1,6 @@
 // footer partial
 
 .products-find {
-  max-width: $bp-xl;
   margin-bottom: 2rem;
   $length: 4rem;
 
@@ -35,16 +34,7 @@
   }
 }
 
-footer {
-  // flex-shrink: 0;
-}
-
-.footer-container-outer {
-  max-width: $bp-xl;
-  margin: 0 auto;
-}
-
-.footer-container-inner {
+.footer-container {
   max-width: $bp-lg;
 }
 
