@@ -1,7 +1,7 @@
 <footer>
   {# include product finder on shop pages #}
   {% if craft.app.request.segments|length and craft.app.request.segments[0] == 'shop' %} {# TODO: change to products #}
-    {% include '_includes/products-find' %}
+    {% include '_includes/products-search' %}
   {% endif %}
 
   <div class="footer-container">

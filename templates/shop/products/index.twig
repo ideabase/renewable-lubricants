@@ -116,8 +116,6 @@
 
 {% js %}
 
-'use strict';
-
 $( ".purchasableId" ).change(function(e) {
   $(".purchasableInfo").hide();
   $("#"+($(this).find(":selected").data('info'))).toggle();

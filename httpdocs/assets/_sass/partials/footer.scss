@@ -1,6 +1,6 @@
 // footer partial
 
-.products-find {
+.products-search {
   margin-bottom: 2rem;
   $length: 4rem;
 
@@ -27,7 +27,7 @@
     font-weight: bold;
   }
 
-  .products-find-wrapper {
+  .products-search-wrapper {
     @include slant('bl', 'center', $color-green-dark, $color-black, 0, $length);
     max-width: $bp-lg;
     margin: 0 0 0 auto;

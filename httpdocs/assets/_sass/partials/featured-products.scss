@@ -14,7 +14,7 @@
 
 .featured-container {
   justify-content: center;
-  background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/contain;
+  background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/100% 50%;
 }
 
 .featured-link {
@@ -26,7 +26,7 @@
 .featured-title {
   height: 0;
   opacity: 0;
-  transition: all .5s linear;
+  transition: all .5s ease-in-out;
   text-transform: uppercase;
 }
 
@@ -48,7 +48,7 @@
   justify-content: center;
 
   img {
-    transition: all .5s linear;
+    transition: all .5s ease-in-out;
   }
 
   &:focus {
