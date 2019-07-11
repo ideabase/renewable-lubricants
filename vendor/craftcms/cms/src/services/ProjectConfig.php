@@ -227,12 +227,6 @@ class ProjectConfig extends Component
     private $_waitingToUpdateParsedConfigTimes = false;
 
     /**
-     * @var bool Whether we’re listening for the request end, to update the modified config data.
-     * @see saveModifiedConfigData()
-     */
-    private $_waitingToSaveModifiedConfigData = false;
-
-    /**
      * @var bool Whether project.yaml changes are currently being applied.
      * @see applyYamlChanges()
      * @see getIsApplyingYamlChanges()
@@ -270,7 +264,7 @@ class ProjectConfig extends Component
      */
     public function init()
     {
-        $this->saveDataAfterRequest();
+        Craft::$app->on(Application::EVENT_AFTER_REQUEST, [$this, 'saveModifiedConfigData'], null, false);
 
         // If we're not using the project config file, load the stored config to emulate config files.
         // This is needed so we can make comparisons between the existing config and the modified config, as we're firing events.
@@ -302,32 +296,6 @@ class ProjectConfig extends Component
         $this->_changesBeingApplied = null;
 
         $this->init();
-    }
-
-    /**
-     * Set up an event handler to save modified data after request is over. This is called automatically when service is initialized.
-     *
-     * @return void
-     */
-    public function saveDataAfterRequest()
-    {
-        if (!$this->_waitingToSaveModifiedConfigData) {
-            Craft::$app->on(Application::EVENT_AFTER_REQUEST, [$this, 'saveModifiedConfigData']);
-            $this->_waitingToSaveModifiedConfigData = true;
-        }
-    }
-
-    /**
-     * Disable the event handler that would save modified data after request is over.
-     *
-     * @return void
-     */
-    public function preventSavingDataAfterRequest()
-    {
-        if ($this->_waitingToSaveModifiedConfigData) {
-            Craft::$app->off(Application::EVENT_AFTER_REQUEST, [$this, 'saveModifiedConfigData']);
-            $this->_waitingToSaveModifiedConfigData = false;
-        }
     }
 
     /**
@@ -647,30 +615,32 @@ class ProjectConfig extends Component
             }
         }
 
-        if (($this->_updateConfigMap && $this->_useConfigFile()) || $this->_updateConfig) {
-            $previousConfig = $this->_getStoredConfig();
-            $value = ProjectConfigHelper::cleanupConfig($previousConfig);
-            ksort($value);
-            $this->_storeYamlHistory($value);
-
-            $info = Craft::$app->getInfo();
-
-            if ($this->_updateConfigMap && $this->_useConfigFile()) {
-                $configMap = $this->_generateConfigMap();
-
-                foreach ($configMap as &$filePath) {
-                    $filePath = Craft::alias($filePath);
-                }
-
-                $info->configMap = Json::encode($configMap);
-            }
-
-            if ($this->_updateConfig) {
-                $info->config = serialize($this->_getConfigurationFromYaml());
-            }
-
-            Craft::$app->saveInfo($info);
+        if (!$this->_updateConfig && !($this->_updateConfigMap && $this->_useConfigFile())) {
+            return;
         }
+
+        $previousConfig = $this->_getStoredConfig();
+        $value = ProjectConfigHelper::cleanupConfig($previousConfig);
+        ksort($value);
+        $this->_storeYamlHistory($value);
+
+        $info = Craft::$app->getInfo();
+
+        if ($this->_updateConfigMap && $this->_useConfigFile()) {
+            $configMap = $this->_generateConfigMap();
+
+            foreach ($configMap as &$filePath) {
+                $filePath = Craft::alias($filePath);
+            }
+
+            $info->configMap = Json::encode($configMap);
+        }
+
+        if ($this->_updateConfig) {
+            $info->config = Json::encode($this->_getConfigurationFromYaml());
+        }
+
+        Craft::$app->saveInfoAfterRequest();
     }
 
     /**
@@ -910,7 +880,11 @@ class ProjectConfig extends Component
         $this->trigger(self::EVENT_REBUILD, $event);
 
         // Merge the new data over the existing one.
-        $configData = array_replace_recursive($currentConfig, $event->config);
+        $configData = array_replace_recursive([
+            'system' => $currentConfig['system'],
+            'routes' => $currentConfig['routes'] ?? [],
+            'plugins' => $currentConfig['plugins'] ?? []
+        ], $event->config);
 
         $this->muteEvents = true;
 
@@ -1125,7 +1099,13 @@ class ProjectConfig extends Component
         }
 
         $info = Craft::$app->getInfo();
-        return $this->_storedConfig = $info->config ? unserialize($info->config, ['allowed_classes' => false]) : [];
+        if (!$info->config) {
+            return $this->_storedConfig = [];
+        }
+        if ($info->config[0] === '{') {
+            return $this->_storedConfig = Json::decode($info->config);
+        }
+        return $this->_storedConfig = unserialize($info->config, ['allowed_classes' => false]);
     }
 
     /**
@@ -1502,7 +1482,7 @@ class ProjectConfig extends Component
                 'sections.handle',
                 'sections.type',
                 'sections.enableVersioning',
-                'sections.propagateEntries',
+                'sections.propagationMethod',
                 'sections.uid',
                 'structures.uid AS structure',
                 'structures.maxLevels AS structureMaxLevels',
@@ -1528,7 +1508,6 @@ class ProjectConfig extends Component
             $uid = $section['uid'];
             unset($section['id'], $section['structureMaxLevels'], $section['uid']);
 
-            $section['propagateEntries'] = (bool)$section['propagateEntries'];
             $section['enableVersioning'] = (bool)$section['enableVersioning'];
 
             $sectionData[$uid] = $section;
