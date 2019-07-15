@@ -12,5 +12,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-criticalcss": "^2.1.0",
     "grunt-shell": "^2.1.0"
+  },
+  "dependencies": {
+    "text-overflow-clamp": "^1.0.0"
   }
 }

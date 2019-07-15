@@ -39,9 +39,9 @@
 
           <div class="testimonial-text-wrapper">
             <div class="testimonial-text">
-              <p>"{{ testimonial.quote }}"</p>
+              <p class="testimonial-quote">"{{ testimonial.quote }}"</p>
               <p class="testimonial-author">– {{ testimonial.testimonialAuthor }}</p>
-              <p>{{ testimonial.authorDescription }}</p>
+              <p class="testimonial-company">{{ testimonial.authorDescription }}</p>
             </div>
           </div>
         </div>
@@ -52,11 +52,3 @@
 {% endif %}
 
 {% endblock %}
-
-{% js %}
-
-'use strict';
-
-
-
-{% endjs %}

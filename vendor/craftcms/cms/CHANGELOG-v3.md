@@ -1,5 +1,50 @@
 # Release Notes for Craft CMS 3.x
 
+## 3.2.2 - 2019-07-14
+
+### Added
+- Added `craft\helpers\ElementHelper::isTempSlug()`.
+- Added `craft\helpers\ElementHelper::tempSlug()`.
+- Added `craft\helpers\UrlHelper::removeParam()`.
+
+### Changed
+- Craft no longer ensures a recent revision exists before creating a draft for an element.
+- Element exports are limited to CSV files now, to avoid the GD requirement imposed by the PHPSpreadsheet library. ([#4553](https://github.com/craftcms/cms/issues/4553))
+
+### Fixed
+- Fixed a bug where multi-site element queries with the `unique` and `offset` params set weren’t returning any results.
+- Fixed an error that could occur when creating a draft. ([#4515](https://github.com/craftcms/cms/issues/4515))
+- Fixed a bug where Craft wasn’t generating a new slug for entries that were saved with a blank Slug field. ([#4518](https://github.com/craftcms/cms/issues/4518))
+- Fixed a bug where disabled select options could lose their disabled text styling in Firefox. ([#4526](https://github.com/craftcms/cms/issues/4526))
+- Fixed a bug where entry forms could miss the fact that a file had been uploaded to an Assets field. ([#4534](https://github.com/craftcms/cms/issues/4534))
+- Fixed a bug where selecting “Create a new child entry” in a Structure section on a multi-site install would result in a 404 error. ([#4541](https://github.com/craftcms/cms/issues/4541))
+- Fixed a bug where it wasn’t possible to set test-specific config settings. ([#4539](https://github.com/craftcms/cms/pull/4539))
+- Fixed an error that occurred when exporting elements if Limit was set to `0`. ([#4547](https://github.com/craftcms/cms/issues/4547))
+- Fixed a bug where the `{% paginate %}` tag wouldn’t generate links to the first page correctly when using query string pagination. ([#4550](https://github.com/craftcms/cms/issues/4550))
+- Fixed an error that occurred when indexing assets from a console request, if no volumes were defined yet. ([#2798](https://github.com/craftcms/cms/issues/2798))
+- Fixed a bug where the “Delete” link could show up in the draft meta HUD for unsaved drafts. ([#4557](https://github.com/craftcms/cms/issues/4557))
+
+## 3.2.1 - 2019-07-11
+
+### Added
+- Added `craft\console\Request::getIsPreview()`.
+- Added `craft\web\Request::getIsPreview()`.
+
+### Changed
+- If a draft can’t be saved, an alert icon is now shown in the Control Panel header, which can be clicked on to reveal more information.
+- Element revisions no longer store snapshot data.
+
+### Fixed
+- Fixed a bug where Feed widget items weren’t getting hyperlinked.
+- Fixed a bug where the `app/migrate` controller wasn’t applying new `project.yaml` changes if there were no pending migrations.
+- Fixed a SQL error that could occur when saving an entry or entry draft. ([#4508](https://github.com/craftcms/cms/issues/4508))
+- Fixed a bug where Assets fields set to restrict uploads to a single folder could have empty selector modals. ([#4522](https://github.com/craftcms/cms/issues/4522))
+- Fixed an error that could occur if a template was accessing the deprecated `locale` property of an element query, but `siteId` wasn’t set to an integer. ([#4531](https://github.com/craftcms/cms/issues/4531))
+- Fixed a bug where users without the “Publish live changes” permission for a section weren’t able to create new entries. ([#4528](https://github.com/craftcms/cms/issues/4529))
+- Fixed a PHP error that could occur when uploading files to Assets fields on the front-end. ([#4382](https://github.com/craftcms/cms/issues/4382))
+- Fixed a bug where elements listed in a Structure view could show descendant toggles even if they had no descendants. ([#4504](https://github.com/craftcms/cms/issues/4504))
+- Fixed a backwards compatibility issue. ([#4523](https://github.com/craftcms/cms/issues/4523))
+
 ## 3.2.0 - 2019-07-09
 
 > {warning} If you’ve ever run the `project-config/rebuild` command, it’s highly recommended that you run it again with Craft 3.1.34, before updating to Craft 3.2.

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6040df8495074b804c8df022ba987d77",
+    "content-hash": "cebb7822b76aba997dbe3c0d4519fc21",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -331,11 +331,11 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.2.0",
+            "version": "3.2.2",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/bc3c8e916f67b525c3880153c361d67519e6a7f9",
-                "reference": "bc3c8e916f67b525c3880153c361d67519e6a7f9",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/d8145c14be484ed81aa10207f610232cba8d3866",
+                "reference": "d8145c14be484ed81aa10207f610232cba8d3866",
                 "shasum": ""
             },
             "require": {
@@ -360,7 +360,6 @@
                 "league/oauth2-client": "^2.2.1",
                 "mikehaertl/php-shellcommand": "^1.2.5",
                 "php": ">=7.0.0",
-                "phpoffice/phpspreadsheet": "^1.6.0",
                 "pixelandtonic/imagine": "~0.7.1.2",
                 "seld/cli-prompt": "^1.0.3",
                 "symfony/yaml": "^3.2|^4.0",
@@ -412,15 +411,15 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2019-07-09T17:21:36+00:00"
+            "time": "2019-07-14T18:34:11+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.1.9",
+            "version": "2.1.10",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/bf336858ed2adfb89b3a7640c03b3cce3175d7b9",
-                "reference": "bf336858ed2adfb89b3a7640c03b3cce3175d7b9",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/d9f63e69fb0a8dd8f1049e1e3829cb438d5a1922",
+                "reference": "d9f63e69fb0a8dd8f1049e1e3829cb438d5a1922",
                 "shasum": ""
             },
             "require": {
@@ -462,7 +461,7 @@
                 "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2019-07-10T15:26:34+00:00"
+            "time": "2019-07-12T15:11:05+00:00"
         },
         {
             "name": "craftcms/commerce-omnipay",
@@ -1176,18 +1175,15 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.10.0",
+            "version": "v4.11.0",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
-                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/83ab08bc1af7d808a9e0fbf024f1c24bfd73c0a7",
+                "reference": "83ab08bc1af7d808a9e0fbf024f1c24bfd73c0a7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
-            },
-            "require-dev": {
-                "simpletest/simpletest": "^1.1"
             },
             "type": "library",
             "autoload": {
@@ -1198,9 +1194,8 @@
                     "library/HTMLPurifier.composer.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL"
+                "LGPL-2.1-or-later"
             ],
             "authors": [
                 {
@@ -1214,7 +1209,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2018-02-23T01:58:20+00:00"
+            "time": "2019-07-14T18:58:38+00:00"
         },
         {
             "name": "guzzle/guzzle",
