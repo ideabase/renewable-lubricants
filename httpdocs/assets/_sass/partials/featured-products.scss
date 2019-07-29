@@ -14,7 +14,6 @@
 
 .featured-container {
   justify-content: center;
-  background: url('/assets/img/ui/polygon-all-gray.svg') no-repeat center/100% 50%;
 }
 
 .featured-link {
@@ -28,6 +27,7 @@
   opacity: 0;
   transition: all .5s ease-in-out;
   text-transform: uppercase;
+  text-align: center;
 }
 
 // visible carousel view
@@ -68,32 +68,37 @@
 
 // carousel navigation buttons
 .slick-prev, .slick-next {
-  background-color: transparent;
-  color: transparent;
-  width: 6rem;
-  height: 100%;
+  width: 5rem;
+  height: 8rem;
   font-size: 0;
   line-height: 0;
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   padding: 0;
-  box-shadow: none;
-
-  &:hover {
-    background-color: transparent;
-  }
+  transition: transform .15s ease-in-out;
+  border: none;
 
   &:focus {
     outline: none;
-    box-shadow: none;
   }
 }
 
 .slick-prev {
-  left: 0;
+  background: url('/assets/img/ui/carousel-arrow.svg') no-repeat center/contain;
+  left: 2rem;
+  transform: translateY(-50%);
+
+  &:hover {
+    transform: translateY(-50%) scale(1.15);
+  }
 }
 
 .slick-next {
+  background: url('/assets/img/ui/carousel-arrow.svg') no-repeat center/contain;
   right: 0;
+  transform: translateY(-50%) rotate(.5turn);
+
+  &:hover {
+    transform: translateY(-50%) rotate(.5turn) scale(1.15);
+  }
 }

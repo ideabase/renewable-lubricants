@@ -127,9 +127,13 @@
 
 .testimonial-quote {
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.testimonial-see-more {
+  align-self: flex-start;
 }
 
 .testimonial-author {

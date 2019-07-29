@@ -67,7 +67,7 @@
             </select>
         </div>
             {% if product.hasUnlimitedStock or (product.hasUnlimitedStock == false and product.totalStock > 0 ) %}
-              <button type="submit">{{ "Add to cart"|t }}</button>
+              <button class="button" type="submit">{{ "Add to cart"|t }}</button>
             {% else %}
               {{ "Out of Stock"|t }}
             {% endif %}
