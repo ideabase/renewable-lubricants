@@ -17,13 +17,13 @@ module.exports = function(grunt) {
     criticalcss: {
       custom: {
         options: {
-          url: "LOCAL URL",
-                width: 1200,
-                height: 900,
-                outputfile: "assets/css/critical.css",
-                filename: "assets/css/style.css", // Using path.resolve( path.join( ... ) ) is a good idea here
-                buffer: 800*1024,
-                ignoreConsole: false
+          url: "http://renew.web/",
+          width: 1200,
+          height: 900,
+          outputfile: "assets/css/critical.css",
+          filename: "assets/css/style.css",
+          buffer: 800*1024,
+          ignoreConsole: false
         }
       }
     },
@@ -34,22 +34,23 @@ module.exports = function(grunt) {
         }
       }
     },
-    autoprefixer: {
-      your_target: {
-        files: {
-          'assets/css/style.css': 'assets/css/style.css'
-        }
+    postcss: {
+      options: {
+        map: false,
+        processors: [
+          require('pixrem')(),
+          require('autoprefixer')(),
+          require('cssnano')()
+        ]
       },
-    },
-    shell: {
-      patternlab: {
-        command: "php lab/core/console -gp"
-      }
+      dist: {
+        src: 'assets/css/style.css'
+      },
     },
     watch: {
       css: {
 				files: '**/*.scss',
-				tasks: ['sass', 'autoprefixer'],
+				tasks: ['sass', 'postcss'],
         options: {
           livereload: true,
         },
@@ -60,28 +61,19 @@ module.exports = function(grunt) {
         options: {
           livereload: true,
         },
-			},
-      html: {
-        files: ['lab/source/_patterns/**/*.mustache', 'lab/source/_patterns/**/*.md',  'lab/source/**/*.json'],
-        tasks: ['shell:patternlab'],
-        options: {
-          spawn: false,
-          livereload: true
-        }
-      }
+			}
     }
   });
 
   // Plugins
-  grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-postcss');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-criticalcss');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-shell');
 
   // Tasks
-  grunt.registerTask('default', ['watch', 'shell:patternlab']);
+  grunt.registerTask('default', ['watch']);
   grunt.registerTask('critical', ['criticalcss']);
 };

@@ -32,7 +32,7 @@
       <h1>Testimonials</h1>
     </div>
     <div class="testimonials-container">
-      {% for testimonial in craft.entries.section('testimonials').limit(3).all() %}
+      {% for testimonial in craft.entries.section('testimonials').orderBy('RAND()').limit(3).all() %}
 
         <div class="testimonial">
           <img src="{{ testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{ testimonial.productImage.one().title }}">

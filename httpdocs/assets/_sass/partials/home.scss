@@ -84,6 +84,27 @@
 .testimonial {
   flex: auto;
   position: relative;
+
+  @media screen and (min-width: $bp-xl) {
+    &:hover {
+      .testimonial-text-wrapper {
+        @include slant('bl', 'center', transparentize($color-yellow, .1), $color-black, .5rem, 16rem, 5rem, .5rem);
+        position: absolute;
+      }
+
+      .testimonial-quote {
+        -webkit-line-clamp: 7;
+      }
+
+      .testimonial-author {
+        -webkit-line-clamp: 1;
+      }
+
+      .testimonial-company {
+        -webkit-line-clamp: 2;
+      }
+    }
+  }
 }
 
 .testimonial-text-wrapper {
@@ -97,6 +118,7 @@
   padding: $padding;
   width: calc(100% - 2 * #{$padding});
   height: calc(100% - 2 * #{$padding});
+  transition: all .15s linear; // for testimonial hover transition
 
   @media screen and (min-width: $bp-md) {
     background-color: unset;
@@ -118,6 +140,7 @@
     flex-direction: column;
     align-items: flex-end;
     height: 100%;
+    transition: all .15s linear; // for testimonial hover transition
 
     @media screen and (min-width: $bp-md) {
       height: $height - 2 * $padding;
@@ -125,28 +148,27 @@
   }
 }
 
-.testimonial-quote {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+// clamp line overflow in testimonial
+@media screen and (min-width: $bp-md) {
+  .testimonial-quote {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-.testimonial-see-more {
-  align-self: flex-start;
-}
+  .testimonial-author {
+    text-transform: uppercase;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-.testimonial-author {
-  text-transform: uppercase;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.testimonial-company {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  .testimonial-company {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
