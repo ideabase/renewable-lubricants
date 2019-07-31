@@ -3885,6 +3885,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'craft\\console\\controllers\\SetupController' => __DIR__ . '/..' . '/craftcms/cms/src/console/controllers/SetupController.php',
         'craft\\console\\controllers\\TestsController' => __DIR__ . '/..' . '/craftcms/cms/src/console/controllers/TestsController.php',
         'craft\\console\\controllers\\UpdateController' => __DIR__ . '/..' . '/craftcms/cms/src/console/controllers/UpdateController.php',
+        'craft\\console\\controllers\\utils\\FixElementUidsController' => __DIR__ . '/..' . '/craftcms/cms/src/console/controllers/utils/FixElementUidsController.php',
         'craft\\contactform\\Mailer' => __DIR__ . '/..' . '/craftcms/contact-form/src/Mailer.php',
         'craft\\contactform\\Plugin' => __DIR__ . '/..' . '/craftcms/contact-form/src/Plugin.php',
         'craft\\contactform\\controllers\\SendController' => __DIR__ . '/..' . '/craftcms/contact-form/src/controllers/SendController.php',

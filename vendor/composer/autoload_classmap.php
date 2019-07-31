@@ -3258,6 +3258,7 @@ return array(
     'craft\\console\\controllers\\SetupController' => $vendorDir . '/craftcms/cms/src/console/controllers/SetupController.php',
     'craft\\console\\controllers\\TestsController' => $vendorDir . '/craftcms/cms/src/console/controllers/TestsController.php',
     'craft\\console\\controllers\\UpdateController' => $vendorDir . '/craftcms/cms/src/console/controllers/UpdateController.php',
+    'craft\\console\\controllers\\utils\\FixElementUidsController' => $vendorDir . '/craftcms/cms/src/console/controllers/utils/FixElementUidsController.php',
     'craft\\contactform\\Mailer' => $vendorDir . '/craftcms/contact-form/src/Mailer.php',
     'craft\\contactform\\Plugin' => $vendorDir . '/craftcms/contact-form/src/Plugin.php',
     'craft\\contactform\\controllers\\SendController' => $vendorDir . '/craftcms/contact-form/src/controllers/SendController.php',

@@ -26,6 +26,14 @@ $('.featured-container').slick({
   infinite: true,
   slidesToShow: 3,
   swipeToSlide: true,
+  responsive: [
+    {
+      breakpoint: 700,
+      settings: {
+        slidesToShow: 1,
+      }
+    },
+  ],
 });
 
 {% endjs %}

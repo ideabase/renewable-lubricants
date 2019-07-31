@@ -41,6 +41,20 @@
   }
 }
 
+.home-title-span {
+  display: none;
+
+  @media screen and (min-width: 750px) {
+    display: unset;
+  }
+}
+
+.home-title-br {
+  @media screen and (min-width: 750px) {
+    display: none;
+  }
+}
+
 .home-body {
   text-align: center;
   margin-bottom: 3rem;
@@ -53,8 +67,15 @@
 
 .testimonials {
   img {
-    display: block;
+    display: none;
     width: 100%;
+
+    visibility: hidden;
+
+    @media screen and (min-width: 700px) {
+      display: block;
+      visibility: unset;
+    }
   }
 
   a:hover {
@@ -76,7 +97,7 @@
   display: flex;
   flex-direction: column;
 
-  @media screen and (min-width: 400px) {
+  @media screen and (min-width: 700px) {
     flex-direction: row;
   }
 }
@@ -84,6 +105,24 @@
 .testimonial {
   flex: auto;
   position: relative;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &:first-child {
+    margin-top: 1rem;
+  }
+
+  @media screen and (min-width: 700px) {
+    &:not(:last-child) {
+      margin-bottom: unset;
+    }
+
+    &:first-child {
+      margin-top: unset
+    }
+  }
 
   @media screen and (min-width: $bp-xl) {
     &:hover {
@@ -112,15 +151,22 @@
   $width: $height / 2;
   $padding: .5rem;
   background-color: transparentize($color-yellow, .1);
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: static;
   padding: $padding;
-  width: calc(100% - 2 * #{$padding});
-  height: calc(100% - 2 * #{$padding});
-  transition: all .15s linear; // for testimonial hover transition
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: $bp-xl) {
+    transition: all .15s linear; // for testimonial hover transition
+  }
+
+  @media screen and (min-width: 700px) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 2 * #{$padding});
+    height: calc(100% - 2 * #{$padding});
+  }
+
+  @media screen and (min-width: $bp-lg) {
     background-color: unset;
     @include slant('bl', 'center', transparentize($color-yellow, .1), $color-black, $padding, $height, $width, $padding);
     position: absolute;
@@ -140,16 +186,19 @@
     flex-direction: column;
     align-items: flex-end;
     height: 100%;
-    transition: all .15s linear; // for testimonial hover transition
 
-    @media screen and (min-width: $bp-md) {
+    @media screen and (min-width: $bp-lg) {
       height: $height - 2 * $padding;
+    }
+
+    @media screen and (min-width: $bp-xl) {
+      transition: all .15s linear; // for testimonial hover transition
     }
   }
 }
 
 // clamp line overflow in testimonial
-@media screen and (min-width: $bp-md) {
+@media screen and (min-width: 700px) {
   .testimonial-quote {
     display: -webkit-box;
     -webkit-line-clamp: 4;
