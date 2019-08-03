@@ -91,6 +91,14 @@
       margin-bottom: auto;
     }
   }
+
+  .h1-wrapper-bottom {
+    margin-bottom: 1rem;
+
+    @media screen and (min-width: 700px) {
+      margin-bottom: unset;
+    }
+  }
 }
 
 .testimonials-container {
@@ -110,17 +118,9 @@
     margin-bottom: 1rem;
   }
 
-  &:first-child {
-    margin-top: 1rem;
-  }
-
   @media screen and (min-width: 700px) {
     &:not(:last-child) {
       margin-bottom: unset;
-    }
-
-    &:first-child {
-      margin-top: unset
     }
   }
 

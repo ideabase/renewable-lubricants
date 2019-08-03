@@ -4,7 +4,19 @@
   margin-bottom: 3rem;
 
   img {
-    width: 200px;
+    width: 100px;
+
+    @media screen and (min-width: 700px) {
+      width: calc(200px * 2 / 3);
+    }
+
+    @media screen and (min-width: 900px) {
+      width: calc(250px * 2 / 3);
+    }
+
+    @media screen and (min-width: 1100px) {
+      width: 200px;
+    }
   }
 
   .h1-wrapper-top {
@@ -14,6 +26,7 @@
 
 .featured-container {
   justify-content: center;
+  align-items: center;
 }
 
 .featured-link {
@@ -32,11 +45,23 @@
 
 // visible carousel view
 .slick-list {
-  max-width: 950px;
+  max-width: 60%;
+
+  @media screen and (min-width: 600px) {
+    max-width: 80%;
+  }
 }
 
 .slick-track {
-  height: calc(300px + 8rem);
+  height: 300px;
+
+  @media screen and (min-width: 900px) {
+    height: calc(300px + 4rem);
+  }
+
+  @media screen and (min-width: 1100px) {
+    height: calc(300px + 8rem);
+  }
 }
 
 .slick-list .slick-slide {
@@ -58,7 +83,19 @@
 
 .slick-center {
   img {
-    width: 300px;
+    width: 150px;
+
+    @media screen and (min-width: 700px) {
+      width: 200px;
+    }
+
+    @media screen and (min-width: 900px) {
+      width: 250px;
+    }
+
+    @media screen and (min-width: 1100px) {
+      width: 300px;
+    }
   }
 
   .featured-title {
@@ -69,14 +106,13 @@
 // carousel navigation buttons
 .slick-prev, .slick-next {
   width: 5rem;
-  height: 8rem;
+  height: 7rem;
   font-size: 0;
   line-height: 0;
-  position: absolute;
-  top: 50%;
   padding: 0;
   transition: transform .15s ease-in-out;
   border: none;
+  cursor: pointer;
 
   &:focus {
     outline: none;
@@ -84,21 +120,20 @@
 }
 
 .slick-prev {
+  margin: 0 1rem 0 2rem;
   background: url('/assets/img/ui/carousel-arrow.svg') no-repeat center/contain;
-  left: 2rem;
-  transform: translateY(-50%);
 
   &:hover {
-    transform: translateY(-50%) scale(1.15);
+    transform: scale(1.15);
   }
 }
 
 .slick-next {
+  margin: 0 2rem 0 1rem;
   background: url('/assets/img/ui/carousel-arrow.svg') no-repeat center/contain;
-  right: 0;
-  transform: translateY(-50%) rotate(.5turn);
+  transform: rotate(.5turn);
 
   &:hover {
-    transform: translateY(-50%) rotate(.5turn) scale(1.15);
+    transform:rotate(.5turn) scale(1.15);
   }
 }
