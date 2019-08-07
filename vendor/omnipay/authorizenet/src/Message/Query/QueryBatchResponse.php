@@ -2,11 +2,8 @@
 
 namespace Omnipay\AuthorizeNet\Message\Query;
 
-use Omnipay\AuthorizeNet\Model\CardReference;
-use Omnipay\AuthorizeNet\Model\TransactionReference;
 use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractRequest;
-use Omnipay\Common\Message\AbstractResponse;
 
 /**
  * Authorize.Net AIM Response
@@ -14,14 +11,19 @@ use Omnipay\Common\Message\AbstractResponse;
 class QueryBatchResponse extends AbstractQueryResponse
 {
     /**
-     * For Error codes: @see https://developer.authorize.net/api/reference/responseCodes.html
+     * For Error codes: @see
+     * https://developer.authorize.net/api/reference/responseCodes.html
      */
     const ERROR_RESPONSE_CODE_CANNOT_ISSUE_CREDIT = 54;
 
     public function __construct(AbstractRequest $request, $data)
     {
-        // Strip out the xmlns junk so that PHP can parse the XML
-        $xml = preg_replace('/<getSettledBatchListRequest[^>]+>/', '<getSettledBatchListRequest>', (string)$data);
+        // Strip out the xmlns junk so that PHP can parse the XML.
+        $xml = preg_replace(
+            '/<getSettledBatchListRequest[^>]+>/',
+            '<getSettledBatchListRequest>',
+            (string)$data
+        );
 
         try {
             $xml = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOWARNING);
@@ -49,7 +51,6 @@ class QueryBatchResponse extends AbstractQueryResponse
 
     public function getData()
     {
-        $result = $this->xml2array($this->data->batchList, true);
-        return $result['batchList'][0]['batch'];
+        return $this->xml2array($this->data->batchList, true)['batch'];
     }
 }

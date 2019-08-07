@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<section class="distributors-map">
+<div class="distributors-map">
   <div class="h1-wrapper-top">
     <h1>Our Global Partners</h1>
   </div>
@@ -25,9 +25,9 @@
   } %}
 
   {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
-</section>
+</div>
 
-<section class="distributors-network">
+<div class="distributors-network">
   <div class="distributors-network-h1-wrapper">
     <h1>Our Distribution Network</h1>
   </div>
@@ -37,36 +37,40 @@
 
   {% for distrib in distributors.all() %}
     <div class="distributors-accordion">
-      <input type="radio" name="tabs">
+      <input type="radio" name="distributors-radio">
       <label>{{ distrib.title }}</label>
-      <div class="distributors-content">
-        <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="distributors-img">
-        {% if distrib.body|length %}
-          <p>{{ distrib.body }}</p>
-        {% endif %}
+      <div class="distributors-content-container">
+        <div class="distributors-content">
+          <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="distributors-img">
+          {% if distrib.body|length %}
+            <div class="distributors-body">
+              {{ distrib.body }}
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   {% endfor %}
 
   {% endcache %}
-</section>
+</div>
 
 {% endblock %}
 
 {% js %}
 
 {# accordion toggle #}
-$(".distributors-accordion label").on('click', function() {
-	// toggle accordion content
+$('.distributors-accordion label').on('click', function() {
+	{# toggle accordion content #}
 	$(this).next().slideToggle('fast');
 
-	// set checkbox to checked
+  {# set checkbox to checked #}
 	$(this).prev().prop('checked')
 		? $(this).prev().prop('checked', false)
 		: $(this).prev().prop('checked', true);
 
-	// close other accordions' content
-	$(".accordion-content").not($(this).next()).slideUp('fast');
+	{# close other accordions' content #}
+	$('.distributors-content-container').not($(this).next()).slideUp('fast');
 });
 
 {% endjs %}

@@ -2,11 +2,8 @@
 
 namespace Omnipay\AuthorizeNet\Message\Query;
 
-use Omnipay\AuthorizeNet\Model\CardReference;
-use Omnipay\AuthorizeNet\Model\TransactionReference;
 use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractRequest;
-use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Omnipay;
 
 /**
@@ -32,8 +29,7 @@ class QueryDetailResponse extends AbstractQueryResponse
         }
 
         parent::__construct($request, $xml);
-        $result = $this->xml2array($this->data->transaction, true);
-        $this->transaction = $result['transaction'][0];
+        $this->transaction = $this->xml2array($this->data->transaction, true);
     }
 
     public function isSuccessful()
@@ -147,8 +143,6 @@ class QueryDetailResponse extends AbstractQueryResponse
             $this->planResponse = $gateway->paymentPlanQuery($data)->send();
         }
         return $this->planResponse->getContactReference();
-
-
     }
 
     /**

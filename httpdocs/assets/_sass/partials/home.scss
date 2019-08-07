@@ -197,6 +197,11 @@
   }
 }
 
+.testimonial-author {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 // clamp line overflow in testimonial
 @media screen and (min-width: 700px) {
   .testimonial-quote {
@@ -207,7 +212,6 @@
   }
 
   .testimonial-author {
-    text-transform: uppercase;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;

@@ -55,25 +55,41 @@
     }
   }
 
-  input:checked + .accordion-content {
-    max-height: 100vh;
-  }
-
   input:checked + label::before {
     transform: rotate(360deg);
     content: '-';
   }
+
+  &:last-child .distributors-content {
+    padding-bottom: 0;
+  }
+}
+
+.distributors-content-container {
+  display: none;
 }
 
 .distributors-content {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 1em;
-  background: #fff;
   font-family: $font-josefin-sans;
-  transition: max-height .35s;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  @media screen and (min-width: 700px) {
+    flex-direction: row;
+  }
 }
 
 .distributors-img {
-  margin-top: 1.5em;
+  flex-shrink: 0;
   width: 150px;
+
+  @media screen and (min-width: 700px) {
+    margin-right: 2rem;
+  }
 }

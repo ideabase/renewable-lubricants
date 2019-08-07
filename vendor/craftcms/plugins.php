@@ -37,25 +37,6 @@ return array (
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
   ),
-  'digital-pros/commerce-authorize' => 
-  array (
-    'class' => 'digitalpros\\commerce\\authorize\\Plugin',
-    'basePath' => $vendorDir . '/digital-pros/commerce-authorize/src',
-    'handle' => 'commerce-authorize',
-    'aliases' => 
-    array (
-      '@digitalpros/commerce/authorize' => $vendorDir . '/digital-pros/commerce-authorize/src',
-    ),
-    'name' => 'Authorize.net for Craft Commerce',
-    'version' => '1.0.3',
-    'description' => 'Authorize.net payment gateway plugin for Craft Commerce 2',
-    'developer' => 'Digital Pros',
-    'developerUrl' => 'https://digitalpros.co/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/digitalpros/commerce-authorize',
-    'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
-    'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
-  ),
   'rias/craft-contact-form-extensions' => 
   array (
     'class' => 'rias\\contactformextensions\\ContactFormExtensions',
@@ -117,5 +98,24 @@ return array (
     'developerUrl' => 'https://craftcommerce.com',
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
+  ),
+  'digital-pros/commerce-authorize' => 
+  array (
+    'class' => 'digitalpros\\commerce\\authorize\\Plugin',
+    'basePath' => $vendorDir . '/digital-pros/commerce-authorize/src',
+    'handle' => 'commerce-authorize',
+    'aliases' => 
+    array (
+      '@digitalpros/commerce/authorize' => $vendorDir . '/digital-pros/commerce-authorize/src',
+    ),
+    'name' => 'Authorize.net for Craft Commerce',
+    'version' => '1.0.7',
+    'description' => 'Authorize.net payment gateway plugin for Craft Commerce 2',
+    'developer' => 'Digital Pros',
+    'developerUrl' => 'https://digitalpros.co/',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://github.com/digitalpros/commerce-authorize',
+    'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
+    'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
   ),
 );

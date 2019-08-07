@@ -2,9 +2,6 @@
 
 namespace Omnipay\AuthorizeNet\Message\Query;
 
-use Omnipay\AuthorizeNet\Model\CardReference;
-use Omnipay\AuthorizeNet\Model\TransactionReference;
-use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Omnipay;
@@ -27,6 +24,8 @@ abstract class AbstractQueryResponse extends AbstractResponse
      */
     public function xml2array(\SimpleXMLElement $xml)
     {
+        return json_decode(json_encode($xml), true);
+
         $arr = array();
         foreach ($xml as $element) {
             $tag = $element->getName();
