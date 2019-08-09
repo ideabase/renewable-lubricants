@@ -1,4 +1,9 @@
-{# javascript links go here #}
+{# scripts to be added to the end of the body to defer loading #}
+
+{# add grunt-contrib-watch live reload script if in dev mode #}
+{% if craft.app.config.general.devMode %}
+  <script src="//localhost:35729/livereload.js"></script>
+{% endif %}
 
 {# jquery min #}
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -7,4 +12,4 @@
 <script src="{{ url('assets/js/min/scripts.js') }}"></script>
 
 {# carousel script, must be after jquery #}
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
