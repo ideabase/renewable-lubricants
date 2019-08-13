@@ -1,11 +1,11 @@
 <div class="address-fieldset {{ class }}">
   <h2>{{ title }}</h2>
-  {% if addresses and currentUser%}
+  {% if addresses and currentUser %}
     {% for address in addresses %}
       <div class="address-select" data-address-id="{{ address.id }}">
         <div class="actions">
           <ul>
-            <li><a class="edit" href="{{ url('shop/customer/addresses/edit?addressId='~ address.id ~'&redirect='~craft.app.request.fullPath)}}">Edit</a>
+            <li><a class="edit" href="{{ url('shop/customer/addresses/edit?addressId='~ address.id ~'&redirect='~craft.app.request.fullPath) }}">Edit</a>
             </li>
           </ul>
         </div>

@@ -42,7 +42,7 @@
             <select id="paymentCurrency" name="paymentCurrency"
                 class="form-control">
               {% for currency in currencies %}
-                <option value="{{ currency.iso }}" {% if currency.iso == cart.paymentCurrency %}selected{% endif %}>{{ currency.name }} {{  currency.iso }} - {{ cart.totalPrice|commerceCurrency(currency.iso,convert=true) }}</option>
+                <option value="{{ currency.iso }}" {% if currency.iso == cart.paymentCurrency %}selected{% endif %}>{{ currency.name }} {{ currency.iso }} - {{ cart.totalPrice|commerceCurrency(currency.iso,convert=true) }}</option>
               {% endfor %}
             </select>
           {% endif %}

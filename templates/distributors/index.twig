@@ -12,16 +12,16 @@
   </div>
 
   {% set options = {
-    markerInfo: '_includes/info-bubble',
-    height: 300,
+    markerInfo: '_includes/distributors-info-bubble',
+    height: 500,
     zoom: 4,
     draggable: true,
     markerOptions: {
       icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
     },
     infoWindowOptions: {
-      maxWidth: 200
-    },
+      maxWidth: 500
+    }
   } %}
 
   {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}

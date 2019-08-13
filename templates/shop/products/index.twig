@@ -9,7 +9,7 @@
 
     <ul id="product-categories">
       <li>
-        <input type="radio" name="radio-category" class="radio" id="radio-all" checked>{{'Show All'}}</input>
+        <input type="radio" name="radio-category" class="radio" id="radio-all" checked>{{ 'Show All' }}</input>
       </li>
       {% for category in craft.categories.group('productCategories').orderBy('title').all() %}
         <li>
@@ -52,13 +52,13 @@
             {{ csrfInput() }}
         <div id="select-product">
             <select name="purchasableId" class="purchasableId">
-              {%- for purchasable in product.getVariants() -%}
+              {% - for purchasable in product.getVariants() - %}
                 <option {% if not purchasable.isAvailable %}disabled {% endif %}
                   data-info="product-{{ product.id }}-purchasable-{{ purchasable.id }}"
                   value="{{ purchasable.id }}">
                   {{ purchasable.description }} {{ purchasable.salePrice|commerceCurrency(cart.currency) }}
                 </option>
-              {%- endfor -%}
+              {% - endfor - %}
             </select>
 
             <select name="options[giftWrapped]">
@@ -80,18 +80,18 @@
             {% endif %}
           {% endif %}
 
-          {%- for purchasable in product.getVariants() -%}
+          {% - for purchasable in product.getVariants() - %}
             <div id="product-{{ product.id }}-purchasable-{{ purchasable.id }}" class="purchasableInfo" style="display:none;">
               <strong>Regular Price: </strong><strike>{{ purchasable.price|commerceCurrency(cart.currency) }}</strike><br>
               <strong>Now: </strong>{{ purchasable.salePrice|commerceCurrency(cart.currency) }}<br>
               {% if purchasable.sales %}<strong>Sales Applied:</strong><br>{% endif %}
               <ul>
-                {% for sale in purchasable.sales  %}
+                {% for sale in purchasable.sales %}
                 <li><strong>{{ sale.name }}</strong> {{ sale.description }}</li>
                 {% endfor %}
               </ul>
             </div>
-          {%- endfor -%}
+          {% - endfor - %}
 
         {% endif %}
       </div>

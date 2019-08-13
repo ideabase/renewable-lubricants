@@ -1,0 +1,12 @@
+<h4>{{ element.title }}</h4>
+<div class="distributors-address">
+  {{ element.addressMap.street1 }}<br>
+  {{ element.addressMap.city }}, {{ element.addressMap.state }} {{ element.addressMap.zip }}
+</div>
+{% if element.phoneNumber|length and element.webUrl|length %}
+  <br>
+  <div>
+    {{ element.phoneNumber }}<br>
+    <a href="{{ element.webUrl }}">Website</a>
+  </div>
+{% endif %}

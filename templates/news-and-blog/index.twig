@@ -25,9 +25,9 @@
       <div id="two">
         {% if entry.imageDescription | length > 50 %}
           <p>{{ entry.imageDescription | slice(0,50) }}</p>
-          <a href="{{entry.url}}">Read More…</a>
+          <a href="{{ entry.url }}">Read More…</a>
         {% else %}
-          <p>{{ entry.imageDescription}}</p>
+          <p>{{ entry.imageDescription }}</p>
       </div>
         {% endif %}
 
@@ -58,9 +58,9 @@
       <div id="two">
         {% if entry.imageDescription | length > 50 %}
           <p>{{ entry.imageDescription | slice(0,50) }}</p>
-          <a href="{{entry.url}}"> Read More…</a>
+          <a href="{{ entry.url }}"> Read More…</a>
         {% else %}
-            <p>{{ entry.imageDescription}}</p>
+            <p>{{ entry.imageDescription }}</p>
       </div>
         {% endif %}
 

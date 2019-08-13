@@ -1,26 +1,24 @@
 <header>
   <div class="flex header-top-row">
     {# header image #}
-    <a href="{{ url() }}">
+    <a class="header-img-a" href="{{ url() }}">
       <img class="header-img" src="{{ header.logo.one().getUrl() }}">
     </a>
 
-    <div class="flex header-info-right">
-      <span class="header-info-tel">+1-800-837-LUBE</span>
+    <span class="header-info-tel">+1-800-837-LUBE</span>
 
-      {% set cartItemCount = cart.totalQty ?? 0 %}
-      {% set cartItemTotal = cart.itemTotal ?? 0 %}
-      {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
-        <a class="header-cart-wrapper" href="{{ url('shop/cart') }}">
-          <div class="flex header-cart">
-            <span>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</span>
-              <div>
-                <span>View Cart{# TODO: cart icon #}</span>
-              </div>
-          </div>
-        </a>
-      {% endif %}
-    </div>
+    {% set cartItemCount = cart.totalQty ?? 0 %}
+    {% set cartItemTotal = cart.itemTotal ?? 0 %}
+    {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+      <a class="header-cart-wrapper" href="{{ url('shop/cart') }}">
+        <div class="flex header-cart">
+          <span>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</span>
+            <div>
+              <span>View Cart{# TODO: cart icon #}</span>
+            </div>
+        </div>
+      </a>
+    {% endif %}
   </div>
 
   {# top nav #}
