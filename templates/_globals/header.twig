@@ -21,6 +21,10 @@
     {% endif %}
   </div>
 
+  {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+    <div class="header-cart-ext"></div>
+  {% endif %}
+
   {# top nav #}
   <nav>
     <ul class="flex">
@@ -48,4 +52,6 @@
       <li><a href="{{ url('contact') }}">Contact</a></li>
     </ul>
   </div>
+
+  <div class="header-nav-ext"></div>
 </header>

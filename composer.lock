@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ceb0b7b0d05dabac7d6cb89dffafccc9",
+    "content-hash": "d1022fbf994c930b9cd73b190be82c5a",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -462,16 +462,16 @@
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.1.11",
+            "version": "2.1.12.1",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/f17c5e3153d5e18569cbfb2afbeb39b0fb4bd66b",
-                "reference": "f17c5e3153d5e18569cbfb2afbeb39b0fb4bd66b",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/93f18ef6aab6fda7e7a42075681fe217068df171",
+                "reference": "93f18ef6aab6fda7e7a42075681fe217068df171",
                 "shasum": ""
             },
             "require": {
                 "craftcms/cms": "^3.1.20",
-                "dompdf/dompdf": "~0.8.2",
+                "dompdf/dompdf": "~0.8.3",
                 "ibericode/vat": "^1.1.2",
                 "moneyphp/money": "^3.1.3",
                 "phpoffice/phpspreadsheet": "^1.4"
@@ -508,7 +508,7 @@
                 "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2019-08-09T15:08:50+00:00"
+            "time": "2019-08-23T16:27:55+00:00"
         },
         {
             "name": "craftcms/commerce-omnipay",

@@ -3407,6 +3407,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'craft\\commerce\\migrations\\m190301_161406_unique_sku_constraint_in_app' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190301_161406_unique_sku_constraint_in_app.php',
         'craft\\commerce\\migrations\\m190311_161910_order_total' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190311_161910_order_total.php',
         'craft\\commerce\\migrations\\m190322_161911_register_on_checkout' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190322_161911_register_on_checkout.php',
+        'craft\\commerce\\migrations\\m190821_150226_discount_purchaseTotal_update' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190821_150226_discount_purchaseTotal_update.php',
         'craft\\commerce\\models\\Address' => __DIR__ . '/..' . '/craftcms/commerce/src/models/Address.php',
         'craft\\commerce\\models\\Country' => __DIR__ . '/..' . '/craftcms/commerce/src/models/Country.php',
         'craft\\commerce\\models\\Currency' => __DIR__ . '/..' . '/craftcms/commerce/src/models/Currency.php',

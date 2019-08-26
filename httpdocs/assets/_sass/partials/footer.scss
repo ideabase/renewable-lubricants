@@ -35,7 +35,16 @@
   }
 }
 
+.footer-container-outer {
+  position: relative;
+}
+
 .footer-container {
+  max-width: $bp-xl;
+  margin: 0 auto;
+}
+
+.footer-container-inner {
   max-width: $bp-lg;
 }
 
@@ -61,7 +70,7 @@
     background-color: $color-yellow;
 
     @media screen and (min-width: $bp-md) {
-      background-color: unset;
+      background-color: initial;
       @include slant('br', 'right', $color-yellow, $color-black, 1rem, $slant-length);
     }
   }
@@ -69,7 +78,6 @@
 
 form[name='newsletter-form'] {
   padding: 1rem 0;
-  // flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -169,4 +177,49 @@ form[name='newsletter-form'] {
 
 .footer-social-icon {
   width: 35px;
+}
+
+.footer-newsletter-ext {
+  display: none;
+
+  @media screen and (min-width: $bp-xl) {
+    display: unset;
+    position: absolute;
+    bottom: 14rem;
+    left: 0;
+    background-color: $color-yellow;
+    height: 4rem;
+    width: 40%;
+    z-index: -1;
+  }
+}
+
+.footer-info-ext {
+  display: none;
+
+  @media screen and (min-width: $bp-xl) {
+    display: unset;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: $color-gray;
+    height: 12rem;
+    width: 40%;
+    z-index: -1;
+  }
+}
+
+.products-search-ext {
+  display: none;
+
+  @media screen and (min-width: $bp-xl) {
+    display: unset;
+    position: absolute;
+    top: 1rem;
+    right: 0;
+    background-color: $color-green-dark;
+    height: 4rem;
+    width: 40%;
+    z-index: -1;
+  }
 }

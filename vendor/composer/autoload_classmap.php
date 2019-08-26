@@ -2762,6 +2762,7 @@ return array(
     'craft\\commerce\\migrations\\m190301_161406_unique_sku_constraint_in_app' => $vendorDir . '/craftcms/commerce/src/migrations/m190301_161406_unique_sku_constraint_in_app.php',
     'craft\\commerce\\migrations\\m190311_161910_order_total' => $vendorDir . '/craftcms/commerce/src/migrations/m190311_161910_order_total.php',
     'craft\\commerce\\migrations\\m190322_161911_register_on_checkout' => $vendorDir . '/craftcms/commerce/src/migrations/m190322_161911_register_on_checkout.php',
+    'craft\\commerce\\migrations\\m190821_150226_discount_purchaseTotal_update' => $vendorDir . '/craftcms/commerce/src/migrations/m190821_150226_discount_purchaseTotal_update.php',
     'craft\\commerce\\models\\Address' => $vendorDir . '/craftcms/commerce/src/models/Address.php',
     'craft\\commerce\\models\\Country' => $vendorDir . '/craftcms/commerce/src/models/Country.php',
     'craft\\commerce\\models\\Currency' => $vendorDir . '/craftcms/commerce/src/models/Currency.php',

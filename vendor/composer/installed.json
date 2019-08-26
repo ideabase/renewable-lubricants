@@ -471,22 +471,22 @@
     },
     {
         "name": "craftcms/commerce",
-        "version": "2.1.11",
-        "version_normalized": "2.1.11.0",
+        "version": "2.1.12.1",
+        "version_normalized": "2.1.12.1",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/commerce/zipball/f17c5e3153d5e18569cbfb2afbeb39b0fb4bd66b",
-            "reference": "f17c5e3153d5e18569cbfb2afbeb39b0fb4bd66b",
+            "url": "https://api.github.com/repos/craftcms/commerce/zipball/93f18ef6aab6fda7e7a42075681fe217068df171",
+            "reference": "93f18ef6aab6fda7e7a42075681fe217068df171",
             "shasum": ""
         },
         "require": {
             "craftcms/cms": "^3.1.20",
-            "dompdf/dompdf": "~0.8.2",
+            "dompdf/dompdf": "~0.8.3",
             "ibericode/vat": "^1.1.2",
             "moneyphp/money": "^3.1.3",
             "phpoffice/phpspreadsheet": "^1.4"
         },
-        "time": "2019-08-09T15:08:50+00:00",
+        "time": "2019-08-23T16:27:55+00:00",
         "type": "craft-plugin",
         "extra": {
             "handle": "commerce",

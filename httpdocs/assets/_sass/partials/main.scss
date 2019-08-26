@@ -10,8 +10,6 @@ body {
   box-sizing: border-box;
   font-family: $font-roboto-slab;
   color: $color-black;
-  max-width: $bp-xl;
-  margin: 0 auto;
 }
 
 .content-wrapper {
@@ -21,8 +19,10 @@ body {
 }
 
 main {
-  margin-bottom: 3rem;
+  margin: 0 auto 3rem auto;
   flex: 1 0 auto;
+  max-width: $bp-xl;
+  width: 100%;
 }
 
 p {
