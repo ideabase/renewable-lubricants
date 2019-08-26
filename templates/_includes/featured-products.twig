@@ -7,7 +7,7 @@
     {% for product in craft.products.featuredProduct(true).orderBy('RAND()').all() %}
       <div>
         <a class="featured-link" href="{{ product.url }}">
-          <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}" class="featured-product-img">
+          <img src="{{ product.productImage.one().getUrl('featuredProducts') }}" alt="{{ product.productImage.one().title }}" class="featured-product-img">
         <div class="featured-title">{{ product.title }}</div>
         </a>
       </div>

@@ -1,10 +1,16 @@
+# uploads
 httpdocs/assets/img/uploads/
 !httpdocs/assets/img/uploads/logo.png
+
+# transformed images
+httpdocs/assets/img/*/_*
+
+# backups and logs
 storage/backups/
 storage/logs/
 storage/runtime/
-vendor/composer/composer/doc/fixtures/repo-composer-with-providers/p/
 
+# common files that don't need versioning
 **/.DS_Store
 **/.sass-cache/
 **/node_modules/

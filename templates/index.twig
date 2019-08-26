@@ -6,7 +6,7 @@
 
 <div class="home-feature">
   {# feature image #}
-  <img class="feature-img" src="{{ entry.featureImage.one().getUrl() }}">
+  <img class="feature-img" src="{{ entry.featureImage.one().getUrl('featureImg') }}">
 
   {# request a quote button #}
   <div class="request-a-quote-wrapper">
@@ -35,7 +35,7 @@
       {% for testimonial in craft.entries.section('testimonials').orderBy('RAND()').limit(3).all() %}
 
         <div class="testimonial">
-          <img src="{{ testimonial.productImage.one().getUrl("testimonialImage") }}" alt="{{ testimonial.productImage.one().title }}">
+          <img src="{{ testimonial.productImage.one().getUrl('testimonialImage') }}" alt="{{ testimonial.productImage.one().title }}">
 
           <div class="testimonial-text-wrapper">
             <div class="testimonial-text">
