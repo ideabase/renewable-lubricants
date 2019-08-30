@@ -16,21 +16,37 @@
 }
 
 .distributors-network h1 {
-  margin-top: 0;
+  margin: 0;
 }
 
 .distributors-network-h1-wrapper {
-  @include slant('bl', 'center', $color-green-dark, $color-white, 1rem, 4rem);
-  max-width: $bp-lg;
-  margin: 0 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $color-green-dark;
+  color: $color-white;
+  height: 4rem;
+
+  @media screen and (min-width: $bp-md) {
+    height: unset;
+    background-color: unset;
+    @include slant('bl', 'center', $color-green-dark, $color-white, 1rem, 4rem);
+    max-width: calc(#{$bp-lg} - 4rem);
+    margin: 0 0 0 auto;
+  }
 }
 
 .distributors-accordion {
+  border-bottom: solid 2px $color-green-dark;
   position: relative;
   margin-bottom: 10px;
-  max-width: calc(#{$bp-lg} + 4rem);
-  margin: 0 0 0 auto;
+  max-width: $bp-lg;
+  margin: 0 1rem;
   color: $color-green-dark;
+
+  @media screen and (min-width: $bp-lg) {
+    margin: 0 0 0 auto;
+  }
 
   input {
     position: absolute;
@@ -40,7 +56,6 @@
 
   label {
     display: block;
-    border-bottom: solid 2px $color-green-dark;
     text-transform: uppercase;
     font-size: 1.25rem;
     font-weight: bold;

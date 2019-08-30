@@ -70,7 +70,7 @@
     background-color: $color-yellow;
 
     @media screen and (min-width: $bp-md) {
-      background-color: initial;
+      background-color: unset;
       @include slant('br', 'right', $color-yellow, $color-black, 1rem, $slant-length);
     }
   }
