@@ -35,16 +35,17 @@
   {% set distributors = craft.entries.section('distributors') %}
   {% cache %}
 
-  {% for distrib in distributors.all() %}
+  {% for distributor in distributors.all() %}
     <div class="distributors-accordion">
       <input type="radio" name="distributors-radio">
-      <label>{{ distrib.title }}</label>
+      <label>{{ distributor.title }}</label>
       <div class="distributors-content-container">
+        <p class="distributors-subtitle">{{ distributor.subtitle }}</p>
         <div class="distributors-content">
-          <img src="{{ distrib.logo.one().url }}" alt="{{ distrib.logo.one().title }}" class="distributors-img">
-          {% if distrib.body|length %}
+          <img src="{{ distributor.logo.one().url }}" alt="{{ distributor.logo.one().title }}" class="distributors-img">
+          {% if distributor.body|length %}
             <div class="distributors-body">
-              {{ distrib.body }}
+              {{ distributor.body }}
             </div>
           {% endif %}
         </div>
