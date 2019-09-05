@@ -19,15 +19,20 @@
                 <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}"> {# Remove the height and width attributes to style the images with css. #}
 
         {% endif %}
-            <div id="three">  <div id="hexshape"></div>
-              <h1>{{ entry.title }}</h1></div>
+
             </div></a>
+
+            <div id="three">
+              <div><span class="BlogTitle">{{ entry.title }}</span>
+            </div>
+              </div>
+
       <div id="two">
         {% if entry.imageDescription | length > 50 %}
-          <p>{{ entry.imageDescription | slice(0,50) }}</p>
+          <p class="BlogDescription">{{ entry.imageDescription | slice(0,50) }}</p>
           <a href="{{ entry.url }}">Read More…</a>
         {% else %}
-          <p>{{ entry.imageDescription }}</p>
+          <p class="BlogDescription">{{ entry.imageDescription }}</p>
       </div>
         {% endif %}
 
