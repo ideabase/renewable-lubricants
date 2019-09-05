@@ -54,7 +54,7 @@
 .BlogTitle{
   font-size: 20px;
   text-align: center;
-  max-width: 400px
+  max-width: 400px;
 
 }
 
@@ -75,6 +75,9 @@
 @include slant('brl', 'center', $color-yellow, $color-black, 1rem, 5rem);  }
 
   #three{
+  font-size: 20px;
+  text-align: center;
+  max-width: 400px;
   }
 }
 
