@@ -22,11 +22,12 @@
 
             </a>
 
-            <div id="three">
-              <div><span class="BlogTitle">{{ entry.title }}</span>
-            </div>
+
               </div>
+              <div id="three">
+                <div><span class="BlogTitle">{{ entry.title }}</span>
               </div>
+                </div>
       <div id="two">
         {% if entry.imageDescription | length > 50 %}
           <p class="BlogDescription">{{ entry.imageDescription | slice(0,50) }}</p>
