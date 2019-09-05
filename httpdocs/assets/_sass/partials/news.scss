@@ -74,11 +74,9 @@
   #hexshape:hover{
 @include slant('brl', 'center', $color-yellow, $color-black, 1rem, 5rem);  }
 
-  //#three{
-    //position: absolute;
-    //bottom: 0px;
-  //}
-//}
+  #three{
+  }
+}
 
 #newsparent{
   position:relative;
