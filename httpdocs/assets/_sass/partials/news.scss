@@ -15,7 +15,7 @@
 #h2news, #pnews {
 
   min-width: 60%;
-  
+
 }
 
 #pnews {
@@ -50,6 +50,15 @@
     left: 10%;
     right: 10%;
   }
+
+.BlogTitle{
+  font-size: 20px;
+  text-align: center;
+  max-width: 400px
+
+}
+
+
 
   #hexshape{
     @include slant('brl', 'center', $color-green-dark, $color-black, 1rem, 5rem);
