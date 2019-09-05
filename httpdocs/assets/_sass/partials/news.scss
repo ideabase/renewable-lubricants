@@ -15,7 +15,7 @@
 #h2news, #pnews {
 
   min-width: 60%;
-  
+
 }
 
 #pnews {
@@ -38,7 +38,7 @@
     z-index: -1;
     display:block;
     margin: 10px auto;
-    width: 100%;
+    max-width: 400px;
   }
 
   h1 {
@@ -51,6 +51,20 @@
     right: 10%;
   }
 
+.BlogTitle{
+  font-size: 20px;
+  text-align: center;
+  max-width: 400px
+
+}
+
+.BlogDescription{
+  text-align:center;
+}
+
+
+
+
   #hexshape{
     @include slant('brl', 'center', $color-green-dark, $color-black, 1rem, 5rem);
     width: 100%;
@@ -60,11 +74,11 @@
   #hexshape:hover{
 @include slant('brl', 'center', $color-yellow, $color-black, 1rem, 5rem);  }
 
-  #three{
-    position: absolute;
-    bottom: 0px;
-  }
-}
+  //#three{
+    //position: absolute;
+    //bottom: 0px;
+  //}
+//}
 
 #newsparent{
   position:relative;
