@@ -9,19 +9,19 @@
     <h1>Popular Product Categories</h1>
   </div>
 
-  <div class="flex product-categories">
+  <div class="products-categories">
 
     {% for category in craft.categories.group('productCategories').limit(8).all() %}
       <a href="{{ category.url }}">
         <img src="{{ category.productImage.one().getUrl() }}">
-        <h3 class="product-title">{{ category.title }}</h3>
+        <h3 class="products-category-title">{{ category.title }}</h3>
         <p>Learn More</p>
       </a>
     {% endfor %}
 
-    <a href="{{ url('shop/products') }}">
+    <a class="products-category-all" href="{{ url('shop/products') }}">
       <img src="{{ url('assets/img/feature-images/ViewAllProducts-Icon-07.png') }}">
-      <h3 class="product-title">View All Products</h3>
+      <h3 class="products-category-title">View All Products</h3>
       <p>Learn More</p>
     </a>
   </div>
