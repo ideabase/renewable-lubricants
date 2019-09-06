@@ -11,7 +11,7 @@
     {% for product in craft.products.relatedTo(category).all() %}
       <div class="category-product">
         <a href="{{ product.url }}">
-          <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}">
+          <img src="{{ product.productImage.one().getUrl('productImage') }}" alt="{{ product.productImage.one().title }}">
           <span>{{ product.title }}</span>
         </a>
       </div>
