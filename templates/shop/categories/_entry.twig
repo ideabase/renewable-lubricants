@@ -7,14 +7,18 @@
 </div>
 
 <div class="category-container">
-  {% for product in craft.products.relatedTo(category).all() %}
-    <div class="category-product">
-      <a href="{{ product.url }}">
-        <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}">
-        <span>{{ product.title }}</span>
-      </a>
-    </div>
-  {% endfor %}
+  {% if craft.products.relatedTo(category)|length %}
+    {% for product in craft.products.relatedTo(category).all() %}
+      <div class="category-product">
+        <a href="{{ product.url }}">
+          <img src="{{ product.productImage.one().getUrl() }}" alt="{{ product.productImage.one().title }}">
+          <span>{{ product.title }}</span>
+        </a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <h2>There are no products in this category.</h2>
+  {% endif %}
 </div>
 
 {% endblock %}

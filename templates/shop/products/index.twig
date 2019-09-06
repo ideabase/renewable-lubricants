@@ -52,13 +52,13 @@
             {{ csrfInput() }}
         <div id="select-product">
             <select name="purchasableId" class="purchasableId">
-              {% - for purchasable in product.getVariants() - %}
+              {%- for purchasable in product.getVariants() -%}
                 <option {% if not purchasable.isAvailable %}disabled {% endif %}
                   data-info="product-{{ product.id }}-purchasable-{{ purchasable.id }}"
                   value="{{ purchasable.id }}">
                   {{ purchasable.description }} {{ purchasable.salePrice|commerceCurrency(cart.currency) }}
                 </option>
-              {% - endfor - %}
+              {%- endfor -%}
             </select>
 
             <select name="options[giftWrapped]">
@@ -80,7 +80,7 @@
             {% endif %}
           {% endif %}
 
-          {% - for purchasable in product.getVariants() - %}
+          {%- for purchasable in product.getVariants() -%}
             <div id="product-{{ product.id }}-purchasable-{{ purchasable.id }}" class="purchasableInfo" style="display:none;">
               <strong>Regular Price: </strong><strike>{{ purchasable.price|commerceCurrency(cart.currency) }}</strike><br>
               <strong>Now: </strong>{{ purchasable.salePrice|commerceCurrency(cart.currency) }}<br>
@@ -91,7 +91,7 @@
                 {% endfor %}
               </ul>
             </div>
-          {% - endfor - %}
+          {%- endfor -%}
 
         {% endif %}
       </div>

@@ -138,6 +138,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'c' => 
         array (
             'creocoder\\nestedsets\\' => 21,
+            'crafttests\\fixtures\\' => 20,
             'craftcms\\oauth2\\client\\' => 23,
             'craft\\redactor\\' => 15,
             'craft\\contactform\\' => 18,
@@ -375,6 +376,10 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'creocoder\\nestedsets\\' => 
         array (
             0 => __DIR__ . '/..' . '/creocoder/yii2-nested-sets/src',
+        ),
+        'crafttests\\fixtures\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures',
         ),
         'craftcms\\oauth2\\client\\' => 
         array (
@@ -4130,6 +4135,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'craft\\gql\\base\\Resolver' => __DIR__ . '/..' . '/craftcms/cms/src/gql/base/Resolver.php',
         'craft\\gql\\base\\StructureElementArguments' => __DIR__ . '/..' . '/craftcms/cms/src/gql/base/StructureElementArguments.php',
         'craft\\gql\\directives\\FormatDateTime' => __DIR__ . '/..' . '/craftcms/cms/src/gql/directives/FormatDateTime.php',
+        'craft\\gql\\directives\\Markdown' => __DIR__ . '/..' . '/craftcms/cms/src/gql/directives/Markdown.php',
         'craft\\gql\\directives\\Transform' => __DIR__ . '/..' . '/craftcms/cms/src/gql/directives/Transform.php',
         'craft\\gql\\interfaces\\Element' => __DIR__ . '/..' . '/craftcms/cms/src/gql/interfaces/Element.php',
         'craft\\gql\\interfaces\\Structure' => __DIR__ . '/..' . '/craftcms/cms/src/gql/interfaces/Structure.php',
@@ -4735,6 +4741,23 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'craft\\widgets\\Updates' => __DIR__ . '/..' . '/craftcms/cms/src/widgets/Updates.php',
         'craftcms\\oauth2\\client\\provider\\CraftId' => __DIR__ . '/..' . '/craftcms/oauth2-craftid/src/provider/CraftId.php',
         'craftcms\\oauth2\\client\\provider\\CraftIdUser' => __DIR__ . '/..' . '/craftcms/oauth2-craftid/src/provider/CraftIdUser.php',
+        'crafttests\\fixtures\\AssetsFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/AssetsFixture.php',
+        'crafttests\\fixtures\\EntryFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/EntryFixture.php',
+        'crafttests\\fixtures\\EntryTypeFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/EntryTypeFixture.php',
+        'crafttests\\fixtures\\EntryWithFieldsFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/EntryWithFieldsFixture.php',
+        'crafttests\\fixtures\\FieldLayoutFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/FieldLayoutFixture.php',
+        'crafttests\\fixtures\\FieldsFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/FieldsFixture.php',
+        'crafttests\\fixtures\\GlobalSetFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/GlobalSetFixture.php',
+        'crafttests\\fixtures\\GqlSchemasFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/GqlSchemasFixture.php',
+        'crafttests\\fixtures\\SectionSettingFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/SectionSettingFixture.php',
+        'crafttests\\fixtures\\SectionsFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/SectionsFixture.php',
+        'crafttests\\fixtures\\SessionsFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/SessionsFixture.php',
+        'crafttests\\fixtures\\SitesFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/SitesFixture.php',
+        'crafttests\\fixtures\\TransformsFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/TransformsFixture.php',
+        'crafttests\\fixtures\\UserGroupsFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/UserGroupsFixture.php',
+        'crafttests\\fixtures\\UsersFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/UsersFixture.php',
+        'crafttests\\fixtures\\VolumesFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/VolumesFixture.php',
+        'crafttests\\fixtures\\VolumesFolderFixture' => __DIR__ . '/..' . '/craftcms/cms/tests/fixtures/VolumesFolderFixture.php',
         'creocoder\\nestedsets\\NestedSetsBehavior' => __DIR__ . '/..' . '/creocoder/yii2-nested-sets/src/NestedSetsBehavior.php',
         'creocoder\\nestedsets\\NestedSetsQueryBehavior' => __DIR__ . '/..' . '/creocoder/yii2-nested-sets/src/NestedSetsQueryBehavior.php',
         'digitalpros\\commerce\\authorize\\AuthorizePaymentBundle' => __DIR__ . '/..' . '/digital-pros/commerce-authorize/src/AuthorizePaymentBundle.php',

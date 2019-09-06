@@ -32,6 +32,7 @@ return array(
     'doublesecretagency\\smartmap\\' => array($vendorDir . '/doublesecretagency/craft-smartmap/src'),
     'digitalpros\\commerce\\authorize\\' => array($vendorDir . '/digital-pros/commerce-authorize/src'),
     'creocoder\\nestedsets\\' => array($vendorDir . '/creocoder/yii2-nested-sets/src'),
+    'crafttests\\fixtures\\' => array($vendorDir . '/craftcms/cms/tests/fixtures'),
     'craftcms\\oauth2\\client\\' => array($vendorDir . '/craftcms/oauth2-craftid/src'),
     'craft\\redactor\\' => array($vendorDir . '/craftcms/redactor/src'),
     'craft\\contactform\\' => array($vendorDir . '/craftcms/contact-form/src'),

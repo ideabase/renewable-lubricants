@@ -77,7 +77,7 @@
     <div class="field">
     <label for="username">Username</label>
     <input id="username" type="text" name="username"
-       {% - if user is defined %} value="{{ user.username }}"{% endif - %}>
+       {%- if user is defined %} value="{{ user.username }}"{% endif -%}>
 
     {% if user is defined %}
     {{ errorList(user.getErrors('username')) }}
@@ -87,8 +87,8 @@
     <div class="field">
     <label for="email">Email</label>
     <input id="email" type="text" name="email"
-       {% - if user is defined %} value="{{ user.email }}"{% endif %}
-       {% - if user is not defined and cart.email %} value="{{ cart.email }}"{% endif %}>
+       {%- if user is defined %} value="{{ user.email }}"{% endif %}
+       {%- if user is not defined and cart.email %} value="{{ cart.email }}"{% endif %}>
 
     {% if user is defined %}
     {{ errorList(user.getErrors('email')) }}
