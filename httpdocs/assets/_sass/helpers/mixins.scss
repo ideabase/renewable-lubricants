@@ -49,15 +49,10 @@
     margin: 0;
     padding: $padding-tb $padding-lr;
     $yLength: calc(-.5 * #{$h} - 50%);
-
-    @if $padding-lr != 0 {
-      width: calc(100% - 2 * #{$padding-lr});
-    } @else {
-      width: 100%;
-    }
+    width: 100%;
 
     @if $padding-tb != 0 {
-      height: calc(#{$h} - 2 * #{$padding-tb});
+      height: $h;
     }
 
     @if str-index($pos, 'b') {

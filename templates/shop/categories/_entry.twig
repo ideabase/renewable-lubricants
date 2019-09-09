@@ -10,8 +10,10 @@
   {% if craft.products.relatedTo(category)|length %}
     {% for product in craft.products.relatedTo(category).all() %}
       <div class="category-product">
-        <a href="{{ product.url }}">
+        <a class="category-image" href="{{ product.url }}">
           <img src="{{ product.productImage.one().getUrl('productImage') }}" alt="{{ product.productImage.one().title }}">
+        </a>
+        <a href="{{ product.url }}">
           <span>{{ product.title }}</span>
         </a>
       </div>

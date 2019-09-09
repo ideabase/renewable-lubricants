@@ -1,14 +1,27 @@
-<footer>
+{% if craft.app.request.segments|length %}
+  {% set slug = craft.app.request.segments[0] %}
+{% endif %}
 
+<footer>
   <div class="footer-container-outer">
-    {% if craft.app.request.segments|length and craft.app.request.segments[0] == 'shop' %} {# TODO: change to products #}
+    {% if slug is defined and slug =='distributors' %}
+      <div class="distributors-network-ext"></div>
+    {% endif %}
+
+    {% if slug is defined and slug == 'shop' %} {# TODO: change to products #}
       <div class="products-search-ext"></div>
     {% endif %}
+
     <div class="footer-newsletter-ext"></div>
     <div class="footer-info-ext"></div>
     <div class="footer-container">
+      {# inlude distributors network on distributor page #}
+      {% if slug is defined and slug == 'distributors' %}
+        {% include '_includes/distributors-network' %}
+      {% endif %}
+
       {# include product finder on shop pages #}
-      {% if craft.app.request.segments|length and craft.app.request.segments[0] == 'shop' %} {# TODO: change to products #}
+      {% if slug is defined and slug == 'shop' %} {# TODO: change to products #}
         {% include '_includes/products-search' %}
       {% endif %}
 
@@ -22,7 +35,7 @@
               <div class="footer-social">
                 <h3>Connect With Us</h3>
                   <a href="https://www.facebook.com/RenewableLubricants/">
-                    <img src="{{ url('assets/img/ui/social/dunno.svg') }}" alt="{# TODO #}" class="footer-social-icon">
+                    <img src="{{ url('assets/img/ui/social/facebook.svg') }}" alt="facebook button" class="footer-social-icon">
                   </a>
                   <a href="https://www.instagram.com/renewablelubricants/" class="button-social">
                     <img src="{{ url('assets/img/ui/social/instagram.svg') }}" alt="instagram button" class="footer-social-icon">
@@ -42,10 +55,10 @@
               </div>
 
               <div>
-                <h3>Location</h3>
+                <h3>Info</h3>
                 <ul>
                   <li>P.O. Box 474</li>
-                  <li>Hartville, OH 44632-0474</li>
+                  <li>Hartville, OH 44632</li>
                   <li>Phone: +1-800-837-LUBE</li>
                 </ul>
               </div>

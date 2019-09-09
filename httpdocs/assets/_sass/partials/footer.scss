@@ -1,25 +1,103 @@
 // footer partial
 
+// distributors network green bar extension for larger screen sizes
+.distributors-network-ext {
+  display: none;
+
+  @media screen and (min-width: $bp-xl) {
+    display: unset;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $color-green-dark;
+    height: 4rem;
+    width: 50%;
+    z-index: -1;
+  }
+}
+
+// product pages 'find your perfect project' green bar extension for larger screen sizes
+.products-search-ext {
+  display: none;
+
+  @media screen and (min-width: $bp-xl) {
+    display: unset;
+    position: absolute;
+    top: 1rem;
+    right: 0;
+    background-color: $color-green-dark;
+    height: 4rem;
+    width: 50%;
+    z-index: -1;
+  }
+}
+
+// footer 'newsletter' yellow bar extension for larger screen sizes
+.footer-newsletter-ext {
+  display: none;
+
+  @media screen and (min-width: $bp-xl) {
+    display: unset;
+    position: absolute;
+    bottom: 14rem;
+    left: 0;
+    background-color: $color-yellow;
+    height: 4rem;
+    width: 50%;
+    z-index: -1;
+  }
+}
+
+// footer info gray bar extension for larger screen sizes
+.footer-info-ext {
+  display: none;
+
+  @media screen and (min-width: $bp-xl) {
+    display: unset;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: $color-gray;
+    height: 12rem;
+    width: 50%;
+    z-index: -1;
+  }
+}
+
 .products-search {
   margin-bottom: 2rem;
-  $slant-length: 4rem;
+  $slant-length: 4rem; // if you change slant length, also change .footer-info-ext height
 
   h2 {
-    max-width: $bp-lg;
-    padding-left: $slant-length;
-    margin: 0 0 0 auto;
+    margin: 0;
     color: $color-green-dark;
+    text-align: center;
     text-transform: uppercase;
     line-height: .7;
+
+    @media screen and (min-width: 850px) {
+      text-align: unset;
+      margin: 0 0 0 auto;
+      max-width: $bp-lg;
+      padding-left: $slant-length;
+    }
   }
 
   ul {
     display: flex;
     justify-content: space-around;
     margin: 0;
+    padding: 0;
     list-style-type: none;
-    font-size: 1.2rem;
     text-transform: uppercase;
+
+    @media screen and (min-width: $bp-sm){
+      font-size: 1.35em;
+    }
+
+    li {
+      margin: 0 .5rem;
+    }
   }
 
   a {
@@ -29,9 +107,17 @@
 
   // nested for use of local variable $slant-length
   .products-search-wrapper {
-    @include slant('bl', 'center', $color-green-dark, $color-black, 0, $slant-length);
-    max-width: $bp-lg;
-    margin: 0 0 0 auto;
+    padding: 1.25rem 0;
+    background-color: $color-green-dark;
+    text-align: center;
+
+    @media screen and (min-width: 850px) {
+      padding: unset;
+      background-color: unset;
+      @include slant('bl', 'center', $color-green-dark, $color-black, 0, $slant-length);
+      max-width: $bp-lg;
+      margin: 0 0 0 auto;
+    }
   }
 }
 
@@ -50,16 +136,16 @@
 
 .newsletter {
   margin-bottom: 2rem;
-  $slant-length: 4rem;
+  $slant-length: 4rem; // if you change slant length, also change .products-search-ext height
 
   h2 {
+    margin: 0;
     color: $color-yellow;
-    line-height: .7;
     text-align: center;
     text-transform: uppercase;
-    margin: 0;
+    line-height: .7;
 
-    @media screen and (min-width: $bp-md) {
+    @media screen and (min-width: 850px) {
       text-align: right;
       margin: 0 $slant-length 0 0;
     }
@@ -69,7 +155,7 @@
   .newsletter-form-container {
     background-color: $color-yellow;
 
-    @media screen and (min-width: $bp-md) {
+    @media screen and (min-width: 850px) {
       background-color: unset;
       @include slant('br', 'right', $color-yellow, $color-black, 1rem, $slant-length);
     }
@@ -77,13 +163,13 @@
 }
 
 form[name='newsletter-form'] {
-  padding: 1rem 0;
+  padding: 1.0625rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
   color: $color-white;
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 850px) {
     padding: 1rem 5rem 1rem 0;
     justify-content: flex-end;
   }
@@ -124,10 +210,10 @@ form[name='newsletter-form'] {
     display: block;
   }
 
-  @media screen and (min-width: 830px) {
+  @media screen and (min-width: 850px) {
     background-color: unset;
     padding: 0;
-    @include slant('br', 'center', $color-gray, $color-black, 2rem, 12rem, 12rem, 2rem);
+    @include slant('br', 'center', $color-gray, $color-black, 2rem, 12rem, 12rem, 2rem); // if you change slant height, also change .footer-info-ext height
   }
 }
 
@@ -136,7 +222,7 @@ form[name='newsletter-form'] {
   flex-direction: column;
   align-items: flex-start;
 
-  & > *:not(:last-child) {
+  & > div:not(:last-child) {
     margin-bottom: 2rem;
   }
 
@@ -162,7 +248,7 @@ form[name='newsletter-form'] {
     justify-content: space-between;
     align-items: stretch;
 
-    & > *:not(:last-child) {
+    & > div:not(:last-child) {
       margin-right: 1rem;
       margin-bottom: 0;
     }
@@ -177,49 +263,4 @@ form[name='newsletter-form'] {
 
 .footer-social-icon {
   width: 35px;
-}
-
-.footer-newsletter-ext {
-  display: none;
-
-  @media screen and (min-width: $bp-xl) {
-    display: unset;
-    position: absolute;
-    bottom: 14rem;
-    left: 0;
-    background-color: $color-yellow;
-    height: 4rem;
-    width: 40%;
-    z-index: -1;
-  }
-}
-
-.footer-info-ext {
-  display: none;
-
-  @media screen and (min-width: $bp-xl) {
-    display: unset;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: $color-gray;
-    height: 12rem;
-    width: 40%;
-    z-index: -1;
-  }
-}
-
-.products-search-ext {
-  display: none;
-
-  @media screen and (min-width: $bp-xl) {
-    display: unset;
-    position: absolute;
-    top: 1rem;
-    right: 0;
-    background-color: $color-green-dark;
-    height: 4rem;
-    width: 40%;
-    z-index: -1;
-  }
 }

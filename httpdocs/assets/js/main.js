@@ -26,3 +26,17 @@ Array.prototype.forEach.call(document.forms, function(form) {
     });
   });
 });
+
+// distributors accorion
+$('.distributors-accordion label').on('click', function() {
+	// toggle accordion content
+	$(this).next().slideToggle('fast');
+
+  // set checkbox to checked
+	$(this).prev().prop('checked')
+		? $(this).prev().prop('checked', false)
+		: $(this).prev().prop('checked', true);
+
+	// close any other open accordions
+	$('.distributors-content-container').not($(this).next()).slideUp('fast');
+});

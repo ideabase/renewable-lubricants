@@ -85,7 +85,6 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         '6ab8ad87a734f276a6bcd5a0fe1289be' => __DIR__ . '/..' . '/markbaker/matrix/classes/src/operations/divideinto.php',
         '8cff32064859f4559445b89279f3199c' => __DIR__ . '/..' . '/php-http/message/src/filters.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
-        '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -330,7 +329,8 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         ),
         'voku\\tests\\' => 
         array (
-            0 => __DIR__ . '/..' . '/voku/portable-utf8/tests',
+            0 => __DIR__ . '/..' . '/voku/portable-ascii/tests',
+            1 => __DIR__ . '/..' . '/voku/portable-utf8/tests',
         ),
         'voku\\helper\\' => 
         array (
@@ -340,8 +340,9 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         ),
         'voku\\' => 
         array (
-            0 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
-            1 => __DIR__ . '/..' . '/voku/stop-words/src/voku',
+            0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+            1 => __DIR__ . '/..' . '/voku/portable-utf8/src/voku',
+            2 => __DIR__ . '/..' . '/voku/stop-words/src/voku',
         ),
         'rias\\contactformextensions\\' => 
         array (
@@ -499,8 +500,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         ),
         'Stringy\\' => 
         array (
-            0 => __DIR__ . '/..' . '/danielstjules/stringy/src',
-            1 => __DIR__ . '/..' . '/voku/stringy/src',
+            0 => __DIR__ . '/..' . '/voku/stringy/src',
         ),
         'Seld\\PharUtils\\' => 
         array (
@@ -2551,8 +2551,8 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'Seld\\JsonLint\\Undefined' => __DIR__ . '/..' . '/seld/jsonlint/src/Seld/JsonLint/Undefined.php',
         'Seld\\PharUtils\\Timestamps' => __DIR__ . '/..' . '/seld/phar-utils/src/Timestamps.php',
         'Stringy\\CollectionStringy' => __DIR__ . '/..' . '/voku/stringy/src/CollectionStringy.php',
-        'Stringy\\StaticStringy' => __DIR__ . '/..' . '/danielstjules/stringy/src/StaticStringy.php',
-        'Stringy\\Stringy' => __DIR__ . '/..' . '/danielstjules/stringy/src/Stringy.php',
+        'Stringy\\StaticStringy' => __DIR__ . '/..' . '/voku/stringy/src/StaticStringy.php',
+        'Stringy\\Stringy' => __DIR__ . '/..' . '/voku/stringy/src/Stringy.php',
         'Svg\\DefaultStyle' => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg/DefaultStyle.php',
         'Svg\\Document' => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg/Document.php',
         'Svg\\Gradient\\Stop' => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg/Gradient/Stop.php',
@@ -3666,6 +3666,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'craft\\commerce\\migrations\\m190311_161910_order_total' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190311_161910_order_total.php',
         'craft\\commerce\\migrations\\m190322_161911_register_on_checkout' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190322_161911_register_on_checkout.php',
         'craft\\commerce\\migrations\\m190821_150226_discount_purchaseTotal_update' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190821_150226_discount_purchaseTotal_update.php',
+        'craft\\commerce\\migrations\\m190823_071838_taxCategoryId_allow_null' => __DIR__ . '/..' . '/craftcms/commerce/src/migrations/m190823_071838_taxCategoryId_allow_null.php',
         'craft\\commerce\\models\\Address' => __DIR__ . '/..' . '/craftcms/commerce/src/models/Address.php',
         'craft\\commerce\\models\\Country' => __DIR__ . '/..' . '/craftcms/commerce/src/models/Country.php',
         'craft\\commerce\\models\\Currency' => __DIR__ . '/..' . '/craftcms/commerce/src/models/Currency.php',
@@ -4883,6 +4884,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'rias\\contactformextensions\\models\\Settings' => __DIR__ . '/..' . '/rias/craft-contact-form-extensions/src/models/Settings.php',
         'rias\\contactformextensions\\services\\ContactFormExtensionsService' => __DIR__ . '/..' . '/rias/craft-contact-form-extensions/src/services/ContactFormExtensionsService.php',
         'rias\\contactformextensions\\variables\\ContactFormExtensionsVariable' => __DIR__ . '/..' . '/rias/craft-contact-form-extensions/src/variables/ContactFormExtensionsVariable.php',
+        'voku\\helper\\ASCII' => __DIR__ . '/..' . '/voku/portable-ascii/src/voku/helper/ASCII.php',
         'voku\\helper\\AntiXSS' => __DIR__ . '/..' . '/voku/anti-xss/src/voku/helper/AntiXSS.php',
         'voku\\helper\\Bootup' => __DIR__ . '/..' . '/voku/portable-utf8/src/voku/helper/Bootup.php',
         'voku\\helper\\EmailCheck' => __DIR__ . '/..' . '/voku/email-check/src/voku/helper/EmailCheck.php',

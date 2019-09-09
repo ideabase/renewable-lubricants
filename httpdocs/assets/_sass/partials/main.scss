@@ -1,5 +1,9 @@
 // main partial
-// this file should contain properties that can apply to every page
+// this file should contain properties that can apply to most pages
+
+* {
+  box-sizing: border-box;
+}
 
 html {
   height: 100%;
@@ -7,7 +11,6 @@ html {
 
 body {
   height: 100%;
-  box-sizing: border-box;
   font-family: $font-roboto-slab;
   color: $color-black;
 }
@@ -31,16 +34,16 @@ p {
 }
 
 a {
-  color: $color-black;
+  color: $color-blue;
   transition: color .15s ease-in-out;
   text-decoration: none;
 
-  &:focus {
-    outline: none;
+  &:hover {
+    text-decoration: underline;
   }
 
-  &:visited {
-    color: $color-black;
+  &:focus {
+    outline: none;
   }
 }
 
@@ -105,7 +108,7 @@ img {
   width: 100%;
   text-align: center;
 
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: $bp-md) {
     background-color: unset;
     @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
     width: 30rem;
@@ -113,7 +116,7 @@ img {
 
   h1 {
     margin: 0;
-    padding: 1rem 0;
+    padding: .875rem 0;
   }
 }
 
@@ -123,7 +126,7 @@ img {
   width: 100%;
   text-align: center;
 
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: $bp-md) {
     background-color: unset;
     @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
     width: 30rem;
@@ -131,7 +134,7 @@ img {
 
   h1 {
     margin: 0;
-    padding: 1rem 0;
+    padding: .875rem 0;
   }
 }
 

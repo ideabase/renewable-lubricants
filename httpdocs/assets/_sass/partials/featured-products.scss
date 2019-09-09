@@ -5,6 +5,7 @@
 
   img {
     width: 100px;
+    margin-bottom: 1rem;
 
     @media screen and (min-width: 700px) {
       width: calc(200px * 2 / 3);
@@ -71,6 +72,10 @@
 .slick-slide {
   align-items: center;
   justify-content: center;
+
+  a {
+    color: black;
+  }
 
   img {
     transition: all .5s ease-in-out;

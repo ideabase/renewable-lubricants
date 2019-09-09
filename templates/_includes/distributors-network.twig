@@ -1,0 +1,42 @@
+<div class="distributors-network">
+  <div class="distributors-network-h1-wrapper">
+    <h1>Our Distribution Network</h1>
+  </div>
+
+  {% cache %}
+
+  {% for distributor in craft.entries.section('distributors').all() %}
+
+    <div class="distributors-accordion">
+      <input type="radio" name="distributors-radio">
+      <label>{{ distributor.title }}</label>
+
+      <div class="distributors-content-container">
+        {% if distributor.subtitle|length %}
+          <p class="distributors-subtitle">{{ distributor.subtitle }}</p>
+        {% endif %}
+
+        <div class="distributors-content">
+          <img src="{{ distributor.logo.one().url }}" alt="{{ distributor.logo.one().title }}" class="distributors-img">
+
+          <div class="distributors-body">
+            {% if distributor.body|length %}
+              {{ distributor.body }}
+            {% endif %}
+
+            {% if distributor.phoneNumber|length %}
+              <div>Phone: {{ distributor.phoneNumber }}</div>
+            {% endif %}
+
+            {% if distributor.websiteURL|length %}
+              <div>Website: <a href="{{ distributor.websiteURL }}">{{ distributor.websiteURL }}</a></div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endfor %}
+
+  {% endcache %}
+</div>

@@ -8,7 +8,7 @@
   </div>
 
   <div class="distributors-map-body">
-  {{ entry.body }}
+    {{ entry.body }}
   </div>
 
   {% set options = {
@@ -27,51 +27,4 @@
   {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
 </div>
 
-<div class="distributors-network">
-  <div class="distributors-network-h1-wrapper">
-    <h1>Our Distribution Network</h1>
-  </div>
-
-  {% set distributors = craft.entries.section('distributors') %}
-  {% cache %}
-
-  {% for distributor in distributors.all() %}
-    <div class="distributors-accordion">
-      <input type="radio" name="distributors-radio">
-      <label>{{ distributor.title }}</label>
-      <div class="distributors-content-container">
-        <p class="distributors-subtitle">{{ distributor.subtitle }}</p>
-        <div class="distributors-content">
-          <img src="{{ distributor.logo.one().url }}" alt="{{ distributor.logo.one().title }}" class="distributors-img">
-          {% if distributor.body|length %}
-            <div class="distributors-body">
-              {{ distributor.body }}
-            </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  {% endfor %}
-
-  {% endcache %}
-</div>
-
 {% endblock %}
-
-{% js %}
-
-{# accordion toggle #}
-$('.distributors-accordion label').on('click', function() {
-	{# toggle accordion content #}
-	$(this).next().slideToggle('fast');
-
-  {# set checkbox to checked #}
-	$(this).prev().prop('checked')
-		? $(this).prev().prop('checked', false)
-		: $(this).prev().prop('checked', true);
-
-	{# close other accordions' content #}
-	$('.distributors-content-container').not($(this).next()).slideUp('fast');
-});
-
-{% endjs %}

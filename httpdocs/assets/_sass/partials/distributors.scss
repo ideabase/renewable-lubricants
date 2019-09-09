@@ -1,9 +1,5 @@
 // distributors partial
 
-.distributors-map {
-  margin-bottom: 3rem;
-}
-
 .distributors-map-body {
   max-width: $bp-md;
   margin: 0 auto 3rem auto;
@@ -15,6 +11,10 @@
   margin-top: 0;
 }
 
+.distributors-network {
+  margin-bottom: 3rem;
+}
+
 .distributors-network-h1-wrapper {
   background-color: $color-green-dark;
   color: $color-white;
@@ -22,17 +22,18 @@
   width: 100%;
   text-align: center;
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 850px) {
     height: unset;
     background-color: unset;
+    text-align: unset;
     @include slant('bl', 'center', $color-green-dark, $color-white, 1rem, 4rem);
-    max-width: calc(#{$bp-lg} - 4rem);
+    max-width: $bp-lg;
     margin: 0 0 0 auto;
   }
 
   h1 {
     margin: 0;
-    padding: 1rem 0;
+    padding: .875rem 0;
   }
 }
 
@@ -41,12 +42,7 @@
   position: relative;
   margin-bottom: 10px;
   max-width: $bp-lg;
-  margin: 0 1rem;
-  color: $color-green-dark;
-
-  @media screen and (min-width: $bp-lg) {
-    margin: 0 0 0 auto;
-  }
+  margin: 0 0 0 auto;
 
   input {
     position: absolute;
@@ -62,6 +58,7 @@
     cursor: pointer;
     margin: 1rem 0;
     padding-left: 2rem;
+    color: $color-green-dark;
 
     &::before {
       content: '+';
@@ -69,7 +66,7 @@
       font-size: 1.6rem;
       position: absolute;
       top: -.25rem;
-      left: 0;
+      left: .5rem;
       transition: all .15s;
     }
   }
@@ -86,6 +83,7 @@
 
 .distributors-subtitle {
   margin: 0 0 0 2rem;
+  color: $color-green-dark;
 }
 
 .distributors-content {
@@ -103,6 +101,10 @@
   @media screen and (min-width: 700px) {
     flex-direction: row;
   }
+}
+
+.distributors-body *:not(:last-child) {
+  margin-bottom: 1rem;
 }
 
 .distributors-img {
