@@ -25,15 +25,15 @@
 
               </div>
               <div id="three">
-                <div><span class="BlogTitle">{{ entry.title }}</span>
+                <div><h3>{{ entry.title }}</h3>
               </div>
                 </div>
       <div id="two">
         {% if entry.imageDescription | length > 50 %}
-          <p class="BlogDescription">{{ entry.imageDescription | slice(0,50) }}</p>
+          <p>{{ entry.imageDescription | slice(0,50) }}</p>
           <a href="{{ entry.url }}">Read More…</a>
         {% else %}
-          <p class="BlogDescription">{{ entry.imageDescription }}</p>
+          <p>{{ entry.imageDescription }}</p>
       </div>
         {% endif %}
 
