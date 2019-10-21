@@ -40,7 +40,7 @@ interface ElementInterface extends ComponentInterface
     public static function refHandle();
 
     /**
-     * Returns whether elements of this type will be storing any data in the `content` table (tiles or custom fields).
+     * Returns whether elements of this type will be storing any data in the `content` table (titles or custom fields).
      *
      * @return bool Whether elements of this type will be storing any data in the `content` table.
      */
@@ -485,6 +485,14 @@ interface ElementInterface extends ComponentInterface
      * @return mixed The route that the request should use, or null if no special action should be taken
      */
     public function getRoute();
+
+    /**
+     * Returns whether this element represents the site homepage.
+     *
+     * @retern bool
+     * @since 3.3.6
+     */
+    public function getIsHomepage(): bool;
 
     /**
      * Returns the element’s full URL.

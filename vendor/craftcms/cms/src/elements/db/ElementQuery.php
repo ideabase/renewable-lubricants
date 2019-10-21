@@ -2293,9 +2293,13 @@ class ElementQuery extends Query implements ElementQueryInterface
             }
         }
 
-        if ($this->siblingOf) {
+        foreach (['siblingOf', 'prevSiblingOf', 'nextSiblingOf'] as $param) {
+            if (!$this->$param) {
+                continue;
+            }
+
             /** @var Element $siblingOf */
-            $siblingOf = $this->_normalizeStructureParamValue('siblingOf', $class);
+            $siblingOf = $this->_normalizeStructureParamValue($param, $class);
 
             $this->subQuery->andWhere([
                 'and',
@@ -2320,28 +2324,23 @@ class ElementQuery extends Query implements ElementQueryInterface
                     ['<', 'structureelements.rgt', $parent->rgt]
                 ]);
             }
-        }
 
-        if ($this->prevSiblingOf) {
-            /** @var Element $prevSiblingOf */
-            $prevSiblingOf = $this->_normalizeStructureParamValue('prevSiblingOf', $class);
-
-            $this->subQuery->andWhere([
-                'structureelements.level' => $prevSiblingOf->level,
-                'structureelements.rgt' => $prevSiblingOf->lft - 1,
-                'structureelements.root' => $prevSiblingOf->root
-            ]);
-        }
-
-        if ($this->nextSiblingOf) {
-            /** @var Element $nextSiblingOf */
-            $nextSiblingOf = $this->_normalizeStructureParamValue('nextSiblingOf', $class);
-
-            $this->subQuery->andWhere([
-                'structureelements.level' => $nextSiblingOf->level,
-                'structureelements.lft' => $nextSiblingOf->rgt + 1,
-                'structureelements.root' => $nextSiblingOf->root
-            ]);
+            switch ($param) {
+                case 'prevSiblingOf':
+                    $this->query->orderBy(['structureelements.lft' => SORT_DESC]);
+                    $this->subQuery
+                        ->andWhere(['<', 'structureelements.lft', $siblingOf->lft])
+                        ->orderBy(['structureelements.lft' => SORT_DESC])
+                        ->limit(1);
+                    break;
+                case 'nextSiblingOf':
+                    $this->query->orderBy(['structureelements.lft' => SORT_ASC]);
+                    $this->subQuery
+                        ->andWhere(['>', 'structureelements.lft', $siblingOf->lft])
+                        ->orderBy(['structureelements.lft' => SORT_ASC])
+                        ->limit(1);
+                    break;
+            }
         }
 
         if ($this->positionedBefore) {
@@ -2467,7 +2466,7 @@ class ElementQuery extends Query implements ElementQueryInterface
             throw new QueryAbortedException();
         }
 
-        return $this->$property;
+        return $this->$property = ElementHelper::sourceElement($this->$property);
     }
 
     /**
@@ -2483,7 +2482,8 @@ class ElementQuery extends Query implements ElementQueryInterface
 
         if ($this->search) {
             // Get the element IDs
-            $elementIds = (clone $this)
+            $elementIdsQuery = clone $this;
+            $elementIds = $elementIdsQuery
                 ->search(null)
                 ->offset(null)
                 ->limit(null)
@@ -2532,7 +2532,12 @@ class ElementQuery extends Query implements ElementQueryInterface
      */
     private function _applyOrderByParams(Connection $db)
     {
-        if ($this->orderBy === null) {
+        if (
+            $this->orderBy === null ||
+            $this->orderBy === ['score' => SORT_ASC] ||
+            $this->orderBy === ['score' => SORT_DESC] ||
+            !empty($this->query->orderBy)
+        ) {
             return;
         }
 
@@ -2552,25 +2557,15 @@ class ElementQuery extends Query implements ElementQueryInterface
                     throw new Exception('The database connection doesn’t support fixed ordering.');
                 }
                 $this->orderBy = [new FixedOrderExpression('elements.id', $ids, $db)];
+            } else if (self::_supportsRevisionParams() && $this->revisions) {
+                $this->orderBy = ['num' => SORT_DESC];
+            } else if ($this->_shouldJoinStructureData()) {
+                $this->orderBy = ['structureelements.lft' => SORT_ASC] + $this->defaultOrderBy;
+            } else if (!empty($this->defaultOrderBy)) {
+                $this->orderBy = $this->defaultOrderBy;
             } else {
-                $default = self::_supportsRevisionParams() && $this->revisions
-                    ? ['num' => SORT_DESC]
-                    : $this->defaultOrderBy;
-                if ($this->_shouldJoinStructureData()) {
-                    $this->orderBy = ['structureelements.lft' => SORT_ASC] + $default;
-                } else {
-                    $this->orderBy = $default;
-                }
+                return;
             }
-        }
-
-        if (
-            empty($this->orderBy) ||
-            $this->orderBy === ['score' => SORT_ASC] ||
-            $this->orderBy === ['score' => SORT_DESC] ||
-            !empty($this->query->orderBy)
-        ) {
-            return;
         }
 
         // Define the real column name mapping (e.g. `fieldHandle` => `field_fieldHandle`)
@@ -2720,7 +2715,8 @@ class ElementQuery extends Query implements ElementQueryInterface
         }
         $caseSql .= ' else ' . count($preferSites) . ' end';
 
-        $subSelectSql = (clone $this->subQuery)
+        $subSelectSqlQuery = clone $this->subQuery;
+        $subSelectSql = $subSelectSqlQuery
             ->select(['elements_sites.id'])
             ->andWhere('[[subElements.id]] = [[tmpElements.id]]')
             ->orderBy([
@@ -2735,9 +2731,10 @@ class ElementQuery extends Query implements ElementQueryInterface
         $qElements = $db->quoteTableName('elements');
         $qSubElements = $db->quoteTableName('subElements');
         $qTmpElements = $db->quoteTableName('tmpElements');
-        $subSelectSql = str_replace($qElements, $qSubElements, $subSelectSql);
+        $q = $qElements[0];
+        $subSelectSql = str_replace("{$qElements}.", "{$qSubElements}.", $subSelectSql);
+        $subSelectSql = str_replace("{$q} {$qElements}", "{$q} {$qSubElements}", $subSelectSql);
         $subSelectSql = str_replace($qTmpElements, $qElements, $subSelectSql);
-        $subSelectSql = str_replace("{$qSubElements} {$qSubElements}", "{$qElements} {$qSubElements}", $subSelectSql);
 
         $this->subQuery->andWhere(new Expression("[[elements_sites.id]] = ({$subSelectSql})"));
     }

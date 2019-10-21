@@ -8,6 +8,7 @@
 namespace craft\gql\interfaces\elements;
 
 use craft\elements\Asset as AssetElement;
+use craft\gql\arguments\Transform;
 use craft\gql\interfaces\Element;
 use craft\gql\TypeLoader;
 use craft\gql\GqlEntityRegistry;
@@ -46,7 +47,7 @@ class Asset extends Element
             'fields' => self::class . '::getFieldDefinitions',
             'description' => 'This is the interface implemented by all assets.',
             'resolveType' => function (AssetElement $value) {
-                return GqlEntityRegistry::getEntity($value->getGqlTypeName());
+                return $value->getGqlTypeName();
             }
         ]));
 
@@ -128,8 +129,9 @@ class Asset extends Element
             ],
             'url' => [
                 'name' => 'url',
+                'args' => Transform::getArguments(),
                 'type' => Type::string(),
-                'description' => 'The full URL of the asset.'
+                'description' => 'The full URL of the asset. This field accepts the same fields as the `transform` directive.'
             ],
             'mimeType' => [
                 'name' => 'mimeType',

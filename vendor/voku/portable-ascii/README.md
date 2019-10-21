@@ -28,9 +28,12 @@ The project based on ...
 * [Install](#install-portable-ascii-via-composer-require)
 * [Why Portable ASCII?](#why-portable-ascii)
 * [Requirements and Recommendations](#requirements-and-recommendations)
-* [Warning](#warning)
 * [Usage](#usage)
 * [Class methods](#class-methods)
+    * [charsArray](#charsarraybool-withextras--false-array)
+    * [charsArrayWithMultiLanguageValues](#charsarraywithmultilanguagevaluesbool-withextras--false-array)
+    * [charsArrayWithOneLanguage](#charsarraywithonelanguagestring-language--en-bool-withextras--false-array-)
+    * [charsArrayWithSingleLanguageValues](#charsarraywithsinglelanguagevaluesbool-withextras--false-array)
     * [is_ascii](#is_asciistring-str--bool) 
     * [normalize_msword](#normalize_mswordstring-str--string)
     * [normalize_whitespace](#normalize_whitespacestring-str-bool-keepnonbreakingspace--false-bool-keepbidiunicodecontrols--false--string)
@@ -86,7 +89,7 @@ Example: ASCII::to_ascii()
 
 # Portable ASCII | API
 
-The API from the "ASCII"-Class is written as small static methods that will match the default PHP-API.
+The API from the "ASCII"-Class is written as small static methods.
 
 
 ## Class methods
@@ -212,7 +215,7 @@ For professional support please contact [me](https://about.me/voku).
 - Thanks to [GitHub](https://github.com) (Microsoft) for hosting the code and a good infrastructure including Issues-Managment, etc.
 - Thanks to [IntelliJ](https://www.jetbrains.com) as they make the best IDEs for PHP and they gave me an open source license for PhpStorm!
 - Thanks to [Travis CI](https://travis-ci.com/) for being the most awesome, easiest continous integration tool out there!
-- Thanks to [StyleCI](https://styleci.io/) for the simple but powerfull code style check.
+- Thanks to [StyleCI](https://styleci.io/) for the simple but powerful code style check.
 - Thanks to [PHPStan](https://github.com/phpstan/phpstan) && [Psalm](https://github.com/vimeo/psalm) for relly great Static analysis tools and for discover bugs in the code!
 
 ### License and Copyright

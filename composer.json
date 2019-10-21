@@ -1,11 +1,11 @@
 {
   "require": {
-    "craftcms/cms": "3.3.1.2",
+    "craftcms/cms": "3.3.11",
     "vlucas/phpdotenv": "^2.4.0",
-    "craftcms/redactor": "2.3.3.2",
+    "craftcms/redactor": "2.4.0",
     "craftcms/commerce": "2.1.13",
     "craftcms/contact-form": "2.2.5",
-    "rias/craft-contact-form-extensions": "1.1.7",
+    "rias/craft-contact-form-extensions": "1.2.0",
     "doublesecretagency/craft-smartmap": "3.2.2.1",
     "digital-pros/commerce-authorize": "1.0.7"
   },

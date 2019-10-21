@@ -10,6 +10,7 @@ namespace craft\controllers;
 use Craft;
 use craft\errors\GqlException;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
 use craft\models\GqlSchema;
 use craft\web\assets\graphiql\GraphiqlAsset;
@@ -139,12 +140,18 @@ class GraphqlController extends Controller
         }
 
         try {
-            $devMode = Craft::$app->getConfig()->getGeneral()->devMode;
-            $schemaDef = $gqlService->getSchemaDef($schema, $devMode);
-            $result = GraphQL::executeQuery($schemaDef, $query, null, null, $variables, $operationName)
-                ->toArray(true);
+            $schemaDef = $gqlService->getSchemaDef($schema, StringHelper::contains($query, '__schema'));
+            $result = $gqlService->executeQuery($schemaDef, $query, $variables, $operationName);
         } catch (\Throwable $e) {
-            throw new GqlException('Something went wrong when processing the GraphQL query.', 0, $e);
+            Craft::$app->getErrorHandler()->logException($e);
+
+            return $this->asJson([
+                'errors' => [
+                    [
+                        'message' => Craft::$app->getConfig()->getGeneral()->devMode ? $e->getMessage() : Craft::t('app', 'Something went wrong when processing the GraphQL query.'),
+                    ]
+                ],
+            ]);
         }
 
         return $this->asJson($result);

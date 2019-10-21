@@ -494,7 +494,7 @@ class UsersController extends Controller
 
         /** @var User $user */
         list($user) = $info;
-        $userIsPending = $user->status == User::STATUS_PENDING;
+        $userIsPending = $user->getStatus() === User::STATUS_PENDING;
 
         if (!Craft::$app->getUsers()->verifyEmailForUser($user)) {
             return $this->renderTemplate('_special/emailtaken', [
@@ -566,46 +566,18 @@ class UsersController extends Controller
         if ($user === null) {
             // Are we editing a specific user account?
             if ($userId !== null) {
-                if ($userId == 'current') {
-                    if ($user) {
-                        /** @var User $user */
-                        // Make sure it's actually the current user
-                        if (!$user->getIsCurrent()) {
-                            throw new BadRequestHttpException('Not the current user');
-                        }
-                    } else {
-                        // Get the current user
-                        $user = $userSession->getIdentity();
-                    }
-                } else {
-                    if ($user) {
-                        // Make sure they have the right ID
-                        /** @var User $user */
-                        if ($user->id != $userId) {
-                            throw new BadRequestHttpException('Not the right user ID');
-                        }
-                    } else {
-                        // Get the user by its ID
-                        /** @var User|null $user */
-                        $user = User::find()
-                            ->id($userId)
-                            ->anyStatus()
-                            ->addSelect('users.passwordResetRequired')
-                            ->one();
+                $user = User::find()
+                    ->addSelect(['users.password', 'users.passwordResetRequired'])
+                    ->id($userId === 'current' ? $userSession->getId() : $userId)
+                    ->anyStatus()
+                    ->one();
+            } else if ($edition === Craft::Pro) {
+                // Registering a new user
+                $user = new User();
+            }
 
-                        if (!$user) {
-                            throw new NotFoundHttpException('User not found');
-                        }
-                    }
-                }
-            } else {
-                if ($edition === Craft::Pro) {
-                    // Registering a new user
-                    $user = new User();
-                } else {
-                    // Nada.
-                    throw new NotFoundHttpException('User not found');
-                }
+            if (!$user) {
+                throw new NotFoundHttpException('User not found');
             }
         }
 
@@ -936,7 +908,7 @@ class UsersController extends Controller
 
         $userId = $request->getBodyParam('userId');
         $isNewUser = !$userId;
-        $thisIsPublicRegistration = false;
+        $isPublicRegistration = false;
 
         // Are we editing an existing user?
         if ($userId) {
@@ -970,7 +942,7 @@ class UsersController extends Controller
                     throw new ForbiddenHttpException('Public registration is not allowed');
                 }
 
-                $thisIsPublicRegistration = true;
+                $isPublicRegistration = true;
             }
 
             $user = new User();
@@ -999,7 +971,11 @@ class UsersController extends Controller
 
             if ($newEmail) {
                 // Does that email need to be verified?
-                if ($requireEmailVerification && (!$currentUser || !$currentUser->admin || $request->getBodyParam('sendVerificationEmail'))) {
+                if ($requireEmailVerification && (
+                    !$currentUser ||
+                    (!$currentUser->admin && !$currentUser->can('administrateUsers')) ||
+                    $request->getBodyParam('sendVerificationEmail')
+                )) {
                     // Save it as an unverified email for now
                     $user->unverifiedEmail = $newEmail;
                     $verifyNewEmail = true;
@@ -1015,7 +991,7 @@ class UsersController extends Controller
         }
 
         // Are they allowed to set a new password?
-        if ($thisIsPublicRegistration) {
+        if ($isPublicRegistration) {
             if (!Craft::$app->getConfig()->getGeneral()->deferPublicRegistrationPassword) {
                 $user->newPassword = $request->getBodyParam('password', '');
             }
@@ -1084,7 +1060,7 @@ class UsersController extends Controller
         }
 
         // Don't validate required custom fields if it's public registration
-        if (!$thisIsPublicRegistration) {
+        if (!$isPublicRegistration) {
             $user->setScenario(Element::SCENARIO_LIVE);
         }
 
@@ -1095,11 +1071,15 @@ class UsersController extends Controller
         ) {
             Craft::info('User not saved due to validation error.', __METHOD__);
 
-            if ($thisIsPublicRegistration) {
+            if ($isPublicRegistration) {
                 // Move any 'newPassword' errors over to 'password'
                 $user->addErrors(['password' => $user->getErrors('newPassword')]);
                 $user->clearErrors('newPassword');
             }
+
+            // Copy any 'unverifiedEmail' errors to 'email'
+            // todo: clear out the 'unverifiedEmail' errors in Craft 4
+            $user->addErrors(['email' => $user->getErrors('unverifiedEmail')]);
 
             if ($request->getAcceptsJson()) {
                 return $this->asJson([
@@ -1159,7 +1139,7 @@ class UsersController extends Controller
         $this->_processUserPhoto($user);
 
         // If this is public registration, assign the user to the default user group
-        if ($thisIsPublicRegistration) {
+        if ($isPublicRegistration) {
             // Assign them to the default user group
             Craft::$app->getUsers()->assignUserToDefaultGroup($user);
         } else {
@@ -1191,7 +1171,7 @@ class UsersController extends Controller
         }
 
         // Is this public registration, and was the user going to be activated automatically?
-        $publicActivation = $thisIsPublicRegistration && $user->status == User::STATUS_ACTIVE;
+        $publicActivation = $isPublicRegistration && $user->getStatus() === User::STATUS_ACTIVE;
 
         if ($publicActivation) {
             // Maybe automatically log them in
@@ -1205,7 +1185,7 @@ class UsersController extends Controller
             ]);
         }
 
-        if ($thisIsPublicRegistration) {
+        if ($isPublicRegistration) {
             Craft::$app->getSession()->setNotice(Craft::t('app', 'User registered.'));
         } else {
             Craft::$app->getSession()->setNotice(Craft::t('app', 'User saved.'));
@@ -1887,40 +1867,42 @@ class UsersController extends Controller
     {
         $uid = Craft::$app->getRequest()->getRequiredParam('id');
         $code = Craft::$app->getRequest()->getRequiredParam('code');
-        $isCodeValid = false;
 
         /** @var User|null $user */
         $user = User::find()
             ->uid($uid)
             ->anyStatus()
-            ->addSelect(['users.password', 'users.unverifiedEmail'])
+            ->addSelect(['users.password'])
             ->one();
+
+        if (!$user) {
+            return $this->_processInvalidToken();
+        }
 
         // If someone is logged in and it's not this person, log them out
         $userSession = Craft::$app->getUser();
-        if (($identity = $userSession->getIdentity()) !== null && $user && $identity->id != $user->id) {
+        if (!$userSession->getIsGuest() && $userSession->getId() != $user->id) {
             $userSession->logout();
         }
 
-        if ($user) {
-            // Fire a 'beforeVerifyUser' event
-            Craft::$app->getUsers()->trigger(Users::EVENT_BEFORE_VERIFY_EMAIL,
-                new UserEvent([
-                    'user' => $user
-                ]));
-
-            $isCodeValid = Craft::$app->getUsers()->isVerificationCodeValidForUser($user, $code);
+        // Fire a 'beforeVerifyUser' event
+        $usersService = Craft::$app->getUsers();
+        if ($usersService->hasEventHandlers(Users::EVENT_BEFORE_VERIFY_EMAIL)) {
+            $usersService->trigger(Users::EVENT_BEFORE_VERIFY_EMAIL, new UserEvent([
+                'user' => $user
+            ]));
         }
 
-        if (!$user || !$isCodeValid) {
+        if (!Craft::$app->getUsers()->isVerificationCodeValidForUser($user, $code)) {
             return $this->_processInvalidToken();
         }
 
         // Fire an 'afterVerifyUser' event
-        Craft::$app->getUsers()->trigger(Users::EVENT_AFTER_VERIFY_EMAIL,
-            new UserEvent([
+        if ($usersService->hasEventHandlers(Users::EVENT_AFTER_VERIFY_EMAIL)) {
+            $usersService->trigger(Users::EVENT_AFTER_VERIFY_EMAIL, new UserEvent([
                 'user' => $user
             ]));
+        }
 
         return [$user, $uid, $code];
     }
@@ -1936,12 +1918,12 @@ class UsersController extends Controller
         if (!$userSession->getIsGuest()) {
             $returnUrl = $userSession->getReturnUrl();
             $userSession->removeReturnUrl();
-
             return $this->redirect($returnUrl);
         }
 
         // If the invalidUserTokenPath config setting is set, send them there
-        if ($url = Craft::$app->getConfig()->getGeneral()->getInvalidUserTokenPath()) {
+        if (Craft::$app->getRequest()->getIsSiteRequest()) {
+            $url = Craft::$app->getConfig()->getGeneral()->getInvalidUserTokenPath();
             return $this->redirect(UrlHelper::siteUrl($url));
         }
 

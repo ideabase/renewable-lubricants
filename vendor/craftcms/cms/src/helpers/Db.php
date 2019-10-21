@@ -484,6 +484,16 @@ class Db
             self::_normalizeEmptyValue($val);
             $operator = self::_parseParamOperator($val, $defaultOperator, $negate);
 
+            if ($columnType === Schema::TYPE_BOOLEAN) {
+                // Convert val to a boolean
+                $val = ($val && $val !== ':empty:');
+                if ($operator === '!=') {
+                    $val = !$val;
+                }
+                $condition[] = $val ? [$column => true] : ['or', ['not', [$column => true]], [$column => null]];
+                continue;
+            }
+
             if ($val === ':empty:') {
                 // If this is a textual column type, also check for empty strings
                 if (

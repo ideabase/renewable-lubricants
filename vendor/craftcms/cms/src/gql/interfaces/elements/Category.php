@@ -47,7 +47,7 @@ class Category extends Structure
             'fields' => self::class . '::getFieldDefinitions',
             'description' => 'This is the interface implemented by all categories.',
             'resolveType' => function (CategoryElement $value) {
-                return GqlEntityRegistry::getEntity($value->getGqlTypeName());
+                return $value->getGqlTypeName();
             }
         ]));
 
@@ -86,6 +86,11 @@ class Category extends Structure
                 'args' => CategoryArguments::getArguments(),
                 'type' => Type::listOf(CategoryInterface::getType()),
                 'description' => 'The category’s children.'
+            ],
+            'parent' => [
+                'name' => 'parent',
+                'type' => CategoryInterface::getType(),
+                'description' => 'The category’s parent.'
             ],
         ]);
     }

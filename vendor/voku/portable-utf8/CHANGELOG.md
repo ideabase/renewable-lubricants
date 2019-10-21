@@ -1,5 +1,36 @@
 # Changelog
 
+### 5.4.25 (2019-10-14)
+
+- update vendor (ASCII) lib
+
+### 5.4.24 (2019-10-06)
+
+- improve performance from "UTF8::UTF8::str_titleize_for_humans()" (use "array_merge" only if needed)
+- improve performance from "UTF8::ucwords()" + "UTF8::lcwords()" (don't use "implode()" if it's not needed)
+
+### 5.4.23 (2019-09-27)
+
+- improve performance from "UTF8::chr_to_decimal()" (now we use iconv if it's available)
+- improve performance from "UTF8::html_entity_decode()" (code cleanup, remove dead code)
+
+### 5.4.22 (2019-09-26)
+
+- improve performance by replacing ```count($a) === 0``` with ```$a === []```
+   -> so we don't need a function call to check if an array is empty
+
+### 5.4.21 (2019-09-17)
+
+- improve performance by not using return types for ```private``` methods
+   -> the code is already checked via phpstan + psalm + phpstorm, ...
+      so no need to check it every time at runtime at this point
+
+### 5.4.20 (2019-09-16)
+
+- fix "preg_quote()" usage
+- fix return type from "mb_encode_numericentity" & "mb_decode_numeric_entity" usage
+- add "@deprecated" for all alias methods
+
 ### 5.4.19 (2019-09-05)
 
 - move ASCII functions into a separated package "Portable ASCII"

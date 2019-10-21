@@ -1,5 +1,177 @@
 # Release Notes for Craft CMS 3.x
 
+## 3.3.11 - 2019-10-16
+
+### Added
+- Added `craft\events\ExecuteGqlQueryEvent`.
+- Added `craft\services\Gql::EVENT_BEFORE_EXECUTE_GQL_QUERY`.
+- Added `craft\services\Gql::EVENT_AFTER_EXECUTE_GQL_QUERY`.
+- Added `craft\services\Gql::executeQuery()`.
+
+### Changed
+- Dropdown and Multi-select fields can now have duplicate option labels, as long as they are in different optgroups. ([#5105](https://github.com/craftcms/cms/issues/5105))
+
+### Fixed
+- Fixed a bug where user email changes were going through email verification even if someone with permission to administrate users was making the change. ([#5088](https://github.com/craftcms/cms/issues/5088))
+- Fixed an error that could occur when duplicating entries with Matrix blocks. ([#5097](https://github.com/craftcms/cms/issues/5097))
+
+## 3.3.10 - 2019-10-15
+
+### Added
+- Added the `allowOwnerDrafts` and `allowOwnerRevisions` Matrix block query params.
+- Added the ability to skip refreshing the project config before running individual tests. ([#5072](https://github.com/craftcms/cms/pull/5072))
+- Added `craft\test\Craft::resetProjectConfig()`
+
+### Fixed
+- Fixed a bug where Craft wasn’t passing assets’ MIME types to cloud storage services when saving them. ([#5052](https://github.com/craftcms/cms/issues/5052))
+- Fixed a bug where Assets fields’ image thumbnails weren’t getting refreshed after images were edited. ([#4212](https://github.com/craftcms/cms/issues/4212))
+- Fixed a bug where the `index-assets` command would bail as soon as it came across a file with a disallowed file extension. ([#5086](https://github.com/craftcms/cms/issues/5086))
+- Fixed a bug where it wasn’t possible to eager-load Matrix blocks that belong to a draft or revision. ([#5031](https://github.com/craftcms/cms/issues/5031))
+- Fixed a bug where the `setup` command would think that Craft was installed when it wasn’t. ([#5093](https://github.com/craftcms/cms/issues/5093))
+- Fixed an error that could occur when syncing the project config if a Matrix field had been changed to something else. ([#4015](https://github.com/craftcms/cms/issues/4015))
+- Fixed a bug where Assets fields weren’t always showing the “Edit” button for images when they should. ([#4618](https://github.com/craftcms/cms/issues/4618))
+- Fixed a bug where `craft\services\Elements::duplicateElement()` wasn’t ensuring that the duplicate had a valid slug on all sites. ([#5097](https://github.com/craftcms/cms/issues/5097))
+- Fixed a bug where querying for elements by their Lightswitch field value could only return elements that had been saved since the Lightswitch field was added, when using PostgreSQL. ([#5073](https://github.com/craftcms/cms/issues/5073))
+- Fixed a SQL error that could occur when querying for Matrix blocks.
+- Fixed a bug where entries that were disabled globally would still get a green status indicator within the entry context menu on Edit Entry pages.
+
+## 3.3.9 - 2019-10-10
+
+### Changed
+- The `project-config/sync` command now correctly returns an error code on failure. ([#4153](https://github.com/craftcms/cms/issues/4153))
+- User queries now include the `unverifiedEmail` value by default. ([#5019](https://github.com/craftcms/cms/issues/5019))
+
+### Fixed
+- Fixed a bug where updating a draft might delete content on other sites in a multisite setup on certain PHP versions. ([#5048](https://github.com/craftcms/cms/issues/5048))
+- Fixed an error that occurred when running console commands before Craft was installed. ([#5083](https://github.com/craftcms/cms/issues/5083))
+
+## 3.3.8 - 2019-10-09
+
+### Added
+- Added `craft\web\Request::getNormalizedContentType()`.
+
+### Changed
+- Eliminated a `SHOW TABLES` SQL query that was getting executed on every request.
+- Craft no longer routes requests based on `action` params in the request body, if the request’s content type is `application/json`.
+- Added support for the `text/vtt` MIME type. ([#5052](https://github.com/craftcms/cms/issues/5052))
+- Updated Twig to 2.12.
+
+### Fixed
+- Fixed a SQL error that could occur when deleting an entry or category with three or more nested levels of elements. ([#3456](https://github.com/craftcms/cms/issues/3456))
+- Fixed a bug where querying for elements by their Lightswitch field value wasn’t working properly on PostgreSQL. ([#5046](https://github.com/craftcms/cms/issues/5046))
+- Fixed a bug where deleting an entry or category with nested elements could leave the structure in a jumbled state.
+- Fixed a bug where Assets fields would attempt to handle the same uploaded files multiple times if an element was saved multiple times in the same request. ([#5061](https://github.com/craftcms/cms/issues/5061))
+- Fixed a PHP error occurred when viewing the PHP Info utility if `register_argc_argv` was set to `On` in `php.ini`. ([#4878](https://github.com/craftcms/cms/issues/4878))
+- Fixed a bug where the `resave/matrix-blocks` command would wittingly resave Matrix blocks even if they hadn’t been loaded with their content, resulting in lost content. ([#5030](https://github.com/craftcms/cms/issues/5030))
+- Fixed some RTL display issues. ([#5051](https://github.com/craftcms/cms/issues/5051))
+
+### Security
+- Fixed an XSS vulnerability.
+
+## 3.3.7 - 2019-10-03
+
+### Changed
+- When saving a user, email validation errors are now copied over to the `email` attribute from the `unverifiedEmail` attribute. ([#5019](https://github.com/craftcms/cms/issues/5019))
+- `craft\web\View::renderString()` and `renderObjectTemplate()` now have `$templateMode` arguments. ([#5020](https://github.com/craftcms/cms/issues/5020))
+
+### Fixed
+- Fixed a bug where the Edit User page would list a “Copy activation URL” action for publicly-registered users who already had a password set.
+- Fixed a bug where the list and structure icons were missing on element index pages for RTL languages. ([#5018](https://github.com/craftcms/cms/issues/5018))
+- Fixed a bug where the `prevSiblingOf` and `nextSiblingOf` element query params weren’t working reliably. ([#4997](https://github.com/craftcms/cms/issues/4997))
+- Fixed a bug where the `descendantOf` element query param wasn’t working when previewing a draft or revision. ([#5021](https://github.com/craftcms/cms/issues/5021))
+- Fixed a PHP error that occurred when saving a Dropdown or Multi-select field with optgroups. ([#5014](https://github.com/craftcms/cms/issues/5014))
+- Fixed a bug where relational fields that were managing relations on a per-site basis would forget other sites’ relations when duplicated. ([#5038](https://github.com/craftcms/cms/issues/5038))
+
+## 3.3.6 - 2019-09-27
+
+### Added
+- Added `craft\base\ElementInterface::getIsHomepage()`. ([#4993](https://github.com/craftcms/cms/issues/4993))
+- Added `craft\base\Element::HOMEPAGE_URI`.
+
+### Changed
+- Updated Garnish to 0.1.31.
+
+### Fixed
+- Fixed a bug where some HTML in the Control Panel was getting improperly encoded. ([#5002](https://github.com/craftcms/cms/issues/5002))
+- Fixed a bug where `craft\helper\UrlHelper` wasn’t encoding `+` and `&` characters in query param values.
+- Fixed an error where GraphQL would sometimes not return a proper error message. ([#4999](https://github.com/craftcms/cms/issues/4999))
+- Fixed a bug where HUDs could be positioned incorrectly when first opened. ([#5004](https://github.com/craftcms/cms/issues/5004))
+- Fixed a bug where HUD tip images could be pointing the wrong way for RTL languages.
+
+## 3.3.5 - 2019-09-25
+
+### Added
+- The Control Panel is now translated into Persian. ([#4969](https://github.com/craftcms/cms/pull/4969))
+- Added `craft\test\fixtures\elements\ElementFixture::$unload`.
+
+### Changed
+- All users with permission to register users can now choose to not have an activation email sent immediately, when registering a new user. ([#4981](https://github.com/craftcms/cms/pull/4981))
+- Craft now shows validation errors when attempting to save a Dropdown, Radio Buttons, Checkboxes, or Multi-select field with duplicate option labels or values. ([#4983](https://github.com/craftcms/cms/issues/4983))
+- Live Preview requests now have an `x-craft-live-preview` query string param, rather than `x-craft-preview`. ([#4950](https://github.com/craftcms/cms/issues/4950))
+- The `_includes/pagination.html` template can now be passed `itemLabel` and `itemsLabel` variables.
+- Any migrations applied during testing are now recorded as content migrations.
+- Added the option to automatically apply all content migrations when setting up the test environment. ([#4904](https://github.com/craftcms/cms/issues/4904))
+- `craft\helpers\Html::parseTagAttributes()` now has a `$decode` argument.
+- `craft\test\fixtures\elements\GlobalSetFixture` now has the option to load the active record instance. ([#4947](https://github.com/craftcms/cms/pull/4947))
+
+### Fixed
+- Fixed a bug where checkbox inputs were positioned incorrectly for RTL languages.
+- Fixed a bug where the updater and `project.yaml` sync pages weren’t always handling error responses correctly. ([#4988](https://github.com/craftcms/cms/issues/4988))
+- Fixed an error that could occur when syncing the project config, if a volume was being deleted that didn’t exist in the database to begin with. ([#4990](https://github.com/craftcms/cms/pull/4990))
+- Fixed an error that could occur if a project config value changed from scalar to an array. ([#4932](https://github.com/craftcms/cms/issues/4932))
+- Fixed a bug where Craft would not recognize certain block types when using the GraphQL API. ([#4961](https://github.com/craftcms/cms/issues/4961))
+- Fixed a bug where `craft\helpers\Html::renderTagAttributes()` was double-encoding preexisting attributes. ([#4984](https://github.com/craftcms/cms/issues/4984))
+
+## 3.3.4.1 - 2019-09-17
+
+### Fixed
+- Fixed a bug where elements with enabled Lightswitch fields weren’t getting returned in element queries. ([#4951](https://github.com/craftcms/cms/issues/4951))
+
+## 3.3.4 - 2019-09-17
+
+### Changed
+- It’s now possible to run the `migrate/create install` command for uninstalled plugins.
+- Improved the button labels in the confirmation dialog that can appear after running the Asset Indexes utility. ([#4943](https://github.com/craftcms/cms/issues/4943))
+
+### Fixed
+- Fixed a bug where asset queries’ `withTransforms` param wasn’t working for eager-loaded assets. ([#4931](https://github.com/craftcms/cms/issues/4931))
+- Fixed a bug where the “Edit Image” asset action could be missing even if the user had the required permissions. ([#3349](https://github.com/craftcms/cms/issues/3349))
+- Fixed a bug where querying for elements by their Lightswitch field value could only return elements that had been saved since the Lightswitch field was added. ([#4939](https://github.com/craftcms/cms/issues/4939))
+- Fixed a bug where the Updates utility wasn’t showing the “Update all” button when multiple updates were available. ([#4938](https://github.com/craftcms/cms/issues/4938))
+- Fixed a bug where the “Updating search indexes” job could fail when updating search indexes for a Matrix block that contained a relational field.
+- Fixed a bug where category groups’ site settings weren’t being added to the project config when a new site was created.
+- Fixed a bug where the Translation Method setting wasn’t immediately shown for Matrix sub-fields, if the field type was changed from one that didn’t have multiple translation methods to one that does. ([#4949](https://github.com/craftcms/cms/issues/4949))
+- Fixed a bug where it wasn’t possible to query for entries by author ID using the GraphQL API.
+- Fixed a bug where it wasn’t possible to query for Matrix blocks directly using the GraphQL API.
+
+## 3.3.3 - 2019-09-12
+
+### Changed
+- The GraphQL API now prebuilds the schema for all introspection queries, regardless of whether Dev Mode is enabled.
+
+### Fixed
+- Fixed a bug where Craft was ignoring the `invalidUserTokenPath` request when it was set to an empty string. ([#1998](https://github.com/craftcms/cms/issues/1998))
+- Fixed a bug where the `invalidUserTokenPath` was affecting Control Panel requests.
+- Fixed a bug where revisions weren’t being sorted correctly in Structure sections.
+- Fixed a bug where Edit Entry pages weren’t working with certain versions of PHP if the user’s preferred language was set to French. ([#4930](https://github.com/craftcms/cms/issues/4930))
+
+## 3.3.2 - 2019-09-11
+
+### Added
+- Added the `graphql/dump-schema` and `graphql/print-schema` commands. ([#4834](https://github.com/craftcms/cms/pull/4834))
+- It’s now possible to access a `parent` field on entries and categories when querying the GraphQL API. ([#4880](https://github.com/craftcms/cms/issues/4880))
+- It’s now possible to apply transforms to assets via `url` field arguments when querying the GraphQL API.
+
+### Changed
+- Craft now resets the `dateCreated` attribute when duplicating elements. ([#4906](https://github.com/craftcms/cms/issues/4906))
+- It’s no longer possible to access the `author` field for entries when querying the GraphQL API, if the schema doesn’t include user data.
+- It’s no longer possible to access the `photo` field for users when querying the GraphQL API, if the schema doesn’t include the user photo volume.
+
+### Fixed
+- Fixed a bug where Lightswitch fields weren’t returning a boolean value for the GraphQL API.
+- Fixed a bug where `craft\web\View::renderString()` and `renderObjectTemplate()` could leave Craft set to the `site` template mode if an error occurred when preparing or rendering the template. ([#4912](https://github.com/craftcms/cms/issues/4912))
+- Fixed a bug where the Plugin Store wasn’t applying edition upgrade pricing for plugins if the higher edition was already installed as a trial.
+
 ## 3.3.1.2 - 2019-09-08
 
 ### Fixed
@@ -18,14 +190,14 @@
 ## 3.3.1 - 2019-09-06
 
 ### Added
-- Added support for setting `offset` and `limit` params to individual paths’ criterias when eager-loading elements.
+- Added support for setting `offset` and `limit` params to individual paths’ criteria when eager-loading elements.
 - Added the `enableGql` config setting. ([#4836](https://github.com/craftcms/cms/issues/4836))
 - Added the `children` field to the `EntryInterface` and `CategoryInterface` GraphQL types. ([#4843](https://github.com/craftcms/cms/issues/4843))
 - Added the `markdown` GraphQL directive. ([#4832](https://github.com/craftcms/cms/issues/4832))
 
 ### Changed
 - Preview target URIs can now be set to environment variables (e.g. `$NEWS_INDEX`) or URLs that begin with an alias (e.g. `@rootUrl/news` or `@rootUrl/news/{slug}`).
-- Templates passed to `craft\web\View::renderString()` and `renderObjectTemplate()` can now incude front-end templates.
+- Templates passed to `craft\web\View::renderString()` and `renderObjectTemplate()` can now include front-end templates.
 - Element queries with the `revisions` param set will now return revisions ordered by `num DESC` by default. ([#4825](https://github.com/craftcms/cms/issues/4825))
 - `graphql/api` responses now set the `Access-Control-Allow-Headers: Content-Type` header for preflight requests.
 - Craft no longer forces preview target URLs to use `https` if the current request is over SSL. ([#4867](https://github.com/craftcms/cms/issues/4867))
@@ -35,10 +207,10 @@
 
 ### Fixed
 - Fixed a bug where Number fields weren’t showing validation errors when non-numeric values were entered. ([#4849](https://github.com/craftcms/cms/issues/4849))
-- Fixed an error that occurred when accesing the GraphQL section in the Control Panel if the `allowAdminChanges` config setting was disabled. ([#4884](https://github.com/craftcms/cms/issues/4884))
+- Fixed an error that occurred when accessing the GraphQL section in the Control Panel if the `allowAdminChanges` config setting was disabled. ([#4884](https://github.com/craftcms/cms/issues/4884))
 - Fixed an error that could occur when executing a GraphQL query if a Matrix field had been converted to a different field type. ([#4848](https://github.com/craftcms/cms/issues/4848))
 - Fixed a deprecation warning when running tests in PhpStorm. ([#4772](https://github.com/craftcms/cms/pull/4772))
-- Fixed an SQL error that occured when eager-loading children for an element that wasn't in a structure.
+- Fixed an SQL error that occurred when eager-loading children for an element that wasn’t in a structure.
 - Fixed a bug that could cause queue jobs to fail when they were run automatically by Craft, if the `enableCsrfProtection` config setting was disabled. ([#4854](https://github.com/craftcms/cms/issues/4854))
 - Fixed an error that could occur if the `select` clause had been completely overridden on an element query, but the `asArray` param wasn’t enabled. ([#4886](https://github.com/craftcms/cms/issues/4886))
 - Fixed a bug where Craft wasn’t always respecting the site-specific status when saving new entries. ([#4892](https://github.com/craftcms/cms/issues/4892))
@@ -378,7 +550,7 @@
 - Fixed a bug where installing a plugin immediately after installing Craft from the console could corrupt the project config if `useProjectConfigFile` was enabled. ([#3870](https://github.com/craftcms/cms/issues/3870))
 - Fixed a bug where entry forms could overlook changes made to Categories fields. ([#4648](https://github.com/craftcms/cms/issues/4648))
 - Fixed a bug where element search indexes weren’t being updated right away after an element was created or updated from an element editor HUD.
-- Fixed a bug where back-end slug validation wasn’t working correctly for slugs with some unicode characters. ([#1535](https://github.com/craftcms/cms/issues/1535))
+- Fixed a bug where back-end slug validation wasn’t working correctly for slugs with some Unicode characters. ([#1535](https://github.com/craftcms/cms/issues/1535))
 - Fixed a bug where Craft was attempting to delete template caches even when saving a draft or revision.
 
 ## 3.2.6 - 2019-07-23
@@ -393,7 +565,7 @@
 ### Fixed
 - Fixed a bug where Craft could load the same JavaScript and CSS files multiple times when opening element editor HUDs. ([#4620](https://github.com/craftcms/cms/issues/4620))
 - Fixed a bug where each animated GIF frame would still be parsed when generating a thumbnail, even if the `transformGifs` setting was set to `false`. ([#4588](https://github.com/craftcms/cms/issues/4588))
-- Fixed a bug where back-end slug validation wasn’t working correctly for slugs with unicode characters. ([#4628](https://github.com/craftcms/cms/issues/4628))
+- Fixed a bug where back-end slug validation wasn’t working correctly for slugs with Unicode characters. ([#4628](https://github.com/craftcms/cms/issues/4628))
 - Fixed a bug where it wasn’t possible to create new entries if the section handle matched the `pageTrigger` config setting, and the `pageTrigger` config setting had a trailing slash. ([#4631](https://github.com/craftcms/cms/issues/4631))
 - Fixed a bug where the `sections.previewTargets` database column was getting created as a `varchar` instead of `text` column for new Craft installs. ([#4638](https://github.com/craftcms/cms/issues/4638))
 
@@ -768,7 +940,7 @@
 ### Fixed
 - Fixed a bug where `Craft::dd()` wouldn’t work properly if output buffering was enabled. ([#4399](https://github.com/craftcms/cms/issues/4399))
 - Fixed a bug where `Craft::alias()` wasn’t working on Windows servers. ([#4405](https://github.com/craftcms/cms/issues/4405))
-- Fixed a bug where Craft wasn't parsing the `dsn` DB connection setting properly if it was supplied.
+- Fixed a bug where Craft wasn’t parsing the `dsn` DB connection setting properly if it was supplied.
 
 ### Security
 - Fixed an XSS vulnerability.
@@ -1198,7 +1370,7 @@
 - `craft\helpers\FileHelper::writeToFile()` now invalidates the OPcache for the file. ([#3838](https://github.com/craftcms/cms/pull/3838))
 - The `serve` command now uses `@webroot` as the default `docroot` option value. ([#3770](https://github.com/craftcms/cms/pull/3770))
 
-### Fixed
+### Fixed
 - Fixed a bug where the `users/save-user` action wasn’t deleting user photos properly.
 - Fixed a bug where changes to Matrix block type fields’ settings weren’t always saving. ([#3832](https://github.com/craftcms/cms/issues/3832))
 - Fixed a bug where non-searchable fields were still getting search keywords stored when using the Search Indexes utility. ([#3837](https://github.com/craftcms/cms/issues/3837))
@@ -1263,7 +1435,7 @@
 ### Changed
 - The “Port” SMTP mail transport setting can now be set to an environment variable. ([#3740](https://github.com/craftcms/cms/issues/3740))
 - `craft\web\Controller::requireAdmin()` now has a `$requireAdminChanges` argument, which dictates whether the `allowAdminChanges` config setting must also be enabled (`true` by default).
-- The `project-config/sync` console command now creates a `project.yaml` file, if it's missing. ([#3736](https://github.com/craftcms/cms/issues/3736))
+- The `project-config/sync` console command now creates a `project.yaml` file, if it’s missing. ([#3736](https://github.com/craftcms/cms/issues/3736))
 - Querying for active users no longer excludes locked users.
 - `craft\helpers\FileHelper::getMimeType()` now returns `application/x-yaml` for `.yaml` and `.yml` files.
 - Updated Craft UI to 0.2.0.
@@ -2161,7 +2333,7 @@
 - `craft\helpers\StringHelper::toKebabCase()`, `toCamelCase()`, `toPascalCase()`, and `toSnakeCase()` now treat camelCase’d and PascalCale’d strings as multiple words. ([#3090](https://github.com/craftcms/cms/issues/3090))
 
 ### Fixed
-- Fixed a bug where `craft\i18n\I18N::getPrimarySiteLocale()` and `getPrimarySiteLocaleId()` were returning locale info for the _first_ site, rather than the primary one. ([#3063](https://github.com/craftcms/cms/issues/3063))
+- Fixed a bug where `craft\i18n\I18N::getPrimarySiteLocale()` and `getPrimarySiteLocaleId()` were returning locale info for the _first_ site, rather than the primary one. ([#3063](https://github.com/craftcms/cms/issues/3063))
 - Fixed a bug where element index pages were loading all elements in the view, rather than waiting for the user to scroll to the bottom of the page before loading the next batch. ([#3068](https://github.com/craftcms/cms/issues/3068))
 - Fixed a bug where sites listed in the Control Panel weren’t always in the correct sort order. ([#3065](https://github.com/craftcms/cms/issues/3065))
 - Fixed an error that occurred when users attempted to create new entries within entry selector modals, for a section they didn’t have permission to publish peer entries in. ([#3069](https://github.com/craftcms/cms/issues/3069))

@@ -20,23 +20,6 @@ return array (
     'developerUrl' => 'https://www.doublesecretagency.com/plugins',
     'documentationUrl' => 'https://www.doublesecretagency.com/plugins/smart-map/docs',
   ),
-  'craftcms/redactor' => 
-  array (
-    'class' => 'craft\\redactor\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/redactor/src',
-    'handle' => 'redactor',
-    'aliases' => 
-    array (
-      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
-    ),
-    'name' => 'Redactor',
-    'version' => '2.3.3.2',
-    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://pixelandtonic.com/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
-  ),
   'craftcms/contact-form' => 
   array (
     'class' => 'craft\\contactform\\Plugin',
@@ -77,30 +60,6 @@ return array (
     'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
     'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
   ),
-  'rias/craft-contact-form-extensions' => 
-  array (
-    'class' => 'rias\\contactformextensions\\ContactFormExtensions',
-    'basePath' => $vendorDir . '/rias/craft-contact-form-extensions/src',
-    'handle' => 'contact-form-extensions',
-    'aliases' => 
-    array (
-      '@rias/contactformextensions' => $vendorDir . '/rias/craft-contact-form-extensions/src',
-    ),
-    'name' => 'Contact Form Extensions',
-    'version' => '1.1.7',
-    'schemaVersion' => '1.0.0',
-    'description' => 'Adds extensions to the Craft CMS contact form plugin.',
-    'developer' => 'Rias',
-    'developerUrl' => 'https://rias.be',
-    'documentationUrl' => 'https://github.com/riasvdv/craft-contact-form-extensions/blob/master/README.md',
-    'changelogUrl' => 'https://raw.githubusercontent.com/riasvdv/craft-contact-form-extensions/master/CHANGELOG.md',
-    'hasCpSettings' => true,
-    'hasCpSection' => true,
-    'components' => 
-    array (
-      'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
-    ),
-  ),
   'craftcms/commerce' => 
   array (
     'class' => 'craft\\commerce\\Plugin',
@@ -117,5 +76,46 @@ return array (
     'developerUrl' => 'https://craftcommerce.com',
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
+  ),
+  'craftcms/redactor' => 
+  array (
+    'class' => 'craft\\redactor\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/redactor/src',
+    'handle' => 'redactor',
+    'aliases' => 
+    array (
+      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
+    ),
+    'name' => 'Redactor',
+    'version' => '2.4.0',
+    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://pixelandtonic.com/',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
+  ),
+  'rias/craft-contact-form-extensions' => 
+  array (
+    'class' => 'rias\\contactformextensions\\ContactFormExtensions',
+    'basePath' => $vendorDir . '/rias/craft-contact-form-extensions/src',
+    'handle' => 'contact-form-extensions',
+    'aliases' => 
+    array (
+      '@rias/contactformextensions' => $vendorDir . '/rias/craft-contact-form-extensions/src',
+    ),
+    'name' => 'Contact Form Extensions',
+    'version' => '1.2.0',
+    'schemaVersion' => '1.0.0',
+    'description' => 'Adds extensions to the Craft CMS contact form plugin.',
+    'developer' => 'Rias',
+    'developerUrl' => 'https://rias.be',
+    'documentationUrl' => 'https://github.com/riasvdv/craft-contact-form-extensions/blob/master/README.md',
+    'changelogUrl' => 'https://raw.githubusercontent.com/riasvdv/craft-contact-form-extensions/master/CHANGELOG.md',
+    'hasCpSettings' => true,
+    'hasCpSection' => true,
+    'components' => 
+    array (
+      'contactFormExtensionsService' => 'rias\\contactformextensions\\services\\ContactFormExtensionsService',
+    ),
   ),
 );

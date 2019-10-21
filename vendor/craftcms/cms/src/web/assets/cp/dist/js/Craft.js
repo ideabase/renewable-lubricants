@@ -1,4 +1,4 @@
-/*!   - 2019-08-27 */
+/*!   - 2019-10-11 */
 (function($){
 
 /** global: Craft */
@@ -367,23 +367,21 @@ $.extend(Craft,
                 headers: headers,
                 data: data,
                 success: callback,
-                complete: function(jqXHR, textStatus) {
-                    if (textStatus === 'error') {
-                        // Ignore incomplete requests, likely due to navigating away from the page
-                        // h/t https://stackoverflow.com/a/22107079/1688568
-                        if (jqXHR.readyState !== 4) {
-                            return;
-                        }
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Ignore incomplete requests, likely due to navigating away from the page
+                    // h/t https://stackoverflow.com/a/22107079/1688568
+                    if (jqXHR.readyState !== 4) {
+                        return;
+                    }
 
-                        if (typeof Craft.cp !== 'undefined') {
-                            Craft.cp.displayError();
-                        } else {
-                            alert(Craft.t('app', 'An unknown error occurred.'));
-                        }
+                    if (typeof Craft.cp !== 'undefined') {
+                        Craft.cp.displayError();
+                    } else {
+                        alert(Craft.t('app', 'An unknown error occurred.'));
+                    }
 
-                        if (callback) {
-                            callback(null, textStatus, jqXHR);
-                        }
+                    if (callback) {
+                        callback(null, textStatus, jqXHR);
                     }
                 }
             }, options));
@@ -2373,7 +2371,8 @@ Craft.BaseElementIndex = Garnish.Base.extend(
                 source: this.instanceState.selectedSource,
                 criteria: criteria,
                 disabledElementIds: this.settings.disabledElementIds,
-                viewState: $.extend({}, this.getSelectedSourceState())
+                viewState: $.extend({}, this.getSelectedSourceState()),
+                paginated: this._isViewPaginated() ? 1 : 0,
             };
 
             // Possible that the order/sort isn't entirely accurate if we're sorting by Score
@@ -3293,6 +3292,10 @@ Craft.BaseElementIndex = Garnish.Base.extend(
         // View
         // -------------------------------------------------------------------------
 
+        _isViewPaginated: function() {
+            return this.settings.context === 'index' && this.getSelectedSortAttribute() !== 'structure';
+        },
+
         _updateView: function(params, response) {
             // Cleanup
             // -------------------------------------------------------------
@@ -3312,10 +3315,9 @@ Craft.BaseElementIndex = Garnish.Base.extend(
             // -------------------------------------------------------------
 
             this.$countContainer.html('');
-            var elementTypeName = (response.count == 1 ? this.settings.elementTypeName : this.settings.elementTypePluralName).toLowerCase();
 
-            if (this.settings.context !== 'index' || this.getSelectedSortAttribute() === 'structure' || response.count <= this.settings.batchSize) {
-                this.$countContainer.text(response.count + ' ' + elementTypeName);
+            if (!this._isViewPaginated() || response.count <= this.settings.batchSize) {
+                this.$countContainer.text(response.countLabel);
             } else {
                 var $paginationContainer = $('<div class="flex pagination"/>').appendTo(this.$countContainer);
                 var totalPages = Math.max(Math.ceil(response.count / this.settings.batchSize), 1);
@@ -3331,14 +3333,9 @@ Craft.BaseElementIndex = Garnish.Base.extend(
                     title: Craft.t('app', 'Next Page')
                 }).appendTo($paginationContainer);
 
-                var first = Math.min((this.settings.batchSize * (this.page - 1)) + 1, response.count);
                 $('<div/>', {
                     'class': 'page-info',
-                    text: Craft.t('app', '{first}-{last} of {total}', {
-                        first: Craft.formatNumber(first),
-                        last: Craft.formatNumber(Math.min(first + (this.settings.batchSize - 1), response.count)),
-                        total: Craft.formatNumber(response.count)
-                    }) + ' ' + elementTypeName
+                    text: response.countLabel
                 }).appendTo($paginationContainer);
 
                 if (this.page > 1) {
@@ -3623,9 +3620,6 @@ Craft.BaseElementIndex = Garnish.Base.extend(
             updateElementsAction: 'element-indexes/get-elements',
             submitActionsAction: 'element-indexes/perform-action',
             toolbarFixed: null,
-
-            elementTypeName: Craft.t('app', 'Element'),
-            elementTypePluralName: Craft.t('app', 'Elements'),
 
             onAfterInit: $.noop,
             onSelectSource: $.noop,
@@ -4958,10 +4952,10 @@ Craft.AdminTable = Garnish.Base.extend(
                 this.updateUI();
                 this.onDeleteItem(id);
 
-                Craft.cp.displayNotice(Craft.t('app', this.settings.deleteSuccessMessage, {name: Craft.escapeHtml(name)}));
+                Craft.cp.displayNotice(Craft.t('app', this.settings.deleteSuccessMessage, {name: name}));
             }
             else {
-                Craft.cp.displayError(Craft.t('app', this.settings.deleteFailMessage, {name: Craft.escapeHtml(name)}));
+                Craft.cp.displayError(Craft.t('app', this.settings.deleteFailMessage, {name: name}));
             }
         },
 
@@ -4978,7 +4972,7 @@ Craft.AdminTable = Garnish.Base.extend(
         },
 
         getItemName: function($row) {
-            return $row.attr(this.settings.nameAttribute);
+            return Craft.escapeHtml($row.attr(this.settings.nameAttribute));
         },
 
         updateUI: function() {
@@ -5082,6 +5076,8 @@ Craft.AssetEditor = Craft.BaseElementEditor.extend(
         onHideHud: function () {
             if (this.reloadIndex && this.settings.elementIndex) {
                 this.settings.elementIndex.updateElements();
+            } else if (this.reloadIndex && this.settings.input) {
+                this.settings.input.refreshThumbnail(this.$element.data('id'));
             }
 
             this.base();
@@ -9105,7 +9101,8 @@ Craft.AssetSelectInput = Craft.BaseElementSelectInput.extend(
             return this.base($element, {
                 params: {
                     defaultFieldLayoutId: this.settings.defaultFieldLayoutId
-                }
+                },
+                input: this
             });
         },
 
@@ -9142,6 +9139,24 @@ Craft.AssetSelectInput = Craft.BaseElementSelectInput.extend(
             options.events.fileuploaddone = $.proxy(this, '_onUploadComplete');
 
             this.uploader = new Craft.Uploader(this.$container, options);
+        },
+
+        refreshThumbnail: function(elementId) {
+            var parameters = {
+                elementId: elementId,
+                siteId: this.settings.criteria.siteId,
+                size: this.settings.viewMode
+            };
+
+            Craft.postActionRequest('elements/get-element-html', parameters, function(data) {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    var $existing = this.$elements.filter('[data-id="' + elementId + '"]');
+                    $existing.find('.elementthumb').replaceWith($(data.html).find('.elementthumb'));
+                    this.thumbLoader.load($existing);
+                }
+            }.bind(this));
         },
 
         /**
@@ -13097,13 +13112,13 @@ Craft.DraftEditor = Garnish.Base.extend(
             }.bind(this));
         },
 
-        getTokenizedPreviewUrl: function(url, forceRandomParam) {
+        getTokenizedPreviewUrl: function(url, randoParam) {
             return new Promise(function(resolve, reject) {
                 var params = {};
 
-                if (forceRandomParam || !this.settings.isLive) {
+                if (randoParam || !this.settings.isLive) {
                     // Randomize the URL so CDNs don't return cached pages
-                    params['x-craft-preview'] = Craft.randomString(10);
+                    params[randoParam || 'x-craft-preview'] = Craft.randomString(10);
                 }
 
                 // No need for a token if we're looking at a live element
@@ -17632,7 +17647,7 @@ Craft.Preview = Garnish.Base.extend(
 
             var url = this.draftEditor.settings.previewTargets[this.activeTarget].url;
 
-            this.draftEditor.getTokenizedPreviewUrl(url, true).then(function(url) {
+            this.draftEditor.getTokenizedPreviewUrl(url, 'x-craft-live-preview').then(function(url) {
                 // Capture the current scroll position?
                 var sameHost;
                 if (resetScroll) {

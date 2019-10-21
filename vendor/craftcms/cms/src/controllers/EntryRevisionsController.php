@@ -154,7 +154,8 @@ class EntryRevisionsController extends BaseEntriesController
         // Are we creating a new entry too?
         if (!$draftId && !$entryId) {
             $entry = new Entry();
-            $entry->sectionId = $request->getBodyParam('entryId');
+            $entry->siteId = $siteId;
+            $entry->sectionId = $request->getBodyParam('sectionId');
             $this->_setDraftAttributesFromPost($entry);
             $this->enforceEditEntryPermissions($entry);
             $entry->setFieldValuesFromRequest($fieldsLocation);
@@ -336,7 +337,7 @@ class EntryRevisionsController extends BaseEntriesController
         /** @var Entry|null $entry */
         $entry = ElementHelper::sourceElement($draft);
         $this->enforceEditEntryPermissions($entry);
-        $section = ($entry)->getSection();
+        $section = $entry->getSection();
 
         // Is this another user's entry (and it's not a Single)?
         $userId = Craft::$app->getUser()->getId();
