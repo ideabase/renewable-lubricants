@@ -59,7 +59,7 @@ use yii\db\Exception as DbException;
  * An instance of the Elements service is globally accessible in Craft via [[\craft\base\ApplicationTrait::getElements()|`Craft::$app->elements`]].
  *
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @since 3.0
+ * @since 3.0.0
  */
 class Elements extends Component
 {
@@ -105,21 +105,57 @@ class Elements extends Component
 
     /**
      * @event ElementEvent The event that is triggered before an element is restored.
+     * @since 3.1.0
      */
     const EVENT_BEFORE_RESTORE_ELEMENT = 'beforeRestoreElement';
 
     /**
      * @event ElementEvent The event that is triggered after an element is restored.
+     * @since 3.1.0
      */
     const EVENT_AFTER_RESTORE_ELEMENT = 'afterRestoreElement';
 
     /**
      * @event ElementEvent The event that is triggered before an element is saved.
+     *
+     * If you want to ignore events for drafts or revisions, call [[\craft\helpers\ElementHelper::isDraftOrRevision()]]
+     * from your event handler:
+     *
+     * ```php
+     * use craft\events\ElementEvent;
+     * use craft\helpers\ElementHelper;
+     * use craft\services\Elements;
+     *
+     * Craft::$app->elements->on(Elements::EVENT_BEFORE_SAVE_ELEMENT, function(ElementEvent $e) {
+     *     if (ElementHelper::isDraftOrRevision($e->element) {
+     *         return;
+     *     }
+     *
+     *     // ...
+     * });
+     * ```
      */
     const EVENT_BEFORE_SAVE_ELEMENT = 'beforeSaveElement';
 
     /**
      * @event ElementEvent The event that is triggered after an element is saved.
+     *
+     * If you want to ignore events for drafts or revisions, call [[\craft\helpers\ElementHelper::isDraftOrRevision()]]
+     * from your event handler:
+     *
+     * ```php
+     * use craft\events\ElementEvent;
+     * use craft\helpers\ElementHelper;
+     * use craft\services\Elements;
+     *
+     * Craft::$app->elements->on(Elements::EVENT_AFTER_SAVE_ELEMENT, function(ElementEvent $e) {
+     *     if (ElementHelper::isDraftOrRevision($e->element) {
+     *         return;
+     *     }
+     *
+     *     // ...
+     * });
+     * ```
      */
     const EVENT_AFTER_SAVE_ELEMENT = 'afterSaveElement';
 
@@ -982,6 +1018,7 @@ class Elements extends Component
      * @param ElementInterface $prevailingElement The element that is sticking around.
      * @return bool Whether the elements were merged successfully.
      * @throws \Throwable if reasons
+     * @since 3.1.31
      */
     public function mergeElements(ElementInterface $mergedElement, ElementInterface $prevailingElement): bool
     {
@@ -1224,6 +1261,7 @@ class Elements extends Component
      * @return bool Whether the element was restored successfully
      * @throws Exception if the $element doesn’t have any supported sites
      * @throws \Throwable if reasons
+     * @since 3.1.0
      */
     public function restoreElement(ElementInterface $element): bool
     {
@@ -1779,6 +1817,7 @@ class Elements extends Component
      * @param ElementInterface|null $siteElement The element loaded for the propagated site (only pass this if you
      * already had a reason to load it)
      * @throws Exception if the element couldn't be propagated
+     * @since 3.0.13
      */
     public function propagateElement(ElementInterface $element, int $siteId, ElementInterface $siteElement = null)
     {

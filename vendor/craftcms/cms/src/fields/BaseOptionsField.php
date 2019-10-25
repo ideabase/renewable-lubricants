@@ -24,7 +24,7 @@ use yii\db\Schema;
  * BaseOptionsField is the base class for classes representing an options field.
  *
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @since 3.0
+ * @since 3.0.0
  */
 abstract class BaseOptionsField extends Field implements PreviewableFieldInterface
 {
@@ -408,7 +408,7 @@ abstract class BaseOptionsField extends Field implements PreviewableFieldInterfa
             foreach ($this->options as $option) {
                 if (isset($option['optgroup'])) {
                     $translatedOptions[] = [
-                        'optgroup' => Craft::t('site',$option['optgroup']),
+                        'optgroup' => Craft::t('site', $option['optgroup']),
                     ];
                 } else {
                     $translatedOptions[] = [

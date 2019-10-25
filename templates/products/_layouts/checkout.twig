@@ -1,0 +1,11 @@
+{% set showNav = false %}
+
+{% extends 'products/_layouts/main' %}
+
+{% set extraHeader %}
+  {% include 'products/_includes/meter' %}
+{% endset %}
+
+{% block main %}
+  {% block content %}{% endblock %}
+{% endblock %}

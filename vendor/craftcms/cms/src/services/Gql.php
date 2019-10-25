@@ -8,8 +8,8 @@
 namespace craft\services;
 
 use Craft;
-use craft\db\Table;
 use craft\db\Query as DbQuery;
+use craft\db\Table;
 use craft\errors\GqlException;
 use craft\events\ExecuteGqlQueryEvent;
 use craft\events\RegisterGqlDirectivesEvent;
@@ -17,30 +17,31 @@ use craft\events\RegisterGqlQueriesEvent;
 use craft\events\RegisterGqlTypesEvent;
 use craft\gql\base\Directive;
 use craft\gql\base\GeneratorInterface;
+use craft\gql\base\InterfaceType;
 use craft\gql\directives\FormatDateTime;
 use craft\gql\directives\Markdown;
 use craft\gql\directives\Transform;
 use craft\gql\GqlEntityRegistry;
-use craft\gql\base\InterfaceType;
+use craft\gql\interfaces\Element as ElementInterface;
 use craft\gql\interfaces\elements\Asset as AssetInterface;
 use craft\gql\interfaces\elements\Category as CategoryInterface;
-use craft\gql\interfaces\Element as ElementInterface;
 use craft\gql\interfaces\elements\Entry as EntryInterface;
 use craft\gql\interfaces\elements\GlobalSet as GlobalSetInterface;
 use craft\gql\interfaces\elements\MatrixBlock as MatrixBlockInterface;
-use craft\gql\interfaces\elements\User as UserInterface;
 use craft\gql\interfaces\elements\Tag as TagInterface;
+use craft\gql\interfaces\elements\User as UserInterface;
 use craft\gql\queries\Asset as AssetQuery;
 use craft\gql\queries\Category as CategoryQuery;
 use craft\gql\queries\Entry as EntryQuery;
 use craft\gql\queries\GlobalSet as GlobalSetQuery;
 use craft\gql\queries\Ping as PingQuery;
-use craft\gql\queries\User as UserQuery;
 use craft\gql\queries\Tag as TagQuery;
+use craft\gql\queries\User as UserQuery;
 use craft\gql\TypeLoader;
 use craft\gql\types\DateTime;
 use craft\gql\types\Query;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\StringHelper;
 use craft\models\GqlSchema;
 use craft\records\GqlSchema as GqlSchemaRecord;
 use GraphQL\GraphQL;
@@ -48,6 +49,7 @@ use GraphQL\Type\Schema;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\caching\TagDependency;
 
 /**
  * The Gql service provides GraphQL functionality.
@@ -147,9 +149,11 @@ class Gql extends Component
      *     }
      * );
      * ```
+     *
+     * @since 3.3.11
      */
     const EVENT_BEFORE_EXECUTE_GQL_QUERY = 'beforeExecuteGqlQuery';
-    
+
     /**
      * @event ExecuteGqlQueryEvent The event that is triggered after executing the GraphQL query.
      *
@@ -168,20 +172,23 @@ class Gql extends Component
      *     }
      * );
      * ```
+     *
+     * @since 3.3.11
      */
     const EVENT_AFTER_EXECUTE_GQL_QUERY = 'afterExecuteGqlQuery';
 
     /**
-     * Currently loaded schema definition
-     *
-     * @var Schema
+     * @since 3.3.12
+     */
+    const CACHE_TAG = 'graphql';
+
+    /**
+     * @var Schema Currently loaded schema definition
      */
     private $_schemaDef;
 
     /**
-     * The active GraphQL schema
-     *
-     * @var GqlSchema
+     * @var GqlSchema The active GraphQL schema
      * @see setActiveSchema()
      */
     private $_schema;
@@ -205,7 +212,7 @@ class Gql extends Component
 
         if (!$this->_schemaDef || $prebuildSchema) {
             // Either cached version was not found or we need a pre-built schema.
-            $this->_registerGqlTypes();
+            $registeredTypes = $this->_registerGqlTypes();
             $this->_registerGqlQueries();
 
             $schemaConfig = [
@@ -218,32 +225,19 @@ class Gql extends Component
             // as the query is being resolved thanks to the magic of lazy-loading, so we needn't worry.
             if (!$prebuildSchema) {
                 $this->_schemaDef = new Schema($schemaConfig);
-
                 return $this->_schemaDef;
             }
 
-            // Create a pre-built schema if that's what they want.
-            $interfaces = [
-                EntryInterface::class,
-                MatrixBlockInterface::class,
-                AssetInterface::class,
-                UserInterface::class,
-                GlobalSetInterface::class,
-                ElementInterface::class,
-                CategoryInterface::class,
-                TagInterface::class,
-            ];
+            foreach ($registeredTypes as $registeredType) {
+                if (method_exists($registeredType, 'getTypeGenerator')) {
+                    /** @var GeneratorInterface $typeGeneratorClass */
+                    $typeGeneratorClass = $registeredType::getTypeGenerator();
 
-            foreach ($interfaces as $interfaceClass) {
-                if (!is_subclass_of($interfaceClass, InterfaceType::class)) {
-                    throw new GqlException('Incorrectly defined interface ' . $interfaceClass);
-                }
-
-                /** @var GeneratorInterface $typeGeneratorClass */
-                $typeGeneratorClass = $interfaceClass::getTypeGenerator();
-
-                foreach ($typeGeneratorClass::generateTypes() as $type) {
-                    $schemaConfig['types'][] = $type;
+                    if (is_subclass_of($typeGeneratorClass, GeneratorInterface::class)) {
+                        foreach ($typeGeneratorClass::generateTypes() as $type) {
+                            $schemaConfig['types'][] = $type;
+                        }
+                    }
                 }
             }
 
@@ -259,18 +253,19 @@ class Gql extends Component
     }
 
     /**
-     * Execute a GraphQL query for a given schema definition.
+     * Execute a GraphQL query for a given active schema.
      *
-     * @param Schema $schema The schema definition to use.
+     * @param GqlSchema $schema The active schema to use.
      * @param string $query The query string to execute.
      * @param array|null $variables The variables to use.
      * @param string|null $operationName The operation name.
      * @return array
+     * @since 3.3.11
      */
-    public function executeQuery(Schema $schemaDef, string $query, $variables, $operationName): array
+    public function executeQuery(GqlSchema $schema, string $query, $variables, $operationName): array
     {
         $event = new ExecuteGqlQueryEvent([
-            'schemaDef' => $schemaDef,
+            'accessToken' => $schema->accessToken,
             'query' => $query,
             'variables' => $variables,
             'operationName' => $operationName,
@@ -279,12 +274,57 @@ class Gql extends Component
         $this->trigger(self::EVENT_BEFORE_EXECUTE_GQL_QUERY, $event);
 
         if ($event->result === null) {
-            $event->result = GraphQL::executeQuery($schemaDef, $query, $event->rootValue, $event->context, $variables, $operationName)->toArray(true);
+            $cacheKey = $this->_getCacheKey($schema, $query, $event->rootValue, $event->context, $variables, $operationName);
+
+            if ($cacheKey && ($cachedResult = $this->getCachedResult($cacheKey))) {
+                $event->result = $cachedResult;
+            } else {
+                $schemaDef = $this->getSchemaDef($schema, StringHelper::contains($query, '__schema'));
+                $event->result = GraphQL::executeQuery($schemaDef, $query, $event->rootValue, $event->context, $event->variables, $event->operationName)->toArray(true);
+
+                if (empty($event->result['errors']) && $cacheKey) {
+                    $this->setCachedResult($cacheKey, $event->result);
+                }
+            }
         }
 
         $this->trigger(self::EVENT_AFTER_EXECUTE_GQL_QUERY, $event);
 
-        return $event->result;
+        return $event->result ?? [];
+    }
+
+    /**
+     * Invalidate all GraphQL result caches.
+     *
+     * @since 3.3.12
+     */
+    public function invalidateCaches()
+    {
+        TagDependency::invalidate(Craft::$app->getCache(), self::CACHE_TAG);
+    }
+
+    /**
+     * Get the cached result for a key.
+     *
+     * @param $cacheKey
+     * @return mixed
+     * @since 3.3.12
+     */
+    public function getCachedResult($cacheKey)
+    {
+        return Craft::$app->getCache()->get($cacheKey);
+    }
+
+    /**
+     * Cache a result for the key and tag it.
+     *
+     * @param $cacheKey
+     * @param $result
+     * @since 3.3.12
+     */
+    public function setCachedResult($cacheKey, $result)
+    {
+        Craft::$app->getCache()->set($cacheKey, $result, null, new TagDependency(['tags' => self::CACHE_TAG]));
     }
 
     /**
@@ -314,7 +354,7 @@ class Gql extends Component
 
         if ($schema) {
             $schema->lastUsed = DateTimeHelper::currentUTCDateTime();
-            $this->saveSchema($schema);
+            $this->saveSchema($schema, true, false);
         }
     }
 
@@ -403,7 +443,6 @@ class Gql extends Component
         $permissions = array_merge($permissions, $this->_getTagPermissions());
 
         return $permissions;
-
     }
 
     /**
@@ -417,6 +456,7 @@ class Gql extends Component
         $this->_schemaDef = null;
         TypeLoader::flush();
         GqlEntityRegistry::flush();
+        $this->invalidateCaches();
     }
 
     /**
@@ -483,11 +523,16 @@ class Gql extends Component
      *
      * @param GqlSchema $schema the schema to save
      * @param bool $runValidation Whether the schema should be validated
+     * @param bool $invalidateCaches Whether the cached results should be invalidated
      * @return bool Whether the schema was saved successfully
      * @throws Exception
      */
-    public function saveSchema(GqlSchema $schema, $runValidation = true): bool
+    public function saveSchema(GqlSchema $schema, $runValidation = true, $invalidateCaches = true): bool
     {
+        if ($schema->isTemporary) {
+            return false;
+        }
+
         $isNewSchema = !$schema->id;
 
         if ($runValidation && !$schema->validate()) {
@@ -502,7 +547,7 @@ class Gql extends Component
         }
 
         $schemaRecord->name = $schema->name;
-        $schemaRecord->enabled = (bool) $schema->enabled;
+        $schemaRecord->enabled = (bool)$schema->enabled;
         $schemaRecord->expiryDate = $schema->expiryDate;
         $schemaRecord->lastUsed = $schema->lastUsed;
         $schemaRecord->scope = $schema->scope;
@@ -513,6 +558,10 @@ class Gql extends Component
 
         $schemaRecord->save();
         $schema->id = $schemaRecord->id;
+
+        if ($invalidateCaches) {
+            $this->invalidateCaches();
+        }
 
         return true;
     }
@@ -538,11 +587,47 @@ class Gql extends Component
     // =========================================================================
 
     /**
-     * Get GraphQL type definitions from a list of models that support GraphQL
+     * Generate a cache key for the GraphQL operation. Returns null if caching is disabled or unable to generate one.
      *
-     * @return void
+     * @param GqlSchema $schema
+     * @param string $query
+     * @param $rootValue
+     * @param $context
+     * @param $variables
+     * @param $operationName
+     *
+     * @return string|null
      */
-    private function _registerGqlTypes()
+    private function _getCacheKey(GqlSchema $schema, string $query, $rootValue, $context, $variables, $operationName)
+    {
+        // No cache key, if explicitly disabled
+        $generalConfig = Craft::$app->getConfig()->getGeneral();
+
+        if (!$generalConfig->enableGraphQlCaching) {
+            return null;
+        }
+
+        // No cache key if we have placeholder elements
+        if (!empty(Craft::$app->getElements()->getPlaceholderElements())) {
+            return null;
+        }
+
+        try {
+            $cacheKey = 'gql.results.' . sha1($schema->accessToken . $query . serialize($rootValue) . serialize($context) . serialize($variables) . serialize($operationName));
+        } catch (\Throwable $e) {
+            Craft::$app->getErrorHandler()->logException($e);
+            $cacheKey = null;
+        }
+
+        return $cacheKey;
+    }
+
+    /**
+     * Get GraphQL type definitions from a list of models that support GraphQL
+     * 
+     * @return array the list of registered types.
+     */
+    private function _registerGqlTypes(): array
     {
         $typeList = [
             // Scalars
@@ -569,6 +654,8 @@ class Gql extends Component
             /** @var InterfaceType $type */
             TypeLoader::registerType($type::getName(), $type . '::getType');
         }
+
+        return $event->types;
     }
 
     /**
@@ -596,7 +683,7 @@ class Gql extends Component
 
         $this->trigger(self::EVENT_REGISTER_GQL_QUERIES, $event);
 
-        TypeLoader::registerType('Query', function () use ($event) {
+        TypeLoader::registerType('Query', function() use ($event) {
             return call_user_func(Query::class . '::getType', $event->queries);
         });
     }

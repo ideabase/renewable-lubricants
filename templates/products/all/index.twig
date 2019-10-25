@@ -1,0 +1,170 @@
+{% extends '_layouts/products' %}
+
+{% set products = craft.products.all() %}
+
+{% block content %}
+  <h1>Products</h1>
+  <div id="product-specifications">
+    <h3>Filter By Category</h3>
+
+    <ul id="product-categories">
+      <li>
+        <input type="radio" name="radio-category" class="radio" id="radio-all" checked>{{ 'Show All' }}</input>
+      </li>
+      {% for category in craft.categories.group('productCategories').orderBy('title').all() %}
+        <li>
+          <input type="radio" name="radio-category" class="radio" id="radio-{{ category.title|replace({' ': ''}) }}">{{ category.title }}</input>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {# add all products to cart button #}
+  {# <form method="POST" class="text-center">
+    <input type="hidden" name="action" value="commerce/cart/update-cart">
+    {{ redirectInput('products/cart') }}
+    {{ csrfInput() }}
+    {% for product in products if product.defaultVariant.isAvailable %}
+      <input type="hidden" name="purchasables[{{ loop.index }}][id]" value="{{ product.defaultVariant.id }}">
+      <input type="hidden" name="purchasables[{{ loop.index }}][qty]" value="1">
+      <input type="hidden" name="purchasables[{{ loop.index }}][note]" value="">
+      <input type="hidden" name="purchasables[{{ loop.index }}][options]" value="">
+    {% endfor %}
+    <input type="submit" value="Add all products to cart">
+  </form> #}
+
+  {% for product in products %}
+    {% for category in product.productCategories.all() %}
+    <div class="product {{ category.title|replace({' ': ''}) }}">
+    {% endfor %}
+      <div>
+        {% if product.productImage|length %}
+          <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}">
+        {% endif %}
+      </div>
+      <div>
+        <h3>{% if product.url %}{{ product.link }}{% else %}{{ product.title }}{% endif %}</h3>
+        {% if product.getVariants()|length %}
+          <form method="POST" class="add-to-cart-form">
+            <input type="hidden" name="action" value="commerce/cart/update-cart">
+            {{ redirectInput('products/cart') }}
+            <input type="hidden" name="qty" value="1">
+            {{ csrfInput() }}
+        <div id="select-product">
+            <select name="purchasableId" class="purchasableId">
+              {%- for purchasable in product.getVariants() -%}
+                <option {% if not purchasable.isAvailable %}disabled {% endif %}
+                  data-info="product-{{ product.id }}-purchasable-{{ purchasable.id }}"
+                  value="{{ purchasable.id }}">
+                  {{ purchasable.description }} {{ purchasable.salePrice|commerceCurrency(cart.currency) }}
+                </option>
+              {%- endfor -%}
+            </select>
+
+            <select name="options[giftWrapped]">
+              <option value="no">No gift wrap.</option>
+              <option value="yes">Gift wrapped.</option>
+            </select>
+        </div>
+            {% if product.hasUnlimitedStock or (product.hasUnlimitedStock == false and product.totalStock > 0 ) %}
+              <button class="button" type="submit">{{ "Add to cart"|t }}</button>
+            {% else %}
+              {{ "Out of Stock"|t }}
+            {% endif %}
+          </form>
+
+          {% if currentUser %}
+            {% set order = craft.orders.user(currentUser).hasPurchasables(product.defaultVariant).all() %}
+            {% if order|length %}
+              <strong>I already own this product: </strong> <a href="/products/customer/order?number={{ order[0].number }}">Order #{{ order[0].shortNumber }}</a>
+            {% endif %}
+          {% endif %}
+
+          {%- for purchasable in product.getVariants() -%}
+            <div id="product-{{ product.id }}-purchasable-{{ purchasable.id }}" class="purchasableInfo" style="display:none;">
+              <strong>Regular Price: </strong><strike>{{ purchasable.price|commerceCurrency(cart.currency) }}</strike><br>
+              <strong>Now: </strong>{{ purchasable.salePrice|commerceCurrency(cart.currency) }}<br>
+              {% if purchasable.sales %}<strong>Sales Applied:</strong><br>{% endif %}
+              <ul>
+                {% for sale in purchasable.sales %}
+                <li><strong>{{ sale.name }}</strong> {{ sale.description }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {%- endfor -%}
+
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+
+
+  {% set donation = craft.commerce.donation %}
+  {% if donation and donation.isAvailable %}
+  <h1>Donations</h1>
+  <form method="POST" class="pt-2 pb-8 text-center">
+    <input type="hidden" name="action" value="commerce/cart/update-cart">
+    {{ redirectInput('products/cart') }}
+    {{ csrfInput() }}
+    <input type="hidden" name="purchasableId" value="{{ craft.commerce.donation.id }}">
+    <input type="text" name="options[donationAmount]" value="" placeholder="Donation">
+    <input type="submit" value="Donate Now">
+  </form>
+  {% endif %}
+
+{% endblock %}
+
+{% js %}
+
+$( ".purchasableId" ).change(function(e) {
+  $(".purchasableInfo").hide();
+  $("#"+($(this).find(":selected").data('info'))).toggle();
+});
+
+{# $('form.add-to-cart-form').submit(function(e){
+  e.preventDefault();
+  var purchasable = $(this).find('.purchasableId').val();
+  $.ajax({
+    type: "POST",
+    dataType: 'json',
+    headers: {
+      "X-CSRF-Token" : '{{ craft.app.request.csrfToken }}',
+    },
+    url: '',
+    data: {
+      'action' : 'commerce/cart/update-cart',
+      'purchasableId': purchasable,
+      'note' : 'from ajax'
+    },
+    success: function(data){
+      console.log(data);
+    }
+  });
+}); #}
+
+{# 'Show All' filter button event listener #}
+document.getElementById('radio-all').addEventListener('click', function() {
+  document.querySelectorAll('.product').forEach(function(productDiv) {
+    productDiv.style.display = '';
+  });
+});
+
+{# get only titles of the categories #}
+{% set category_names = [] %}
+{% for category in craft.categories.group('productCategories').all() %}
+  {% set category_names = category_names|merge([category.title|replace({' ': ''})]) %}
+{% endfor %}
+
+{# loop through filter buttons and add event listeners #}
+{{ category_names|json_encode|raw }}.forEach(function(categoryName) {
+  document.querySelector(`#radio-${categoryName}`).addEventListener('click', function() {
+    document.querySelectorAll(`.product.${categoryName}`).forEach(function(productDiv) {
+      productDiv.style.display = '';
+    });
+    document.querySelectorAll(`.product:not(.${categoryName})`).forEach(function(productDiv) {
+      productDiv.style.display = 'none';
+    });
+  });
+});
+
+{% endjs %}

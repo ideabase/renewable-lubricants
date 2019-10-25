@@ -1,0 +1,83 @@
+{% extends '_layouts/products' %}
+
+{% block content %}
+
+<div class="product-details flex">
+  {% if product.productImage|length %}
+    <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}" class="product-image">
+  {% endif %}
+
+  <div class="product-info">
+    <h1>{{ product.title }}</h1>
+
+    <form method="POST" name="product-add-form" class="flex">
+      <input type="hidden" name="action" value="commerce/cart/update-cart">
+      {{ redirectInput('products/cart') }}
+      {{ csrfInput() }}
+
+      <div>
+        <div class="product-opts">
+          <span>Product:</span>
+          <select name="purchasableId" id="product-select">
+            {% for variant in product.variants %}
+              <option {% if variant.stock <= 0 and variant.hasUnlimitedStock == false %}disabled {% endif %}value="{{ variant.id }}">{{ variant.sku }}: {{ variant.description }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ variant.size }})</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="product-opts">
+          <span>Quantity:</span>
+          <input type="number" name="qty" min="1" value="1" required>
+        </div>
+
+        <input type="submit" value="{{ "Add to cart"|t }}" class="button">
+      </div>
+    </form>
+
+    {{ product.body }}
+
+    {% set productCategories = craft.categories.group('productCategories').relatedTo(product) %}
+
+    {% if productCategories|length %}
+      <div>
+        <h2>Categories</h2>
+
+        {% for productCategory in productCategories.all() %}
+          <a href="{{ productCategory.getUrl() }}">{{ productCategory.title }}</a>
+          {% if not loop.last %}
+            <span>, </span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% set brands = craft.categories.group('brands').relatedTo(product) %}
+    {% set foodGrades = craft.categories.group('foodGrades').relatedTo(product) %}
+
+    {% if brands|length and foodGrades|length %}
+      <div class="product-brands-grade flex">
+        {% if brands|length %}
+          <div>
+            <h2>Brands</h2>
+
+            {% for brand in brands.all() %}
+              <span>{{ brand.title }}</span>
+              {% if not loop.last %}
+                <span>, </span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if foodGrades|length %}
+          <div>
+            <h2>Food Grade</h2>
+            <span>{{ foodGrades.one().title }}</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

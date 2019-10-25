@@ -10,7 +10,7 @@
     {% set cartItemCount = cart.totalQty ?? 0 %}
     {% set cartItemTotal = cart.itemTotal ?? 0 %}
     {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
-      <a class="header-cart-wrapper" href="{{ url('shop/cart') }}">
+      <a class="header-cart-wrapper" href="{{ url('products/cart') }}">
         <div class="flex header-cart">
           <span>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</span>
             <div>
@@ -29,7 +29,7 @@
   <nav>
     <ul class="flex">
       <li><a href="{{ url() }}">Home</a></li>
-      <li><a href="{{ url('shop') }}">Products</a></li> {# TODO: change link to products #}
+      <li><a href="{{ url('products') }}">Products</a></li>
       <li><a href="{{ url('distributors') }}">Distributors</a></li>
       <li><a href="{{ url('news-and-blog') }}">News & Blog</a></li>
       <li><a href="{{ url('about') }}">About</a></li>
@@ -45,7 +45,7 @@
     </a>
     <ul class="mobile-dropdown">
       <li><a href="{{ url() }}">Home</a></li>
-      <li><a href="{{ url('shop') }}">Products</a></li> {# TODO: change link to products #}
+      <li><a href="{{ url('products') }}">Products</a></li>
       <li><a href="{{ url('distributors') }}">Distributors</a></li>
       <li><a href="{{ url('news-and-blog') }}">News & Blog</a></li>
       <li><a href="{{ url('about') }}">About</a></li>

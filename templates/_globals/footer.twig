@@ -8,7 +8,7 @@
       <div class="distributors-network-ext"></div>
     {% endif %}
 
-    {% if slug is defined and slug == 'shop' %} {# TODO: change to products #}
+    {% if slug is defined and slug == 'products' %}
       <div class="products-search-ext"></div>
     {% endif %}
 
@@ -20,8 +20,8 @@
         {% include '_includes/distributors-network' %}
       {% endif %}
 
-      {# include product finder on shop pages #}
-      {% if slug is defined and slug == 'shop' %} {# TODO: change to products #}
+      {# include product finder on product pages #}
+      {% if slug is defined and slug == 'products' %}
         {% include '_includes/products-search' %}
       {% endif %}
 

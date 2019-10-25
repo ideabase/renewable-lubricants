@@ -1,5 +1,57 @@
 # Release Notes for Craft CMS 3.x
 
+## 3.3.13 - 2019-10-23
+
+### Added
+- It’s now possible to pass arrow functions to the `|group` filter. ([#5156](https://github.com/craftcms/cms/issues/5156))
+
+### Changed
+- Underscores are now stripped from search keywords before being saved to the database.
+
+### Fixed
+- Fixed a bug where translation message parameters weren’t getting parsed correctly if the installed ICU library was less than version 4.8. ([#4995](https://github.com/craftcms/cms/issues/4995))
+- Fixed a bug where GraphQL caches were not being invalidated on element save. ([#5148](https://github.com/craftcms/cms/issues/5148))
+- Fixed a bug where GraphQL type generators provided by plugins were not getting invoked when building introspection schemas. ([#5149](https://github.com/craftcms/cms/issues/5149))
+- Fixed an error that occurred when using the `|json_encode` Twig filter on console requests. ([#5150](https://github.com/craftcms/cms/issues/5150))
+- Fixed a bug where editable table rows could get taller than they should. ([#5159](https://github.com/craftcms/cms/issues/5159))
+
+## 3.3.12 - 2019-10-22
+
+### Added
+- GraphQL query results are now cached.
+- The GraphQL → Explore page now lists a “Full Schema” option before the Public Schema and any custom-defined schemas.
+- Added the “GraphQL caches” option for the Clear Caches utility.
+- Added the `gql()` Twig function, which executes a GraphQL query and returns the result.
+- Added the `enableGraphQlCaching` config setting.
+- Added the `transform` GraphQL parameter for asset URLs (alias of `handle`).
+- Added the `url` field to the `EntryInterface` GraphQL type. ([#5113](https://github.com/craftcms/cms/issues/5113))
+- Added the `relatedTo` and `relatedToAll` arguments for all GraphQL element queries. ([#5071](https://github.com/craftcms/cms/issues/5071))
+- Added support for multi-site GraphQL element queries. ([#5079](https://github.com/craftcms/cms/issues/5079))
+- Added `craft\helpers\Gql::createFullAccessSchema()`.
+- Added `craft\models\GqlSchema::$isTemporary`.
+- Added the `$invalidateCaches` argument to `craft\services\Gql::saveSchema()`.
+
+### Changed
+- Matrix blocks now maintain the same `display` style when expanded as they had before they were initially collapsed. ([#5075](https://github.com/craftcms/cms/issues/5075))
+- It’s no longer necessary to register GraphQL type loaders when creating types.
+- Improved the performance of downloading remote assets. ([#5134](https://github.com/craftcms/cms/pull/5134))
+- The `craft\services\Gql::executeQuery()` method now expects an active schema object, instead of a GraphQL Schema object.
+- The `users/save-user` action no longer copies `unverifiedEmail` validation errors over to the `email` attribute if the `email` attribute already has its own errors.
+- `users/set-password` requests now respond with JSON if the request accepts a JSON response. ([#5138](https://github.com/craftcms/cms/pull/5138))
+
+### Deprecated
+- Deprecated the `$checkToken` argument for `craft\gql\base\Query::getQueries()`. `craft\helpers\Gql::getFullAccessSchema()` should be used instead to ensure all queries are returned.
+
+### Fixed
+- Fixed a bug that could occur when using plugin specific config files while running functional tests. ([#5137](https://github.com/craftcms/cms/pull/5137))
+- Fixed an error that occurred when loading a relational field’s selection modal, if no sources were visible.
+- Fixed a bug where required relational fields would get a validation error if only elements from other sites were selected. ([#5116](https://github.com/craftcms/cms/issues/5116))
+- Fixed a bug where the “Profile Twig templates when Dev Mode is disabled” admin preference wasn’t saving. ([#5118](https://github.com/craftcms/cms/pull/5118))
+- Fixed a bug where failed queue jobs were losing their `dateReserved`, `timeUpdated`, `progress`, and `progressLabel` values.
+- Fixed a PHP error occurred when viewing the PHP Info utility if `register_argc_argv` was set to `On` in `php.ini`. ([#4878](https://github.com/craftcms/cms/issues/4878))
+- Fixed a bug where the `craft\queue\jobs\UpdateSearchIndex` was ignorning the `siteId` property.
+- Fixed a bug where Craft could attempt to perform transforms on element URLs for elements that were not Assets when using GraphQL.
+
 ## 3.3.11 - 2019-10-16
 
 ### Added
@@ -20,7 +72,7 @@
 ### Added
 - Added the `allowOwnerDrafts` and `allowOwnerRevisions` Matrix block query params.
 - Added the ability to skip refreshing the project config before running individual tests. ([#5072](https://github.com/craftcms/cms/pull/5072))
-- Added `craft\test\Craft::resetProjectConfig()`
+- Added `craft\test\Craft::resetProjectConfig()`.
 
 ### Fixed
 - Fixed a bug where Craft wasn’t passing assets’ MIME types to cloud storage services when saving them. ([#5052](https://github.com/craftcms/cms/issues/5052))
@@ -986,7 +1038,7 @@
 ### Added
 - Added the “Customize element sources” user permission. ([#4282](https://github.com/craftcms/cms/pull/4282))
 - Matrix sub-fields now have a “Use this field’s values as search keywords?” setting. ([#4291](https://github.com/craftcms/cms/issues/4291))
-- Added `craft\web\twig\variables::setBasePath()`. ([#4286](https://github.com/craftcms/cms/issues/4286))
+- Added `craft\web\twig\variables\Paginate::setBasePath()`. ([#4286](https://github.com/craftcms/cms/issues/4286))
 
 ### Changed
 - Craft now requires Yii 2.0.19.
@@ -1128,7 +1180,7 @@
 - Added the `backup` command, which creates a new database backup. ([#4075](https://github.com/craftcms/cms/issues/4075))
 - Added the `queue/retry` command, which can be passed a failed job ID, or `all` to retry all failed jobs. ([#4072](https://github.com/craftcms/cms/issues/4072))
 - Added `craft\queue\Queue::retryAll()`.
-- Added `craft\services\sections::$autoResaveEntries`, which can be set to `false` from `config/app.php` to prevent Craft from auto-resaving entries after sections and entry types are updated. ([#3482](https://github.com/craftcms/cms/issues/3482))
+- Added `craft\services\Sections::$autoResaveEntries`, which can be set to `false` from `config/app.php` to prevent Craft from auto-resaving entries after sections and entry types are updated. ([#3482](https://github.com/craftcms/cms/issues/3482))
 
 ### Changed
 - It’s now possible to double-click on asset sources to expand/collapse their subfolders. ([#4070](https://github.com/craftcms/cms/issues/4070))
@@ -2214,7 +2266,7 @@
 
 ### Added
 - Added the `craft.query()` template function, for creating new database queries.
-- Added `craft\services\Structures::mutexTimeout`. ([#3148](https://github.com/craftcms/cms/issues/3148))
+- Added `craft\services\Structures::$mutexTimeout`. ([#3148](https://github.com/craftcms/cms/issues/3148))
 - Added `craft\services\Api::getComposerWhitelist()`.
 
 ### Removed
@@ -2492,9 +2544,7 @@
 - Variables passed into `craft\web\View::renderObjectTemplate()` can now be referenced using the shorthand syntax (e.g. `{foo}`).
 - `craft\helpers\StringHelper::asciiCharMap()` now has `$flat` and `$language` arguments.
 - Craft no longer saves new versions of entries when absolutely nothing changed about them in the save request. ([#2923](https://github.com/craftcms/cms/issues/2923))
-- Craft no longer enforces plugins’ `minVersionRequired` settings if the currently-installed version begins with `
-- 
-- dev-`.
+- Craft no longer enforces plugins’ `minVersionRequired` settings if the currently-installed version begins with `dev-`.
 - Improved the performance of element queries when a lot of values were passed into a param, such as `id`, by using `IN()` and `NOT IN()` conditions when possible. ([#2937](https://github.com/craftcms/cms/pull/2937))
 - The Asset Indexes utility no longer skips files with leading underscores. ([#2943](https://github.com/craftcms/cms/issues/2943))
 - Updated Garnish to 0.1.23.
@@ -2643,7 +2693,7 @@
 ### Added
 - Added the `craft.globalSets()` template function. ([#2790](https://github.com/craftcms/cms/issues/2790))
 - Added the `hasDescendants` element query param. ([#2786](https://github.com/craftcms/cms/issues/2786))
-- Added `craft\elements\User::hasDashboard`.
+- Added `craft\elements\User::$hasDashboard`.
 
 ### Changed
 - Sections and category groups now ignore posted Template settings for sites that don’t have URI Formats.
