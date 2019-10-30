@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "77a9deccba3bc5d83a75c13b4ae03487",
+    "content-hash": "2c05642fab311930b847d648c48ff8d7",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -459,11 +459,11 @@
         },
         {
             "name": "craftcms/commerce",
-            "version": "2.2.5",
+            "version": "2.2.6",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/0903fc111846a5b814d636eeecbd3eb5ed2db251",
-                "reference": "0903fc111846a5b814d636eeecbd3eb5ed2db251",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/6be0f35760b485bc5f42d766df5b6dd759e9bb87",
+                "reference": "6be0f35760b485bc5f42d766df5b6dd759e9bb87",
                 "shasum": ""
             },
             "require": {
@@ -505,7 +505,7 @@
                 "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2019-10-24T18:46:23+00:00"
+            "time": "2019-10-26T07:08:10+00:00"
         },
         {
             "name": "craftcms/commerce-omnipay",

@@ -3,7 +3,7 @@
     "craftcms/cms": "3.3.13",
     "vlucas/phpdotenv": "^2.4.0",
     "craftcms/redactor": "2.4.0",
-    "craftcms/commerce": "2.2.5",
+    "craftcms/commerce": "2.2.6",
     "craftcms/contact-form": "2.2.5",
     "rias/craft-contact-form-extensions": "1.2.0",
     "doublesecretagency/craft-smartmap": "3.2.2.1",
