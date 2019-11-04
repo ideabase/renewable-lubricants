@@ -2,74 +2,32 @@
 
 {% block content %}
 
-<div class="news">
-  <h1>Viewing All News</h1>
-
-  <div>
-    <hr>
-    <img src="https://renewablelube.com/files/cache/0df5f5c5eaa3d8e5a77f1d78fe7947c9_f1170.jpg">
-    <p>Look for this logo on all our product's Technical Data Sheets that are readily biodegradable, non-toxic, and meet stringent ISO 4406 cleanliness standards.</p>
+<section class="news">
+  <div class="h1-wrapper-top">
+    <h1>News</h1>
   </div>
 
-  {# <ul>
+  <div class="news-item-container">
     {% for entry in craft.entries.section('news').all() %}
-
-      <li>
+      <div class="news-item">
         <a href="{{ entry.url }}">
           {% if entry.featureImage|length %}
             <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
           {% endif %}
-          <div id="banana"><h1>{{ entry.title }}</h1></div>
+
+          <h2>{{ entry.title }}</h2>
+
+          {% if entry.description|length %}
+            {% if entry.description|length > 50 %} {# TODO: fix slice #}
+              <p>{{ entry.description|slice(0,50) }}</p>
+            {% else %}
+              <p>{{ entry.description }}</p>
+            {% endif %}
+          {% endif %}
         </a>
-
-        {% if entry.description|length > 50 %}
-          <p>{{ entry.description|slice(0,50) }}</p>
-          <a href="{{ entry.url }}">Read More…</a>
-        {% else %}
-          <p>{{ entry.description }}</p>
-        {% endif %}
-      </li>
-
+      </div>
     {% endfor %}
-  </ul> #}
-
-
-  <ul>
-    <li>
-      <row>
-      <img class="news-img" src="https://en.es-static.us/upl/2018/06/sun-pillar-6-25-2018-Peter-Gipson-sq.jpg">
-      <h2>Compliance Declaration for RLI Products</h2>
-      <p>For people living around 40 degrees north latitude, the latest sunset of the year happens on or near June 27. And in the Southern Hemisphere, at 40 degrees south latitude, it’s the year’s latest sunrise that happens around now.</p>
-      <a class="news-link" href="#">View Article</a>
-      </row>
-    </li>
-
-  <li>
-
-      <img class="news-img" src="https://en.es-static.us/upl/2018/06/sun-pillar-6-25-2018-Peter-Gipson-sq.jpg">
-      <h2>Compliance Declaration for RLI Products</h2>
-      <p>For people living around 40 degrees north latitude, the latest sunset of the year happens on or near June 27. And in the Southern Hemisphere, at 40 degrees south latitude, it’s the year’s latest sunrise that happens around now.</p>
-      <a class="news-link" href="#">View Article</a>
-    </li>
-
-    <li>
-
-      <img class="news-img" src="https://en.es-static.us/upl/2018/06/sun-pillar-6-25-2018-Peter-Gipson-sq.jpg">
-      <h2>Compliance Declaration for RLI Products</h2>
-      <p>For people living around 40 degrees north latitude, the latest sunset of the year happens on or near June 27. And in the Southern Hemisphere, at 40 degrees south latitude, it’s the year’s latest sunrise that happens around now.</p>
-      <a class="news-link" href="#">View Article</a>
-    </li>
-
-    <li>
-      <h2>RLI Case Study: Pizza Plant Goes All In</h2>
-      <a class="news-link" href="#">View Article</a>
-    </li>
-
-    <li>
-      <h2>Suffield Firm A Global Success</h2>
-      <a class="news-link" href="#">View Article</a>
-    </li>
-  <ul>
+  </div>
 </div>
 
 {% endblock %}

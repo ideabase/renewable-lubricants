@@ -4195,6 +4195,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'craft\\gql\\resolvers\\elements\\User' => __DIR__ . '/..' . '/craftcms/cms/src/gql/resolvers/elements/User.php',
         'craft\\gql\\types\\DateTime' => __DIR__ . '/..' . '/craftcms/cms/src/gql/types/DateTime.php',
         'craft\\gql\\types\\Query' => __DIR__ . '/..' . '/craftcms/cms/src/gql/types/Query.php',
+        'craft\\gql\\types\\QueryArgument' => __DIR__ . '/..' . '/craftcms/cms/src/gql/types/QueryArgument.php',
         'craft\\gql\\types\\TableRow' => __DIR__ . '/..' . '/craftcms/cms/src/gql/types/TableRow.php',
         'craft\\gql\\types\\elements\\Asset' => __DIR__ . '/..' . '/craftcms/cms/src/gql/types/elements/Asset.php',
         'craft\\gql\\types\\elements\\Category' => __DIR__ . '/..' . '/craftcms/cms/src/gql/types/elements/Category.php',

@@ -1,16 +1,17 @@
 {# news and blog page #}
 {% extends "_layouts/main" %}
 
-
 {% block content %}
 
 <section>
-  <h1>Latest News</h1>
-  <p>Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
+  <div class="h1-wrapper-top">
+    <h1>Latest News</h1>
+  </div>
+  <p class="news-blog-desc">Read our latest news articles regarding our products, recent publications, and sponsorships below:</p>
 
-  <ul>
+  <div class="news-blog-grid">
     {% for entry in craft.entries.section('news').limit(3).all() %}
-      <li>
+      <div class="news-blog-grid-item">
         <a href="{{ entry.url }}">
           {% if entry.featureImage|length %}
             <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
@@ -26,20 +27,25 @@
             {% endif %}
           {% endif %}
         </a>
-      </li>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 
-  <a href="/news">View All News</a>
+  <div class="news-blog-link news-blog-news-link">
+    <a href="{{ url('news') }}">View All News</a>
+    <div class="news-blog-poly"></div>
+  </div>
 </section>
 
 <section>
-  <h1>Blog Posts</h1>
-  <p>Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
+  <div class="h1-wrapper-top">
+    <h1>Blog Posts</h1>
+  </div>
+  <p class="news-blog-desc">Check out the latest blog posts regarding content ranging from videos on how to use our products to informational updates about the company.</p>
 
-  <ul>
+  <div class="news-blog-grid">
     {% for entry in craft.entries.section('blog').limit(3).all() %}
-        <li>
+        <div class="news-blog-grid-item">
           <a href="{{ entry.url }}">
             {% if entry.featureImage|length %}
               <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
@@ -55,10 +61,13 @@
             {% endif %}
           {% endif %}
         </a>
-      </li>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 
-  <a href="/blog">View All Blog Posts</a>
+  <div class="news-blog-link">
+    <a href="{{ url('blog') }}">View All Blog Posts</a>
+    <div class="news-blog-poly"></div>
+  </div>
 </section>
 {% endblock %}

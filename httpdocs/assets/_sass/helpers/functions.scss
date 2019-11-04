@@ -3,7 +3,6 @@
 // string split function for slant mixin
 @function str-split($str) {
   $list: ();
-  $i: 1;
 
   @for $i from 0 to str-length($str) {
     $char: str-slice($str, $i + 1, $i + 1);

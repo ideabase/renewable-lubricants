@@ -3479,6 +3479,7 @@ return array(
     'craft\\gql\\resolvers\\elements\\User' => $vendorDir . '/craftcms/cms/src/gql/resolvers/elements/User.php',
     'craft\\gql\\types\\DateTime' => $vendorDir . '/craftcms/cms/src/gql/types/DateTime.php',
     'craft\\gql\\types\\Query' => $vendorDir . '/craftcms/cms/src/gql/types/Query.php',
+    'craft\\gql\\types\\QueryArgument' => $vendorDir . '/craftcms/cms/src/gql/types/QueryArgument.php',
     'craft\\gql\\types\\TableRow' => $vendorDir . '/craftcms/cms/src/gql/types/TableRow.php',
     'craft\\gql\\types\\elements\\Asset' => $vendorDir . '/craftcms/cms/src/gql/types/elements/Asset.php',
     'craft\\gql\\types\\elements\\Category' => $vendorDir . '/craftcms/cms/src/gql/types/elements/Category.php',
