@@ -7,27 +7,25 @@
     <h1>News</h1>
   </div>
 
-  <div class="news-item-container">
-    {% for entry in craft.entries.section('news').all() %}
-      <div class="news-item">
-        <a href="{{ entry.url }}">
-          {% if entry.featureImage|length %}
-            <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
-          {% endif %}
+  {% for newsArticle in craft.entries.section('news').all() %}
+    <div class="news-item">
+      <a href="{{ newsArticle.url }}">
+        <div><img src="{{ newsArticle.featureImage.one().getUrl("newsFeatureImage") }}"></div>
 
-          <h2>{{ entry.title }}</h2>
+        <div class="news-item-text">
+          <h2>{{ newsArticle.title }}</h2>
 
-          {% if entry.description|length %}
-            {% if entry.description|length > 50 %} {# TODO: fix slice #}
-              <p>{{ entry.description|slice(0,50) }}</p>
+          {% if newsArticle.description|length %}
+            {% if newsArticle.description|length > 50 %} {# TODO: fix slice #}
+              <p>{{ newsArticle.description|slice(0,50) }}</p>
             {% else %}
-              <p>{{ entry.description }}</p>
+              <p>{{ newsArticle.description }}</p>
             {% endif %}
           {% endif %}
-        </a>
-      </div>
-    {% endfor %}
-  </div>
-</div>
+        </div>
+      </a>
+    </div>
+  {% endfor %}
+</section>
 
 {% endblock %}

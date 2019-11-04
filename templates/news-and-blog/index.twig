@@ -13,20 +13,18 @@
     {% for entry in craft.entries.section('news').limit(3).all() %}
       <div class="news-blog-grid-item">
         <a href="{{ entry.url }}">
-          {% if entry.featureImage|length %}
-            <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
-          {% endif %}
+          <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
 
           <h2>{{ entry.title }}</h2>
-
-          {% if entry.description|length %} {# TODO: fix slice #}
-            {% if entry.description|length > 50 %}
-              <p>{{ entry.description|slice(0,50) }}</p>
-            {% else %}
-              <p>{{ entry.description }}</p>
-            {% endif %}
-          {% endif %}
         </a>
+
+        {% if entry.description|length %} {# TODO: fix slice #}
+          {% if entry.description|length > 50 %}
+            <p>{{ entry.description|slice(0,50) }}</p>
+          {% else %}
+            <p>{{ entry.description }}</p>
+          {% endif %}
+        {% endif %}
       </div>
     {% endfor %}
   </div>
@@ -45,22 +43,20 @@
 
   <div class="news-blog-grid">
     {% for entry in craft.entries.section('blog').limit(3).all() %}
-        <div class="news-blog-grid-item">
-          <a href="{{ entry.url }}">
-            {% if entry.featureImage|length %}
-              <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
-            {% endif %}
+      <div class="news-blog-grid-item">
+        <a href="{{ entry.url }}">
+          <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}">
 
           <h2>{{ entry.title }}</h2>
-
-          {% if entry.description|length %} {# TODO: fix slice #}
-            {% if entry.description|length > 50 %}
-              <p>{{ entry.description|slice(0,50) }}</p>
-            {% else %}
-              <p>{{ entry.description }}</p>
-            {% endif %}
-          {% endif %}
         </a>
+
+        {% if entry.description|length %} {# TODO: fix slice #}
+          {% if entry.description|length > 50 %}
+            <p>{{ entry.description|slice(0,50) }}</p>
+          {% else %}
+            <p>{{ entry.description }}</p>
+          {% endif %}
+        {% endif %}
       </div>
     {% endfor %}
   </div>

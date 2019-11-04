@@ -2,26 +2,30 @@
 
 {% block content %}
 
-<ul>
-  {% for entry in craft.entries.section('blog').all() %}
+<section class="news">
+  <div class="h1-wrapper-top">
+    <h1>Blog</h1>
+  </div>
 
-    <li>
-      <a href="{{ entry.url }}">
-        {% if entry.featureImage | length %} {# Checking for not null fields. #}
-          <img src="{{ entry.featureImage.one().getUrl("newsFeatureImage") }}"> {# Remove the height and width attributes to style the images with css. #}
-        {% endif %}
-        <div><h1>{{ entry.title }}</h1></div>
+  {% for blogPost in craft.entries.section('blog').all() %}
+    <div class="news-item">
+      <a href="{{ blogPost.url }}">
+        <div><img src="{{ blogPost.featureImage.one().getUrl("newsFeatureImage") }}"></div>
+
+        <div class="news-item-text">
+          <h2>{{ blogPost.title }}</h2>
+
+          {% if blogPost.description|length %}
+            {% if blogPost.description|length > 50 %} {# TODO: fix slice #}
+              <p>{{ blogPost.description|slice(0,50) }}</p>]
+            {% else %}
+              <p>{{ blogPost.description }}</p>
+            {% endif %}
+          {% endif %}
+        </div>
       </a>
-
-      {% if entry.imageDescription|length > 50 %} {# TODO: fix slice #}
-        <p>{{ entry.imageDescription|slice(0,50) }}</p>
-        <a href="{{ entry.url }}">Read More…</a>
-      {% else %}
-        <p>{{ entry.imageDescription }}</p>
-      {% endif %}
-    </li>
-
+    </div>
   {% endfor %}
-</ul>
+</section>
 
 {% endblock %}
