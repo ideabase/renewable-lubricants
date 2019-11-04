@@ -3,7 +3,7 @@
 .distributors-portal {
   justify-content: center;
 
-  button:not(:last-child) {
-    margin-right: 1rem;
+  a:first-child {
+    margin-right: 2rem;
   }
 }

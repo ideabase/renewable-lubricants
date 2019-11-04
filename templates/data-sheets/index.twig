@@ -1,0 +1,13 @@
+{% extends '_layouts/main' %}
+
+{% block content %}
+
+<div class="h1-wrapper-top">
+  <h1>Data Sheets</h1>
+</div>
+
+{% for dataSheet in craft.assets.volume('dataSheets').all() %}
+  <a href="{{ dataSheet.getUrl() }}">{{ dataSheet.title }}</a>
+{% endfor %}
+
+{% endblock %}
