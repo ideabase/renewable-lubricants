@@ -5186,6 +5186,7 @@ class ComposerStaticInit531abb82119048e37a570d64920e2432
         'yii\\debug\\panels\\RouterPanel' => __DIR__ . '/..' . '/yiisoft/yii2-debug/src/panels/RouterPanel.php',
         'yii\\debug\\panels\\TimelinePanel' => __DIR__ . '/..' . '/yiisoft/yii2-debug/src/panels/TimelinePanel.php',
         'yii\\debug\\panels\\UserPanel' => __DIR__ . '/..' . '/yiisoft/yii2-debug/src/panels/UserPanel.php',
+        'yii\\debug\\widgets\\NavigationButton' => __DIR__ . '/..' . '/yiisoft/yii2-debug/src/widgets/NavigationButton.php',
         'yii\\di\\Container' => __DIR__ . '/..' . '/yiisoft/yii2/di/Container.php',
         'yii\\di\\Instance' => __DIR__ . '/..' . '/yiisoft/yii2/di/Instance.php',
         'yii\\di\\NotInstantiableException' => __DIR__ . '/..' . '/yiisoft/yii2/di/NotInstantiableException.php',

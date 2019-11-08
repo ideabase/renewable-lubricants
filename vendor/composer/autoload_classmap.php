@@ -4470,6 +4470,7 @@ return array(
     'yii\\debug\\panels\\RouterPanel' => $vendorDir . '/yiisoft/yii2-debug/src/panels/RouterPanel.php',
     'yii\\debug\\panels\\TimelinePanel' => $vendorDir . '/yiisoft/yii2-debug/src/panels/TimelinePanel.php',
     'yii\\debug\\panels\\UserPanel' => $vendorDir . '/yiisoft/yii2-debug/src/panels/UserPanel.php',
+    'yii\\debug\\widgets\\NavigationButton' => $vendorDir . '/yiisoft/yii2-debug/src/widgets/NavigationButton.php',
     'yii\\di\\Container' => $vendorDir . '/yiisoft/yii2/di/Container.php',
     'yii\\di\\Instance' => $vendorDir . '/yiisoft/yii2/di/Instance.php',
     'yii\\di\\NotInstantiableException' => $vendorDir . '/yiisoft/yii2/di/NotInstantiableException.php',
