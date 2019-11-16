@@ -157,11 +157,11 @@ document.getElementById('radio-all').addEventListener('click', function() {
 
 {# loop through filter buttons and add event listeners #}
 {{ category_names|json_encode|raw }}.forEach(function(categoryName) {
-  document.querySelector(`#radio-${categoryName}`).addEventListener('click', function() {
-    document.querySelectorAll(`.product.${categoryName}`).forEach(function(productDiv) {
+  document.querySelector('#radio-' + categoryName).addEventListener('click', function() {
+    document.querySelectorAll('.product.' + categoryName).forEach(function(productDiv) {
       productDiv.style.display = '';
     });
-    document.querySelectorAll(`.product:not(.${categoryName})`).forEach(function(productDiv) {
+    document.querySelectorAll('.product:not(.' + categoryName + ')').forEach(function(productDiv) {
       productDiv.style.display = 'none';
     });
   });

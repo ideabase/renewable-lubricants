@@ -17,21 +17,22 @@
       {{ redirectInput('products/cart') }}
       {{ csrfInput() }}
 
+      <div class="product-info-grid">
+        <span>Product:</span>
+        <select name="purchasableId" id="product-select">
+          {% for variant in product.variants %}
+            <option id="product-{{ variant.sku }}" value="{{ variant.id }}"{% if variant.stock <= 0 and variant.hasUnlimitedStock == false %} disabled{% endif %}>{{ variant.sku }}: {{ product.title }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ (variant.size) }})</option>
+          {% endfor %}
+        </select>
+
+        <span>Quantity:</span>
+        <input id="product-quantity" type="number" name="qty" min="1" value="1" required>
+
+        <span>Price: </span>
+        <span id="product-price"></span>
+      </div>
+
       <div>
-        <div class="product-opts">
-          <span>Product:</span>
-          <select name="purchasableId" id="product-select">
-            {% for variant in product.variants %}
-              <option {% if variant.stock <= 0 and variant.hasUnlimitedStock == false %}disabled {% endif %}value="{{ variant.id }}">{{ variant.sku }}: {{ variant.description }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ variant.size }})</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="product-opts">
-          <span>Quantity:</span>
-          <input type="number" name="qty" min="1" value="1" required>
-        </div>
-
         <input type="submit" value="{{ "Add to cart"|t }}" class="button">
       </div>
     </form>
@@ -77,7 +78,40 @@
         {% endif %}
       </div>
     {% endif %}
+
   </div>
 </div>
 
 {% endblock %}
+
+{% js %}
+
+{# get variants as array #}
+{% set productVariants = [] %}
+{% for variant in product.variants %}
+  {% set productVariants = productVariants|merge([[variant.sku, variant.price]]) %}
+{% endfor %}
+var productVariants = {{ productVariants|json_encode|raw }};
+
+var productSelect = document.getElementById('product-select');
+var productQuantity = document.getElementById('product-quantity');
+
+var selectedId = productSelect.options[productSelect.selectedIndex].id;
+var variantPrice = productVariants.find(function(variant) {
+  return selectedId === ('product-' + variant[0]);
+})[1];
+
+document.getElementById('product-price').innerHTML = '$' + (productQuantity.value * parseFloat(variantPrice)).toFixed(2);
+
+productSelect.addEventListener('change', updatePrice);
+productQuantity.addEventListener('change', updatePrice);
+
+function updatePrice() {
+  selectedId = productSelect.options[productSelect.selectedIndex].id;
+  variantPrice = productVariants.find(function(variant) {
+    return selectedId === ('product-' + variant[0]);
+  })[1];
+  document.getElementById('product-price').innerHTML = '$' + (productQuantity.value * parseFloat(variantPrice)).toFixed(2);
+}
+
+{% endjs %}

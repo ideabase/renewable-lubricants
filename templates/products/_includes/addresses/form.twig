@@ -132,49 +132,49 @@
   </div>
 </div>
 
-  {% js %}
-  var states = {{ craft.commerce.states.allStatesAsList|json_encode|raw }};
+{% js %}
+var states = {{ craft.commerce.states.allStatesAsList|json_encode|raw }};
 
-  $('select.address-country').change(function ()
+$('select.address-country').change(function ()
+{
+  // get the value of the selected country.
+  var cid = $(this).val();
+  var $states = $(this).closest('.addressBox').find('select.address-stateId');
+  var $stateName = $(this).closest('.addressBox').find('input.address-stateName');
+  $states.find('option').remove();
+
+  if (states.hasOwnProperty(cid))
   {
-    // get the value of the selected country.
-    var cid = $(this).val();
-    var $states = $(this).closest('.addressBox').find('select.address-stateId');
-    var $stateName = $(this).closest('.addressBox').find('input.address-stateName');
-    $states.find('option').remove();
+    // We have states for this country, show the states drop down.
+    $states.removeClass('hidden');
+    $states.attr('name', $states.data('modelname')+'[stateValue]');
 
-    if (states.hasOwnProperty(cid))
+    // We have states for this country, hide the stateName input.
+    $stateName.removeAttr('name');
+    $stateName.addClass('hidden');
+    $stateName.val('');
+
+    // Add all states as options to drop down.
+    for (var id in states[cid])
     {
-      // We have states for this country, show the states drop down.
-      $states.removeClass('hidden');
-      $states.attr('name', $states.data('modelname')+'[stateValue]');
-
-      // We have states for this country, hide the stateName input.
-      $stateName.removeAttr('name');
-      $stateName.addClass('hidden');
-      $stateName.val('');
-
-      // Add all states as options to drop down.
-      for (var id in states[cid])
-      {
-        var state = states[cid][id];
-        var $option = $('<option>');
-        $option.attr('value', id).text(state);
-        $states.append($option);
-      }
-
-    }else{
-      // hide the states dropdown, since this country has none.
-      $states.addClass('hidden');
-      $states.removeAttr('name');
-
-      // show the stateName
-      $stateName.removeClass('hidden');
-      $stateName.attr('name', $stateName.data('modelname')+'[stateValue]');
+      var state = states[cid][id];
+      var $option = $('<option>');
+      $option.attr('value', id).text(state);
+      $states.append($option);
     }
 
-  });
+  }else{
+    // hide the states dropdown, since this country has none.
+    $states.addClass('hidden');
+    $states.removeAttr('name');
 
-  $('select').addClass('form-control input-sm');
+    // show the stateName
+    $stateName.removeClass('hidden');
+    $stateName.attr('name', $stateName.data('modelname')+'[stateValue]');
+  }
 
-  {% endjs %}
+});
+
+$('select').addClass('form-control input-sm');
+
+{% endjs %}

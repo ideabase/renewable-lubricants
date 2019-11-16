@@ -26,19 +26,21 @@
   }
 }
 
+.product-info-grid {
+  align-self: flex-start;
+  display: inline-grid;
+  grid-template-columns: min-content auto;
+  column-gap: 1rem;
+  row-gap: .75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 form[name='product-add-form'] {
   flex-direction: column;
   margin: 2rem 0;
 
   input[name='qty'] {
     width: 50px;
-  }
-}
-
-.product-opts {
-  margin-bottom: 1rem;
-
-  span {
-    margin-right: 1rem;
   }
 }
