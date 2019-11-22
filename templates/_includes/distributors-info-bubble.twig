@@ -1,12 +1,29 @@
-<h4>{{ element.title }}</h4>
-<div class="distributors-address">
-  {{ element.address.street1 }}<br>
-  {{ element.address.city }}, {{ element.address.state }} {{ element.address.zip }}
-</div>
-{% if element.phoneNumber|length and element.websiteURL|length %}
-  <br>
+<div class="distributors-info-bubble">
+  <h2>{{ element.title }}</h2>
+
   <div>
-    {{ element.phoneNumber }}<br>
-    <a href="{{ element.websiteURL }}">Website</a>
+    <h3>Address</h3>
+    <p>{{ element.address.format }}</p>
   </div>
-{% endif %}
+
+  {% if element.phoneNumber|length %}
+    <div>
+      <h3>Contact</h3>
+      {% for block in element.phoneNumber %}
+        <p>{{ block.contactInfo }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if element.websiteURL|length %}
+    <div>
+      <h3>Website</h3>
+      <a href="{{ element.websiteURL }}">{{ element.websiteURL }}</a>
+    </div>
+  {% endif %}
+
+  <div>
+    <h3>Group</h3>
+    <p>{{ element.group.label }}</p>
+  </div>
+</div>

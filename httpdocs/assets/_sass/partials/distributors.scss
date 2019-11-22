@@ -11,6 +11,20 @@
   margin-top: 0;
 }
 
+.distributors-info-bubble {
+  h2, h3 {
+    font-family: $font-roboto-slab;
+  }
+
+  h2, h3, p {
+    margin: 0;
+  }
+
+  div {
+    margin-top: .5em;
+  }
+}
+
 .distributors-network {
   margin-bottom: 3rem;
 }

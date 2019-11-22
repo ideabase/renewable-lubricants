@@ -24,7 +24,30 @@
     }
   } %}
 
-  {{ craft.smartMap.map(craft.entries.section('distributors').all(), options) }}
+  {{ craft.smartMap.map(craft.entries.section('distributors'), options) }}
+
+  {% for entry in craft.entries.section('distributors').all %}
+    {% switch entry.group %}
+      {% case 'resale' %}
+        {% set icon = 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png' %}
+      {% case 'international' %}
+        {% set icon = 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png' %}
+      {% default %}
+        {% set icon = 'https://maps.google.com/mapfiles/ms/icons/green-dot.png' %}
+    {% endswitch %}
+
+    {% if entry.address.country is not same as('United States') %}
+      {% set icon = 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png' %}
+    {% endif %}
+
+    {% js %}
+
+      var markerId = 'smartmap-mapcanvas-1.{{ entry.id }}.address';
+      smartMap.marker[markerId].setOptions({'icon': '{{ icon }}'});
+
+    {% endjs %}
+
+  {% endfor %}
 </div>
 
 {% endblock %}

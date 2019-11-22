@@ -1,4 +1,4 @@
-{# scripts to be added to the end of the body to defer loading #}
+{% cache %}
 
 {# add grunt-contrib-watch live reload script if in dev mode #}
 {% if craft.app.config.general.devMode %}
@@ -13,3 +13,5 @@
 
 {# carousel script, must be after jquery #}
 <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+{% endcache %}

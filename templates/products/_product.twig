@@ -21,7 +21,9 @@
         <span>Product:</span>
         <select name="purchasableId" id="product-select">
           {% for variant in product.variants %}
-            <option id="product-{{ variant.sku }}" value="{{ variant.id }}"{% if variant.stock <= 0 and variant.hasUnlimitedStock == false %} disabled{% endif %}>{{ variant.sku }}: {{ product.title }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ (variant.size) }})</option>
+            <option id="product-{{ variant.sku }}" value="{{ variant.id }}"{% if variant.stock <= 0 and variant.hasUnlimitedStock == false %} disabled{% endif %}>
+              {{ variant.sku }}: {{ product.title }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ (variant.size) }})
+            </option>
           {% endfor %}
         </select>
 

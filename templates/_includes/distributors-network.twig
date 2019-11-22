@@ -12,24 +12,22 @@
       <label>{{ distributor.title }}</label>
 
       <div class="distributors-content-container">
-        {% if distributor.subtitle|length %}
-          <p class="distributors-subtitle">{{ distributor.subtitle }}</p>
-        {% endif %}
-
         <div class="distributors-content">
           <img src="{{ distributor.logo.one().url }}" alt="{{ distributor.logo.one().title }}" class="distributors-img">
 
           <div class="distributors-body">
-            {% if distributor.body|length %}
-              {{ distributor.body }}
-            {% endif %}
-
-            {% if distributor.phoneNumber|length %}
-              <div>Phone: {{ distributor.phoneNumber }}</div>
+            {% if distributor.address|length %}
+              <div>{{ distributor.address }}</div>
             {% endif %}
 
             {% if distributor.websiteURL|length %}
               <div>Website: <a href="{{ distributor.websiteURL }}">{{ distributor.websiteURL }}</a></div>
+            {% endif %}
+
+            {% if distributor.phoneNumber|length %}
+              {% for block in distributor.phoneNumber %}
+                <div>{{ block.contactInfo }}</div>
+              {% endfor %}
             {% endif %}
           </div>
         </div>

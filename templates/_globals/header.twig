@@ -25,6 +25,8 @@
     <div class="header-cart-ext"></div>
   {% endif %}
 
+  {% cache globally %}
+
   {# top nav #}
   <nav>
     <ul class="flex">
@@ -55,4 +57,6 @@
   </div>
 
   <div class="header-nav-ext"></div>
+
+  {% endcache %}
 </header>
