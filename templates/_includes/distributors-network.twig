@@ -25,7 +25,7 @@
             {% endif %}
 
             {% if distributor.phoneNumber|length %}
-              {% for block in distributor.phoneNumber %}
+              {% for block in distributor.phoneNumber.all() %}
                 <div>{{ block.contactInfo }}</div>
               {% endfor %}
             {% endif %}

@@ -9,7 +9,7 @@
   {% if element.phoneNumber|length %}
     <div>
       <h3>Contact</h3>
-      {% for block in element.phoneNumber %}
+      {% for block in element.phoneNumber.all() %}
         <p>{{ block.contactInfo }}</p>
       {% endfor %}
     </div>

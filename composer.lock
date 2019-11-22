@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8f123a0b9a7442a51fe32b129a03bc4",
+    "content-hash": "28349538efa92ef96c6fd84344610a17",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -373,11 +373,11 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.3.15",
+            "version": "3.3.16.1",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/7a294dd6fd6054b5278a940d7a6e4fcd9c1a2550",
-                "reference": "7a294dd6fd6054b5278a940d7a6e4fcd9c1a2550",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/b16ba7b81892f97a23f3a24ac6406ed569d2cbc6",
+                "reference": "b16ba7b81892f97a23f3a24ac6406ed569d2cbc6",
                 "shasum": ""
             },
             "require": {
@@ -387,7 +387,7 @@
                 "craftcms/server-check": "~1.1.0",
                 "creocoder/yii2-nested-sets": "~0.9.0",
                 "elvanto/litemoji": "^1.3.1",
-                "enshrined/svg-sanitize": "~0.9.0",
+                "enshrined/svg-sanitize": "~0.13.0",
                 "ext-curl": "*",
                 "ext-dom": "*",
                 "ext-json": "*",
@@ -406,10 +406,11 @@
                 "symfony/yaml": "^3.2|^4.0",
                 "true/punycode": "^2.1.0",
                 "twig/twig": "~2.12.0",
+                "voku/portable-utf8": "^5.4.28",
                 "voku/stringy": "~5.1.0",
                 "webonyx/graphql-php": "^0.12.0",
                 "yii2tech/ar-softdelete": "^1.0.2",
-                "yiisoft/yii2": "~2.0.21.0",
+                "yiisoft/yii2": "~2.0.30.0",
                 "yiisoft/yii2-debug": "^2.1.0",
                 "yiisoft/yii2-queue": "2.1.0",
                 "yiisoft/yii2-swiftmailer": "^2.1.0",
@@ -454,7 +455,7 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2019-11-05T19:51:36+00:00"
+            "time": "2019-11-22T18:32:57+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -1141,12 +1142,16 @@
         },
         {
             "name": "enshrined/svg-sanitize",
-            "version": "0.9.2",
+            "version": "0.13.0",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/darylldoyle/svg-sanitizer/zipball/e0cb5ad3abea5459e0962cf79a92d34714c74dfa",
-                "reference": "e0cb5ad3abea5459e0962cf79a92d34714c74dfa",
+                "url": "https://api.github.com/repos/darylldoyle/svg-sanitizer/zipball/4cf8d0f61edf9f00b84e162fc229176a362da247",
+                "reference": "4cf8d0f61edf9f00b84e162fc229176a362da247",
                 "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-libxml": "*"
             },
             "type": "library",
             "autoload": {
@@ -1155,7 +1160,7 @@
                 }
             },
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -1164,7 +1169,7 @@
                 }
             ],
             "description": "An SVG sanitizer for PHP",
-            "time": "2018-10-01T17:11:02+00:00"
+            "time": "2019-11-07T09:16:31+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -3219,11 +3224,11 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v6.2.1",
+            "version": "v6.2.3",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a",
-                "reference": "5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/149cfdf118b169f7840bbe3ef0d4bc795d1780c9",
+                "reference": "149cfdf118b169f7840bbe3ef0d4bc795d1780c9",
                 "shasum": ""
             },
             "require": {
@@ -3267,7 +3272,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2019-04-21T09:21:45+00:00"
+            "time": "2019-11-12T09:31:26+00:00"
         },
         {
             "name": "symfony/console",
@@ -4078,11 +4083,11 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.12.1",
+            "version": "v2.12.2",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ddd4134af9bfc6dba4eff7c8447444ecc45b9ee5",
-                "reference": "ddd4134af9bfc6dba4eff7c8447444ecc45b9ee5",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d761fd1f1c6b867ae09a7d8119a6d95d06dc44ed",
+                "reference": "d761fd1f1c6b867ae09a7d8119a6d95d06dc44ed",
                 "shasum": ""
             },
             "require": {
@@ -4130,7 +4135,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-10-17T07:34:53+00:00"
+            "time": "2019-11-11T16:52:09+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -4180,11 +4185,11 @@
         },
         {
             "name": "voku/anti-xss",
-            "version": "4.1.16",
+            "version": "4.1.19",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/anti-xss/zipball/a87bdbfad5211e6f35232d1af691dbf1eab0ac47",
-                "reference": "a87bdbfad5211e6f35232d1af691dbf1eab0ac47",
+                "url": "https://api.github.com/repos/voku/anti-xss/zipball/8acdad8a3ad4c70d04cd6925811b28d06d776ca1",
+                "reference": "8acdad8a3ad4c70d04cd6925811b28d06d776ca1",
                 "shasum": ""
             },
             "require": {
@@ -4224,15 +4229,15 @@
                 "security",
                 "xss"
             ],
-            "time": "2019-11-03T13:38:15+00:00"
+            "time": "2019-11-11T14:48:30+00:00"
         },
         {
             "name": "voku/arrayy",
-            "version": "5.14.2",
+            "version": "5.15.0",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/Arrayy/zipball/6fe80d46f515d8d96db244d36e6099ef6659c04a",
-                "reference": "6fe80d46f515d8d96db244d36e6099ef6659c04a",
+                "url": "https://api.github.com/repos/voku/Arrayy/zipball/807013ebf923de01689afe516e1301c51818f056",
+                "reference": "807013ebf923de01689afe516e1301c51818f056",
                 "shasum": ""
             },
             "require": {
@@ -4271,7 +4276,7 @@
                 "utility",
                 "utils"
             ],
-            "time": "2019-10-06T17:56:40+00:00"
+            "time": "2019-11-18T00:23:19+00:00"
         },
         {
             "name": "voku/email-check",
@@ -4319,11 +4324,11 @@
         },
         {
             "name": "voku/portable-ascii",
-            "version": "1.3.4",
+            "version": "1.3.5",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/d3553af811794c377ea2afff5494b343bcef5b76",
-                "reference": "d3553af811794c377ea2afff5494b343bcef5b76",
+                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/056000d679a44b06ee61a63114f587cde066b1a8",
+                "reference": "056000d679a44b06ee61a63114f587cde066b1a8",
                 "shasum": ""
             },
             "require": {
@@ -4355,15 +4360,15 @@
                 "clean",
                 "php"
             ],
-            "time": "2019-10-14T09:49:39+00:00"
+            "time": "2019-11-11T16:55:47+00:00"
         },
         {
             "name": "voku/portable-utf8",
-            "version": "5.4.26",
+            "version": "5.4.28",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/portable-utf8/zipball/708c25fd7e460260cf111f034deed117f1ef5173",
-                "reference": "708c25fd7e460260cf111f034deed117f1ef5173",
+                "url": "https://api.github.com/repos/voku/portable-utf8/zipball/f1b08aa203cb4731a5c4c9d9328b6fc329341acf",
+                "reference": "f1b08aa203cb4731a5c4c9d9328b6fc329341acf",
                 "shasum": ""
             },
             "require": {
@@ -4420,7 +4425,7 @@
                 "utf-8",
                 "utf8"
             ],
-            "time": "2019-11-05T02:39:01+00:00"
+            "time": "2019-11-17T21:08:41+00:00"
         },
         {
             "name": "voku/stop-words",
@@ -4690,11 +4695,11 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.21",
+            "version": "2.0.30",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/7e4622252c5f272373e1339a47d331e4a55e9591",
-                "reference": "7e4622252c5f272373e1339a47d331e4a55e9591",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/dfeeaf4dbdd23c9cd29b9246921e8a9ca2dbabe4",
+                "reference": "dfeeaf4dbdd23c9cd29b9246921e8a9ca2dbabe4",
                 "shasum": ""
             },
             "require": {
@@ -4780,7 +4785,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2019-06-18T14:25:08+00:00"
+            "time": "2019-11-19T21:22:20+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -4834,11 +4839,11 @@
         },
         {
             "name": "yiisoft/yii2-debug",
-            "version": "2.1.11",
+            "version": "2.1.12",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/72e7c6c454028366f14ccef5a93d6c18fc9dcd63",
-                "reference": "72e7c6c454028366f14ccef5a93d6c18fc9dcd63",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/bf9234ba1369116d12ebe266d98006416a5ae304",
+                "reference": "bf9234ba1369116d12ebe266d98006416a5ae304",
                 "shasum": ""
             },
             "require": {
@@ -4877,7 +4882,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2019-11-05T13:56:49+00:00"
+            "time": "2019-11-19T20:09:08+00:00"
         },
         {
             "name": "yiisoft/yii2-queue",
