@@ -13,11 +13,15 @@
 
       <div class="distributors-content-container">
         <div class="distributors-content">
-          <img src="{{ distributor.logo.one().url }}" alt="{{ distributor.logo.one().title }}" class="distributors-img">
+          <div>
+            {% if distributor.logo|length %}
+              <img src="{{ distributor.logo.one().url }}" alt="{{ distributor.logo.one().title }}" class="distributors-img">
+            {% endif %}
+          </div>
 
           <div class="distributors-body">
             {% if distributor.address|length %}
-              <div>{{ distributor.address }}</div>
+              <div>{{ distributor.address.format }}</div>
             {% endif %}
 
             {% if distributor.websiteURL|length %}

@@ -36,7 +36,8 @@
         {% set icon = 'https://maps.google.com/mapfiles/ms/icons/green-dot.png' %}
     {% endswitch %}
 
-    {% if entry.address.country is not same as('United States') %}
+    {% set usaNames = ['united states of america', 'united states', 'u.s.a.', 'u.s.', 'u.s.a', 'u.s', 'usa', 'us'] %}
+    {% if entry.address.country|lower not in usaNames %}
       {% set icon = 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png' %}
     {% endif %}
 
