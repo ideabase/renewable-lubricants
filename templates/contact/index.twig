@@ -52,7 +52,9 @@
 
   <div class="contact-info">
     <div>Email: <a href="mailto:{{ entry.email }}">{{ entry.email }}</a></div>
-    <div>Phone: {{ entry.phoneNumber }}</div>
+    {% for block in entry.phoneNumber.all() %}
+      <div>{{ block.contactInfo }}</div>
+    {% endfor %}
     <br>
     <div>{{ entry.address.street1 }}</div>
     <div>{{ entry.address.street2 }}</div>
