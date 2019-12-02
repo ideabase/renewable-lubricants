@@ -24,14 +24,14 @@
               <div>{{ distributor.address.format }}</div>
             {% endif %}
 
-            {% if distributor.websiteURL|length %}
-              <div>Website: <a href="{{ distributor.websiteURL }}">{{ distributor.websiteURL }}</a></div>
-            {% endif %}
-
             {% if distributor.phoneNumber|length %}
               {% for block in distributor.phoneNumber.all() %}
                 <div>{{ block.contactInfo }}</div>
               {% endfor %}
+            {% endif %}
+
+            {% if distributor.websiteURL|length %}
+              <div>Website: <a href="{{ distributor.websiteURL }}">{{ distributor.websiteURL }}</a></div>
             {% endif %}
           </div>
         </div>

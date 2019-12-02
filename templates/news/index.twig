@@ -7,25 +7,44 @@
     <h1>News</h1>
   </div>
 
-  {% for newsArticle in craft.entries.section('news').all() %}
-    <div class="news-item">
-      <a href="{{ newsArticle.url }}">
-        <div><img src="{{ newsArticle.featureImage.one().getUrl("newsFeatureImage") }}"></div>
+  {% set query = craft.entries.section('news').limit(10) %}
+  {% paginate query as newsPage, newsEntries %}
 
-        <div class="news-item-text">
-          <h2>{{ newsArticle.title }}</h2>
+  <div class="news-list">
+    {% for entry in newsEntries %}
+      <div class="news-item flex">
+        <a href="{{ entry.url }}">
+          <img src="{{ entry.featureImage.one().getUrl() }}">
+        </a>
 
-          {% if newsArticle.description|length %}
-            {% if newsArticle.description|length > 50 %} {# TODO: fix slice #}
-              <p>{{ newsArticle.description|slice(0,50) }}</p>
-            {% else %}
-              <p>{{ newsArticle.description }}</p>
-            {% endif %}
+        <a href="{{ entry.url }}">
+          <h2>{{ entry.title }}</h2>
+
+          {% if entry.description|length %}
+            <p>{{ entry.description }}</p>
           {% endif %}
-        </div>
-      </a>
-    </div>
-  {% endfor %}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="news-pagination">
+    <a href="{{ newsPage.firstUrl }}">
+      <button class="button"{% if craft.app.request.absoluteUrl == newsPage.firstUrl %} disabled{% endif %}>First</button>
+    </a>
+    <a href="{{ newsPage.prevUrl }}">
+      <button class="button"{% if not newsPage.prevUrl %} disabled{% endif %}>Previous</button>
+    </a>
+    <span>
+      <button class="button" disabled>{{ newsPage.currentPage }}</button>
+    </span>
+    <a href="{{ newsPage.nextUrl }}">
+      <button class="button"{% if not newsPage.nextUrl %} disabled{% endif %}>Next</button>
+    </a>
+    <a href="{{ newsPage.lastUrl }}">
+      <button class="button"{% if craft.app.request.absoluteUrl == newsPage.lastUrl %} disabled{% endif %}>Last</button>
+    </a>
+  </div>
 </section>
 
 {% endblock %}

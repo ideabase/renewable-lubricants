@@ -28,6 +28,9 @@ return [
 
     // The secure key Craft will use for hashing and encrypting data
     'securityKey' => getenv('SECURITY_KEY'),
+
+    // String to append to paginated URLs
+    'pageTrigger' => 'page/'
   ],
 
   // Dev environment settings

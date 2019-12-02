@@ -47,12 +47,6 @@ a {
   }
 }
 
-button, input[type='submit'] {
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 button.button, input[type='submit'] {
   background-color: $color-yellow;
   font-family: $font-josefin-sans;
@@ -63,6 +57,12 @@ button.button, input[type='submit'] {
 
   &:hover {
     background-color: darken($color-yellow, 15);
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: $color-yellow;
+    cursor: default;
   }
 }
 
