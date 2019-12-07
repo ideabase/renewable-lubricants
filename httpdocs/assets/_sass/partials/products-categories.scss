@@ -26,21 +26,39 @@
       max-height: 200px;
     }
   }
-
-  span {
-    @media screen and (min-width: $bp-sm) {
-      font-size: 1.2rem;
-    }
-  }
 }
 
 .category-product {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  color: $color-black;
 }
 
 .category-image {
-  margin-bottom: 1rem;
+  justify-self: center;
+}
+
+.category-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 1rem 0;
+
+  p {
+    font-family: $font-roboto-slab;
+    margin: 0;
+  }
+
+  span {
+    color: $color-black;
+  }
+
+  @media screen and (min-width: $bp-sm) {
+    font-size: 1.2rem;
+  }
+}
+
+.category-text-price {
+  justify-self: flex-end;
+  color: $color-gray;
 }

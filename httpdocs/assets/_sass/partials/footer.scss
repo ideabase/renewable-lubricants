@@ -105,7 +105,7 @@
     font-weight: bold;
   }
 
-  // nested for use of local variable $slant-length
+  // nested to use local variable $slant-length
   .products-search-wrapper {
     padding: 1.25rem 0;
     background-color: $color-green-dark;
@@ -151,7 +151,7 @@
     }
   }
 
-  // nested for use of local variable $slant-length
+  // nested to use local variable $slant-length
   .newsletter-form-container {
     background-color: $color-yellow;
 
@@ -217,6 +217,20 @@ form[name='newsletter-form'] {
   }
 }
 
+.footer-social {
+  a:not(:last-child) {
+    margin-right: 1rem;
+  }
+}
+
+.footer-social-icon {
+  width: 35px;
+}
+
+.footer-contact a {
+  color: $color-black;
+}
+
 .footer-info {
   display: flex;
   flex-direction: column;
@@ -253,14 +267,4 @@ form[name='newsletter-form'] {
       margin-bottom: 0;
     }
   }
-}
-
-.footer-social {
-  a:not(:last-child) {
-    margin-right: 1rem;
-  }
-}
-
-.footer-social-icon {
-  width: 35px;
 }

@@ -380,12 +380,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.3.16.3",
-        "version_normalized": "3.3.16.3",
+        "version": "3.3.17",
+        "version_normalized": "3.3.17.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/46871fbfdffaa70e6ea4dc7ab20b5332e0974189",
-            "reference": "46871fbfdffaa70e6ea4dc7ab20b5332e0974189",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/a6d67d9a4317a0ac338cfddb2abd7a4fa78678a9",
+            "reference": "a6d67d9a4317a0ac338cfddb2abd7a4fa78678a9",
             "shasum": ""
         },
         "require": {
@@ -438,7 +438,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2019-11-26T14:27:53+00:00",
+        "time": "2019-12-03T20:23:49+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -4535,12 +4535,12 @@
     },
     {
         "name": "voku/portable-utf8",
-        "version": "5.4.28",
-        "version_normalized": "5.4.28.0",
+        "version": "5.4.30",
+        "version_normalized": "5.4.30.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/voku/portable-utf8/zipball/f1b08aa203cb4731a5c4c9d9328b6fc329341acf",
-            "reference": "f1b08aa203cb4731a5c4c9d9328b6fc329341acf",
+            "url": "https://api.github.com/repos/voku/portable-utf8/zipball/713c7201c2026344e4fb679cbc8e437a97fbc868",
+            "reference": "713c7201c2026344e4fb679cbc8e437a97fbc868",
             "shasum": ""
         },
         "require": {
@@ -4560,7 +4560,7 @@
             "ext-json": "Use JSON for string detection",
             "ext-mbstring": "Use Mbstring for best performance"
         },
-        "time": "2019-11-17T21:08:41+00:00",
+        "time": "2019-12-04T11:04:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

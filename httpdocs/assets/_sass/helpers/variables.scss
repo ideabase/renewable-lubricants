@@ -1,16 +1,15 @@
 // variables
 
 // colors
-$color-white: #fafafa;
-$color-white-pure: #ffffff;
-$color-red: #ff5722;
+$color-white: #fafafa;      // color for dark backgrounds
+$color-white-pure: #ffffff; // default background color
+$color-red: #ff5722;        // errors
 $color-yellow: #f9c546;
 $color-green-dark: #008e56;
 $color-green: #93cfb7;
-$color-blue: #007bff;
-$color-gray: #a9b4b9; // footer links and header phone number
-$color-black: #212121;
-$color-black-pure: #000000;
+$color-blue: #007bff;       // default a tag color
+$color-gray: #a9b4b9;
+$color-black: #212121;      // default color
 
 // fonts
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300,400|Roboto+Slab:400,700');

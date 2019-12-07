@@ -1,0 +1,35 @@
+{% extends '_layouts/products' %}
+
+{% block content %}
+
+<div class="h1-wrapper-top">
+  <h1>{{ category.title }}</h1>
+</div>
+
+<div class="category-container">
+  {% if craft.products.relatedTo(category)|length %}
+    {% for product in craft.products.relatedTo(category).all() %}
+      {% set cheapestVariant = product.variants[0] %}
+
+      {% for variant in product.variants %}
+        {% if variant.price < cheapestVariant.price %}
+          {% set cheapestVariant = variant %}
+        {% endif %}
+      {% endfor %}
+
+      <a class="category-product" href="{{ product.url }}">
+        <div class="category-image">
+          <img src="{{ product.productImage.one().getUrl('productImage') }}" alt="{{ product.productImage.one().title }}">
+        </div>
+        <div class="category-text">
+          <p>{{ product.title }}</p>
+          <p class="category-text-price">Starting at <span>${{ cheapestVariant.price|number_format(2, '.', ',') }}</span></p>
+        </div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <h2>There are no products in this category.</h2>
+  {% endif %}
+</div>
+
+{% endblock %}

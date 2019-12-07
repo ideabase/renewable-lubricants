@@ -1,5 +1,13 @@
 # Changelog
 
+### 5.4.30 (2019-12-04)
+
+- fix "UTF8::str_contains_all" -> fix the loop
+
+### 5.4.29 (2019-12-02)
+
+- add "UTF8::has_whitespace()"
+
 ### 5.4.28 (2019-11-17)
 
 - use "mb_str_split" with PHP >= 7.4 + mbstring support (performance++)

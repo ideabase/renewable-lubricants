@@ -2,13 +2,23 @@
 
 {% block content %}
 
-<div class="search-results">
-  <h1>Search Results</h1>
+<div class="search">
+  <div class="h1-wrapper-top">
+    <h1>Search</h1>
+  </div>
 
-  {% set query = craft.app.request.getParam('q') %}
-  {% set products = craft.products.search(query).orderBy('score').all() %}
+  <form action="{{ url('search/results') }}" name="search-form">
+    <input type="search" name="q" placeholder="Search" autofocus required>
+    <input type="submit" value="Go">
+  </form>
 
-  {% if products|length %}
+  {% set searchQuery = craft.app.request.getParam('q') %}
+  {% set products = craft.products.search(searchQuery).orderBy('score').all() %}
+  {% set categories = craft.categories.group('productCategories').search(searchQuery).orderBy('score').all() %}
+  {% set news = craft.entries.section('news').search(searchQuery).orderBy('score').all() %}
+
+  {% if searchQuery|length and products|length %}
+    <h2>Products</h2>
     <p>{{ products|length }} results:</p>
 
     <ul>
@@ -16,9 +26,42 @@
         <li><a href="{{ product.getUrl() }}">{{ product.title }}</a></li>
       {% endfor %}
     </ul>
-  {% else %}
-    <p>Your search for "{{ query }}" didn’t return any results.</p>
+  {% endif %}
+
+  {% if searchQuery|length and categories|length %}
+    <h2>Categories</h2>
+    <p>{{ categories|length }} results:</p>
+
+    <ul>
+      {% for category in categories %}
+        <li><a href="{{ category.getUrl() }}">{{ category.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if searchQuery|length and news|length %}
+    <h2>news</h2>
+    <p>{{ news|length }} results:</p>
+
+    <ul>
+      {% for entry in news %}
+        <li><a href="{{ entry.getUrl() }}">{{ entry.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if searchQuery|length and not products|length and not categories|length %}
+    <p>Your search for "{{ searchQuery }}" didn’t return any results.</p>
   {% endif %}
 </div>
 
 {% endblock %}
+
+{% js %}
+
+'use strict';
+
+var url = {{ craft.app.request.getParam('q')|json_encode|raw }};
+console.log(url);
+
+{% endjs %}

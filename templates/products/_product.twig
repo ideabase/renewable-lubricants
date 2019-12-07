@@ -19,7 +19,7 @@
 
       <div class="product-info-grid">
         <span>Product:</span>
-        <select name="purchasableId" id="product-select">
+        <select name="purchasableId" id="product-select" autofocus required>
           {% for variant in product.variants %}
             <option id="product-{{ variant.sku }}" value="{{ variant.id }}"{% if variant.stock <= 0 and variant.hasUnlimitedStock == false %} disabled{% endif %}>
               {{ variant.sku }}: {{ product.title }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ (variant.size) }})
@@ -94,26 +94,20 @@
   {% set productVariants = productVariants|merge([[variant.sku, variant.price]]) %}
 {% endfor %}
 var productVariants = {{ productVariants|json_encode|raw }};
-
 var productSelect = document.getElementById('product-select');
 var productQuantity = document.getElementById('product-quantity');
 
-var selectedId = productSelect.options[productSelect.selectedIndex].id;
-var variantPrice = productVariants.find(function(variant) {
-  return selectedId === ('product-' + variant[0]);
-})[1];
-
-document.getElementById('product-price').innerHTML = '$' + (productQuantity.value * parseFloat(variantPrice)).toFixed(2);
+updatePrice();
 
 productSelect.addEventListener('change', updatePrice);
 productQuantity.addEventListener('change', updatePrice);
 
 function updatePrice() {
-  selectedId = productSelect.options[productSelect.selectedIndex].id;
-  variantPrice = productVariants.find(function(variant) {
+  var selectedId = productSelect.options[productSelect.selectedIndex].id;
+  var variantPrice = productVariants.find(function(variant) {
     return selectedId === ('product-' + variant[0]);
   })[1];
-  document.getElementById('product-price').innerHTML = '$' + (productQuantity.value * parseFloat(variantPrice)).toFixed(2);
+  document.getElementById('product-price').innerHTML = (productQuantity.value * parseFloat(variantPrice)).toLocaleString('en-US', {style:'currency', currency:'USD'});
 }
 
 {% endjs %}
