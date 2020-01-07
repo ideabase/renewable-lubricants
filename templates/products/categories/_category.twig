@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="h1-wrapper-top">
+<div class="category-h1">
   <h1>{{ category.title }}</h1>
 </div>
 
@@ -23,12 +23,12 @@
         </div>
         <div class="category-text">
           <p>{{ product.title }}</p>
-          <p class="category-text-price">Starting at <span>${{ cheapestVariant.price|number_format(2, '.', ',') }}</span></p>
+          <p>Starting at <span>${{ cheapestVariant.price|number_format(2, '.', ',') }}</span></p>
         </div>
       </a>
     {% endfor %}
   {% else %}
-    <h2>There are no products in this category.</h2>
+    <p class="category-empty">There are no products in this category.</p>
   {% endif %}
 </div>
 

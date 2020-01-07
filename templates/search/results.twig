@@ -8,7 +8,7 @@
   </div>
 
   <form action="{{ url('search/results') }}" name="search-form">
-    <input type="search" name="q" placeholder="Search" autofocus required>
+    <input type="search" id="search-form-input" name="q" placeholder="Search" autofocus required>
     <input type="submit" value="Go">
   </form>
 
@@ -19,7 +19,7 @@
 
   {% if searchQuery|length and products|length %}
     <h2>Products</h2>
-    <p>{{ products|length }} results:</p>
+    <p>{{ products|length }} result{% if products|length > 1 %}{{ 's' }}{% endif %}:</p>
 
     <ul>
       {% for product in products %}
@@ -29,8 +29,8 @@
   {% endif %}
 
   {% if searchQuery|length and categories|length %}
-    <h2>Categories</h2>
-    <p>{{ categories|length }} results:</p>
+    <h2>Product Categories</h2>
+    <p>{{ categories|length }} result{% if categories|length > 1 %}{{ 's' }}{% endif %}:</p>
 
     <ul>
       {% for category in categories %}
@@ -40,8 +40,8 @@
   {% endif %}
 
   {% if searchQuery|length and news|length %}
-    <h2>news</h2>
-    <p>{{ news|length }} results:</p>
+    <h2>News</h2>
+    <p>{{ news|length }} result{% if news|length > 1 %}{{ 's' }}{% endif %}:</p>
 
     <ul>
       {% for entry in news %}
@@ -50,7 +50,7 @@
     </ul>
   {% endif %}
 
-  {% if searchQuery|length and not products|length and not categories|length %}
+  {% if searchQuery|length and not products|length and not categories|length and not news|length %}
     <p>Your search for "{{ searchQuery }}" didn’t return any results.</p>
   {% endif %}
 </div>
@@ -59,9 +59,9 @@
 
 {% js %}
 
-'use strict';
-
-var url = {{ craft.app.request.getParam('q')|json_encode|raw }};
-console.log(url);
+var query = {{ craft.app.request.getParam('q')|json_encode|raw }};
+if (query.length > 0) {
+  document.getElementById('search-form-input').value = query;
+}
 
 {% endjs %}
