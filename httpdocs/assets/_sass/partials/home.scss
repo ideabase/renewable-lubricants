@@ -22,7 +22,7 @@
   transform: translateX(-50%);
   width: 18rem;
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 800px) {
     left: 0;
     transform: none;
   }
@@ -124,7 +124,7 @@
     }
   }
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     &:hover {
       .testimonial-text-wrapper {
         @include slant('bl', 'center', transparentize($color-yellow, .1), $color-black, .5rem, 16rem, 5rem, .5rem);
@@ -154,7 +154,7 @@
   position: static;
   padding: $padding;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     transition: all .15s linear; // for testimonial hover transition
   }
 
@@ -166,7 +166,7 @@
     height: 100%;
   }
 
-  @media screen and (min-width: $bp-lg) {
+  @media screen and (min-width: 1000px) {
     background-color: unset;
     @include slant('bl', 'center', transparentize($color-yellow, .1), $color-black, $padding, $height, $width, $padding);
     position: absolute;
@@ -187,11 +187,11 @@
     align-items: flex-end;
     height: 100%;
 
-    @media screen and (min-width: $bp-lg) {
+    @media screen and (min-width: 1000px) {
       height: $height;
     }
 
-    @media screen and (min-width: $bp-xl) {
+    @media screen and (min-width: 1200px) {
       transition: all .15s linear; // for testimonial hover transition
     }
   }

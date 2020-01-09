@@ -17,7 +17,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 800px) {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -29,7 +29,7 @@
     max-width: 150px;
     max-height: 150px;
 
-    @media screen and (min-width: $bp-md) {
+    @media screen and (min-width: 800px) {
       max-width: 200px;
       max-height: 200px;
     }
@@ -67,7 +67,7 @@
     color: $color-green-dark;
   }
 
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: 600px) {
     font-size: 1.2rem;
   }
 }

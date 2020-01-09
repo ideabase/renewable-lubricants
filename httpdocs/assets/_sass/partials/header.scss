@@ -28,13 +28,13 @@ header {
       text-decoration: none;
     }
 
-    @media screen and (min-width: $bp-xl) {
-      max-width: $bp-xl;
+    @media screen and (min-width: 1200px) {
+      max-width: 1200px;
       margin: 0 auto;
     }
   }
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 800px) {
     margin: .5rem 0 3rem 0;
   }
 }
@@ -43,7 +43,7 @@ header {
 .header-nav-ext {
   display: none;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     display: unset;
     position: absolute;
     bottom: 0;
@@ -56,13 +56,13 @@ header {
 }
 
 .header-top-row {
-  max-width: $bp-xl;
+  max-width: 1200px;
   position: relative;
   justify-content: flex-end;
   align-items: center;
   margin: 0 0 .5rem .5rem;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     margin: 0 auto .5rem auto;
   }
 }
@@ -78,7 +78,7 @@ header {
     max-width: 85px;
   }
 
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: 600px) {
     max-width: 125px;
   }
 }
@@ -96,7 +96,7 @@ header {
     font-size: 1rem;
   }
 
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: 600px) {
     font-size: 1.2rem;
   }
 }
@@ -116,7 +116,7 @@ header {
     }
   }
 
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: 600px) {
     @include slant('bl', 'left', $color-yellow, $color-black, .5rem, 5rem);
     width: 15rem;
     font-size: unset;
@@ -134,7 +134,7 @@ header {
 .header-cart-ext {
   display: none;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     display: unset;
     position: absolute;
     top: 1.2rem;
@@ -146,7 +146,7 @@ header {
   }
 }
 
-@media screen and (min-width: $bp-md) {
+@media screen and (min-width: 800px) {
   .mobile-menu {
     display: none;
   }

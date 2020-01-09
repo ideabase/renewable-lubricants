@@ -4,7 +4,7 @@
 .distributors-network-ext {
   display: none;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     display: unset;
     position: absolute;
     top: 0;
@@ -20,7 +20,7 @@
 .products-search-ext {
   display: none;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     display: unset;
     position: absolute;
     top: 1rem;
@@ -36,7 +36,7 @@
 .footer-newsletter-ext {
   display: none;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     display: unset;
     position: absolute;
     bottom: 14rem;
@@ -52,7 +52,7 @@
 .footer-info-ext {
   display: none;
 
-  @media screen and (min-width: $bp-xl) {
+  @media screen and (min-width: 1200px) {
     display: unset;
     position: absolute;
     bottom: 0;
@@ -78,7 +78,7 @@
     @media screen and (min-width: 850px) {
       text-align: unset;
       margin: 0 0 0 auto;
-      max-width: $bp-lg;
+      max-width: 1000px;
       padding-left: $slant-length;
     }
   }
@@ -91,7 +91,7 @@
     list-style-type: none;
     text-transform: uppercase;
 
-    @media screen and (min-width: $bp-sm){
+    @media screen and (min-width: 600px){
       font-size: 1.35em;
     }
 
@@ -115,7 +115,7 @@
       padding: unset;
       background-color: unset;
       @include slant('bl', 'center', $color-green-dark, $color-black, 0, $slant-length);
-      max-width: $bp-lg;
+      max-width: 1000px;
       margin: 0 0 0 auto;
     }
   }
@@ -126,12 +126,12 @@
 }
 
 .footer-container {
-  max-width: $bp-xl;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .footer-container-inner {
-  max-width: $bp-lg;
+  max-width: 1000px;
 }
 
 .newsletter {
@@ -188,13 +188,13 @@ form[name='newsletter-form'] {
 .newsletter-h2-md {
   display: none;
 
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: 600px) {
     display: block;
   }
 }
 
 .newsletter-h2-sm {
-  @media screen and (min-width: $bp-sm) {
+  @media screen and (min-width: 600px) {
     display: none;
   }
 }
@@ -204,7 +204,7 @@ form[name='newsletter-form'] {
   justify-content: center;
   background-color: $color-gray;
   padding: 2rem;
-  max-width: $bp-lg;
+  max-width: 1000px;
 
   @media screen and (min-width: 630px) {
     display: block;

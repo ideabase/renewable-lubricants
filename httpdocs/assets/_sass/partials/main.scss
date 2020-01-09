@@ -24,7 +24,7 @@ body {
 main {
   margin: 0 auto 3rem auto;
   flex: 1 0 auto;
-  max-width: $bp-xl;
+  max-width: 1200px;
   width: 100%;
 }
 
@@ -97,7 +97,7 @@ img {
   max-height: 300px;
   object-fit: cover;
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 800px) {
     max-height: 400px;
   }
 }
@@ -108,7 +108,7 @@ img {
   width: 100%;
   text-align: center;
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 800px) {
     background-color: unset;
     @include slant('trl', 'center', $color-green, $color-black, 1rem, 4rem);
     width: 30rem;
@@ -126,7 +126,7 @@ img {
   width: 100%;
   text-align: center;
 
-  @media screen and (min-width: $bp-md) {
+  @media screen and (min-width: 800px) {
     background-color: unset;
     @include slant('brl', 'center', $color-green, $color-black, 1rem, 4rem);
     width: 30rem;

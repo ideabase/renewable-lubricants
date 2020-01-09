@@ -1,7 +1,7 @@
 // distributors partial
 
 .distributors-map-body {
-  max-width: $bp-md;
+  max-width: 800px;
   margin: 0 auto 3rem auto;
   padding: 0 1rem;
   text-align: center;
@@ -41,7 +41,7 @@
     background-color: unset;
     text-align: unset;
     @include slant('bl', 'center', $color-green-dark, $color-white, 1rem, 4rem);
-    max-width: $bp-lg;
+    max-width: 1000px;
     margin: 0 0 0 auto;
   }
 
@@ -55,7 +55,7 @@
   border-bottom: solid 2px $color-green-dark;
   position: relative;
   margin-bottom: 10px;
-  max-width: $bp-lg;
+  max-width: 1000px;
   margin: 0 0 0 auto;
 
   input {
