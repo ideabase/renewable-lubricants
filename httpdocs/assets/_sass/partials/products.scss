@@ -29,6 +29,10 @@
     align-items: center;
     text-align: center;
     color: $color-black;
+
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
   }
 
   img {
@@ -40,11 +44,11 @@
   font-weight: bold;
   font-family: $font-roboto-slab, serif;
   text-transform: uppercase;
-  margin-bottom: .2rem;
+  margin: 0;
 }
 
 .products-category-all {
-  @media screen and (min-width: 450px) and (max-width: calc(#{800px} - 1px)) {
+  @media screen and (min-width: 450px) and (max-width: 799px) {
     grid-column-start: span 2;
   }
 }

@@ -1,5 +1,18 @@
 # Changelog
 
+### 4.1.21 (2019-12-30)
+
+- fix false-positive (issue #53)
+- fix for "server-sent events"
+- optimize regex for encoded script-tags (%3C && %3E)
+
+
+### 4.1.20 (2019-12-07)
+
+- fix additional false positives in string (issue #52)
+- remove support for "Netscape 4 JS entities"
+
+
 ### 4.1.19 (2019-11-11)
 
 - keep more non XSS content from html input

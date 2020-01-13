@@ -1,5 +1,64 @@
 # Release Notes for Craft CMS 3.x
 
+## 3.3.19 - 2019-12-30
+
+### Changed
+- Improved the performance of `craft\helpers\StringHelper::containsMb4()`. ([#5366](https://github.com/craftcms/cms/issues/5366))
+- Updated Yii to 2.0.31.
+
+### Security
+- Fixed an information exposure vulnerability.
+
+## 3.3.18.4 - 2019-12-21
+
+### Fixed
+- Fixed a bug where “Updating search indexes” jobs would show inaccurate progress bars. ([#5358](https://github.com/craftcms/cms/pull/5358))
+- Fixed a PHP error that could occur when using the `|attr` filter on an HTML element that had an existing attribute with an empty value. ([#5364](https://github.com/craftcms/cms/issues/5364))
+- Fixed a race condition that could result in a PHP error when generating `ElementQueryBehavior.php`. ([#5361](https://github.com/craftcms/cms/issues/5361))
+
+### Security
+- Fixed a bug where Craft was renewing the identity cookie each time it checked on the user’s remaining session time. ([#3951](https://github.com/craftcms/cms/issues/3951))
+
+## 3.3.18.3 - 2019-12-17
+
+### Changed
+- Slug fields’ translation icon tooltips now clarify that their values are translated for each site. ([#2064](https://github.com/craftcms/cms/issues/2064))
+
+### Fixed
+- Fixed a PHP error that could occur when `craft\services\Elements::getElementById()` was called with an element whose class didn’t exist. ([#5345](https://github.com/craftcms/cms/issues/5345))
+- Fixed a PHP error that could occur when autoloading the `ContentBehavior` class in some environments.
+
+## 3.3.18.2 - 2019-12-15
+
+### Changed
+- Autosuggest inputs now restore focus to the input field when an alias is chosen. ([#5338](https://github.com/craftcms/cms/issues/5338))
+- The Guzzle requirement now excludes Guzzle 6.5.0. ([#5326](https://github.com/craftcms/cms/issues/5326))
+
+## 3.3.18.1 - 2019-12-10
+
+### Fixed
+- Fixed a JavaScript error that could occur if Craft didn’t have a license key yet.
+
+## 3.3.18 - 2019-12-10
+
+### Added
+- Added `craft\queue\jobs\ApplyMatrixPropagationMethod`.
+- Added `craft\services\Matrix::getSupportedSiteIds()`.
+
+### Changed
+- When a Matrix field’s Propagation Method setting changes, the field’s blocks are now duplicated into any sites where their content would have otherwise been deleted. ([#5182](https://github.com/craftcms/cms/issues/5182))
+- Title fields’ translation icon tooltips now clarify that their values are translated for each site. ([#2064](https://github.com/craftcms/cms/issues/2064))
+
+### Deprecated
+- Deprecated `craft\services\Matrix::getSupportedSiteIdsForField()`. `getSupportedSiteIds()` should be used instead.
+
+### Fixed
+- Fixed a bug where the page URL could change when interacting with element selection modals. ([#5254](https://github.com/craftcms/cms/issues/5254))
+- Fixed a bug where entry draft changes could go unnoticed if they were made while another change was being saved. ([#5305](https://github.com/craftcms/cms/issues/5305))
+- Fixed an error that could occur when using the `|group` filter, if a function name was passed in (e.g. `date`).
+- Fixed a bug where `craft\helpers\FileHelper::writeToFile()` wasn’t waiting until a lock could be acquired before writing to the file.
+- Fixed an issue where the Plugin Store was not creating a new cart when it was not able to retrieve an existing one. ([#5318](https://github.com/craftcms/cms/issues/5318))
+
 ## 3.3.17 - 2019-12-03
 
 ### Added

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace voku\helper;
 
+/**
+ * @psalm-immutable
+ */
 class Bootup
 {
     /**
@@ -214,9 +217,16 @@ class Bootup
      *
      * @return bool
      *              Return <strong>true</strong> if the current version is $version or higher
+     *
+     * @psalm-pure
      */
     public static function is_php($version): bool
     {
+        /**
+         * @psalm-suppress ImpureStaticVariable
+         *
+         * @var bool[]
+         */
         static $_IS_PHP;
 
         $version = (string) $version;

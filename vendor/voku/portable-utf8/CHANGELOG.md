@@ -1,5 +1,34 @@
 # Changelog
 
+### 5.4.37 (2019-12-30)
+
+- fix nesting function error from "UTF8::substr()"
+
+### 5.4.36 (2019-12-30)
+
+- add "is_punctuation()" && "is_printable()"
+
+### 5.4.35 (2019-12-27)
+
+- add "UTF8::to_int()" && "UTF8::to_string()"
+
+### 5.4.34 (2019-12-19)
+
+- use "@psalm-pure"
+
+### 5.4.33 (2019-12-18)
+
+- use "@psalm-immutable"
+
+### 5.4.32 (2019-12-13)
+
+- fix "UTF8::str_contains_all" -> "strpos(): Empty needle"
+
+### 5.4.31 (2019-12-13)
+
+- update vendor (ASCII) lib
+- optimize phpstan config
+
 ### 5.4.30 (2019-12-04)
 
 - fix "UTF8::str_contains_all" -> fix the loop

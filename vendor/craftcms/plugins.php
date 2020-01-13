@@ -20,27 +20,6 @@ return array (
     'developerUrl' => 'https://www.doublesecretagency.com/plugins',
     'documentationUrl' => 'https://www.doublesecretagency.com/plugins/smart-map/docs',
   ),
-  'craftcms/contact-form' => 
-  array (
-    'class' => 'craft\\contactform\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/contact-form/src',
-    'handle' => 'contact-form',
-    'aliases' => 
-    array (
-      '@craft/contactform' => $vendorDir . '/craftcms/contact-form/src',
-    ),
-    'name' => 'Contact Form',
-    'version' => '2.2.5',
-    'description' => 'Add a simple contact form to your Craft CMS site',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://pixelandtonic.com/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/craftcms/contact-form/blob/v2/README.md',
-    'components' => 
-    array (
-      'mailer' => 'craft\\contactform\\Mailer',
-    ),
-  ),
   'digital-pros/commerce-authorize' => 
   array (
     'class' => 'digitalpros\\commerce\\authorize\\Plugin',
@@ -111,11 +90,32 @@ return array (
       '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
     ),
     'name' => 'Craft Commerce',
-    'version' => '2.2.8',
+    'version' => '2.2.13',
     'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
     'developer' => 'Pixel & Tonic',
     'developerUrl' => 'https://craftcommerce.com',
     'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
+  ),
+  'craftcms/contact-form' => 
+  array (
+    'class' => 'craft\\contactform\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/contact-form/src',
+    'handle' => 'contact-form',
+    'aliases' => 
+    array (
+      '@craft/contactform' => $vendorDir . '/craftcms/contact-form/src',
+    ),
+    'name' => 'Contact Form',
+    'version' => '2.2.6',
+    'description' => 'Add a simple contact form to your Craft CMS site',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://pixelandtonic.com/',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://github.com/craftcms/contact-form/blob/v2/README.md',
+    'components' => 
+    array (
+      'mailer' => 'craft\\contactform\\Mailer',
+    ),
   ),
 );
