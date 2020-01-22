@@ -47,10 +47,13 @@
   height: 0;
   opacity: 0;
   transition: all .5s ease-in-out;
-  text-transform: uppercase;
   text-align: center;
   bottom: 0;
   transform: translateY(100%);
+
+  @media screen and (min-width: 800px) {
+    font-size: 1.17em;
+  }
 }
 
 // visible carousel view

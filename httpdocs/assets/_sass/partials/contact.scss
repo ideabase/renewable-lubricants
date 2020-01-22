@@ -22,7 +22,7 @@ form[name='contact-form'] {
   min-width: 0;
 
   @media screen and (min-width: 600px) {
-    grid-column-start: span 2;
+    grid-column: 1 / -1;
   }
 
   textarea {
@@ -39,7 +39,7 @@ form[name='contact-form'] {
   justify-content: center;
 
   @media screen and (min-width: 600px) {
-    grid-column-start: span 2;
+    grid-column: 1 / -1;
   }
 }
 

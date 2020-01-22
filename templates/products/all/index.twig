@@ -38,9 +38,7 @@
     <div class="product {{ category.title|replace({' ': ''}) }}">
     {% endfor %}
       <div>
-        {% if product.productImage|length %}
-          <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}">
-        {% endif %}
+        <img src="{{ product.defaultImage.one().getUrl('productImage') }}" alt="{{ product.defaultImage.one().title }}">
       </div>
       <div>
         <h3>{% if product.url %}{{ product.link }}{% else %}{{ product.title }}{% endif %}</h3>

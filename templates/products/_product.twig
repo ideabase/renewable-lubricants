@@ -2,42 +2,44 @@
 
 {% block content %}
 
-<div class="product-details flex">
-  {% if product.productImage|length %}
-    <img src="{{ product.productImage.one().url }}" alt="{{ product.productImage.one().title }}" class="product-image">
-  {% endif %}
+<div class="product-details">
+  <div class="product-details-upper flex">
+    <img id="product-img" src="{{ product.defaultImage.one().getUrl('productImage') }}" alt="{{ product.defaultImage.one().title }}" class="product-image">
 
-  <div class="product-info">
-    <h1>{{ product.title }}</h1>
+    <div>
+      <h1>{{ product.title }}</h1>
 
+      <form method="POST" name="product-add-form" class="flex">
+        <input type="hidden" name="action" value="commerce/cart/update-cart">
+        {{ redirectInput('products/cart') }}
+        {{ csrfInput() }}
+
+        <div class="product-info-grid">
+          <span>Product:</span>
+          <select name="purchasableId" id="product-select" autofocus required>
+            {% for variant in product.variants %}
+              <option id="product-{{ variant.sku }}" value="{{ variant.id }}"{% if variant.stock <= 0 and variant.hasUnlimitedStock == false %} disabled{% endif %}>
+                {{ variant.sku }}: {% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ (variant.size) }})
+              </option>
+            {% endfor %}
+          </select>
+
+          <span>Quantity:</span>
+          <input id="product-quantity" type="number" name="qty" min="1" value="1" required>
+
+          <span>Price: </span>
+          <span id="product-price"></span>
+        </div>
+
+        <div class="product-add">
+          <input type="submit" value="{{ "Add to cart"|t }}" class="button">
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="product-description">
     {{ product.body }}
-
-    <form method="POST" name="product-add-form" class="flex">
-      <input type="hidden" name="action" value="commerce/cart/update-cart">
-      {{ redirectInput('products/cart') }}
-      {{ csrfInput() }}
-
-      <div class="product-info-grid">
-        <span>Product:</span>
-        <select name="purchasableId" id="product-select" autofocus required>
-          {% for variant in product.variants %}
-            <option id="product-{{ variant.sku }}" value="{{ variant.id }}"{% if variant.stock <= 0 and variant.hasUnlimitedStock == false %} disabled{% endif %}>
-              {{ variant.sku }}: {{ product.title }}{% if variant.viscosityGrade|length %} {{ variant.viscosityGrade }}{% endif %} ({{ (variant.size) }})
-            </option>
-          {% endfor %}
-        </select>
-
-        <span>Quantity:</span>
-        <input id="product-quantity" type="number" name="qty" min="1" value="1" required>
-
-        <span>Price: </span>
-        <span id="product-price"></span>
-      </div>
-
-      <div>
-        <input type="submit" value="{{ "Add to cart"|t }}" class="button">
-      </div>
-    </form>
 
     {% set productCategories = craft.categories.group('productCategories').relatedTo(product) %}
 
@@ -80,7 +82,6 @@
         {% endif %}
       </div>
     {% endif %}
-
   </div>
 </div>
 
@@ -91,23 +92,50 @@
 {# get variants as array #}
 {% set productVariants = [] %}
 {% for variant in product.variants %}
-  {% set productVariants = productVariants|merge([[variant.sku, variant.price]]) %}
+  {% if variant.productImage|length %}
+    {% set variantImgSrc = variant.productImage.one().getUrl('productImage') %}
+  {% else %}
+    {% set variantImgSrc = product.defaultImage.one().getUrl('productImage') %}
+  {% endif %}
+  {% set productVariants = productVariants|merge([[variant.sku, variant.price, variantImgSrc]]) %}
 {% endfor %}
 var productVariants = {{ productVariants|json_encode|raw }};
 var productSelect = document.getElementById('product-select');
 var productQuantity = document.getElementById('product-quantity');
+var productPrice = document.getElementById('product-price');
+var productImg = document.getElementById('product-img');
+var selectedVariantId;
 
+setSelectedVariantId();
 updatePrice();
+updateImgSrc();
 
-productSelect.addEventListener('change', updatePrice);
-productQuantity.addEventListener('change', updatePrice);
+productSelect.addEventListener('change', function() {
+  setSelectedVariantId();
+  updatePrice();
+  updateImgSrc();
+});
+
+productQuantity.addEventListener('input', function() {
+  setSelectedVariantId();
+  updatePrice();
+});
+
+function setSelectedVariantId() {
+  selectedVariantId = productSelect.options[productSelect.selectedIndex].id;
+}
 
 function updatePrice() {
-  var selectedId = productSelect.options[productSelect.selectedIndex].id;
   var variantPrice = productVariants.find(function(variant) {
-    return selectedId === ('product-' + variant[0]);
+    return selectedVariantId === ('product-' + variant[0]);
   })[1];
-  document.getElementById('product-price').innerHTML = (productQuantity.value * parseFloat(variantPrice)).toLocaleString('en-US', {style:'currency', currency:'USD'});
+  productPrice.innerHTML = (productQuantity.value * parseFloat(variantPrice)).toLocaleString('en-US', {style:'currency', currency:'USD'});
+}
+
+function updateImgSrc() {
+  productImg.src = productVariants.find(function(variant) {
+    return selectedVariantId === ('product-' + variant[0]);
+  })[2];
 }
 
 {% endjs %}

@@ -19,7 +19,7 @@
 
       <a class="category-product" href="{{ product.url }}">
         <div class="category-image">
-          <img src="{{ product.productImage.one().getUrl('productImage') }}" alt="{{ product.productImage.one().title }}">
+          <img src="{{ product.defaultImage.one().getUrl('productImage') }}" alt="{{ product.defaultImage.one().title }}">
         </div>
         <div class="category-text">
           <p>{{ product.title }}</p>
