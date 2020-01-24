@@ -4,14 +4,13 @@
   text-align: center;
 
   h1 {
-    margin: 0rem 0 3rem 0;
+    margin: 0 0 .5rem;
   }
 }
 
 .category-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  align-items: start;
   row-gap: .5rem;
   column-gap: .5rem;
   margin: 0 .5rem;
@@ -43,6 +42,7 @@
 
 .category-product {
   display: grid;
+  grid-template-rows: auto 1fr;
   color: $color-black;
   background-color: $color-white;
   padding: 1rem 0;
@@ -59,7 +59,7 @@
 .category-text {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   margin: 1rem 1rem 0;
 
   p {
@@ -69,6 +69,10 @@
     &:nth-child(2) {
       color: $color-gray;
     }
+
+    @media screen and (min-width: 1000px) {
+      margin-top: auto;
+    }
   }
 
   span {
@@ -77,6 +81,10 @@
 
   @media screen and (min-width: 600px) {
     font-size: 1.2rem;
+  }
+
+  @media screen and (min-width: 1000px) {
+    justify-content: space-around;
   }
 }
 
