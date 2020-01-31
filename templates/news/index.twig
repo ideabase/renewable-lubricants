@@ -7,24 +7,22 @@
     <h1>News</h1>
   </div>
 
-  {% set query = craft.entries.section('news').limit(5) %}
+  {% set query = craft.entries.section('news').limit(5).orderBy('dateCreated desc') %}
   {% paginate query as newsPage, newsEntries %}
 
   <div class="news-list">
     {% for entry in newsEntries %}
-      <div class="news-item flex">
-        <a href="{{ entry.url }}">
-          <img src="{{ entry.featureImage.one().getUrl() }}">
-        </a>
+      <a class="news-img" href="{{ entry.url }}">
+        <img src="{{ entry.featureImage.one().getUrl() }}">
+      </a>
 
-        <a href="{{ entry.url }}">
-          <h2>{{ entry.title }}</h2>
+      <a href="{{ entry.url }}">
+        <h2>{{ entry.title }}</h2>
 
-          {% if entry.description|length %}
-            <p>{{ entry.description }}</p>
-          {% endif %}
-        </a>
-      </div>
+        {% if entry.description|length %}
+          <p>{{ entry.description }}</p>
+        {% endif %}
+      </a>
     {% endfor %}
   </div>
 

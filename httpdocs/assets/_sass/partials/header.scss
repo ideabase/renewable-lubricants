@@ -1,7 +1,6 @@
 // header partial
 header {
   position: relative;
-  margin: .5rem 0;
 
   nav {
     $height: 4rem;
@@ -32,10 +31,6 @@ header {
       max-width: 1200px;
       margin: 0 auto;
     }
-  }
-
-  @media screen and (min-width: 600px) {
-    margin-bottom: 1rem;
   }
 
   @media screen and (min-width: 800px) {

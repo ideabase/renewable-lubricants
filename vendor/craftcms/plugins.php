@@ -78,22 +78,6 @@ return array (
     'developer' => 'Double Secret Agency',
     'developerUrl' => 'https://www.doublesecretagency.com/plugins',
   ),
-  'craftcms/commerce' => 
-  array (
-    'class' => 'craft\\commerce\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/commerce/src',
-    'handle' => 'commerce',
-    'aliases' => 
-    array (
-      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
-    ),
-    'name' => 'Craft Commerce',
-    'version' => '2.2.15',
-    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://craftcommerce.com',
-    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
-  ),
   'digital-pros/commerce-authorize' => 
   array (
     'class' => 'digitalpros\\commerce\\authorize\\Plugin',
@@ -104,11 +88,31 @@ return array (
       '@digitalpros/commerce/authorize' => $vendorDir . '/digital-pros/commerce-authorize/src',
     ),
     'name' => 'Authorize.net for Craft Commerce',
-    'version' => '1.0.7',
+    'version' => '1.0.9',
     'description' => 'Authorize.net payment gateway plugin for Craft Commerce 2',
     'developer' => 'Digital Pros',
     'developerUrl' => 'https://digitalpros.co/',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://github.com/digitalpros/commerce-authorize',
     'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
     'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
+  ),
+  'craftcms/commerce' => 
+  array (
+    'class' => 'craft\\commerce\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/commerce/src',
+    'handle' => 'commerce',
+    'aliases' => 
+    array (
+      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
+      '@craftcommercetests/fixtures' => $vendorDir . '/craftcms/commerce/tests/fixtures',
+    ),
+    'name' => 'Craft Commerce',
+    'version' => '3.0.3',
+    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://craftcommerce.com',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
   ),
 );

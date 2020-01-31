@@ -1,5 +1,15 @@
 # Release Notes for Authorize.net for Craft Commerce
 
+## 1.0.9 - 2020-01-30
+
+### Added
+- Support for Commerce 3
+
+## 1.0.8 - 2019-10-09
+
+### Added
+- Support for Environment Variables
+
 ## 1.0.7 - 2019-08-02
 
 ### Fixed

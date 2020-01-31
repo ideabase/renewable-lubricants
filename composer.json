@@ -1,13 +1,13 @@
 {
   "require": {
-    "craftcms/cms": "3.4.0.2",
+    "craftcms/cms": "3.4.1",
     "vlucas/phpdotenv": "^2.4.0",
     "craftcms/redactor": "2.5.0",
-    "craftcms/commerce": "2.2.15",
+    "craftcms/commerce": "3.0.3",
     "craftcms/contact-form": "2.2.6",
     "rias/craft-contact-form-extensions": "1.2.0",
     "doublesecretagency/craft-smartmap": "3.2.2.1",
-    "digital-pros/commerce-authorize": "1.0.7"
+    "digital-pros/commerce-authorize": "1.0.9"
   },
   "autoload": {
     "psr-4": {
