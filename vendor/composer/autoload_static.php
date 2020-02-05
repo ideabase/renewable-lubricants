@@ -4105,6 +4105,7 @@ class ComposerStaticInit1fdf1cd71be0ff68a3b074c95720cc98
         'craft\\assetpreviews\\Image' => __DIR__ . '/..' . '/craftcms/cms/src/assetpreviews/Image.php',
         'craft\\assetpreviews\\Pdf' => __DIR__ . '/..' . '/craftcms/cms/src/assetpreviews/Pdf.php',
         'craft\\assetpreviews\\Text' => __DIR__ . '/..' . '/craftcms/cms/src/assetpreviews/Text.php',
+        'craft\\assetpreviews\\Video' => __DIR__ . '/..' . '/craftcms/cms/src/assetpreviews/Video.php',
         'craft\\base\\ApplicationTrait' => __DIR__ . '/..' . '/craftcms/cms/src/base/ApplicationTrait.php',
         'craft\\base\\AssetPreviewHandler' => __DIR__ . '/..' . '/craftcms/cms/src/base/AssetPreviewHandler.php',
         'craft\\base\\AssetPreviewHandlerInterface' => __DIR__ . '/..' . '/craftcms/cms/src/base/AssetPreviewHandlerInterface.php',

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcef0f93d83a2e941a2f8dd70a2d65d0",
+    "content-hash": "465634b5ddfb97c2acbe9dd74df4b110",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -398,11 +398,11 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.4.1",
+            "version": "3.4.3",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/9a9d5a5d1f512105042edb55b2d0468de4e72f3d",
-                "reference": "9a9d5a5d1f512105042edb55b2d0468de4e72f3d",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/8436bfe373e81a2cc9d551feb4f9bad8d0fbdefb",
+                "reference": "8436bfe373e81a2cc9d551feb4f9bad8d0fbdefb",
                 "shasum": ""
             },
             "require": {
@@ -483,15 +483,15 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2020-01-29T21:03:20+00:00"
+            "time": "2020-02-04T00:47:42+00:00"
         },
         {
             "name": "craftcms/commerce",
-            "version": "3.0.3",
+            "version": "3.0.5",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/commerce/zipball/2c607331c87dfd6f3811a5828d01c61b9888ec6e",
-                "reference": "2c607331c87dfd6f3811a5828d01c61b9888ec6e",
+                "url": "https://api.github.com/repos/craftcms/commerce/zipball/7ae6334ab33dbd6fb5417294fc6ae2aa8e3d893b",
+                "reference": "7ae6334ab33dbd6fb5417294fc6ae2aa8e3d893b",
                 "shasum": ""
             },
             "require": {
@@ -533,7 +533,7 @@
                 "docs": "https://docs.craftcms.com/commerce/v2/",
                 "rss": "https://github.com/craftcms/commerce/releases.atom"
             },
-            "time": "2020-01-29T23:14:21+00:00"
+            "time": "2020-02-01T06:06:55+00:00"
         },
         {
             "name": "craftcms/commerce-omnipay",

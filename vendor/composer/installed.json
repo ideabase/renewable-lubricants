@@ -405,12 +405,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.4.1",
-        "version_normalized": "3.4.1.0",
+        "version": "3.4.3",
+        "version_normalized": "3.4.3.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/9a9d5a5d1f512105042edb55b2d0468de4e72f3d",
-            "reference": "9a9d5a5d1f512105042edb55b2d0468de4e72f3d",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/8436bfe373e81a2cc9d551feb4f9bad8d0fbdefb",
+            "reference": "8436bfe373e81a2cc9d551feb4f9bad8d0fbdefb",
             "shasum": ""
         },
         "require": {
@@ -466,7 +466,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2020-01-29T21:03:20+00:00",
+        "time": "2020-02-04T00:47:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -496,12 +496,12 @@
     },
     {
         "name": "craftcms/commerce",
-        "version": "3.0.3",
-        "version_normalized": "3.0.3.0",
+        "version": "3.0.5",
+        "version_normalized": "3.0.5.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/commerce/zipball/2c607331c87dfd6f3811a5828d01c61b9888ec6e",
-            "reference": "2c607331c87dfd6f3811a5828d01c61b9888ec6e",
+            "url": "https://api.github.com/repos/craftcms/commerce/zipball/7ae6334ab33dbd6fb5417294fc6ae2aa8e3d893b",
+            "reference": "7ae6334ab33dbd6fb5417294fc6ae2aa8e3d893b",
             "shasum": ""
         },
         "require": {
@@ -510,7 +510,7 @@
             "ibericode/vat": "^1.1.2",
             "moneyphp/money": "^3.2.1"
         },
-        "time": "2020-01-29T23:14:21+00:00",
+        "time": "2020-02-01T06:06:55+00:00",
         "type": "craft-plugin",
         "extra": {
             "handle": "commerce",

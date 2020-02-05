@@ -3300,6 +3300,7 @@ return array(
     'craft\\assetpreviews\\Image' => $vendorDir . '/craftcms/cms/src/assetpreviews/Image.php',
     'craft\\assetpreviews\\Pdf' => $vendorDir . '/craftcms/cms/src/assetpreviews/Pdf.php',
     'craft\\assetpreviews\\Text' => $vendorDir . '/craftcms/cms/src/assetpreviews/Text.php',
+    'craft\\assetpreviews\\Video' => $vendorDir . '/craftcms/cms/src/assetpreviews/Video.php',
     'craft\\base\\ApplicationTrait' => $vendorDir . '/craftcms/cms/src/base/ApplicationTrait.php',
     'craft\\base\\AssetPreviewHandler' => $vendorDir . '/craftcms/cms/src/base/AssetPreviewHandler.php',
     'craft\\base\\AssetPreviewHandlerInterface' => $vendorDir . '/craftcms/cms/src/base/AssetPreviewHandlerInterface.php',

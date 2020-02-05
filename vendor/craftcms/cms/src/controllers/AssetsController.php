@@ -151,8 +151,16 @@ class AssetsController extends Controller
             ($userSession->getId() == $asset->uploaderId || $userSession->checkPermission("replacePeerFilesInVolume:{$volume->uid}"))
         );
 
+        if (in_array($asset->kind, [Asset::KIND_IMAGE, Asset::KIND_PDF, Asset::KIND_TEXT])) {
+            $assetUrl = $asset->getUrl();
+        } else {
+            $assetUrl = null;
+        }
+
         return $this->renderTemplate('assets/_edit', [
             'element' => $asset,
+            'volume' => $volume,
+            'assetUrl' => $assetUrl,
             'title' => trim($asset->title) ?: Craft::t('app', 'Edit Asset'),
             'crumbs' => $crumbs,
             'previewHtml' => $previewHtml,
@@ -1152,12 +1160,16 @@ class AssetsController extends Controller
             return $this->asErrorJson(Craft::t('app', 'Asset not found with that id'));
         }
 
-        $previewHandler = Craft::$app->getAssets()->getAssetPreviewHandler($asset);
+        $previewHtml = null;
 
+        // todo: we should be passing the asset into getPreviewHtml(), not the constructor
+        $previewHandler = Craft::$app->getAssets()->getAssetPreviewHandler($asset);
         if ($previewHandler) {
-            $previewHtml = $previewHandler->getPreviewHtml();
-        } else {
-            $previewHtml = null;
+            try {
+                $previewHtml = $previewHandler->getPreviewHtml();
+            } catch (NotSupportedException $e) {
+                // No big deal
+            }
         }
 
         $view = $this->getView();
