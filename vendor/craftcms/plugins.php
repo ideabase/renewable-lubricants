@@ -108,7 +108,7 @@ return array (
       '@craftcommercetests/fixtures' => $vendorDir . '/craftcms/commerce/tests/fixtures',
     ),
     'name' => 'Craft Commerce',
-    'version' => '3.0.5',
+    'version' => '3.0.6',
     'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
     'developer' => 'Pixel & Tonic',
     'developerUrl' => 'https://craftcommerce.com',

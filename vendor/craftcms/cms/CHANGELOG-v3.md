@@ -1,5 +1,64 @@
 # Release Notes for Craft CMS 3.x
 
+## 3.4.5 - 2020-02-07
+
+### Added
+- Added `craft\models\GqlToken::getIsExpired()`.
+
+### Changed
+- `craft\services\Gql::getPublicSchema()` now returns `null` if the public schema doesn’t exist yet and `allowAdminChanges` is disabled.
+- Tightened up the horizontal padding on text inputs. ([#5608](https://github.com/craftcms/cms/issues/5608))
+- Improved the look of Matrix blocks.
+- Improved the look of editable tables. ([#5615](https://github.com/craftcms/cms/issues/5615))
+- URL and Email fields now trim leading/trailing whitespace from their values before validating. ([#5614](https://github.com/craftcms/cms/issues/5614))
+- Table fields now trim leading/trailing whitespace from textual cell values before validating.
+- Improved GraphQL API performance. ([#5607](https://github.com/craftcms/cms/issues/5607))
+- Updated Garnish to 0.1.33.
+
+### Deprecated
+- Deprecated `craft\gql\base\Arguments::buildContentArguments()`.
+
+### Fixed
+- Fixed an error that occurred when working with GraphQL on an environment with `allowAdminChanges` disabled, if the public schema didn’t exist yet. ([#5588](https://github.com/craftcms/cms/issues/5588))
+- Fixed a bug where static Matrix blocks weren’t getting any top padding. ([#5609](https://github.com/craftcms/cms/issues/5609))
+- Fixed a bug where static text cells within editable tables were getting cut off. ([#5611](https://github.com/craftcms/cms/issues/5611))
+- Fixed an error that occurred when saving an element with an Assets field set to restrict files to a single folder, if any of the selected assets’ files didn’t exist.
+- Fixed an error that occurred when attempting to export elements. ([#5617](https://github.com/craftcms/cms/issues/5617))
+- Fixed a bug where HTTP exceptions were getting lost if triggered from a template via an `{% exit %}` tag.
+
+## 3.4.4.1 - 2020-02-06
+
+### Changed
+- Plugins can now modify the params sent with element index Ajax requests by hooking into the new `registerViewParams` event triggered by `Craft.BaseElementIndex`.
+
+### Fixed
+- Fixed an error that occurred when searching for elements from element indexes. ([#5599](https://github.com/craftcms/cms/issues/5599))
+
+## 3.4.4 - 2020-02-05
+
+### Added
+- Added the ability to limit multiple selections in admin tables.
+- Added an event to admin tables when selections are changed.
+- Added an event to admin tables to retrieve currently visible data.
+- Added `craft\controllers\ElementIndexesController::actionExport()`.
+- Added the `Craft.downloadFromUrl()` JavaScript method.
+
+### Deprecated
+- Deprecated `craft\controllers\ElementIndexesController::actionCreateExportToken()`.
+- Deprecated `craft\controllers\ExportController`.
+
+### Fixed
+- Fixed a bug where data tables weren’t getting horizontal scrollbars in Firefox. ([#5574](https://github.com/craftcms/cms/issues/5574))
+- Fixed a bug where HTML was being escaped twice in some admin tables. ([#5532](https://github.com/craftcms/cms/issues/5532))
+- Fixed a 404 error that would occur when attempting to preview a PDF file in a volume that didn’t have a base URL. ([#5581](https://github.com/craftcms/cms/issues/5581))
+- Fixed a bug where the Asset Indexes utility could leave the progress bar visible after it was done.
+- Fixed a bug where the `_count` field would sometimes not work correctly when using GraphQL. ([#4847](https://github.com/craftcms/cms/issues/4847))
+- Fixed a bug where assets that had been drag-uploaded to an Assets field would be hyperlinked. ([#5584](https://github.com/craftcms/cms/issues/5584))
+- Fixed a bug where `CustomFieldBehavior.php` was getting created with restricted permissions. ([#5570](https://github.com/craftcms/cms/issues/5570))
+- Fixed a bug where element exporting would redirect the browser window if the export request didn’t immediately return the export data. ([#5558](https://github.com/craftcms/cms/issues/5558))
+- Fixed a “Division by zero” error that occurred if an image transform didn’t specify a width or a height. ([#5590](https://github.com/craftcms/cms/issues/5590))
+- Fixed a bug where elements weren’t always retaining their positions in element indexes between pages.
+
 ## 3.4.3 - 2020-02-03
 
 ### Added

@@ -167,12 +167,12 @@ Craft.BaseElementIndex = Garnish.Base.extend(
                 this.siteMenu.on('optionselect', $.proxy(this, '_handleSiteChange'));
 
                 if (this.siteId) {
-                    // Do we have a different site stored in localStorage?
-                    var storedSiteId = Craft.getLocalStorage('BaseElementIndex.siteId');
+                    // Should we be using a different default site?
+                    var defaultSiteId = this.settings.defaultSiteId || Craft.getLocalStorage('BaseElementIndex.siteId');
 
-                    if (storedSiteId && storedSiteId != this.siteId) {
+                    if (defaultSiteId && defaultSiteId != this.siteId) {
                         // Is that one available here?
-                        var $storedSiteOption = this.siteMenu.$options.filter('[data-site-id="' + storedSiteId + '"]:first');
+                        var $storedSiteOption = this.siteMenu.$options.filter('[data-site-id="' + defaultSiteId + '"]:first');
 
                         if ($storedSiteOption.length) {
                             // Todo: switch this to siteMenu.selectOption($storedSiteOption) once Menu is updated to support that
@@ -597,6 +597,11 @@ Craft.BaseElementIndex = Garnish.Base.extend(
                 }
                 params.collapsedElementIds = this.instanceState.collapsedElementIds;
             }
+
+            // Give plugins a chance to hook in here
+            this.trigger('registerViewParams', {
+                params: params,
+            });
 
             return params;
         },
@@ -1815,19 +1820,20 @@ Craft.BaseElementIndex = Garnish.Base.extend(
                     }
                 }
 
-                Craft.postActionRequest('element-indexes/create-export-token', params, $.proxy(function(response, textStatus) {
-                    submitting = false;
-                    $spinner.addClass('hidden');
+                if (Craft.csrfTokenValue) {
+                    params[Craft.csrfTokenName] = Craft.csrfTokenValue;
+                }
 
-                    if (textStatus === 'success') {
-                        var params = {};
-                        params[Craft.tokenParam] = response.token;
-                        var url = Craft.getCpUrl('', params);
-                        document.location.href = url;
-                    } else {
+                Craft.downloadFromUrl('POST', Craft.getActionUrl('element-indexes/export'), params)
+                    .then(function() {
+                        submitting = false;
+                        $spinner.addClass('hidden');
+                    })
+                    .catch(function() {
+                        submitting = false;
+                        $spinner.addClass('hidden');
                         Craft.cp.displayError(Craft.t('app', 'A server error occurred.'));
-                    }
-                }, this));
+                    });
             });
         },
 
@@ -1865,6 +1871,7 @@ Craft.BaseElementIndex = Garnish.Base.extend(
             refreshSourcesAction: 'element-indexes/get-source-tree-html',
             updateElementsAction: 'element-indexes/get-elements',
             submitActionsAction: 'element-indexes/perform-action',
+            defaultSiteId: null,
             defaultSource: null,
 
             onAfterInit: $.noop,

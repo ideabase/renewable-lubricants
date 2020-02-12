@@ -55,7 +55,7 @@ class GeneralConfig extends BaseObject
      * If this is disabled, the Settings and Plugin Store sections will be hidden,
      * the Craft edition and Craft/plugin versions will be locked, and the project config will become read-only.
      *
-     * Therefore you should only disable this in production environments when [[useProjectConfigFile]] is enabled,
+     * Therefore you should only disable this in production environments when <config:useProjectConfigFile> is enabled,
      * and you have a deployment workflow that runs `composer install` automatically on deploy.
      *
      * ::: warning
@@ -68,7 +68,7 @@ class GeneralConfig extends BaseObject
     /**
      * @var bool Whether Craft should allow system and plugin updates in the control panel, and plugin installation from the Plugin Store.
      *
-     * This setting will automatically be disabled if [[allowAdminChanges]] is disabled.
+     * This setting will automatically be disabled if <config:allowAdminChanges> is disabled.
      */
     public $allowUpdates = true;
     /**
@@ -118,7 +118,7 @@ class GeneralConfig extends BaseObject
      * It will be determined automatically if left blank.
      *
      * ::: tip
-     * The base control panel URL should **not** include the [[cpTrigger|control panel trigger word]] (e.g. `/admin`).
+     * The base control panel URL should **not** include the [control panel trigger word](config:cpTrigger) (e.g. `/admin`).
      * :::
      */
     public $baseCpUrl;
@@ -165,7 +165,7 @@ class GeneralConfig extends BaseObject
      */
     public $cpTrigger = 'admin';
     /**
-     * @var string The name of CSRF token used for CSRF validation if [[enableCsrfProtection]] is set to `true`.
+     * @var string The name of CSRF token used for CSRF validation if <config:enableCsrfProtection> is set to `true`.
      * @see enableCsrfProtection
      */
     public $csrfTokenName = 'CRAFT_CSRF_TOKEN';
@@ -272,7 +272,7 @@ class GeneralConfig extends BaseObject
      */
     public $disabledPlugins = [];
     /**
-     * @var bool Whether to use a cookie to persist the CSRF token if [[enableCsrfProtection]] is enabled. If false, the CSRF token
+     * @var bool Whether to use a cookie to persist the CSRF token if <config:enableCsrfProtection> is enabled. If false, the CSRF token
      * will be stored in session under the `csrfTokenName` config setting name. Note that while storing CSRF tokens in
      * session increases security, it requires starting a session for every page that a CSRF token is needed, which may
      * degrade site performance.
@@ -326,7 +326,7 @@ class GeneralConfig extends BaseObject
      */
     public $errorTemplatePrefix = '';
     /**
-     * @var string[]|null List of file extensions that will be merged into the [[allowedFileExtensions]] config setting.
+     * @var string[]|null List of file extensions that will be merged into the <config:allowedFileExtensions> config setting.
      * @see allowedFileExtensions
      */
     public $extraAllowedFileExtensions;
@@ -341,7 +341,7 @@ class GeneralConfig extends BaseObject
     public $extraAppLocales;
     /**
      * @var array List of additional file kinds Craft should support. This array
-     * will get merged with the one defined in [[craft\helpers\Assets::_buildFileKinds()]].
+     * will get merged with the one defined in [[\craft\helpers\Assets::_buildFileKinds()]].
      *
      * ```php
      * 'extraFileKinds' => [
@@ -359,7 +359,7 @@ class GeneralConfig extends BaseObject
      *
      * ::: tip
      * File extensions listed here won’t immediately be allowed to be uploaded. You will also need to list them with
-     * the [[$extraAllowedFileExtensions]] config setting.
+     * the <config:extraAllowedFileExtensions> config setting.
      * :::
      *
      * @since 3.0.37
@@ -385,8 +385,8 @@ class GeneralConfig extends BaseObject
      * - Front-end responses will be JSON-formatted rather than HTML by default.
      * - Twig will be configured to escape unsafe strings for JavaScript/JSON
      *   rather than HTML by default for front-end requests.
-     * - The [[loginPath]], [[logoutPath]], [[setPasswordPath]], and
-     *   [[verifyEmailPath]] settings will be ignored.
+     * - The <config:loginPath>, <config:logoutPath>, <config:setPasswordPath>, and
+     *   <config:verifyEmailPath> settings will be ignored.
      *
      * @since 3.3.0
      */
@@ -519,7 +519,7 @@ class GeneralConfig extends BaseObject
      * `?page` | `/news?page=5`
      *
      * ::: tip
-     * If you want to set this to `?p` (e.g. `/news?p=5`), you will need to change your [[$pathParam]] setting as well,
+     * If you want to set this to `?p` (e.g. `/news?p=5`), you will need to change your <config:pathParam> setting as well,
      * which is set to `p` by default, and if your server is running Apache, you will need to update the redirect code
      * in your `.htaccess` file to match your new `pathParam` value.
      * :::
@@ -700,18 +700,20 @@ class GeneralConfig extends BaseObject
      */
     public $rotateImagesOnUploadByExifData = true;
     /**
-     * @var bool Whether Craft should run pending queue jobs automatically over HTTP requests.
+     * @var bool Whether Craft should run pending queue jobs automatically when someone visits the control panel.
      *
+     * If disabled, an alternate queue worker *must* be set up separately, either as an
+     * [always-running daemon](https://github.com/yiisoft/yii2-queue/blob/master/docs/guide/worker.md), or a
+     * cron job that runs the `queue/run` command every minute:
+     *
+     * ```cron
+     * * * * * * /path/to/project/craft queue/run
+     * ```
+     *
+     * ::: tip
      * This setting should be disabled for servers running Win32, or with Apache’s mod_deflate/mod_gzip installed,
      * where PHP’s [flush()](http://php.net/manual/en/function.flush.php) method won’t work.
-     *
-     * If disabled, an alternate queue runner *must* be set up separately.
-     *
-     * Here is an example of how you would setup a queue runner from a cron job that ran every minute:
-     *
-     * ```text
-     * /1 * * * * /path/to/project/root/craft queue/run
-     * ```
+     * :::
      */
     public $runQueueAutomatically = true;
     /**
@@ -774,7 +776,7 @@ class GeneralConfig extends BaseObject
      *
      * This can be set to a string, which will override the primary site’s base URL only, or an array with site handles used as the keys.
      *
-     * The URL(s) must begin with either `http://`, `https://`, `//` (protocol-relative), or an [[aliases|alias]].
+     * The URL(s) must begin with either `http://`, `https://`, `//` (protocol-relative), or an [alias](config:aliases).
      *
      * ```php
      * 'siteUrl' => [
@@ -878,7 +880,7 @@ class GeneralConfig extends BaseObject
     /**
      * @var bool Whether Craft should specify the path using `PATH_INFO` or as a query string parameter when generating URLs.
      *
-     * Note that this setting only takes effect if [[omitScriptNameInUrls]] is set to false.
+     * Note that this setting only takes effect if <config:omitScriptNameInUrls> is set to false.
      */
     public $usePathInfo = false;
     /**
