@@ -13,6 +13,7 @@ window.livePreviewHideFullscreen = false;
             volumes: null,
             elementSiteId: null,
             redactorConfig: null,
+            showAllUploaders: false,
 
             $textarea: null,
             redactor: null,
@@ -25,6 +26,7 @@ window.livePreviewHideFullscreen = false;
                 this.transforms = settings.transforms;
                 this.elementSiteId = settings.elementSiteId;
                 this.redactorConfig = settings.redactorConfig;
+                this.showAllUploaders = settings.showAllUploaders;
 
                 this.linkOptionModals = [];
 
@@ -42,11 +44,6 @@ window.livePreviewHideFullscreen = false;
                 // Prevent a JS error when calling core.destroy() when opts.plugins == false
                 if (typeof this.redactorConfig.plugins !== typeof []) {
                     this.redactorConfig.plugins = [];
-                }
-
-                // Prevent Redactor from saving block elements inconsistently
-                if (typeof this.redactorConfig.removeNewLines === 'undefined') {
-                    this.redactorConfig.removeNewLines = true;
                 }
 
                 this.redactorConfig.plugins.push('craftAssetImages');
@@ -80,7 +77,47 @@ window.livePreviewHideFullscreen = false;
                     if (typeof lowestListButtonIndex !== 'undefined') {
                         this.redactorConfig.buttons.splice(lowestListButtonIndex, 0, 'lists');
                     }
+                } else {
+                    this.redactorConfig.buttons = [];
                 }
+
+                // Now mix in the buttons provided by other options, before we start our own shenanigans
+                // `buttonsAddFirst`
+                if (this.redactorConfig.buttonsAddFirst) {
+                    this.redactorConfig.buttons = this.redactorConfig.buttonsAddFirst.buttons.concat(this.redactorConfig.buttons);
+                }
+
+                // `buttonsAdd`
+                if (this.redactorConfig.buttonsAdd) {
+                    this.redactorConfig.buttons = this.redactorConfig.buttons.concat(this.redactorConfig.buttonsAdd.buttons);
+                }
+
+                // `buttonsAddBefore`
+                if (this.redactorConfig.buttonsAddBefore) {
+                    var index;
+                    for (i = 0; i < this.redactorConfig.buttons.length; i++) {
+                        if (this.redactorConfig.buttons[i] == this.redactorConfig.buttonsAddBefore.before) {
+                            this.redactorConfig.buttons.splice(i, 0, ...this.redactorConfig.buttonsAddBefore.buttons);
+                            break;
+                        }
+                    }
+                }
+
+                // `buttonsAddAfter`
+                if (this.redactorConfig.buttonsAddAfter) {
+                    var index;
+                    for (i = 0; i < this.redactorConfig.buttons.length; i++) {
+                        if (this.redactorConfig.buttons[i] == this.redactorConfig.buttonsAddAfter.after) {
+                            this.redactorConfig.buttons.splice(i + 1, 0, ...this.redactorConfig.buttonsAddAfter.buttons);
+                            break;
+                        }
+                    }
+                }
+
+                delete this.redactorConfig.buttonsAddFirst;
+                delete this.redactorConfig.buttonsAddBefore;
+                delete this.redactorConfig.buttonsAddAfter;
+                delete this.redactorConfig.buttonsAdd;
 
                 // Define our callbacks
                 this.redactorConfig.callbacks = {
@@ -100,7 +137,7 @@ window.livePreviewHideFullscreen = false;
 
                 if (typeof this.redactorConfig.toolbarFixed === 'undefined' || this.redactorConfig.toolbarFixed) {
                     // Set the toolbarFixedTarget depending on the context
-                    var target = this.$textarea.closest('#content, .lp-editor');
+                    var target = this.$textarea.closest('#content');
                     if (target.length) {
                         this.redactorConfig.toolbarFixedTarget = target;
                     }
@@ -126,6 +163,7 @@ window.livePreviewHideFullscreen = false;
                     this.redactor.plugin.craftAssetImages.setTransforms(this.transforms);
                     this.redactor.plugin.craftAssetImages.setVolumes(this.volumes);
                     this.redactor.plugin.craftAssetImages.setElementSiteId(this.elementSiteId);
+                    this.redactor.plugin.craftAssetImages.allowAllUploaders = this.showAllUploaders;
                 }
 
                 if (this.redactorConfig.buttons.indexOf('file') !== -1) {
@@ -229,8 +267,10 @@ window.livePreviewHideFullscreen = false;
                 var data = this.redactor.inspector.parse(current);
 
                 var repositionContextBar = function (e, contextbar) {
-                    var top = e.clientY - contextbar.$contextbar.height() - 10;
-                    var left = e.clientX - contextbar.$contextbar.width() / 2;
+                    var parent = contextbar.$contextbar.parent();
+
+                    var top = e.clientY + contextbar.$contextbar.height() - 10 - parent.offset().top + (contextbar.livePreview ? parent.scrollTop() : contextbar.$win.scrollTop());
+                    var left = e.clientX - contextbar.$contextbar.width() / 2 - parent.offset().left;
 
                     var position = {
                         left: left + 'px',

@@ -23,9 +23,12 @@ use craft\helpers\StringHelper;
 use craft\models\Section;
 use craft\redactor\assets\field\FieldAsset;
 use craft\redactor\assets\redactor\RedactorAsset;
+use craft\redactor\events\ModifyPurifierConfigEvent;
 use craft\redactor\events\RegisterLinkOptionsEvent;
 use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\validators\HandleValidator;
+use HTMLPurifier_AttrDef_Text;
+use HTMLPurifier_Config;
 use yii\base\Event;
 use yii\base\InvalidConfigException;
 use yii\db\Schema;
@@ -50,6 +53,24 @@ class Field extends \craft\base\Field
      * @event RegisterLinkOptionsEvent The event that is triggered when registering the link options for the field.
      */
     const EVENT_REGISTER_LINK_OPTIONS = 'registerLinkOptions';
+
+    /**
+     * @event ModifyPurifierConfigEvent The event that is triggered when creating HTML Purifier config
+     *
+     * Plugins can get notified when HTML Purifier config is being constructed.
+     *
+     * ```php
+     * use craft\redactor\events\ModifyPurifierConfigEvent;
+     * use craft\redactor\Field;
+     * use HTMLPurifier_AttrDef_Text;
+     * use yii\base\Event;
+     *
+     * Event::on(Field::class, Field::EVENT_MODIFY_PURIFIER_CONFIG, function(ModifyPurifierConfigEvent $e) {
+     *      // Allow the use of the Redactor Variables plugin
+     *      $e->config->getHTMLDefinition(true)->addAttribute('span', 'data-redactor-type', new HTMLPurifier_AttrDef_Text());
+     * });
+     * ```
+     */    const EVENT_MODIFY_PURIFIER_CONFIG = 'modifyPurifierConfig';
 
     // Static
     // =========================================================================
@@ -119,6 +140,19 @@ class Field extends \craft\base\Field
     public $availableTransforms = '*';
 
     /**
+     * @var bool Whether to show input sources for volumes the user doesn’t have permission to view.
+     * @since 2.6.0
+     */
+    public $showUnpermittedVolumes = false;
+
+    /**
+     * @var bool Whether to show files the user doesn’t have permission to view, per the
+     * “View files uploaded by other users” permission.
+     * @since 2.6.0
+     */
+    public $showUnpermittedFiles = false;
+
+    /**
      * @inheritdoc
      */
     public function __construct(array $config = [])
@@ -168,7 +202,22 @@ class Field extends \craft\base\Field
             $config['redactorConfig'] = ArrayHelper::remove($config, 'configFile');
         }
 
+        // Default showUnpermittedVolumes to true for existing Redactor fields
+        if (isset($config['id']) && !isset($config['showUnpermittedVolumes'])) {
+            $config['showUnpermittedVolumes'] = true;
+        }
+
         parent::__construct($config);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        $this->showUnpermittedVolumes = (bool)$this->showUnpermittedVolumes;
+        $this->showUnpermittedFiles = (bool)$this->showUnpermittedFiles;
+        parent::init();
     }
 
     /**
@@ -336,6 +385,7 @@ class Field extends \craft\base\Field
             'elementSiteId' => $site->id,
             'redactorConfig' => $redactorConfig,
             'redactorLang' => $redactorLang,
+            'showAllUploaders' => $this->showUnpermittedFiles,
         ];
 
         if ($this->translationMethod != self::TRANSLATION_METHOD_NONE) {
@@ -357,9 +407,6 @@ class Field extends \craft\base\Field
 
             // Swap any <!--pagebreak-->'s with <hr>'s
             $value = str_replace('<!--pagebreak-->', '<hr class="redactor_pagebreak" style="display:none" unselectable="on" contenteditable="false" />', $value);
-
-            // Remove newlines to avoid pointless page unload confirmations
-            $value = preg_replace('/[\r\n]/', '', $value);
         }
 
         return '<textarea id="'.$id.'" name="'.$this->handle.'" style="display: none">'.htmlentities($value, ENT_NOQUOTES, 'UTF-8').'</textarea>';
@@ -438,7 +485,7 @@ class Field extends \craft\base\Field
                 // Remove disallowed inline styles
                 $allowedStyles = $this->_allowedStyles();
                 $value = preg_replace_callback(
-                    '/(<(?:h1|h2|h3|h4|h5|h6|p|div|blockquote|pre|strong|em|b|i|u|a|span)\b[^>]*)\s+style="([^"]*)"/',
+                    '/(<(?:h1|h2|h3|h4|h5|h6|p|div|blockquote|pre|strong|em|b|i|u|a|span|img)\b[^>]*)\s+style="([^"]*)"/',
                     function(array $matches) use ($allowedStyles) {
                         // Only allow certain styles through
                         $allowed = [];
@@ -652,9 +699,18 @@ class Field extends \craft\base\Field
 
         $criteria = ['parentId' => ':empty:'];
 
-        if ($this->availableVolumes !== '*') {
-            $criteria['volumeId'] = Db::idsByUids('{{%volumes}}', $this->availableVolumes);
+        $allVolumes = Craft::$app->getVolumes()->getAllVolumes();
+        $allowedVolumes = [];
+        $userService = Craft::$app->getUser();
+
+        foreach ($allVolumes as $volume) {
+            $allowedBySettings = $this->availableVolumes === '*' || (is_array($this->availableVolumes) && in_array($volume->uid, $this->availableVolumes));
+            if ($allowedBySettings && ($this->showUnpermittedVolumes || $userService->checkPermission("viewVolume:{$volume->uid}"))) {
+                $allowedVolumes[] = $volume->uid;
+            }
         }
+
+        $criteria['volumeId'] = Db::idsByUids('{{%volumes}}', $allowedVolumes);
 
         $folders = Craft::$app->getAssets()->findFolders($criteria);
 
@@ -765,20 +821,31 @@ class Field extends \craft\base\Field
     /**
      * Returns the HTML Purifier config used by this field.
      *
-     * @return array
+     * @return HTMLPurifier_Config
      */
-    private function _getPurifierConfig(): array
+    private function _getPurifierConfig(): HTMLPurifier_Config
     {
+        $purifierConfig = HTMLPurifier_Config::createDefault();
+        $purifierConfig->autoFinalize = false;
+
         if ($config = $this->_getConfig('htmlpurifier', $this->purifierConfig)) {
-            return $config;
+            foreach ($config as $option => $value) {
+                $purifierConfig->set($option, $value);
+            }
+        } else {
+            $purifierConfig->set('Attr.AllowedFrameTargets', ['_blank']);
+            $purifierConfig->set('Attr.EnableID', true);
+            $purifierConfig->set('HTML.AllowedComments', ['pagebreak']); // remove this later!
         }
 
-        // Default config
-        return [
-            'Attr.AllowedFrameTargets' => ['_blank'],
-            'Attr.EnableID' => true,
-            'HTML.AllowedComments' => ['pagebreak'],
-        ];
+        // Give plugins a chance to modify the HTML Purifier config, or add new ones
+        $event = new ModifyPurifierConfigEvent([
+            'config' => $purifierConfig,
+        ]);
+
+        $this->trigger(self::EVENT_MODIFY_PURIFIER_CONFIG, $event);
+
+        return $event->config;
     }
 
     /**

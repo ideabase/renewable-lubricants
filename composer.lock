@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f43554470cb1aa255cf4cd4021091e8",
+    "content-hash": "cf8c4c2efba05353e4b7368ab704ede5",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -710,11 +710,11 @@
         },
         {
             "name": "craftcms/redactor",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/redactor/zipball/b11b0625c3f84e00ee28739856ce96cd9823fed5",
-                "reference": "b11b0625c3f84e00ee28739856ce96cd9823fed5",
+                "url": "https://api.github.com/repos/craftcms/redactor/zipball/26c484287a39530dadf5c250465d8a0c424a57f5",
+                "reference": "26c484287a39530dadf5c250465d8a0c424a57f5",
                 "shasum": ""
             },
             "require": {
@@ -731,7 +731,6 @@
                     "craft\\redactor\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -743,13 +742,20 @@
             ],
             "description": "Edit rich text content in Craft CMS using Redactor by Imperavi.",
             "keywords": [
-                "Redactor",
                 "cms",
                 "craftcms",
                 "html",
+                "redactor",
                 "yii2"
             ],
-            "time": "2020-01-18T00:14:28+00:00"
+            "support": {
+                "email": "support@craftcms.com",
+                "issues": "https://github.com/craftcms/redactor/issues?state=open",
+                "source": "https://github.com/craftcms/redactor",
+                "docs": "https://github.com/craftcms/redactor/blob/v2/README.md",
+                "rss": "https://github.com/craftcms/redactor/commits/v2.atom"
+            },
+            "time": "2020-02-13T12:48:41+00:00"
         },
         {
             "name": "craftcms/server-check",

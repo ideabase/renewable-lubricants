@@ -4489,6 +4489,7 @@ return array(
     'craft\\redactor\\assets\\field\\FieldAsset' => $vendorDir . '/craftcms/redactor/src/assets/field/FieldAsset.php',
     'craft\\redactor\\assets\\redactor\\RedactorAsset' => $vendorDir . '/craftcms/redactor/src/assets/redactor/RedactorAsset.php',
     'craft\\redactor\\controllers\\DefaultController' => $vendorDir . '/craftcms/redactor/src/controllers/DefaultController.php',
+    'craft\\redactor\\events\\ModifyPurifierConfigEvent' => $vendorDir . '/craftcms/redactor/src/events/ModifyPurifierConfigEvent.php',
     'craft\\redactor\\events\\RegisterLinkOptionsEvent' => $vendorDir . '/craftcms/redactor/src/events/RegisterLinkOptionsEvent.php',
     'craft\\redactor\\events\\RegisterPluginPathsEvent' => $vendorDir . '/craftcms/redactor/src/events/RegisterPluginPathsEvent.php',
     'craft\\redactor\\migrations\\Install' => $vendorDir . '/craftcms/redactor/src/migrations/Install.php',

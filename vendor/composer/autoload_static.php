@@ -5294,6 +5294,7 @@ class ComposerStaticInit1fdf1cd71be0ff68a3b074c95720cc98
         'craft\\redactor\\assets\\field\\FieldAsset' => __DIR__ . '/..' . '/craftcms/redactor/src/assets/field/FieldAsset.php',
         'craft\\redactor\\assets\\redactor\\RedactorAsset' => __DIR__ . '/..' . '/craftcms/redactor/src/assets/redactor/RedactorAsset.php',
         'craft\\redactor\\controllers\\DefaultController' => __DIR__ . '/..' . '/craftcms/redactor/src/controllers/DefaultController.php',
+        'craft\\redactor\\events\\ModifyPurifierConfigEvent' => __DIR__ . '/..' . '/craftcms/redactor/src/events/ModifyPurifierConfigEvent.php',
         'craft\\redactor\\events\\RegisterLinkOptionsEvent' => __DIR__ . '/..' . '/craftcms/redactor/src/events/RegisterLinkOptionsEvent.php',
         'craft\\redactor\\events\\RegisterPluginPathsEvent' => __DIR__ . '/..' . '/craftcms/redactor/src/events/RegisterPluginPathsEvent.php',
         'craft\\redactor\\migrations\\Install' => __DIR__ . '/..' . '/craftcms/redactor/src/migrations/Install.php',
