@@ -7,7 +7,7 @@
 </div>
 
 {% for dataSheet in craft.assets.volume('dataSheets').all() %}
-  <a href="{{ dataSheet.getUrl() }}">{{ dataSheet.title }}</a>
+  <div><a href="{{ dataSheet.getUrl() }}">{{ dataSheet.title }}</a></div>
 {% endfor %}
 
 {% endblock %}
