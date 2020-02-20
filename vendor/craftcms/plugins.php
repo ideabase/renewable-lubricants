@@ -4,6 +4,22 @@ $vendorDir = dirname(__DIR__);
 $rootDir = dirname(dirname(__DIR__));
 
 return array (
+  'craftcms/redactor' => 
+  array (
+    'class' => 'craft\\redactor\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/redactor/src',
+    'handle' => 'redactor',
+    'aliases' => 
+    array (
+      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
+    ),
+    'name' => 'Redactor',
+    'version' => '2.6.0.1',
+    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://pixelandtonic.com/',
+    'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
+  ),
   'craftcms/contact-form' => 
   array (
     'class' => 'craft\\contactform\\Plugin',
@@ -62,25 +78,6 @@ return array (
     'developer' => 'Double Secret Agency',
     'developerUrl' => 'https://www.doublesecretagency.com/plugins',
   ),
-  'digital-pros/commerce-authorize' => 
-  array (
-    'class' => 'digitalpros\\commerce\\authorize\\Plugin',
-    'basePath' => $vendorDir . '/digital-pros/commerce-authorize/src',
-    'handle' => 'commerce-authorize',
-    'aliases' => 
-    array (
-      '@digitalpros/commerce/authorize' => $vendorDir . '/digital-pros/commerce-authorize/src',
-    ),
-    'name' => 'Authorize.net for Craft Commerce',
-    'version' => '1.0.9',
-    'description' => 'Authorize.net payment gateway plugin for Craft Commerce 2',
-    'developer' => 'Digital Pros',
-    'developerUrl' => 'https://digitalpros.co/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/digitalpros/commerce-authorize',
-    'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
-    'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
-  ),
   'craftcms/commerce' => 
   array (
     'class' => 'craft\\commerce\\Plugin',
@@ -96,24 +93,23 @@ return array (
     'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
     'developer' => 'Pixel & Tonic',
     'developerUrl' => 'https://craftcommerce.com',
-    'developerEmail' => 'support@craftcms.com',
     'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
   ),
-  'craftcms/redactor' => 
+  'digital-pros/commerce-authorize' => 
   array (
-    'class' => 'craft\\redactor\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/redactor/src',
-    'handle' => 'redactor',
+    'class' => 'digitalpros\\commerce\\authorize\\Plugin',
+    'basePath' => $vendorDir . '/digital-pros/commerce-authorize/src',
+    'handle' => 'commerce-authorize',
     'aliases' => 
     array (
-      '@craft/redactor' => $vendorDir . '/craftcms/redactor/src',
+      '@digitalpros/commerce/authorize' => $vendorDir . '/digital-pros/commerce-authorize/src',
     ),
-    'name' => 'Redactor',
-    'version' => '2.6.0',
-    'description' => 'Edit rich text content in Craft CMS using Redactor by Imperavi.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://pixelandtonic.com/',
-    'developerEmail' => 'support@craftcms.com',
-    'documentationUrl' => 'https://github.com/craftcms/redactor/blob/v2/README.md',
+    'name' => 'Authorize.net for Craft Commerce',
+    'version' => '1.0.9',
+    'description' => 'Authorize.net payment gateway plugin for Craft Commerce 2',
+    'developer' => 'Digital Pros',
+    'developerUrl' => 'https://digitalpros.co/',
+    'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
+    'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
   ),
 );
