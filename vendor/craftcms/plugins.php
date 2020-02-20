@@ -78,23 +78,6 @@ return array (
     'developer' => 'Double Secret Agency',
     'developerUrl' => 'https://www.doublesecretagency.com/plugins',
   ),
-  'craftcms/commerce' => 
-  array (
-    'class' => 'craft\\commerce\\Plugin',
-    'basePath' => $vendorDir . '/craftcms/commerce/src',
-    'handle' => 'commerce',
-    'aliases' => 
-    array (
-      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
-      '@craftcommercetests/fixtures' => $vendorDir . '/craftcms/commerce/tests/fixtures',
-    ),
-    'name' => 'Craft Commerce',
-    'version' => '3.0.6',
-    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
-    'developer' => 'Pixel & Tonic',
-    'developerUrl' => 'https://craftcommerce.com',
-    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
-  ),
   'digital-pros/commerce-authorize' => 
   array (
     'class' => 'digitalpros\\commerce\\authorize\\Plugin',
@@ -111,5 +94,23 @@ return array (
     'developerUrl' => 'https://digitalpros.co/',
     'changelogUrl' => 'https://raw.githubusercontent.com/digitalpros/commerce-authorize/master/CHANGELOG.md',
     'downloadUrl' => 'https://github.com/digitalpros/commerce-authorize/archive/master.zip',
+  ),
+  'craftcms/commerce' => 
+  array (
+    'class' => 'craft\\commerce\\Plugin',
+    'basePath' => $vendorDir . '/craftcms/commerce/src',
+    'handle' => 'commerce',
+    'aliases' => 
+    array (
+      '@craft/commerce' => $vendorDir . '/craftcms/commerce/src',
+      '@craftcommercetests/fixtures' => $vendorDir . '/craftcms/commerce/tests/fixtures',
+    ),
+    'name' => 'Craft Commerce',
+    'version' => '3.0.9',
+    'description' => 'An amazingly powerful and flexible e-commerce platform for Craft CMS.',
+    'developer' => 'Pixel & Tonic',
+    'developerUrl' => 'https://craftcommerce.com',
+    'developerEmail' => 'support@craftcms.com',
+    'documentationUrl' => 'https://docs.craftcms.com/commerce/v2/',
   ),
 );
