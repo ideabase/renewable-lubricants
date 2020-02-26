@@ -405,12 +405,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.4.6.1",
-        "version_normalized": "3.4.6.1",
+        "version": "3.4.8",
+        "version_normalized": "3.4.8.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/be125c0eba3175693839476ffc1e67c71b080f71",
-            "reference": "be125c0eba3175693839476ffc1e67c71b080f71",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/eca660ae7dde806bba54cc69d7a67d50e7745a76",
+            "reference": "eca660ae7dde806bba54cc69d7a67d50e7745a76",
             "shasum": ""
         },
         "require": {
@@ -466,7 +466,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2020-02-18T21:06:19+00:00",
+        "time": "2020-02-22T01:20:21+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -496,12 +496,12 @@
     },
     {
         "name": "craftcms/commerce",
-        "version": "3.0.9",
-        "version_normalized": "3.0.9.0",
+        "version": "3.0.11",
+        "version_normalized": "3.0.11.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/commerce/zipball/8c83f1d41d99351fa51dae74cab9eaf1787342b7",
-            "reference": "8c83f1d41d99351fa51dae74cab9eaf1787342b7",
+            "url": "https://api.github.com/repos/craftcms/commerce/zipball/d25b9f389a3a372ef5e0bad6ac91a3fa0764c734",
+            "reference": "d25b9f389a3a372ef5e0bad6ac91a3fa0764c734",
             "shasum": ""
         },
         "require": {
@@ -510,7 +510,7 @@
             "ibericode/vat": "^1.1.2",
             "moneyphp/money": "^3.2.1"
         },
-        "time": "2020-02-19T14:36:06+00:00",
+        "time": "2020-02-25T00:11:38+00:00",
         "type": "craft-plugin",
         "extra": {
             "handle": "commerce",
@@ -842,12 +842,12 @@
     },
     {
         "name": "digital-pros/commerce-authorize",
-        "version": "1.0.9",
-        "version_normalized": "1.0.9.0",
+        "version": "1.0.10",
+        "version_normalized": "1.0.10.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/digital-pros/commerce-authorize/zipball/a5f8bc5826412d827695a54ceedc085f31929b79",
-            "reference": "a5f8bc5826412d827695a54ceedc085f31929b79",
+            "url": "https://api.github.com/repos/digital-pros/commerce-authorize/zipball/adb7e7471e121eac83166ec8bffacc4fec9d6e8a",
+            "reference": "adb7e7471e121eac83166ec8bffacc4fec9d6e8a",
             "shasum": ""
         },
         "require": {
@@ -856,7 +856,7 @@
             "craftcms/commerce-omnipay": "^2.0.0",
             "omnipay/authorizenet": "^3.0.0"
         },
-        "time": "2020-01-30T15:54:48+00:00",
+        "time": "2020-02-24T05:26:31+00:00",
         "type": "craft-plugin",
         "extra": {
             "name": "Authorize.net for Craft Commerce",
@@ -870,7 +870,6 @@
                 "digitalpros\\commerce\\authorize\\": "src/"
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "proprietary"
         ],
@@ -880,14 +879,21 @@
                 "homepage": "https://digitalpros.co/"
             }
         ],
-        "description": "Authorize.net payment gateway plugin for Craft Commerce 2",
+        "description": "Authorize.net payment gateway plugin for Craft Commerce 3",
         "keywords": [
             "authorize",
             "commerce",
             "craftcms",
             "omnipay",
             "yii2"
-        ]
+        ],
+        "support": {
+            "email": "support@craftcms.com",
+            "issues": "https://github.com/digitalpros/commerce-authorize/issues?state=open",
+            "source": "https://github.com/digitalpros/commerce-authorize",
+            "docs": "https://github.com/digitalpros/commerce-authorize",
+            "rss": "https://github.com/digitalpros/commerce-authorize/commits/master.atom"
+        }
     },
     {
         "name": "dnoegel/php-xdg-base-dir",
@@ -5493,12 +5499,12 @@
     },
     {
         "name": "voku/portable-utf8",
-        "version": "5.4.39",
-        "version_normalized": "5.4.39.0",
+        "version": "5.4.40",
+        "version_normalized": "5.4.40.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/voku/portable-utf8/zipball/e462e8985a80cbd927765fd7e09f52bb103c9797",
-            "reference": "e462e8985a80cbd927765fd7e09f52bb103c9797",
+            "url": "https://api.github.com/repos/voku/portable-utf8/zipball/1b558059a84d566843c8d0a2ba1d9c3051764565",
+            "reference": "1b558059a84d566843c8d0a2ba1d9c3051764565",
             "shasum": ""
         },
         "require": {
@@ -5510,9 +5516,6 @@
             "symfony/polyfill-php72": "~1.0",
             "voku/portable-ascii": "~1.4"
         },
-        "require-dev": {
-            "phpunit/phpunit": "~6.0 || ~7.0"
-        },
         "suggest": {
             "ext-ctype": "Use Ctype for e.g. hexadecimal digit detection",
             "ext-fileinfo": "Use Fileinfo for better binary file detection",
@@ -5521,7 +5524,7 @@
             "ext-json": "Use JSON for string detection",
             "ext-mbstring": "Use Mbstring for best performance"
         },
-        "time": "2020-01-30T15:12:06+00:00",
+        "time": "2020-02-22T23:18:32+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -5533,7 +5536,6 @@
                 "bootstrap.php"
             ]
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "(Apache-2.0 or GPL-2.0)"
         ],
