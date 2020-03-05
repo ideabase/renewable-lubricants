@@ -4900,6 +4900,7 @@ class ComposerStaticInitd7331431c115b9608e9a3cb1949b7544
         'craft\\migrations\\m200127_172522_queue_channels' => __DIR__ . '/..' . '/craftcms/cms/src/migrations/m200127_172522_queue_channels.php',
         'craft\\migrations\\m200211_175048_truncate_element_query_cache' => __DIR__ . '/..' . '/craftcms/cms/src/migrations/m200211_175048_truncate_element_query_cache.php',
         'craft\\migrations\\m200213_172522_new_elements_index' => __DIR__ . '/..' . '/craftcms/cms/src/migrations/m200213_172522_new_elements_index.php',
+        'craft\\migrations\\m200228_195211_long_deprecation_messages' => __DIR__ . '/..' . '/craftcms/cms/src/migrations/m200228_195211_long_deprecation_messages.php',
         'craft\\models\\AssetIndexData' => __DIR__ . '/..' . '/craftcms/cms/src/models/AssetIndexData.php',
         'craft\\models\\AssetTransform' => __DIR__ . '/..' . '/craftcms/cms/src/models/AssetTransform.php',
         'craft\\models\\AssetTransformIndex' => __DIR__ . '/..' . '/craftcms/cms/src/models/AssetTransformIndex.php',

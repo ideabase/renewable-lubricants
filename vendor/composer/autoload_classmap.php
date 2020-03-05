@@ -4168,6 +4168,7 @@ return array(
     'craft\\migrations\\m200127_172522_queue_channels' => $vendorDir . '/craftcms/cms/src/migrations/m200127_172522_queue_channels.php',
     'craft\\migrations\\m200211_175048_truncate_element_query_cache' => $vendorDir . '/craftcms/cms/src/migrations/m200211_175048_truncate_element_query_cache.php',
     'craft\\migrations\\m200213_172522_new_elements_index' => $vendorDir . '/craftcms/cms/src/migrations/m200213_172522_new_elements_index.php',
+    'craft\\migrations\\m200228_195211_long_deprecation_messages' => $vendorDir . '/craftcms/cms/src/migrations/m200228_195211_long_deprecation_messages.php',
     'craft\\models\\AssetIndexData' => $vendorDir . '/craftcms/cms/src/models/AssetIndexData.php',
     'craft\\models\\AssetTransform' => $vendorDir . '/craftcms/cms/src/models/AssetTransform.php',
     'craft\\models\\AssetTransformIndex' => $vendorDir . '/craftcms/cms/src/models/AssetTransformIndex.php',

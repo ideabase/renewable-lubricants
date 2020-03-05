@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9be069f1f9defc28837382ccc61d045f",
+    "content-hash": "051fc57cc1b1e99cc25e05b9a7801b61",
     "packages": [
         {
             "name": "albertcht/invisible-recaptcha",
@@ -398,11 +398,11 @@
         },
         {
             "name": "craftcms/cms",
-            "version": "3.4.8",
+            "version": "3.4.9",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/craftcms/cms/zipball/eca660ae7dde806bba54cc69d7a67d50e7745a76",
-                "reference": "eca660ae7dde806bba54cc69d7a67d50e7745a76",
+                "url": "https://api.github.com/repos/craftcms/cms/zipball/fa28541499591b458e11f61c21016365da7120f5",
+                "reference": "fa28541499591b458e11f61c21016365da7120f5",
                 "shasum": ""
             },
             "require": {
@@ -483,7 +483,7 @@
                 "docs": "https://docs.craftcms.com/v3/",
                 "rss": "https://github.com/craftcms/cms/releases.atom"
             },
-            "time": "2020-02-22T01:20:21+00:00"
+            "time": "2020-02-28T19:59:36+00:00"
         },
         {
             "name": "craftcms/commerce",
@@ -817,11 +817,11 @@
         },
         {
             "name": "digital-pros/commerce-authorize",
-            "version": "1.0.10",
+            "version": "1.0.11",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/digital-pros/commerce-authorize/zipball/adb7e7471e121eac83166ec8bffacc4fec9d6e8a",
-                "reference": "adb7e7471e121eac83166ec8bffacc4fec9d6e8a",
+                "url": "https://api.github.com/repos/digital-pros/commerce-authorize/zipball/2eb42312e2fcd7ab5cf98f2f1a781c548dfb26c8",
+                "reference": "2eb42312e2fcd7ab5cf98f2f1a781c548dfb26c8",
                 "shasum": ""
             },
             "require": {
@@ -866,7 +866,7 @@
                 "docs": "https://github.com/digitalpros/commerce-authorize",
                 "rss": "https://github.com/digitalpros/commerce-authorize/commits/master.atom"
             },
-            "time": "2020-02-24T05:26:31+00:00"
+            "time": "2020-03-02T03:09:25+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -5927,16 +5927,16 @@
         },
         {
             "name": "yiisoft/yii2-shell",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-shell/zipball/1d9548d56ef45fb82a39cf32b84d137ddd92dc38",
-                "reference": "1d9548d56ef45fb82a39cf32b84d137ddd92dc38",
+                "url": "https://api.github.com/repos/yiisoft/yii2-shell/zipball/8439588d187c23d47e0e6fd773f5b544c87f4d56",
+                "reference": "8439588d187c23d47e0e6fd773f5b544c87f4d56",
                 "shasum": ""
             },
             "require": {
                 "psy/psysh": "~0.9.3",
-                "symfony/var-dumper": "~2.7|~3.0|~4.0",
+                "symfony/var-dumper": "~2.7|~3.0|~4.0|~5.0",
                 "yiisoft/yii2": "~2.0.0"
             },
             "type": "yii2-extension",
@@ -5951,7 +5951,6 @@
                     "yii\\shell\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -5970,7 +5969,7 @@
                 "shell",
                 "yii2"
             ],
-            "time": "2019-01-07T21:30:35+00:00"
+            "time": "2020-03-03T20:19:36+00:00"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",

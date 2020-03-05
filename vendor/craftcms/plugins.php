@@ -106,7 +106,7 @@ return array (
       '@digitalpros/commerce/authorize' => $vendorDir . '/digital-pros/commerce-authorize/src',
     ),
     'name' => 'Authorize.net for Craft Commerce',
-    'version' => '1.0.10',
+    'version' => '1.0.11',
     'description' => 'Authorize.net payment gateway plugin for Craft Commerce 3',
     'developer' => 'Digital Pros',
     'developerUrl' => 'https://digitalpros.co/',

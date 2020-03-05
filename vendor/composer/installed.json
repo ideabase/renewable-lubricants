@@ -405,12 +405,12 @@
     },
     {
         "name": "craftcms/cms",
-        "version": "3.4.8",
-        "version_normalized": "3.4.8.0",
+        "version": "3.4.9",
+        "version_normalized": "3.4.9.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/craftcms/cms/zipball/eca660ae7dde806bba54cc69d7a67d50e7745a76",
-            "reference": "eca660ae7dde806bba54cc69d7a67d50e7745a76",
+            "url": "https://api.github.com/repos/craftcms/cms/zipball/fa28541499591b458e11f61c21016365da7120f5",
+            "reference": "fa28541499591b458e11f61c21016365da7120f5",
             "shasum": ""
         },
         "require": {
@@ -466,7 +466,7 @@
             "ext-imagick": "Adds support for more image processing formats and options.",
             "ext-intl": "Adds rich internationalization support."
         },
-        "time": "2020-02-22T01:20:21+00:00",
+        "time": "2020-02-28T19:59:36+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -842,12 +842,12 @@
     },
     {
         "name": "digital-pros/commerce-authorize",
-        "version": "1.0.10",
-        "version_normalized": "1.0.10.0",
+        "version": "1.0.11",
+        "version_normalized": "1.0.11.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/digital-pros/commerce-authorize/zipball/adb7e7471e121eac83166ec8bffacc4fec9d6e8a",
-            "reference": "adb7e7471e121eac83166ec8bffacc4fec9d6e8a",
+            "url": "https://api.github.com/repos/digital-pros/commerce-authorize/zipball/2eb42312e2fcd7ab5cf98f2f1a781c548dfb26c8",
+            "reference": "2eb42312e2fcd7ab5cf98f2f1a781c548dfb26c8",
             "shasum": ""
         },
         "require": {
@@ -856,7 +856,7 @@
             "craftcms/commerce-omnipay": "^2.0.0",
             "omnipay/authorizenet": "^3.0.0"
         },
-        "time": "2020-02-24T05:26:31+00:00",
+        "time": "2020-03-02T03:09:25+00:00",
         "type": "craft-plugin",
         "extra": {
             "name": "Authorize.net for Craft Commerce",
@@ -6152,20 +6152,20 @@
     },
     {
         "name": "yiisoft/yii2-shell",
-        "version": "2.0.2",
-        "version_normalized": "2.0.2.0",
+        "version": "2.0.3",
+        "version_normalized": "2.0.3.0",
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-shell/zipball/1d9548d56ef45fb82a39cf32b84d137ddd92dc38",
-            "reference": "1d9548d56ef45fb82a39cf32b84d137ddd92dc38",
+            "url": "https://api.github.com/repos/yiisoft/yii2-shell/zipball/8439588d187c23d47e0e6fd773f5b544c87f4d56",
+            "reference": "8439588d187c23d47e0e6fd773f5b544c87f4d56",
             "shasum": ""
         },
         "require": {
             "psy/psysh": "~0.9.3",
-            "symfony/var-dumper": "~2.7|~3.0|~4.0",
+            "symfony/var-dumper": "~2.7|~3.0|~4.0|~5.0",
             "yiisoft/yii2": "~2.0.0"
         },
-        "time": "2019-01-07T21:30:35+00:00",
+        "time": "2020-03-03T20:19:36+00:00",
         "type": "yii2-extension",
         "extra": {
             "bootstrap": "yii\\shell\\Bootstrap",
@@ -6179,7 +6179,6 @@
                 "yii\\shell\\": ""
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "BSD-3-Clause"
         ],
