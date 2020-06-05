@@ -1,21 +1,41 @@
 "use strict";
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-/*!   - 2020-02-25 */
+/*!   - 2020-05-29 */
 (function ($) {
   /** global: Craft */
 
   /** global: Garnish */
-  // Set all the standard Craft.* stuff
+  // Use old jQuery prefilter behavior
+  // see https://jquery.com/upgrade-guide/3.5/
+  var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi;
+
+  jQuery.htmlPrefilter = function (html) {
+    return html.replace(rxhtmlTag, "<$1></$2>");
+  }; // Set all the standard Craft.* stuff
+
+
   $.extend(Craft, {
     navHeight: 48,
 
@@ -646,7 +666,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         options = options ? $.extend({}, options) : {};
         options.method = method;
         options.url = Craft.getActionUrl(action);
-        options.headers = $.extend({}, options.headers || {}, _this2._actionHeaders());
+        options.headers = $.extend({
+          'X-Requested-With': 'XMLHttpRequest'
+        }, options.headers || {}, _this2._actionHeaders());
         options.params = $.extend({}, options.params || {}, {
           // Force Safari to not load from cache
           v: new Date().getTime()
@@ -654,6 +676,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         axios.request(options).then(resolve)["catch"](reject);
       });
     },
+    _processedApiHeaders: false,
 
     /**
      * Sends a request to the Craftnet API.
@@ -667,31 +690,129 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var _this3 = this;
 
       return new Promise(function (resolve, reject) {
-        options = options ? $.extend({}, options) : {}; // Get the latest headers
+        options = options ? $.extend({}, options) : {};
+        var cancelToken = options.cancelToken || null; // Get the latest headers
 
-        _this3.sendActionRequest('POST', 'app/api-headers', {
-          cancelToken: options.cancelToken || null
-        }).then(function (headerResponse) {
+        _this3.getApiHeaders(cancelToken).then(function (apiHeaders) {
           options.method = method;
           options.baseURL = Craft.baseApiUrl;
           options.url = uri;
-          options.headers = $.extend(headerResponse.data, options.headers || {});
+          options.headers = $.extend(apiHeaders, options.headers || {});
           options.params = $.extend(Craft.apiParams || {}, options.params || {}, {
             // Force Safari to not load from cache
             v: new Date().getTime()
           });
           axios.request(options).then(function (apiResponse) {
-            _this3.sendActionRequest('POST', 'app/process-api-response-headers', {
-              data: {
-                headers: apiResponse.headers
-              },
-              cancelToken: options.cancelToken || null
-            }).then(function () {
-              resolve(apiResponse.data);
-            })["catch"](reject);
+            // Send the API response back immediately
+            resolve(apiResponse.data);
+
+            if (!_this3._processedApiHeaders) {
+              if (apiResponse.headers['x-craft-license-status']) {
+                _this3._processedApiHeaders = true;
+
+                _this3.sendActionRequest('POST', 'app/process-api-response-headers', {
+                  data: {
+                    headers: apiResponse.headers
+                  },
+                  cancelToken: cancelToken
+                }); // If we just got a new license key, set it and then resolve the header waitlist
+
+
+                if (_this3._apiHeaders && _this3._apiHeaders['X-Craft-License'] === '__REQUEST__') {
+                  _this3._apiHeaders['X-Craft-License'] = apiResponse.headers['x-craft-license'];
+
+                  _this3._resolveHeaderWaitlist();
+                }
+              } else if (_this3._apiHeaders && _this3._apiHeaders['X-Craft-License'] === '__REQUEST__' && _this3._apiHeaderWaitlist.length) {
+                // The request didn't send headers. Go ahead and resolve the next request on the
+                // header waitlist.
+                var _item = _this3._apiHeaderWaitlist.shift();
+
+                _item[0](_this3._apiHeaders);
+              }
+            }
           })["catch"](reject);
         })["catch"](reject);
       });
+    },
+    _loadingApiHeaders: false,
+    _apiHeaders: null,
+    _apiHeaderWaitlist: [],
+
+    /**
+     * Returns the headers that should be sent with API requests.
+     *
+     * @param {Object|null} cancelToken
+     * @return {Promise}
+     */
+    getApiHeaders: function getApiHeaders(cancelToken) {
+      var _this4 = this;
+
+      return new Promise(function (resolve, reject) {
+        // Are we already loading them?
+        if (_this4._loadingApiHeaders) {
+          _this4._apiHeaderWaitlist.push([resolve, reject]);
+
+          return;
+        } // Are the headers already cached?
+
+
+        if (_this4._apiHeaders) {
+          resolve(_this4._apiHeaders);
+          return;
+        }
+
+        _this4._loadingApiHeaders = true;
+
+        _this4.sendActionRequest('POST', 'app/api-headers', {
+          cancelToken: cancelToken
+        }).then(function (response) {
+          // Make sure we even are waiting for these anymore
+          if (!_this4._loadingApiHeaders) {
+            reject(e);
+            return;
+          }
+
+          _this4._apiHeaders = response.data;
+          resolve(_this4._apiHeaders); // If we are requesting a new Craft license, hold off on
+          // resolving other API requests until we have one
+
+          if (response.data['X-Craft-License'] !== '__REQUEST__') {
+            _this4._resolveHeaderWaitlist();
+          }
+        })["catch"](function (e) {
+          _this4._loadingApiHeaders = false;
+          reject(e); // Was anything else waiting for them?
+
+          var item;
+
+          while (item = _this4._apiHeaderWaitlist.shift()) {
+            item[1](e);
+          }
+        });
+      });
+    },
+    _resolveHeaderWaitlist: function _resolveHeaderWaitlist() {
+      this._loadingApiHeaders = false; // Was anything else waiting for them?
+
+      var item;
+
+      while (item = this._apiHeaderWaitlist.shift()) {
+        item[0](this._apiHeaders);
+      }
+    },
+
+    /**
+     * Clears the cached API headers.
+     */
+    clearCachedApiHeaders: function clearCachedApiHeaders() {
+      this._apiHeaders = null;
+      this._processedApiHeaders = false;
+      this._loadingApiHeaders = false; // Reject anything in the header waitlist
+
+      while (item = this._apiHeaderWaitlist.shift()) {
+        item[1]();
+      }
     },
 
     /**
@@ -703,7 +824,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
      * @return {Promise}
      */
     downloadFromUrl: function downloadFromUrl(method, url, body) {
-      var _this4 = this;
+      var _this5 = this;
 
       return new Promise(function (resolve, reject) {
         // h/t https://nehalist.io/downloading-files-from-post-requests/
@@ -741,7 +862,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           } else {
             reject();
           }
-        }.bind(_this4);
+        }.bind(_this5);
 
         request.send(body);
       });
@@ -1403,6 +1524,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       $('.pill', $container).pill();
       $('.formsubmit', $container).formsubmit();
       $('.menubtn', $container).menubtn();
+      $('.datetimewrapper', $container).datetime();
     },
     _elementIndexClasses: {},
     _elementSelectorModalClasses: {},
@@ -1496,6 +1618,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
      * @param {object} settings
      */
     createElementEditor: function createElementEditor(elementType, element, settings) {
+      // Param mapping
+      if (typeof settings === 'undefined' && $.isPlainObject(element)) {
+        // (settings)
+        settings = element;
+        element = null;
+      } else if (_typeof(settings) !== 'object') {
+        settings = {};
+      }
+
+      if (!settings.elementType) {
+        settings.elementType = elementType;
+      }
+
       var func;
 
       if (typeof this._elementEditorClasses[elementType] !== 'undefined') {
@@ -1826,7 +1961,46 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           new Garnish.MenuBtn($btn, settings);
         }
       });
-    }
+    },
+    datetime: function datetime() {
+      return this.each(function () {
+        var $wrapper = $(this);
+        var $inputs = $wrapper.find('input:not([name$="[timezone]"])');
+
+        var checkValue = function checkValue() {
+          var hasValue = false;
+
+          for (var _i3 = 0; _i3 < $inputs.length; _i3++) {
+            if ($inputs.eq(_i3).val()) {
+              hasValue = true;
+              break;
+            }
+          }
+
+          if (hasValue) {
+            if (!$wrapper.children('.clear-btn').length) {
+              var $btn = $('<div/>', {
+                "class": 'clear-btn',
+                role: 'button',
+                title: Craft.t('app', 'Clear')
+              }).appendTo($wrapper).on('click', function () {
+                for (var _i4 = 0; _i4 < $inputs.length; _i4++) {
+                  $inputs.eq(_i4).val('');
+                }
+
+                $btn.remove();
+              });
+            }
+          } else {
+            $wrapper.children('.clear-btn').remove();
+          }
+        };
+
+        $inputs.on('change', checkValue);
+        checkValue();
+      });
+    },
+    checkDatetimeValue: function checkDatetimeValue() {}
   });
   Garnish.$doc.ready(function () {
     Craft.initUiElements();
@@ -1943,7 +2117,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
         this.$form = $('<div/>');
         this.$fieldsContainer = $('<div class="fields"/>').appendTo(this.$form);
-        this.updateForm(response);
+        this.updateForm(response, true);
         this.onCreateForm(this.$form);
         var $footer = $('<div class="hud-footer"/>').appendTo(this.$form),
             $buttonsContainer = $('<div class="buttons right"/>').appendTo($footer);
@@ -1957,9 +2131,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.hud = new Garnish.HUD(hudTrigger, $hudContents, {
             bodyClass: 'body elementeditor',
             closeOtherHUDs: false,
-            onShow: $.proxy(this, 'onShowHud'),
-            onHide: $.proxy(this, 'onHideHud'),
-            onSubmit: $.proxy(this, 'saveElement')
+            hideOnEsc: false,
+            hideOnShadeClick: false,
+            onShow: this.onShowHud.bind(this),
+            onHide: this.onHideHud.bind(this),
+            onSubmit: this.saveElement.bind(this)
           });
           this.hud.$hud.data('elementEditor', this); // Disable browser input validation
 
@@ -2002,7 +2178,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       data = $.extend(this.getBaseData(), data);
       Craft.postActionRequest('elements/get-editor-html', data, $.proxy(function (response, textStatus) {
         if (textStatus === 'success') {
-          this.updateForm(response);
+          this.updateForm(response, true);
         }
 
         if (callback) {
@@ -2010,10 +2186,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
       }, this));
     },
-    updateForm: function updateForm(response) {
+    updateForm: function updateForm(response, refreshInitialData) {
       this.siteId = response.siteId;
-      this.deltaNames = response.deltaNames;
-      this.$fieldsContainer.html(response.html); // Swap any instruction text with info icons
+      this.$fieldsContainer.html(response.html);
+
+      if (refreshInitialData !== false) {
+        this.deltaNames = response.deltaNames;
+      } // Swap any instruction text with info icons
+
 
       var $instructions = this.$fieldsContainer.find('> .meta > .field > .heading > .instructions');
 
@@ -2028,7 +2208,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         Craft.appendHeadHtml(response.headHtml);
         Craft.appendFootHtml(response.footHtml);
         Craft.initUiElements(this.$fieldsContainer);
-        this.initialData = this.hud.$body.serialize();
+
+        if (refreshInitialData) {
+          this.initialData = this.hud.$body.serialize();
+        }
       }, this));
     },
     saveElement: function saveElement() {
@@ -2063,10 +2246,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               }
             }
 
+            if (this.settings.elementType && Craft.elementTypeNames[this.settings.elementType]) {
+              Craft.cp.displayNotice(Craft.t('app', '{type} saved.', {
+                type: Craft.elementTypeNames[this.settings.elementType][0]
+              }));
+            }
+
             this.closeHud();
             this.onSaveElement(response);
           } else {
-            this.updateForm(response);
+            this.updateForm(response, false);
             Garnish.shake(this.hud.$hud);
           }
         }
@@ -2079,6 +2268,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     // Events
     // -------------------------------------------------------------------------
     onShowHud: function onShowHud() {
+      Garnish.shortcutManager.registerShortcut({
+        keyCode: Garnish.S_KEY,
+        ctrl: true
+      }, this.saveElement.bind(this));
       this.settings.onShowHud();
       this.trigger('showHud');
     },
@@ -2390,7 +2583,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       return this._cancelToken.token;
     },
     _cancelRequests: function _cancelRequests() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this._cancelToken) {
         this._ignoreFailedRequest = true;
@@ -2398,7 +2591,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this._cancelToken.cancel();
 
         Garnish.requestAnimationFrame(function () {
-          _this5._ignoreFailedRequest = false;
+          _this6._ignoreFailedRequest = false;
         });
       }
     },
@@ -2460,7 +2653,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     },
     refreshSources: function refreshSources() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.sourceSelect.removeAllItems();
       var params = {
@@ -2471,17 +2664,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       Craft.sendActionRequest('POST', this.settings.refreshSourcesAction, {
         data: params
       }).then(function (response) {
-        _this6.setIndexAvailable();
+        _this7.setIndexAvailable();
 
-        _this6.getSourceContainer().replaceWith(response.data.html);
+        _this7.getSourceContainer().replaceWith(response.data.html);
 
-        _this6.initSources();
+        _this7.initSources();
 
-        _this6.selectDefaultSource();
+        _this7.selectDefaultSource();
       })["catch"](function () {
-        _this6.setIndexAvailable();
+        _this7.setIndexAvailable();
 
-        if (!_this6._ignoreFailedRequest) {
+        if (!_this7._ignoreFailedRequest) {
           Craft.cp.displayError(Craft.t('app', 'A server error occurred.'));
         }
       });
@@ -2711,7 +2904,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       return params;
     },
     updateElements: function updateElements(preservePagination) {
-      var _this7 = this;
+      var _this8 = this;
 
       // Ignore if we're not fully initialized yet
       if (!this.initialized) {
@@ -2739,13 +2932,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         data: params,
         cancelToken: this._createCancelToken()
       }).then(function (response) {
-        _this7.setIndexAvailable();
+        _this8.setIndexAvailable();
 
-        _this7._updateView(params, response.data);
+        _this8._updateView(params, response.data);
       })["catch"](function () {
-        _this7.setIndexAvailable();
+        _this8.setIndexAvailable();
 
-        if (!_this7._ignoreFailedRequest) {
+        if (!_this8._ignoreFailedRequest) {
           Craft.cp.displayError(Craft.t('app', 'A server error occurred.'));
         }
       });
@@ -2778,7 +2971,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.showingActionTriggers = true;
     },
     submitAction: function submitAction(actionClass, actionParams) {
-      var _this8 = this;
+      var _this9 = this;
 
       // Make sure something's selected
       var selectedElementIds = this.view.getSelectedElementIds(),
@@ -2807,6 +3000,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
       var viewParams = this.getViewParams();
+      actionParams = actionParams ? Craft.expandPostArray(actionParams) : {};
       var params = $.extend(viewParams, actionParams, {
         elementAction: actionClass,
         elementIds: selectedElementIds
@@ -2818,24 +3012,24 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         data: params,
         cancelToken: this._createCancelToken()
       }).then(function (response) {
-        _this8.setIndexAvailable();
+        _this9.setIndexAvailable();
 
         if (response.data.success) {
           // Update the count text too
-          _this8._resetCount();
+          _this9._resetCount();
 
-          _this8._updateView(viewParams, response.data);
+          _this9._updateView(viewParams, response.data);
 
           if (response.data.message) {
             Craft.cp.displayNotice(response.data.message);
           }
 
-          _this8.afterAction(action, params);
+          _this9.afterAction(action, params);
         } else {
           Craft.cp.displayError(response.data.message);
         }
       })["catch"](function () {
-        _this8.setIndexAvailable();
+        _this9.setIndexAvailable();
       });
     },
     afterAction: function afterAction(action, params) {
@@ -3562,7 +3756,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       return this.settings.context === 'index' && this.getSelectedSortAttribute() !== 'structure';
     },
     _updateView: function _updateView(params, response) {
-      var _this9 = this;
+      var _this10 = this;
 
       // Cleanup
       // -------------------------------------------------------------
@@ -3579,22 +3773,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this.$countContainer.html('');
 
         this._countResults().then(function (total) {
-          _this9.$countSpinner.addClass('hidden');
+          _this10.$countSpinner.addClass('hidden');
 
-          var itemLabel = Craft.elementTypeNames[_this9.elementType] ? Craft.elementTypeNames[_this9.elementType][2] : 'element';
-          var itemsLabel = Craft.elementTypeNames[_this9.elementType] ? Craft.elementTypeNames[_this9.elementType][3] : 'elements';
+          var itemLabel = Craft.elementTypeNames[_this10.elementType] ? Craft.elementTypeNames[_this10.elementType][2] : 'element';
+          var itemsLabel = Craft.elementTypeNames[_this10.elementType] ? Craft.elementTypeNames[_this10.elementType][3] : 'elements';
 
-          if (!_this9._isViewPaginated()) {
+          if (!_this10._isViewPaginated()) {
             var countLabel = Craft.t('app', '{total, number} {total, plural, =1{{item}} other{{items}}}', {
               total: total,
               item: itemLabel,
               items: itemsLabel
             });
 
-            _this9.$countContainer.text(countLabel);
+            _this10.$countContainer.text(countLabel);
           } else {
-            var first = Math.min(_this9.settings.batchSize * (_this9.page - 1) + 1, total);
-            var last = Math.min(first + (_this9.settings.batchSize - 1), total);
+            var first = Math.min(_this10.settings.batchSize * (_this10.page - 1) + 1, total);
+            var last = Math.min(first + (_this10.settings.batchSize - 1), total);
 
             var _countLabel = Craft.t('app', '{first, number}-{last, number} of {total, number} {total, plural, =1{{item}} other{{items}}}', {
               first: first,
@@ -3604,15 +3798,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               items: itemsLabel
             });
 
-            var $paginationContainer = $('<div class="flex pagination"/>').appendTo(_this9.$countContainer);
-            var totalPages = Math.max(Math.ceil(total / _this9.settings.batchSize), 1);
+            var $paginationContainer = $('<div class="flex pagination"/>').appendTo(_this10.$countContainer);
+            var totalPages = Math.max(Math.ceil(total / _this10.settings.batchSize), 1);
             var $prevBtn = $('<div/>', {
-              'class': 'page-link' + (_this9.page > 1 ? '' : ' disabled'),
+              'class': 'page-link' + (_this10.page > 1 ? '' : ' disabled'),
               'data-icon': 'leftangle',
               title: Craft.t('app', 'Previous Page')
             }).appendTo($paginationContainer);
             var $nextBtn = $('<div/>', {
-              'class': 'page-link' + (_this9.page < totalPages ? '' : ' disabled'),
+              'class': 'page-link' + (_this10.page < totalPages ? '' : ' disabled'),
               'data-icon': 'rightangle',
               title: Craft.t('app', 'Next Page')
             }).appendTo($paginationContainer);
@@ -3621,8 +3815,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               text: _countLabel
             }).appendTo($paginationContainer);
 
-            if (_this9.page > 1) {
-              _this9.addListener($prevBtn, 'click', function () {
+            if (_this10.page > 1) {
+              _this10.addListener($prevBtn, 'click', function () {
                 this.removeListener($prevBtn, 'click');
                 this.removeListener($nextBtn, 'click');
                 this.setPage(this.page - 1);
@@ -3630,8 +3824,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               });
             }
 
-            if (_this9.page < totalPages) {
-              _this9.addListener($nextBtn, 'click', function () {
+            if (_this10.page < totalPages) {
+              _this10.addListener($nextBtn, 'click', function () {
                 this.removeListener($prevBtn, 'click');
                 this.removeListener($nextBtn, 'click');
                 this.setPage(this.page + 1);
@@ -3640,7 +3834,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             }
           }
         })["catch"](function () {
-          _this9.$countSpinner.addClass('hidden');
+          _this10.$countSpinner.addClass('hidden');
         });
       } // Update the view with the new container + elements HTML
       // -------------------------------------------------------------
@@ -3727,28 +3921,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.onUpdateElements();
     },
     _countResults: function _countResults() {
-      var _this10 = this;
+      var _this11 = this;
 
       return new Promise(function (resolve, reject) {
-        if (_this10.totalResults !== null) {
-          resolve(_this10.totalResults);
+        if (_this11.totalResults !== null) {
+          resolve(_this11.totalResults);
         } else {
-          var params = _this10.getViewParams();
+          var params = _this11.getViewParams();
 
           delete params.criteria.offset;
           delete params.criteria.limit; // Make sure we've got an active result set ID
 
-          if (_this10.resultSet === null) {
-            _this10.resultSet = Math.floor(Math.random() * 100000000);
+          if (_this11.resultSet === null) {
+            _this11.resultSet = Math.floor(Math.random() * 100000000);
           }
 
-          params.resultSet = _this10.resultSet;
-          Craft.sendActionRequest('POST', _this10.settings.countElementsAction, {
+          params.resultSet = _this11.resultSet;
+          Craft.sendActionRequest('POST', _this11.settings.countElementsAction, {
             data: params,
-            cancelToken: _this10._createCancelToken()
+            cancelToken: _this11._createCancelToken()
           }).then(function (response) {
-            if (response.data.resultSet == _this10.resultSet) {
-              _this10.totalResults = response.data.count;
+            if (response.data.resultSet == _this11.resultSet) {
+              _this11.totalResults = response.data.count;
               resolve(response.data.count);
             } else {
               reject();
@@ -4482,8 +4676,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
       }
 
-      $elements.find('.delete').on('click', $.proxy(function (ev) {
-        this.removeElement($(ev.currentTarget).closest('.element'));
+      $elements.find('.delete').on('click dblclick', $.proxy(function (ev) {
+        this.removeElement($(ev.currentTarget).closest('.element')); // Prevent this from acting as one of a double-click
+
+        ev.stopPropagation();
       }, this));
       this.$elements = this.$elements.add($elements);
       this.updateAddElementsBtn();
@@ -4581,8 +4777,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     getDisabledElementIds: function getDisabledElementIds() {
       var ids = this.getSelectedElementIds();
 
-      if (this.settings.sourceElementId) {
+      if (!this.settings.allowSelfRelations && this.settings.sourceElementId) {
         ids.push(this.settings.sourceElementId);
+      }
+
+      if (this.settings.disabledElementIds) {
+        ids.push.apply(ids, _toConsumableArray(this.settings.disabledElementIds));
       }
 
       return ids;
@@ -4601,12 +4801,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.updateDisabledElementsInModal();
     },
     selectElements: function selectElements(elements) {
-      for (var i = 0; i < elements.length; i++) {
-        var elementInfo = elements[i],
+      for (var _i5 = 0; _i5 < elements.length; _i5++) {
+        var elementInfo = elements[_i5],
             $element = this.createNewElement(elementInfo);
         this.appendElement($element);
         this.addElements($element);
-        this.animateElementIntoPlace(elementInfo.$element, $element);
+        this.animateElementIntoPlace(elementInfo.$element, $element); // Override the element reference with the new one
+
+        elementInfo.$element = $element;
       }
 
       this.onSelectElements(elements);
@@ -4680,7 +4882,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       elementType: null,
       sources: null,
       criteria: {},
+      allowSelfRelations: false,
       sourceElementId: null,
+      disabledElementIds: null,
       viewMode: 'list',
       limit: null,
       showSiteMenu: false,
@@ -5211,8 +5415,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   Craft.AssetEditor = Craft.BaseElementEditor.extend({
     reloadIndex: false,
-    updateForm: function updateForm(response) {
-      this.base(response);
+    updateForm: function updateForm(response, refreshInitialData) {
+      this.base(response, refreshInitialData);
 
       if (this.$element.data('id')) {
         var $imageEditorTrigger = this.$fieldsContainer.find('> .meta > .preview-thumb-container.editable');
@@ -10318,7 +10522,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }));
       Craft.createElementEditor(this.elementType, {
         hudTrigger: this.$newCategoryBtnGroup,
-        elementType: 'craft\\elements\\Category',
         siteId: this.siteId,
         attributes: {
           groupId: groupId
@@ -11016,7 +11219,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       this.$colorContainer.removeClass('static');
-      this.$colorInput = $(input).addClass('hidden').insertAfter(this.$input);
+      this.$colorInput = $(input).addClass('color-preview-input').appendTo(this.$colorPreview);
       this.addListener(this.$colorContainer, 'click', function () {
         this.$colorInput.trigger('click');
       });
@@ -11159,14 +11362,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
       if (this.$primaryForm.length && Garnish.hasAttr(this.$primaryForm, 'data-saveshortcut')) {
-        this.addListener(Garnish.$doc, 'keydown', function (ev) {
-          if (Garnish.isCtrlKeyPressed(ev) && ev.keyCode === Garnish.S_KEY) {
-            ev.preventDefault();
-            this.submitPrimaryForm();
-          }
-
-          return true;
-        });
+        Garnish.shortcutManager.registerShortcut({
+          keyCode: Garnish.S_KEY,
+          ctrl: true
+        }, this.submitPrimaryForm.bind(this));
       }
 
       this.initTabs();
@@ -12702,10 +12901,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       if (this.settings.revisionId) {
         return;
-      } // Store the initial form value
+      } // Override the serializer to use our own
 
-
-      this.lastSerializedValue = this.serializeForm(true); // Override the serializer to use our own
 
       Craft.cp.$primaryForm.data('serializer', function () {
         return this.serializeForm(true);
@@ -13079,7 +13276,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       var data = this.serializeForm(true);
 
-      if (force || data !== this.lastSerializedValue) {
+      if (force || data !== (this.lastSerializedValue || Craft.cp.$primaryForm.data('initialSerializedValue'))) {
         this.saveDraft(data);
       }
     },
@@ -13206,10 +13403,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 }).insertAfter($draftHeading);
               }
 
-              var $draftLi = $('<li/>').appendTo($draftsUl);
+              var $draftLi = $('<li/>').prependTo($draftsUl);
               var $draftA = $('<a/>', {
                 'class': 'sel',
-                html: '<span class="draft-name"></span> <span class="draft-creator light"></span>'
+                html: '<span class="draft-name"></span> <span class="draft-meta light"></span>'
               }).appendTo($draftLi);
               revisionMenu.addOptions($draftA);
               revisionMenu.selectOption($draftA); // Update the site URLs
@@ -13227,9 +13424,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
           if (revisionMenu) {
             revisionMenu.$options.filter('.sel').find('.draft-name').text(response.draftName);
-            revisionMenu.$options.filter('.sel').find('.draft-creator').text(Craft.t('app', 'by {creator}', {
-              creator: response.creator
-            }));
+            revisionMenu.$options.filter('.sel').find('.draft-meta').text("\u2013 ".concat(response.timestamp) + (response.creator ? ", ".concat(response.creator) : ''));
           } // Did the controller send us updated preview targets?
 
 
@@ -13718,6 +13913,27 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         $(blurTd).trigger('blur');
         $input.trigger('focus');
       }
+    },
+    importData: function importData(data, row, tdIndex) {
+      var lines = data.split(/\r?\n|\r/);
+
+      for (var _i6 = 0; _i6 < lines.length; _i6++) {
+        var values = lines[_i6].split("\t");
+
+        for (var j = 0; j < values.length; j++) {
+          var value = values[j];
+          row.$tds.eq(tdIndex + j).find('textarea,input[type!=hidden]').val(value).trigger('input');
+        } // move onto the next row
+
+
+        var $nextTr = row.$tr.next('tr');
+
+        if ($nextTr.length) {
+          row = $nextTr.data('editable-table-row');
+        } else {
+          row = this.addRow(false);
+        }
+      }
     }
   }, {
     textualColTypes: ['color', 'date', 'email', 'multiline', 'number', 'singleline', 'template', 'time', 'url'],
@@ -13917,6 +14133,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             type: col.type
           }, 'validateValue');
           $textarea.trigger('input');
+
+          if (col.type !== 'multiline') {
+            this.addListener($textarea, 'paste', {
+              tdIndex: i,
+              type: col.type
+            }, 'handlePaste');
+          }
+
           textareasByColId[colId] = $textarea;
         } else if (col.type === 'checkbox') {
           $checkbox = $('input[type="checkbox"]', td);
@@ -14058,6 +14282,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       if (ev.data.type === 'number' && !ctrl && !Craft.inArray(keyCode, Craft.EditableTable.Row.numericKeyCodes)) {
         ev.preventDefault();
       }
+    },
+    handlePaste: function handlePaste(ev) {
+      var data = Craft.trim(ev.originalEvent.clipboardData.getData('Text'), ' \n\r');
+
+      if (!data.match(/[\t\r\n]/)) {
+        return;
+      }
+
+      ev.preventDefault();
+      this.table.importData(data, this, ev.data.tdIndex);
     },
     validateValue: function validateValue(ev) {
       if (ev.data.type === 'multiline') {
@@ -14233,16 +14467,61 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     },
     load: function load($elements) {
-      this.queue = this.queue.concat($elements.find('.elementthumb').toArray());
+      var _this12 = this;
 
-      if (this.queue.length) {
-        // See if there are any inactive workers
-        for (var i = 0; i < this.workers.length; i++) {
-          if (!this.workers[i].active) {
-            this.workers[i].loadNext();
-          }
+      // Only immediately load the visible images
+      var $thumbs = $elements.find('.elementthumb');
+
+      var _loop = function _loop(_i7) {
+        var $thumb = $thumbs.eq(_i7);
+        var $scrollParent = $thumb.scrollParent();
+
+        if (_this12.isVisible($thumb, $scrollParent)) {
+          _this12.addToQueue($thumb[0]);
+        } else {
+          var key = 'thumb' + Math.floor(Math.random() * 1000000);
+          Craft.ElementThumbLoader.invisibleThumbs[key] = [_this12, $thumb, $scrollParent];
+          $scrollParent.on("scroll.".concat(key), {
+            $thumb: $thumb,
+            $scrollParent: $scrollParent,
+            key: key
+          }, function (ev) {
+            if (_this12.isVisible(ev.data.$thumb, ev.data.$scrollParent)) {
+              delete Craft.ElementThumbLoader.invisibleThumbs[ev.data.key];
+              $scrollParent.off("scroll.".concat(ev.data.key));
+
+              _this12.addToQueue(ev.data.$thumb[0]);
+            }
+          });
+        }
+      };
+
+      for (var _i7 = 0; _i7 < $thumbs.length; _i7++) {
+        _loop(_i7);
+      }
+    },
+    addToQueue: function addToQueue(thumb) {
+      this.queue.push(thumb); // See if there are any inactive workers
+
+      for (var i = 0; i < this.workers.length; i++) {
+        if (!this.workers[i].active) {
+          this.workers[i].loadNext();
         }
       }
+    },
+    isVisible: function isVisible($thumb, $scrollParent) {
+      var thumbOffset = $thumb.offset().top;
+      var scrollParentOffset, scrollParentHeight;
+
+      if ($scrollParent[0] === document) {
+        scrollParentOffset = $scrollParent.scrollTop();
+        scrollParentHeight = Garnish.$win.height();
+      } else {
+        scrollParentOffset = $scrollParent.offset().top;
+        scrollParentHeight = $scrollParent.height();
+      }
+
+      return thumbOffset > scrollParentOffset && thumbOffset < scrollParentOffset + scrollParentHeight + 1000;
     },
     destroy: function destroy() {
       for (var i = 0; i < this.workers.length; i++) {
@@ -14250,6 +14529,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       this.base();
+    }
+  }, {
+    invisibleThumbs: {},
+    retryAll: function retryAll() {
+      for (var key in Craft.ElementThumbLoader.invisibleThumbs) {
+        var _Craft$ElementThumbLo = _slicedToArray(Craft.ElementThumbLoader.invisibleThumbs[key], 3),
+            queue = _Craft$ElementThumbLo[0],
+            $thumb = _Craft$ElementThumbLo[1],
+            $scrollParent = _Craft$ElementThumbLo[2];
+
+        delete Craft.ElementThumbLoader.invisibleThumbs[key];
+        $scrollParent.off("scroll.".concat(key));
+        queue.load($thumb.parent());
+      }
     }
   });
   Craft.ElementThumbLoader.Worker = Garnish.Base.extend({
@@ -14279,7 +14572,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         srcset: $container.attr('data-srcset'),
         alt: ''
       });
-      this.addListener($img, 'load', 'loadNext');
+      this.addListener($img, 'load,error', 'loadNext');
       $img.appendTo($container);
       picturefill({
         elements: [$img[0]]
@@ -14691,11 +14984,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }));
       Craft.createElementEditor(this.elementType, {
         hudTrigger: this.$newEntryBtnGroup,
-        elementType: 'craft\\elements\\Entry',
         siteId: this.siteId,
         attributes: {
           sectionId: sectionId,
-          typeId: section.entryTypes[0].id
+          typeId: section.entryTypes[0].id,
+          enabled: section.canPublish ? 1 : 0
         },
         onBeginLoading: $.proxy(function () {
           this.$newEntryBtn.addClass('loading');
@@ -16531,6 +16824,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       Garnish.on(Craft.BaseElementEditor, 'saveElement', this._forceUpdateIframeProxy);
       Garnish.on(Craft.AssetImageEditor, 'save', this._forceUpdateIframeProxy);
+      Craft.ElementThumbLoader.retryAll();
       this.inPreviewMode = true;
       this.trigger('enter');
     },
@@ -16597,6 +16891,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this.$iframeContainer.hide();
       }, this));
       Garnish.off(Craft.BaseElementEditor, 'saveElement', this._forceUpdateIframeProxy);
+      Craft.ElementThumbLoader.retryAll();
       this.inPreviewMode = false;
       this.trigger('exit');
     },
@@ -17079,6 +17374,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.draftEditor.on('update', this._updateIframeProxy);
       Garnish.on(Craft.BaseElementEditor, 'saveElement', this._updateIframeProxy);
       Garnish.on(Craft.AssetImageEditor, 'save', this._updateIframeProxy);
+      Craft.ElementThumbLoader.retryAll();
       this.trigger('open');
     },
     switchTarget: function switchTarget(i) {
@@ -17139,6 +17435,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.draftEditor.off('update', this._updateIframeProxy);
       Garnish.off(Craft.BaseElementEditor, 'saveElement', this._updateIframeProxy);
       Garnish.off(Craft.AssetImageEditor, 'save', this._updateIframeProxy);
+      Craft.ElementThumbLoader.retryAll();
       this.isActive = false;
       this.trigger('close');
     },

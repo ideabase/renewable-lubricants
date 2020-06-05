@@ -11,6 +11,8 @@
 
 namespace doublesecretagency\smartmap\services;
 
+use craft\elements\db\ElementQuery;
+use craft\elements\MatrixBlock;
 use yii\base\Event;
 use yii\caching\FileCache;
 
@@ -100,25 +102,16 @@ class SmartMapService extends Component
     {
         // Get user IP address
         $ip = Craft::$app->getRequest()->getUserIP();
-
         // If IP is local, bail
         if ('127.0.0.1' == $ip) {
             return false;
         }
         // If IP is invalid, bail
-        if (!$this->validIp($ip)) {
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
             return false;
         }
         // Return IP address
         return $ip;
-    }
-
-    // Checks whether IP address is valid
-    public function validIp($ip)
-    {
-        // TODO: THIS ISN'T CHECKING FOR IPv6
-        $ipPattern = '/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/';
-        return preg_match($ipPattern, $ip);
     }
 
     //
@@ -151,9 +144,7 @@ class SmartMapService extends Component
             return;
         }
 
-        // @TODO
-        // Use Google Maps Geolocation API (as default service)
-
+        // Determine which API to use for geolocation
         switch (SmartMap::$plugin->getSettings()->geolocation) {
             case 'ipstack':
                 SmartMap::$plugin->smartMap_ipstack->lookupIpData($ip);
@@ -163,7 +154,12 @@ class SmartMapService extends Component
                 break;
         }
 
-        // Fire an 'afterDetectLocation' event
+        // If no visitor data, bail
+        if (!isset($this->cacheData['visitor'])) {
+            return;
+        }
+
+        // Get visitor data
         $eventLocation = $this->cacheData['visitor'];
         unset($eventLocation['ip']);
 
@@ -281,51 +277,69 @@ class SmartMapService extends Component
         $query->subQuery->leftJoin('{{%smartmap_addresses}} addresses', '[[addresses.elementId]] = [[elements.id]]');
 
         // Search by comparing coordinates
-        if (array_key_exists('target', $params) || array_key_exists('range', $params)) {
+        if (isset($params['target']) || isset($params['range'])) {
             $this->_searchCoords($query, $params);
         }
 
         // Filter according to subfield(s)
-        if (array_key_exists('filter', $params)) {
+        if (isset($params['filter'])) {
             $this->_filterSubfield($query, $params);
+        }
+
+        // Filter by non-null lat/lng values
+        if ($params['hasCoords'] ?? false) {
+            $query->subQuery->andWhere(['not', [
+                'or',
+                ['lat' => null],
+                ['lng' => null]
+            ]]);
         }
     }
 
     // Filter according to subfield(s)
     private function _filterSubfield(&$query, $params = [])
     {
+        // List of valid subfields
         $realSubfields = ['street1','street2','city','state','zip','country','lat','lng'];
 
-        foreach ($params['filter'] as $subfield => $value) {
-            if (in_array($subfield, $realSubfields)) {
+        // Ensure filter is a valid array
+        $filter = (is_array($params['filter'] ?? false) ? $params['filter'] : []);
 
-                // Ensure value is an array
-                if (is_string($value) || is_float($value)) {
-                    $value = [$value];
-                }
-                // If value is not an array, skip
-                if (!is_array($value)) {
-                    continue;
-                }
+        // Loop through specified subfields
+        foreach ($filter as $subfield => $value) {
 
-                // Compile WHERE clause
-                $where = [];
-
-                // Loop through filter values
-                foreach ($value as $filterValue) {
-                    $where[] = [$subfield => $filterValue];
-                }
-
-                // Re-organize WHERE filters
-                if (1 == count($where)) {
-                    $where = $where[0];
-                } else {
-                    array_unshift($where, 'or');
-                }
-
-                // Append WHERE clause to subquery
-                $query->subQuery->andWhere($where);
+            // Skip invalid subfields
+            if (!in_array($subfield, $realSubfields)) {
+                continue;
             }
+
+            // Ensure value is an array
+            if (is_string($value) || is_float($value)) {
+                $value = [$value];
+            }
+
+            // If value is not an array, skip
+            if (!is_array($value)) {
+                continue;
+            }
+
+            // Compile WHERE clause
+            $where = [];
+
+            // Loop through filter values
+            foreach ($value as $filterValue) {
+                $where[] = [$subfield => $filterValue];
+            }
+
+            // Re-organize WHERE filters
+            if (1 == count($where)) {
+                $where = $where[0];
+            } else {
+                array_unshift($where, 'or');
+            }
+
+            // Append WHERE clause to subquery
+            $query->subQuery->andWhere($where);
         }
     }
 
@@ -431,14 +445,14 @@ class SmartMapService extends Component
     // ==================================================== //
 
     // Parse query filter
-    private function _parseFilter(array $params)
+    private function _parseFilter(array &$params)
     {
-
+        $coordsPattern = '/^-?[0-9.]+, *-?[0-9.]+$/';
         if (!is_array($params)) {
             $params = [];
             $api = MapApi::LatLngArray;
             $coords = $this->defaultCoords();
-        } else if (!array_key_exists('target', $params)) {
+        } else if (!isset($params['target'])) {
             $api = MapApi::LatLngArray;
             $coords = $this->defaultCoords();
         } else if (is_array($params['target'])) {
@@ -453,6 +467,14 @@ class SmartMapService extends Component
             $coords = [
                 'lat' => $lat,
                 'lng' => $lng,
+            ];
+        } else if (is_string($params['target']) && preg_match($coordsPattern, trim($params['target']))) {
+            $api = MapApi::LatLngArray;
+            $coordsString = $params['target'];
+            $coordsArray = explode(',', $coordsString);
+            $coords = [
+                'lat' => (float) trim($coordsArray[0]),
+                'lng' => (float) trim($coordsArray[1]),
             ];
         } else if (is_string($params['target']) || is_numeric($params['target'])) {
             $api = MapApi::GoogleMaps;
@@ -476,7 +498,18 @@ class SmartMapService extends Component
                 break;
             case MapApi::GoogleMaps:
             default:
-                $filter->coords = $this->_geocodeGoogleMapApi($filter->target, $filter->components);
+                // Whether to use the filter fallback
+                $filterFallback = ('fallback' == ($params['filter'] ?? false));
+                // Perform geocode
+                $results = $this->_geocodeGoogleMapApi($filter->target, $filter->components, $filterFallback);
+                // If using the filter fallback
+                if ($filterFallback) {
+                    // Set coords and updated filter
+                    list($filter->coords, $params['filter']) = $results;
+                } else {
+                    // Set coords the old-fashioned way
+                    $filter->coords = $results;
+                }
                 break;
         }
 
@@ -487,7 +520,7 @@ class SmartMapService extends Component
     }
 
     // Search by coordinates
-    private function _searchCoords(&$query, array $params)
+    private function _searchCoords(&$query, array &$params)
     {
         $filter = $this->_parseFilter($params);
         // Implement haversine formula
@@ -523,16 +556,81 @@ class SmartMapService extends Component
     }
 
     // Get coordinates from Google Maps API
-    private function _geocodeGoogleMapApi($target, $components = [])
+    private function _geocodeGoogleMapApi($target, $components, &$filterFallback = false)
     {
-        // Lookup geocode matches
+        // Perform geocoding
         $response = $this->lookup($target, $components);
-        // If no results, use default coords
+
+        // If no results, return default coordinates
         if (empty($response['results'])) {
+            $filterFallback = false;
             return $this->defaultCoords();
         }
-        // Return location data
-        return $response['results'][0]['geometry']['location'];
+
+        // Get first matching location
+        $location = $response['results'][0];
+        $coords = $location['geometry']['location'];
+
+        // If not using the filter fallback, return coordinates of location
+        if (!$filterFallback) {
+            return $coords;
+        }
+
+        // Initialize reconfigured parts
+        $parts = [];
+
+        // Restructure the address component parts
+        foreach ($location['address_components'] as $component) {
+            $c = ($component['types'][0] ?? false);
+            switch ($c) {
+                case 'locality':
+                case 'country':
+                    $parts[$c] = $component['long_name'];
+                    break;
+                default:
+                    $parts[$c] = $component['short_name'];
+                    break;
+            }
+        }
+
+        // Don't filter further, we have a specific address!
+        if (isset($parts['route'])) {
+            $filterFallback = false;
+            return $coords;
+        }
+
+        // Reconfigure filter
+        $filter = [
+            'city'    => ($parts['locality']                    ?? null),
+            'state'   => ($parts['administrative_area_level_1'] ?? null),
+            'zip'     => ($parts['postal_code']                 ?? null),
+            'country' => ($parts['country']                     ?? null),
+        ];
+
+        // Abbreviate target
+        $t = trim(strtolower($target));
+
+        // Prune unspecified subfields
+        foreach ($filter as $subfield => $part) {
+
+            // Abbreviate part
+            $p = trim(strtolower($part));
+
+            // If target and part are identical, filter by THIS PART ONLY!
+            if ($t === $p) {
+                $filter = [$subfield => $part];
+                break;
+            }
+
+            // If no part was specified, remove from filter
+            if (null === $part) {
+                unset($filter[$subfield]);
+            }
+
+        }
+
+        // Return coordinates and updated filter
+        return [$coords, $filter];
     }
 
     // Decipher map center & markers based on locations
@@ -548,7 +646,7 @@ class SmartMapService extends Component
         }
 
         // If Address model, process immediately
-        if (is_object($locations) && is_a($locations, 'doublesecretagency\\smartmap\\models\\Address')) {
+        if (is_object($locations) && is_a($locations, AddressModel::class)) {
 
             $markers = [];
 
@@ -580,7 +678,7 @@ class SmartMapService extends Component
         }
 
         // If ElementCriteriaModel, convert to normal array
-        if (is_object($locations[0]) && is_a($locations[0], 'craft\\elements\\db\\ElementQuery')) {
+        if (is_object($locations[0]) && is_a($locations[0], ElementQuery::class)) {
             return $this->markerCoords($locations[0]->all(), $options);
         }
 
@@ -605,7 +703,7 @@ class SmartMapService extends Component
             } else {
                 // Find all Smart Map Address field fieldIds
                 foreach (Craft::$app->fields->getAllFields() as $field) {
-                    if ($field->className() == 'doublesecretagency\\smartmap\\fields\\Address') {
+                    if ($field->className() == AddressField::class) {
                         $fieldHandles[] = $field->handle;
                     }
                 }
@@ -613,12 +711,12 @@ class SmartMapService extends Component
                 foreach ($locations as $loc) {
                     if (is_object($loc)) {
                         // If Matrix Block model, get new set of field handles
-                        if (is_a($loc, 'craft\\elements\\MatrixBlock')) {
+                        if (is_a($loc, MatrixBlock::class)) {
                             // Find all Smart Map Address field fieldIds related specifically to this matrix block type
                             $fieldHandles = [];
                             $typeId = $loc->type->id;
-                            foreach (Craft::$app->fields->getAllFields(null, "matrixBlockType:$typeId") as $field) {
-                                if ($field->className() == 'doublesecretagency\\smartmap\\fields\\Address') {
+                            foreach (Craft::$app->fields->getAllFields("matrixBlockType:$typeId") as $field) {
+                                if ($field->className() == AddressField::class) {
                                     $fieldHandles[] = $field->handle;
                                 }
                             }
@@ -652,7 +750,7 @@ class SmartMapService extends Component
                         } else {
                             $lat = $this->findKeyInArray($loc, ['latitude','lat']);
                             $lng = $this->findKeyInArray($loc, ['longitude','lng','lon','long']);
-                            $title = (array_key_exists('title',$loc) ? $loc['title'] : '');
+                            $title = (isset($loc['title']) ? $loc['title'] : '');
                         }
                         $markers[] = [
                             'lat'     => $lat,
@@ -668,14 +766,14 @@ class SmartMapService extends Component
         }
 
         // Determine center of map
-        if (array_key_exists('center', $options)) {
+        if (isset($options['center'])) {
             // Center is specified in options
             $center = $options['center'];
         } else if (empty($locations) || empty($allLats) || empty($allLngs)) {
             // Error was triggered
             $markers = [];
-            if (array_key_exists('target', $options)) {
-                $components = (array_key_exists('components', $options) ? $options['components'] : []);
+            if (isset($options['target'])) {
+                $components = (isset($options['components']) ? $options['components'] : []);
                 $center = $this->targetCoords = $this->_geocodeGoogleMapApi($options['target'], $components);
             } else {
                 $center = $this->targetCenter();
@@ -771,7 +869,7 @@ class SmartMapService extends Component
                 $message = Craft::t('smart-map', 'You are over your quota. If this is a shared server, enable Google Maps API Keys.');
                 break;
             case 'REQUEST_DENIED':
-                if (array_key_exists('error_message', $response) && $response['error_message']) {
+                if (isset($response['error_message']) && $response['error_message']) {
                     $message = $response['error_message'];
                 } else {
                     $message = Craft::t('smart-map', 'Your request was denied for some reason.');
@@ -815,7 +913,7 @@ class SmartMapService extends Component
     {
         // Get server key
         $settings = SmartMap::$plugin->getSettings();
-        $key = trim($settings['googleServerKey']);
+        $key = trim($settings->getGoogleServerKey());
 
         // If no key, log deprecation message and bail
         if (!$key) {
@@ -832,7 +930,7 @@ class SmartMapService extends Component
     {
         // Get server key
         $settings = SmartMap::$plugin->getSettings();
-        $key = trim($settings['googleBrowserKey']);
+        $key = trim($settings->getGoogleBrowserKey());
 
         // If no key, log deprecation message and bail
         if (!$key) {
@@ -856,7 +954,7 @@ class SmartMapService extends Component
             'lng' => -123.393333,
         ];
         $this->loadGeoData();
-        if ($this->visitor && array_key_exists('latitude', $this->visitor) && array_key_exists('longitude', $this->visitor)) {
+        if ($this->visitor && isset($this->visitor['latitude']) && isset($this->visitor['longitude'])) {
             $coords = [
                 // Current location
                 'lat' => $this->visitor['latitude'],
@@ -880,7 +978,7 @@ class SmartMapService extends Component
     public function findKeyInArray($array, $possibleKeys)
     {
         foreach ($possibleKeys as $key) {
-            if (array_key_exists($key, $array)) {
+            if (isset($array[$key])) {
                 return $array[$key];
             }
         }

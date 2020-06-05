@@ -291,7 +291,8 @@ class Subscription extends Element
      */
     public function getTrialExpires(): DateTIme
     {
-        return (clone $this->dateCreated)->add(new DateInterval('P' . $this->trialDays . 'D'));
+        $created = clone $this->dateCreated;
+        return $created->add(new DateInterval('P' . $this->trialDays . 'D'));
     }
 
     /**
@@ -334,7 +335,7 @@ class Subscription extends Element
         if (null === $this->_gateway) {
             $this->_gateway = Plugin::getInstance()->getGateways()->getGatewayById($this->gatewayId);
             if (!$this->_gateway instanceof SubscriptionGatewayInterface) {
-                throw new InvalidConfigException('The gateway set for subscription does not support subsriptions.');
+                throw new InvalidConfigException('The gateway set for subscription does not support subscriptions.');
             }
         }
 
@@ -617,6 +618,10 @@ class Subscription extends Element
         $subscriptionRecord->isSuspended = $this->isSuspended;
         $subscriptionRecord->dateSuspended = $this->dateSuspended;
 
+        // We want to always have the same date as the element table, based on the logic for updating these in the element service i.e resaving
+        $subscriptionRecord->dateUpdated = $this->dateUpdated;
+        $subscriptionRecord->dateCreated = $this->dateCreated;
+
         // Some properties of the subscription are immutable
         if ($isNew) {
             $subscriptionRecord->gatewayId = $this->gatewayId;
@@ -739,6 +744,11 @@ class Subscription extends Element
                 'label' => Plugin::t('Subscription date'),
                 'orderBy' => 'commerce_subscriptions.dateCreated',
                 'attribute' => 'dateCreated'
+            ],
+            [
+                'label' => Craft::t('app', 'ID'),
+                'orderBy' => 'elements.id',
+                'attribute' => 'id',
             ],
         ];
     }

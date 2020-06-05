@@ -13,8 +13,10 @@ namespace doublesecretagency\smartmap\services;
 
 use Craft;
 use craft\base\Component;
+use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 
+use doublesecretagency\smartmap\events\SearchResultsEvent;
 use doublesecretagency\smartmap\SmartMap;
 
 /**
@@ -23,6 +25,11 @@ use doublesecretagency\smartmap\SmartMap;
  */
 class Main extends Component
 {
+
+    /**
+     * @event SearchResultsEvent The event that is triggered after search results are restructured.
+     */
+    const EVENT_MODIFY_SEARCH_RESULTS = 'modifySearchResults';
 
     // Search for address using Google Maps API
     public function addressSearch($address)
@@ -40,7 +47,7 @@ class Main extends Component
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_FOLLOWLOCATION => true,
         ]);
-        $response = json_decode(curl_exec($ch), true);
+        $response = Json::decode(curl_exec($ch));
         $error = curl_error($ch);
 
         if ($error) {
@@ -65,7 +72,7 @@ class Main extends Component
                 ]);
                 break;
             case 'REQUEST_DENIED':
-                if (array_key_exists('error_message', $response) && $response['error_message']) {
+                if (isset($response['error_message'])) {
                     $message = $response['error_message'];
                 } else {
                     $message = Craft::t('smart-map','Your request was denied for some reason.');
@@ -79,10 +86,10 @@ class Main extends Component
         if (!$message) {
             if (!$response) {
                 $message = Craft::t('smart-map','Failed to execute cURL command.');
-            } else if (array_key_exists('status', $response) && $response['status']) {
+            } else if (isset($response['status'])) {
                 $message = Craft::t('smart-map','Response from Google Maps API:').' '.$response['status'];
             } else {
-                $message = Craft::t('smart-map','Unknown cURL response:').' '.json_encode($response);
+                $message = Craft::t('smart-map','Unknown cURL response:').' '.Json::encode($response);
             }
         }
 
@@ -120,7 +127,14 @@ class Main extends Component
             $restructured['coords'] = $result['geometry']['location'];
             $restructuredResults[] = $restructured;
         }
-        return $restructuredResults;
+
+        // Allow plugins to modify the search results
+        $event = new SearchResultsEvent([
+            'results' => $restructuredResults
+        ]);
+        $this->trigger(self::EVENT_MODIFY_SEARCH_RESULTS, $event);
+
+        return $event->results;
     }
     /*
     for (c in components) {

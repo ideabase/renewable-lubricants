@@ -8,6 +8,7 @@
 namespace craft\fields;
 
 use Craft;
+use craft\base\BlockElementInterface;
 use craft\base\EagerLoadingFieldInterface;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -20,6 +21,7 @@ use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\elements\db\ElementRelationParamParser;
 use craft\errors\SiteNotFoundException;
+use craft\events\ElementCriteriaEvent;
 use craft\events\ElementEvent;
 use craft\helpers\ArrayHelper;
 use craft\helpers\ElementHelper;
@@ -30,6 +32,7 @@ use craft\queue\jobs\LocalizeRelations;
 use craft\services\Elements;
 use craft\validators\ArrayValidator;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 
 /**
@@ -40,6 +43,12 @@ use yii\base\NotSupportedException;
  */
 abstract class BaseRelationField extends Field implements PreviewableFieldInterface, EagerLoadingFieldInterface
 {
+    /**
+     * @event ElementCriteriaEvent The event that is triggered when defining the selection criteria for this field.
+     * @since 3.4.16
+     */
+    const EVENT_DEFINE_SELECTION_CRITERIA = 'defineSelectionCriteria';
+
     /**
      * @inheritdoc
      */
@@ -151,6 +160,12 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
     public $allowLimit = true;
 
     /**
+     * @var bool Whether elements should be allowed to relate themselves.
+     * @since 3.4.21
+     */
+    public $allowSelfRelations = false;
+
+    /**
      * @var bool Whether to allow the “Large Thumbnails” view mode
      */
     protected $allowLargeThumbsView = false;
@@ -234,6 +249,7 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
         $attributes[] = 'selectionLabel';
         $attributes[] = 'localizeRelations';
         $attributes[] = 'validateRelatedElements';
+        $attributes[] = 'allowSelfRelations';
 
         return $attributes;
     }
@@ -440,14 +456,30 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
         }
 
         if ($value === ':notempty:' || $value === ':empty:') {
-            $alias = 'relations_' . $this->handle;
-            $operator = ($value === ':notempty:' ? '!=' : '=');
-            $paramHandle = ':fieldId' . StringHelper::randomString(8);
+            $ns = $this->handle . '_' . StringHelper::randomString(5);
+            $condition = [
+                'exists', (new Query())
+                    ->from(["relations_$ns" => TableName::RELATIONS])
+                    ->innerJoin(["elements_$ns" => TableName::ELEMENTS], "[[elements_$ns.id]] = [[relations_$ns.targetId]]")
+                    ->leftJoin(["elements_sites_$ns" => TableName::ELEMENTS_SITES], [
+                        'and',
+                        "[[elements_sites_$ns.elementId]] = [[elements_$ns.id]]",
+                        ["elements_sites_$ns.siteId" => $query->siteId],
+                    ])
+                    ->where("[[relations_$ns.sourceId]] = [[elements.id]]")
+                    ->andWhere([
+                        "relations_$ns.fieldId" => $this->id,
+                        "elements_$ns.enabled" => true,
+                        "elements_$ns.dateDeleted" => null,
+                    ])
+                    ->andWhere(['not', ["elements_sites_$ns.enabled" => false]])
+            ];
 
-            $query->subQuery->andWhere(
-                "(select count([[{$alias}.id]]) from {{%relations}} {{{$alias}}} where [[{$alias}.sourceId]] = [[elements.id]] and [[{$alias}.fieldId]] = {$paramHandle}) {$operator} 0",
-                [$paramHandle => $this->id]
-            );
+            if ($value === ':notempty:') {
+                $query->subQuery->andWhere($condition);
+            } else {
+                $query->subQuery->andWhere(['not', $condition]);
+            }
         } else {
             $parser = new ElementRelationParamParser([
                 'fields' => [
@@ -474,12 +506,21 @@ abstract class BaseRelationField extends Field implements PreviewableFieldInterf
      */
     public function modifyElementIndexQuery(ElementQueryInterface $query)
     {
-        $query->andWith([
-            $this->handle, [
-                'status' => null,
-                'enabledForSite' => false,
-            ]
-        ]);
+        $criteria = [
+            'status' => null,
+            'enabledForSite' => false,
+        ];
+
+        if (!$this->targetSiteId) {
+            $criteria['siteId'] = '*';
+            $criteria['unique'] = true;
+            // Just to be safe...
+            if (is_numeric($query->siteId)) {
+                $criteria['preferSites'] = [$query->siteId];
+            }
+        }
+
+        $query->andWith([$this->handle, $criteria]);
     }
 
     /**
@@ -598,38 +639,49 @@ JS;
      */
     public function getEagerLoadingMap(array $sourceElements)
     {
-        /** @var Element|null $firstElement */
-        $firstElement = $sourceElements[0] ?? null;
-
         // Get the source element IDs
-        $sourceElementIds = [];
+        $sourceElementIdsBySiteId = [];
 
-        foreach ($sourceElements as $sourceElement) {
-            $sourceElementIds[] = $sourceElement->id;
+        foreach ($sourceElements as $element) {
+            $sourceElementIdsBySiteId[$element->siteId][] = $element->id;
+        }
+
+        $condition = [
+            'and',
+            ['fieldId' => $this->id],
+        ];
+
+        foreach ($sourceElementIdsBySiteId as $siteId => $elementIds) {
+            $condition[] = [
+                'and',
+                ['sourceId' => $elementIds],
+                ['or', ['sourceSiteId' => $siteId], ['sourceSiteId' => null]],
+            ];
         }
 
         // Return any relation data on these elements, defined with this field
         $map = (new Query())
             ->select(['sourceId as source', 'targetId as target'])
             ->from([TableName::RELATIONS])
-            ->where([
-                'and',
-                [
-                    'fieldId' => $this->id,
-                    'sourceId' => $sourceElementIds,
-                ],
-                [
-                    'or',
-                    ['sourceSiteId' => $firstElement ? $firstElement->siteId : null],
-                    ['sourceSiteId' => null]
-                ]
-            ])
+            ->where($condition)
             ->orderBy(['sortOrder' => SORT_ASC])
             ->all();
+
+        $criteria = [];
+
+        // Is a single target site selected?
+        if ($this->targetSiteId && Craft::$app->getIsMultiSite()) {
+            try {
+                $criteria['siteId'] = Craft::$app->getSites()->getSiteByUid($this->targetSiteId)->id;
+            } catch (SiteNotFoundException $exception) {
+                Craft::warning($exception->getMessage(), __METHOD__);
+            }
+        }
 
         return [
             'elementType' => static::elementType(),
             'map' => $map,
+            'criteria' => $criteria,
         ];
     }
 
@@ -743,7 +795,7 @@ JS;
             return null;
         }
 
-        $type = $class::lowerDisplayName();
+        $type = $class::pluralLowerDisplayName();
         $showTargetSite = !empty($this->targetSiteId);
 
         $html = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'checkboxField',
@@ -861,8 +913,27 @@ JS;
 
         $selectionCriteria = $this->inputSelectionCriteria();
         $selectionCriteria['enabledForSite'] = null;
-        if ($this->targetSiteId) {
-            $selectionCriteria['siteId'] = $this->targetSiteId($element);
+        if (($siteId = $this->inputSiteId($element)) !== null) {
+            $selectionCriteria['siteId'] = $siteId;
+        }
+
+        $disabledElementIds = [];
+
+        if (!$this->allowSelfRelations && $element) {
+            if ($element->id) {
+                $disabledElementIds[] = $element->getSourceId();
+            }
+            if ($element instanceof BlockElementInterface) {
+                $el = $element;
+                do {
+                    try {
+                        $el = $el->getOwner();
+                        $disabledElementIds[] = $el->getSourceId();
+                    } catch (InvalidConfigException $e) {
+                        break;
+                    }
+                } while ($el instanceof BlockElementInterface);
+            }
         }
 
         return [
@@ -876,7 +947,9 @@ JS;
             'sources' => $this->inputSources($element),
             'criteria' => $selectionCriteria,
             'showSiteMenu' => $this->targetSiteId ? false : 'auto',
+            'allowSelfRelations' => (bool)$this->allowSelfRelations,
             'sourceElementId' => !empty($element->id) ? $element->id : null,
+            'disabledElementIds' => $disabledElementIds,
             'limit' => $this->allowLimit ? $this->limit : null,
             'viewMode' => $this->viewMode(),
             'selectionLabel' => $this->selectionLabel ? Craft::t('site', $this->selectionLabel) : static::defaultSelectionLabel(),
@@ -912,7 +985,25 @@ JS;
      */
     protected function inputSelectionCriteria(): array
     {
-        return [];
+        // Fire a defineSelectionCriteria event
+        $event = new ElementCriteriaEvent();
+        $this->trigger(self::EVENT_DEFINE_SELECTION_CRITERIA, $event);
+        return $event->criteria;
+    }
+
+    /**
+     * Returns the site ID that the input should select elements from.
+     *
+     * @param ElementInterface|null $element
+     * @return int|null
+     * @since 3.4.19
+     */
+    protected function inputSiteId(ElementInterface $element = null)
+    {
+        if ($this->targetSiteId) {
+            return $this->targetSiteId($element);
+        }
+        return null;
     }
 
     /**

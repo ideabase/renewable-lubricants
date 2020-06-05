@@ -112,6 +112,7 @@ JS;
             'Cancel',
             'Choose a user',
             'Choose which table columns should be visible for this source, and in which order.',
+            'Clear',
             'Close Preview',
             'Close',
             'Continue',
@@ -186,6 +187,7 @@ JS;
             'Pay {price}',
             'Pending',
             'Previous Page',
+            'Publish changes',
             'Really delete folder “{folder}”?',
             'Remove',
             'Rename folder',
@@ -244,6 +246,7 @@ JS;
             '{first}-{last} of {total}',
             '{num, number} {num, plural, =1{Available Update} other{Available Updates}}',
             '{total, number} {total, plural, =1{{item}} other{{items}}}',
+            '{type} saved.',
             '“{name}” deleted.',
         ]);
     }
@@ -374,7 +377,7 @@ JS;
         $sections = [];
 
         foreach (Craft::$app->getSections()->getEditableSections() as $section) {
-            if ($section->type !== Section::TYPE_SINGLE && $currentUser->can('createEntries:' . $section->uid)) {
+            if ($section->type !== Section::TYPE_SINGLE && $currentUser->can("createEntries:$section->uid")) {
                 $sections[] = [
                     'entryTypes' => $this->_entryTypes($section),
                     'handle' => $section->handle,
@@ -383,6 +386,7 @@ JS;
                     'sites' => $section->getSiteIds(),
                     'type' => $section->type,
                     'uid' => $section->uid,
+                    'canPublish' => $currentUser->can("publishEntries:$section->uid"),
                 ];
             }
         }

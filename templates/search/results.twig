@@ -1,3 +1,5 @@
+{# search results #}
+
 {% extends '_layouts/main' %}
 
 {% block content %}
@@ -7,16 +9,19 @@
     <h1>Search</h1>
   </div>
 
+  {# search form #}
   <form action="{{ url('search/results') }}" name="search-form">
     <input type="search" id="search-form-input" name="q" placeholder="Search" autofocus required>
     <input type="submit" value="Go">
   </form>
 
+  {# get the search query and use it to search in products, categories, and news #}
   {% set searchQuery = craft.app.request.getParam('q') %}
   {% set products = craft.products.search(searchQuery).orderBy('score').all() %}
   {% set categories = craft.categories.group('productCategories').search(searchQuery).orderBy('score').all() %}
   {% set news = craft.entries.section('news').search(searchQuery).orderBy('score').all() %}
 
+  {# product search results #}
   {% if searchQuery|length and products|length %}
     <h2>Products</h2>
     <p>{{ products|length }} result{% if products|length > 1 %}{{ 's' }}{% endif %}:</p>
@@ -28,6 +33,7 @@
     </ul>
   {% endif %}
 
+  {# category search results #}
   {% if searchQuery|length and categories|length %}
     <h2>Product Categories</h2>
     <p>{{ categories|length }} result{% if categories|length > 1 %}{{ 's' }}{% endif %}:</p>
@@ -39,6 +45,7 @@
     </ul>
   {% endif %}
 
+  {# news search results #}
   {% if searchQuery|length and news|length %}
     <h2>News</h2>
     <p>{{ news|length }} result{% if news|length > 1 %}{{ 's' }}{% endif %}:</p>
@@ -50,13 +57,15 @@
     </ul>
   {% endif %}
 
+  {# if no results, return a message to the user #}
   {% if searchQuery|length and not products|length and not categories|length and not news|length %}
-    <p>Your search for "{{ searchQuery }}" didn’t return any results.</p>
+    <p class="search-no-results">Your search for "{{ searchQuery }}" didn’t return any results.</p>
   {% endif %}
 </div>
 
 {% endblock %}
 
+{# fill the search input with the previous query #}
 {% js %}
 
 var query = {{ craft.app.request.getParam('q')|json_encode|raw }};

@@ -40,14 +40,14 @@ class ConsolidateGuestOrders extends BaseJob
     {
         $this->_queue = $queue;
 
-        $total = count($this->emails) + 1;
+        $total = count($this->emails);
 
         $step = 1;
 
         foreach ($this->emails as $email) {
             $this->setProgress($this->_queue, $step / $total, Plugin::t('Email {step} of {total}', compact('step', 'total')));
             try {
-                $this->consolidate($email);
+                Plugin::getInstance()->getCustomers()->consolidateGuestOrdersByEmail($email);
             } catch (\Throwable $e) {
                 Craft::warning('Could not consolidate orders for guest email'.$email, 'commerce');
             }
@@ -60,7 +60,7 @@ class ConsolidateGuestOrders extends BaseJob
     }
 
     /**
-     * @inheritDoc
+     * @deprecated in 3.1.4. Use [[\craft\commerce\services\Customers::consolidateGuestOrdersByEmail()]] instead.
      */
     public function consolidate($email)
     {
@@ -93,12 +93,15 @@ class ConsolidateGuestOrders extends BaseJob
             if (!$userId) {
                 // Dont use element save, just update DB directly
                 Craft::$app->getDb()->createCommand()
-                    ->update('{{%commerce_orders}} orders', ['[[orders.customerId]]' => $customerId], ['[[orders.id]]' => $orderId])
+                    ->update(Table::ORDERS, [
+                        'customerId' => $customerId,
+                    ], [
+                        'id' => $orderId,
+                    ])
                     ->execute();
             }
         }
     }
-
 
     /**
      * @inheritdoc

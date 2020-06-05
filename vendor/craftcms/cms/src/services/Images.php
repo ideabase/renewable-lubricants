@@ -15,6 +15,7 @@ use craft\helpers\FileHelper;
 use craft\helpers\Image as ImageHelper;
 use craft\image\Raster;
 use craft\image\Svg;
+use craft\image\SvgAllowedAttributes;
 use enshrined\svgSanitize\Sanitizer;
 use yii\base\Component;
 use yii\base\Exception;
@@ -88,6 +89,8 @@ class Images extends Component
 
     /**
      * Returns the version of the image driver.
+     *
+     * @return string
      */
     public function getVersion(): string
     {
@@ -263,6 +266,7 @@ class Images extends Component
             }
 
             $sanitizer = new Sanitizer();
+            $sanitizer->setAllowedAttrs(new SvgAllowedAttributes());
             $svgContents = file_get_contents($filePath);
             $svgContents = $sanitizer->sanitize($svgContents);
 

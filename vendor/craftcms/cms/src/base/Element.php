@@ -167,6 +167,34 @@ abstract class Element extends Component implements ElementInterface
 
     /**
      * @event DefineEagerLoadingMapEvent The event that is triggered when defining an eager-loading map.
+     *
+     * ```php
+     * use craft\base\Element;
+     * use craft\db\Query;
+     * use craft\elements\Entry;
+     * use craft\events\DefineEagerLoadingMapEvent;
+     * use craft\helpers\ArrayHelper;
+     * use yii\base\Event;
+     *
+     * // Add support for `with(['bookClub'])` to entries
+     * Event::on(
+     *     Entry::class,
+     *     Element::EVENT_DEFINE_EAGER_LOADING_MAP,
+     *     function(DefineEagerLoadingMapEvent $e) {
+     *         if ($e->handle === 'bookClub') {
+     *             $bookEntryIds = ArrayHelper::getColumn($e->sourceElements, 'id');
+     *             $e->elementType = \my\plugin\BookClub::class,
+     *             $e->map = (new Query)
+     *                 ->select(['source' => 'bookId', 'target' => 'clubId'])
+     *                 ->from('{{%bookclub_books}}')
+     *                 ->where(['bookId' => $bookEntryIds])
+     *                 ->all();
+     *             $e->handled = true;
+     *         }
+     *     }
+     * );
+     * ```
+     *
      * @since 3.1.0
      */
     const EVENT_DEFINE_EAGER_LOADING_MAP = 'defineEagerLoadingMap';
@@ -221,7 +249,7 @@ abstract class Element extends Component implements ElementInterface
      *     // @var Entry $entry
      *     $entry = $e->sender;
      *
-     *     if (ElementHelper::isDraftOrRevision($entry) {
+     *     if (ElementHelper::isDraftOrRevision($entry)) {
      *         return;
      *     }
      *
@@ -248,7 +276,7 @@ abstract class Element extends Component implements ElementInterface
      *     // @var Entry $entry
      *     $entry = $e->sender;
      *
-     *     if (ElementHelper::isDraftOrRevision($entry) {
+     *     if (ElementHelper::isDraftOrRevision($entry)) {
      *         return;
      *     }
      *
@@ -542,7 +570,7 @@ abstract class Element extends Component implements ElementInterface
     /**
      * Defines the available element exporters for a given source.
      *
-     * @param string|null $source The selected source’s key
+     * @param string $source The selected source’s key
      * @return array The available element exporters
      * @see exporters()
      * @since 3.4.0
@@ -690,7 +718,7 @@ abstract class Element extends Component implements ElementInterface
     protected static function defineSortOptions(): array
     {
         // Default to the available table attributes
-        $tableAttributes = Craft::$app->getElementIndexes()->getAvailableTableAttributes(static::class);
+        $tableAttributes = Craft::$app->getElementIndexes()->getAvailableTableAttributes(static::class, false);
         $sortOptions = [];
 
         foreach ($tableAttributes as $key => $labelInfo) {
@@ -735,84 +763,82 @@ abstract class Element extends Component implements ElementInterface
      */
     public static function eagerLoadingMap(array $sourceElements, string $handle)
     {
-        // Eager-loading descendants or direct children?
-        if ($handle === 'descendants' || $handle === 'children') {
-            // Get the source element IDs
-            $sourceElementIds = ArrayHelper::getColumn($sourceElements, 'id');
+        switch ($handle) {
+            case 'descendants':
+            case 'children':
+                // Get the source element IDs
+                $sourceElementIds = ArrayHelper::getColumn($sourceElements, 'id');
 
-            // Get the structure data for these elements
-            $selectColumns = ['structureId', 'elementId', 'lft', 'rgt'];
-
-            if ($handle === 'children') {
-                $selectColumns[] = 'level';
-            }
-
-            $structureData = (new Query())
-                ->select($selectColumns)
-                ->from([Table::STRUCTUREELEMENTS])
-                ->where(['elementId' => $sourceElementIds])
-                ->all();
-
-            if (empty($structureData)) {
-                return;
-            }
-
-            $db = Craft::$app->getDb();
-            $qb = $db->getQueryBuilder();
-            $query = new Query();
-            $sourceSelectSql = '(CASE';
-            $condition = ['or'];
-
-            foreach ($structureData as $i => $elementStructureData) {
-                $thisElementCondition = [
-                    'and',
-                    ['structureId' => $elementStructureData['structureId']],
-                    ['>', 'lft', $elementStructureData['lft']],
-                    ['<', 'rgt', $elementStructureData['rgt']],
-                ];
+                // Get the structure data for these elements
+                $selectColumns = ['structureId', 'elementId', 'lft', 'rgt'];
 
                 if ($handle === 'children') {
-                    $thisElementCondition[] = ['level' => $elementStructureData['level'] + 1];
+                    $selectColumns[] = 'level';
                 }
 
-                $condition[] = $thisElementCondition;
-                $sourceSelectSql .= ' WHEN ' .
-                    $qb->buildCondition(
-                        [
-                            'and',
-                            ['structureId' => $elementStructureData['structureId']],
-                            ['>', 'lft', $elementStructureData['lft']],
-                            ['<', 'rgt', $elementStructureData['rgt']]
-                        ],
-                        $query->params) .
-                    " THEN :sourceId{$i}";
-                $query->params[':sourceId' . $i] = $elementStructureData['elementId'];
-            }
+                $structureData = (new Query())
+                    ->select($selectColumns)
+                    ->from([Table::STRUCTUREELEMENTS])
+                    ->where(['elementId' => $sourceElementIds])
+                    ->all();
 
-            $sourceSelectSql .= ' END) as source';
+                if (empty($structureData)) {
+                    return null;
+                }
 
-            // Return any child elements
-            $map = $query
-                ->select([$sourceSelectSql, 'elementId as target'])
-                ->from([Table::STRUCTUREELEMENTS])
-                ->where($condition)
-                ->orderBy(['structureId' => SORT_ASC, 'lft' => SORT_ASC])
-                ->all();
+                $db = Craft::$app->getDb();
+                $qb = $db->getQueryBuilder();
+                $query = new Query();
+                $sourceSelectSql = '(CASE';
+                $condition = ['or'];
 
-            return [
-                'elementType' => static::class,
-                'map' => $map
-            ];
+                foreach ($structureData as $i => $elementStructureData) {
+                    $thisElementCondition = [
+                        'and',
+                        ['structureId' => $elementStructureData['structureId']],
+                        ['>', 'lft', $elementStructureData['lft']],
+                        ['<', 'rgt', $elementStructureData['rgt']],
+                    ];
+
+                    if ($handle === 'children') {
+                        $thisElementCondition[] = ['level' => $elementStructureData['level'] + 1];
+                    }
+
+                    $condition[] = $thisElementCondition;
+                    $sourceSelectSql .= ' WHEN ' .
+                        $qb->buildCondition(
+                            [
+                                'and',
+                                ['structureId' => $elementStructureData['structureId']],
+                                ['>', 'lft', $elementStructureData['lft']],
+                                ['<', 'rgt', $elementStructureData['rgt']]
+                            ],
+                            $query->params) .
+                        " THEN :sourceId{$i}";
+                    $query->params[':sourceId' . $i] = $elementStructureData['elementId'];
+                }
+
+                $sourceSelectSql .= ' END) as source';
+
+                // Return any child elements
+                $map = $query
+                    ->select([$sourceSelectSql, 'elementId as target'])
+                    ->from([Table::STRUCTUREELEMENTS])
+                    ->where($condition)
+                    ->orderBy(['structureId' => SORT_ASC, 'lft' => SORT_ASC])
+                    ->all();
+
+                return [
+                    'elementType' => static::class,
+                    'map' => $map
+                ];
         }
 
         // Is $handle a custom field handle?
         // (Leave it up to the extended class to set the field context, if it shouldn't be 'global')
         $field = Craft::$app->getFields()->getFieldByHandle($handle);
-
-        if ($field) {
-            if ($field instanceof EagerLoadingFieldInterface) {
-                return $field->getEagerLoadingMap($sourceElements);
-            }
+        if ($field && $field instanceof EagerLoadingFieldInterface) {
+            return $field->getEagerLoadingMap($sourceElements);
         }
 
         // Give plugins a chance to provide custom mappings
@@ -821,7 +847,6 @@ abstract class Element extends Component implements ElementInterface
             'handle' => $handle
         ]);
         Event::trigger(static::class, self::EVENT_DEFINE_EAGER_LOADING_MAP, $event);
-
         if ($event->elementType !== null) {
             return [
                 'elementType' => $event->elementType,
@@ -1850,7 +1875,12 @@ abstract class Element extends Component implements ElementInterface
     {
         // Eager-loaded?
         if (($descendants = $this->getEagerLoadedElements('descendants')) !== null) {
-            return $descendants;
+            if ($dist === null) {
+                return $descendants;
+            }
+            return ArrayHelper::where($descendants, function(self $element) use ($dist) {
+                return $element->level <= $this->level + $dist;
+            });
         }
 
         return static::find()
@@ -2244,6 +2274,14 @@ abstract class Element extends Component implements ElementInterface
     /**
      * @inheritdoc
      */
+    public function markAsDirty()
+    {
+        $this->_allDirty = true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function markAsClean()
     {
         $this->_allDirty = false;
@@ -2401,9 +2439,11 @@ abstract class Element extends Component implements ElementInterface
         }
 
         if ($this->_currentRevision === null) {
+            /** @var Element $source */
+            $source = ElementHelper::sourceElement($this);
             $this->_currentRevision = static::find()
-                ->revisionOf($this->getSourceId())
-                ->dateCreated($this->dateUpdated)
+                ->revisionOf($source->id)
+                ->dateCreated($source->dateUpdated)
                 ->anyStatus()
                 ->orderBy(['num' => SORT_DESC])
                 ->one() ?: false;

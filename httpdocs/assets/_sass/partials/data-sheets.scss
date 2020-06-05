@@ -1,0 +1,32 @@
+// data sheets partial
+
+.data-sheets {
+  max-width: 800px;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.data-sheets-filter {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+form[name='data-sheets-search'] {
+  display: flex;
+  max-width: 800px;
+  margin: 0 auto;
+
+  input[type='search'] {
+    flex-grow: 1;
+    margin: 0 1rem;
+  }
+
+  input[type='submit'] {
+    margin: 0 1rem 0 0;
+  }
+}
+
+.data-sheets-no-results {
+  text-align: center;
+}

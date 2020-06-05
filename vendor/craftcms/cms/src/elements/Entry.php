@@ -31,6 +31,7 @@ use craft\models\EntryType;
 use craft\models\Section;
 use craft\models\Site;
 use craft\records\Entry as EntryRecord;
+use craft\services\Structures;
 use craft\validators\DateTimeValidator;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -630,7 +631,7 @@ class Entry extends Element
     public $deletedWithEntryType = false;
 
     /**
-     * @var User|null
+     * @var User|null|false
      */
     private $_author;
 
@@ -809,7 +810,16 @@ class Entry extends Element
      */
     public function getFieldLayout()
     {
-        return parent::getFieldLayout() ?? $this->getType()->getFieldLayout();
+        if (($fieldLayout = parent::getFieldLayout()) !== null) {
+            return $fieldLayout;
+        }
+        try {
+            $entryType = $this->getType();
+        } catch (InvalidConfigException $e) {
+            // The entry type was probably deleted
+            return null;
+        }
+        return $entryType->getFieldLayout();
     }
 
     /**
@@ -893,20 +903,18 @@ class Entry extends Element
      */
     public function getAuthor()
     {
-        if ($this->_author !== null) {
-            return $this->_author;
+        if ($this->_author === null) {
+            if ($this->authorId === null) {
+                return null;
+            }
+
+            if (($this->_author = Craft::$app->getUsers()->getUserById($this->authorId)) === null) {
+                // The author is probably soft-deleted. Just no author is set
+                $this->_author = false;
+            }
         }
 
-        if ($this->authorId === null) {
-            return null;
-        }
-
-        if (($this->_author = Craft::$app->getUsers()->getUserById($this->authorId)) === null) {
-            // The author is probably soft-deleted. Just no author is set
-            return null;
-        }
-
-        return $this->_author;
+        return $this->_author ?: null;
     }
 
     /**
@@ -960,14 +968,36 @@ class Entry extends Element
      */
     public function getIsEditable(): bool
     {
-        return (
-            Craft::$app->getUser()->checkPermission('publishEntries:' . $this->getSection()->uid) && (
-                !$this->authorId ||
-                $this->authorId == Craft::$app->getUser()->getIdentity()->id ||
-                Craft::$app->getUser()->checkPermission('publishPeerEntries:' . $this->getSection()->uid) ||
-                $this->getSection()->type == Section::TYPE_SINGLE
-            )
-        );
+        $section = $this->getSection();
+        $userSession = Craft::$app->getUser();
+
+        // Cover the basics
+        if (
+            !$userSession->checkPermission("editEntries:$section->uid") ||
+            ($this->enabled && !$userSession->checkPermission("publishEntries:$section->uid"))
+        ) {
+            return false;
+        }
+
+        if ($section->type === Section::TYPE_SINGLE) {
+            return true;
+        }
+
+        // Is this a new entry?
+        if (!$this->id) {
+            return $userSession->checkPermission("createEntries:$section->uid");
+        }
+
+        // Is this their own entry?
+        if (!$this->authorId || $this->authorId == $userSession->getId()) {
+            return true;
+        }
+
+        if (!$this->enabled) {
+            return $userSession->checkPermission("editPeerEntries:$section->uid");
+        }
+
+        return $userSession->checkPermission("publishPeerEntries:$section->uid");
     }
 
     /**
@@ -1014,8 +1044,7 @@ class Entry extends Element
     public function setEagerLoadedElements(string $handle, array $elements)
     {
         if ($handle === 'author') {
-            $author = $elements[0] ?? null;
-            $this->setAuthor($author);
+            $this->_author = $elements[0] ?? false;
         } else {
             parent::setEagerLoadedElements($handle, $elements);
         }
@@ -1124,7 +1153,10 @@ EOD;
             // Set Craft to the entry's site's language, in case the title format has any static translations
             $language = Craft::$app->language;
             Craft::$app->language = $this->getSite()->language;
-            $this->title = Craft::$app->getView()->renderObjectTemplate($entryType->titleFormat, $this);
+            $title = Craft::$app->getView()->renderObjectTemplate($entryType->titleFormat, $this);
+            if ($title !== '') {
+                $this->title = $title;
+            }
             Craft::$app->language = $language;
         }
     }
@@ -1246,18 +1278,21 @@ EOD;
 
             $record->save(false);
 
-            if ($section->type == Section::TYPE_STRUCTURE) {
+            if (!$this->duplicateOf && $section->type == Section::TYPE_STRUCTURE) {
                 // Has the parent changed?
                 if ($this->_hasNewParent()) {
+                    $mode = $isNew ? Structures::MODE_INSERT : Structures::MODE_AUTO;
                     if (!$this->newParentId) {
-                        Craft::$app->getStructures()->appendToRoot($this->structureId, $this);
+                        Craft::$app->getStructures()->appendToRoot($this->structureId, $this, $mode);
                     } else {
-                        Craft::$app->getStructures()->append($this->structureId, $this, $this->getParent());
+                        Craft::$app->getStructures()->append($this->structureId, $this, $this->getParent(), $mode);
                     }
                 }
 
                 // Update the entry's descendants, who may be using this entry's URI in their own URIs
-                Craft::$app->getElements()->updateDescendantSlugsAndUris($this, true, true);
+                if (!$isNew) {
+                    Craft::$app->getElements()->updateDescendantSlugsAndUris($this, true, true);
+                }
             }
 
             $this->setDirtyAttributes($dirtyAttributes);

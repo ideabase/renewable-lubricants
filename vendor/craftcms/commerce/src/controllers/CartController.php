@@ -8,16 +8,16 @@
 namespace craft\commerce\controllers;
 
 use Craft;
+use craft\base\Element;
 use craft\commerce\elements\Order;
 use craft\commerce\helpers\LineItem as LineItemHelper;
 use craft\commerce\Plugin;
 use craft\errors\ElementNotFoundException;
 use craft\helpers\Html;
-use LitEmoji\LitEmoji;
+use craft\helpers\UrlHelper;
 use Throwable;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
-use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -32,12 +32,12 @@ class CartController extends BaseFrontEndController
     /**
      * @var Order The cart element
      */
-    private $_cart;
+    protected $_cart;
 
     /**
      * @var string the name of the cart variable
      */
-    private $_cartVariable;
+    protected $_cartVariable;
 
 
     public function init()
@@ -83,7 +83,7 @@ class CartController extends BaseFrontEndController
 
         // Backwards compatible way of adding to the cart
         if ($purchasableId = $request->getParam('purchasableId')) {
-            $note = LitEmoji::unicodeToShortcode($request->getParam('note', ''));
+            $note = $request->getParam('note', '');
             $options = $request->getParam('options') ?: [];
             $qty = (int)$request->getParam('qty', 1);
 
@@ -109,7 +109,7 @@ class CartController extends BaseFrontEndController
             $purchasablesByKey = [];
             foreach ($purchasables as $key => $purchasable) {
                 $purchasableId = $request->getParam("purchasables.{$key}.id");
-                $note = LitEmoji::unicodeToShortcode($request->getParam("purchasables.{$key}.note", ''));
+                $note = $request->getParam("purchasables.{$key}.note", '');
                 $options = $request->getParam("purchasables.{$key}.options") ?: [];
                 $qty = (int)$request->getParam("purchasables.{$key}.qty", 1);
 
@@ -153,7 +153,7 @@ class CartController extends BaseFrontEndController
         if ($lineItems = $request->getParam('lineItems')) {
             foreach ($lineItems as $key => $lineItem) {
                 $lineItemId = $key;
-                $note = LitEmoji::unicodeToShortcode($request->getParam("lineItems.{$key}.note"));
+                $note = $request->getParam("lineItems.{$key}.note");
                 $options = $request->getParam("lineItems.{$key}.options");
                 $qty = $request->getParam("lineItems.{$key}.qty");
                 $removeLine = $request->getParam("lineItems.{$key}.remove");
@@ -201,6 +201,10 @@ class CartController extends BaseFrontEndController
             $this->_cart->registerUserOnOrderComplete = true;
         }
 
+        if ($request->getBodyParam('registerUserOnOrderComplete') === 'false') {
+            $this->_cart->registerUserOnOrderComplete = false;
+        }
+
         // Set payment currency on cart
         if ($currency = $request->getParam('paymentCurrency')) {
             $this->_cart->paymentCurrency = $currency;
@@ -239,6 +243,72 @@ class CartController extends BaseFrontEndController
         return $this->_returnCart();
     }
 
+    /**
+     * @return Response|null
+     * @throws \craft\errors\MissingComponentException
+     * @since 3.1
+     */
+    public function actionLoadCart()
+    {
+        $request = Craft::$app->getRequest();
+        $number = $request->getParam('number');
+        $redirect = Plugin::getInstance()->getSettings()->loadCartRedirectUrl ?: UrlHelper::siteUrl();
+
+        if (!$number) {
+            $error = Plugin::t('A cart number must be specified.');
+
+            if ($request->getAcceptsJson()) {
+                return $this->asErrorJson($error);
+            }
+
+            Craft::$app->getSession()->setError($error);
+            return $request->getIsGet() ? $this->redirect($redirect) : null;
+        }
+
+        $cart = Order::find()->number($number)->isCompleted(false)->one();
+
+        if (!$cart) {
+            $error = Plugin::t('Unable to retrieve cart.');
+
+            if ($request->getAcceptsJson()) {
+                return $this->asErrorJson($error);
+            }
+
+            Craft::$app->getSession()->setError($error);
+            return $request->getIsGet() ? $this->redirect($redirect) : null;
+        }
+
+        $cartCustomer = $cart->getCustomer();
+        $currentUser = Craft::$app->getUser()->getIdentity();
+
+        if ($cartCustomer && $cartCustomer->userId && (!$currentUser || $currentUser->id != $cartCustomer->userId)) {
+            $error = Plugin::t('You must be logged in to load this cart.');
+
+            if ($request->getAcceptsJson()) {
+                return $this->asErrorJson($error);
+            }
+
+            Craft::$app->getSession()->setError($error);
+            return $request->getIsGet() ? $this->redirect($redirect) : null;
+        }
+
+        $session = Craft::$app->getSession();
+        $carts = Plugin::getInstance()->getCarts();
+        $carts->forgetCart();
+        $session->set($carts->getCartName(), $number);
+
+        $customers = Plugin::getInstance()->getCustomers();
+        $customers->forgetCustomer();
+        if ($cartCustomer) {
+            $session->set($customers::SESSION_CUSTOMER, $cartCustomer->id);
+        }
+
+        if ($request->getAcceptsJson()) {
+            return $this->asJson(['success' => true]);
+        }
+
+        return $request->getIsGet() ? $this->redirect($redirect) : $this->redirectToPostedUrl();
+    }
 
     /**
      * @return Response
@@ -251,7 +321,25 @@ class CartController extends BaseFrontEndController
     {
         $request = Craft::$app->getRequest();
 
-        if (!$this->_cart->validate() || !Craft::$app->getElements()->saveElement($this->_cart, false)) {
+        // Allow validation of custom fields when passing this param
+        $validateCustomFields = Plugin::getInstance()->getSettings()->validateCartCustomFieldsOnSubmission;
+
+        // Do we want to validate fields submitted
+        $customFieldAttributes = [];
+
+        if ($validateCustomFields) {
+            // $fields will be null so
+            if ($submittedFields = $request->getBodyParam('fields')) {
+                $this->_cart->setScenario(Element::SCENARIO_LIVE);
+                $customFieldAttributes = array_keys($submittedFields);
+            }
+        }
+
+        $attributes = array_merge($this->_cart->activeAttributes(), $customFieldAttributes);
+
+        $updateCartSearchIndexes = Plugin::getInstance()->getSettings()->updateCartSearchIndexes;
+        
+        if (!$this->_cart->validate($attributes) || !Craft::$app->getElements()->saveElement($this->_cart, false, false, $updateCartSearchIndexes)) {
             $error = Plugin::t('Unable to update cart.');
 
             if ($request->getAcceptsJson()) {

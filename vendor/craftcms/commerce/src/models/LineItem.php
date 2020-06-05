@@ -19,6 +19,7 @@ use craft\commerce\Plugin;
 use craft\commerce\records\TaxRate as TaxRateRecord;
 use craft\commerce\services\LineItemStatuses;
 use craft\commerce\services\Orders;
+use craft\errors\DeprecationException;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Json;
 use craft\validators\StringValidator;
@@ -44,6 +45,9 @@ use yii\behaviors\AttributeTypecastBehavior;
  * @property int $taxIncluded
  * @property-read string $optionsSignature the unique hash of the options
  * @property-read float $subtotal the Purchasable’s sale price multiplied by the quantity of the line item
+ * @property-read float $saleAmount
+ * @property float salePrice
+ * @property float price
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @since 2.0
  */
@@ -57,22 +61,17 @@ class LineItem extends Model
     /**
      * @var string Description
      */
-    public $description;
+    private $_description;
 
     /**
      * @var float Price is the original price of the purchasable
      */
-    public $price = 0;
-
-    /**
-     * @var float Sale amount off the price, based on the sales applied to the purchasable.
-     */
-    public $saleAmount = 0;
+    private $_price = 0;
 
     /**
      * @var float Sale price is the price of the line item. Sale price is price + saleAmount
      */
-    public $salePrice = 0;
+    private $_salePrice = 0;
 
     /**
      * @var float Weight
@@ -107,7 +106,7 @@ class LineItem extends Model
     /**
      * @var string SKU
      */
-    public $sku;
+    private $_sku;
 
     /**
      * @var string Note
@@ -170,7 +169,20 @@ class LineItem extends Model
      */
     private $_options = [];
 
+    /**
+     * @inheritDoc
+     */
+    public function init()
+    {
+        $this->note = LitEmoji::shortcodeToUnicode($this->note);
+        $this->privateNote = LitEmoji::shortcodeToUnicode($this->privateNote);
 
+        parent::init();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function behaviors(): array
     {
         $behaviors = parent::behaviors();
@@ -191,7 +203,6 @@ class LineItem extends Model
                 'weight' => AttributeTypecastBehavior::TYPE_FLOAT,
                 'qty' => AttributeTypecastBehavior::TYPE_INTEGER,
                 'price' => AttributeTypecastBehavior::TYPE_FLOAT,
-                'saleAmount' => AttributeTypecastBehavior::TYPE_FLOAT,
                 'salePrice' => AttributeTypecastBehavior::TYPE_FLOAT
             ]
         ];
@@ -273,11 +284,54 @@ class LineItem extends Model
             return $options;
         };
 
+        // TODO make this consistent no matter what the DB driver is. Will be a "breaking" change.
         if (Craft::$app->getDb()->getSupportsMb4()) {
             $this->_options = $options;
         } else {
             $this->_options = $cleanEmojiValues($options);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        if (!$this->_description) {
+            $snapshot = Json::decodeIfJson($this->snapshot, true);
+            $this->_description = $snapshot['description'] ?? '';
+        }
+
+        return $this->_description;
+    }
+
+    /**
+     * @param $description
+     */
+    public function setDescription($description)
+    {
+        $this->_description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSku()
+    {
+        if (!$this->_sku) {
+            $snapshot = Json::decodeIfJson($this->snapshot, true);
+            $this->_sku = $snapshot['sku'] ?? '';
+        }
+
+        return $this->_sku;
+    }
+
+    /**
+     * @param $sku
+     */
+    public function setSku($sku)
+    {
+        $this->_sku = $sku;
     }
 
     /**
@@ -289,11 +343,58 @@ class LineItem extends Model
     }
 
     /**
+     * @return float
+     * @since 3.1.1
+     */
+    public function getPrice()
+    {
+        return CurrencyHelper::round($this->_price);
+    }
+
+    /**
+     * @param $price
+     * @since 3.1.1
+     */
+    public function setPrice($price)
+    {
+        $this->_price = $price;
+    }
+
+    /**
      * @return float Sale Price
      */
     public function getSalePrice()
     {
-        return CurrencyHelper::round($this->saleAmount + $this->price);
+        return CurrencyHelper::round($this->_salePrice);
+    }
+
+    /**
+     * @param $salePrice
+     * @since 3.1.1
+     */
+    public function setSalePrice($salePrice)
+    {
+        $this->_salePrice = $salePrice;
+    }
+
+    /**
+     * @param $saleAmount
+     * @throws DeprecationException
+     * @since 3.1.1
+     * @deprecated in 3.1.1
+     */
+    public function setSaleAmount($saleAmount)
+    {
+        Craft::$app->getDeprecator()->log('LineItem::setSaleAmount()', 'The setting of “saleAmount” has been deprecated. “saleAmount” is automatically calculated.');
+    }
+
+    /**
+     * @return float
+     * @since 3.1.1
+     */
+    public function getSaleAmount()
+    {
+        return $this->price - $this->salePrice;
     }
 
     /**
@@ -321,8 +422,7 @@ class LineItem extends Model
         ];
         $rules[] = [['qty'], 'integer', 'min' => 1];
         $rules[] = [['shippingCategoryId', 'taxCategoryId'], 'integer'];
-        $rules[] = [['price', 'salePrice', 'saleAmount'], 'number'];
-        $rules[] = [['note', 'privateNote'], StringValidator::class, 'disallowMb4' => true];
+        $rules[] = [['price', 'salePrice'], 'number'];
 
         if ($this->purchasableId) {
             /** @var PurchasableInterface $purchasable */
@@ -348,6 +448,9 @@ class LineItem extends Model
         $names[] = 'options';
         $names[] = 'optionsSignature';
         $names[] = 'onSale';
+        $names[] = 'price';
+        $names[] = 'saleAmount';
+        $names[] = 'salePrice';
         $names[] = 'sku';
         $names[] = 'total';
 
@@ -385,11 +488,12 @@ class LineItem extends Model
     public function extraFields(): array
     {
         return [
-            'order',
-            'shippingCategory',
-            'taxCategory',
             'lineItemStatus',
-            'snapshot'
+            'order',
+            'purchasable',
+            'shippingCategory',
+            'snapshot',
+            'taxCategory',
         ];
     }
 
@@ -423,7 +527,7 @@ class LineItem extends Model
             $salePrice = $this->salePrice;
         }
 
-        return $this->qty * $salePrice;
+        return CurrencyHelper::round($this->qty * $salePrice);
     }
 
     /**
@@ -507,12 +611,13 @@ class LineItem extends Model
     public function populateFromPurchasable(PurchasableInterface $purchasable)
     {
         $this->price = $purchasable->getPrice();
+        $this->salePrice = $this->price;
         $this->taxCategoryId = $purchasable->getTaxCategoryId();
         $this->shippingCategoryId = $purchasable->getShippingCategoryId();
         $this->sku = $purchasable->getSku();
         $this->description = $purchasable->getDescription();
 
-        // Check to see if there is a discount applied that ignores Sales
+        // Check to see if there is a discount applied that ignores Sales for this line item
         $ignoreSales = false;
         foreach (Plugin::getInstance()->getDiscounts()->getAllActiveDiscounts($this->getOrder()) as $discount) {
             if ($discount->enabled && Plugin::getInstance()->getDiscounts()->matchLineItem($this, $discount, true)) {
@@ -524,9 +629,9 @@ class LineItem extends Model
             }
         }
 
-        $this->salePrice = $ignoreSales ? $this->price : Plugin::getInstance()->getSales()->getSalePriceForPurchasable($purchasable, $this->order);
-
-        $this->saleAmount = $this->salePrice - $this->price;
+        if (!$ignoreSales) {
+            $this->salePrice = Plugin::getInstance()->getSales()->getSalePriceForPurchasable($purchasable, $this->order);
+        }
 
         $snapshot = [
             'price' => $purchasable->getPrice(),
@@ -559,11 +664,7 @@ class LineItem extends Model
      */
     public function getOnSale(): bool
     {
-        if (null !== $this->salePrice) {
-            return CurrencyHelper::round($this->salePrice) !== CurrencyHelper::round($this->price);
-        }
-
-        return false;
+        return $this->getSaleAmount() > 0;
     }
 
     /**

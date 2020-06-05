@@ -19,6 +19,7 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\Console;
 use craft\helpers\FileHelper;
 use craft\helpers\StringHelper;
+use craft\migrations\CreateDbCacheTable;
 use craft\migrations\CreatePhpSessionTable;
 use Seld\CliPrompt\CliPrompt;
 use yii\base\InvalidConfigException;
@@ -106,7 +107,7 @@ class SetupController extends Controller
 
         $this->run('db-creds');
 
-        if (Craft::$app->getIsInstalled()) {
+        if (Craft::$app->getIsInstalled(true)) {
             $this->stdout("It looks like Craft is already installed, so we're done here." . PHP_EOL, Console::FG_YELLOW);
             return ExitCode::OK;
         }
@@ -184,6 +185,7 @@ EOD;
     {
         $firstTime = true;
         $badUserCredentials = false;
+        $isNitro = App::isNitro();
 
         top:
 
@@ -201,11 +203,15 @@ EOD;
         }
 
         // server
-        $this->server = $this->prompt('Database server name or IP address:', [
-            'required' => true,
-            'default' => $this->server ?: '127.0.0.1',
-        ]);
-        $this->server = strtolower($this->server);
+        if ($isNitro) {
+            $this->server = '127.0.0.1';
+        } else {
+            $this->server = $this->prompt('Database server name or IP address:', [
+                'required' => true,
+                'default' => $this->server ?: '127.0.0.1',
+            ]);
+            $this->server = strtolower($this->server);
+        }
 
         // port
         if ($firstTime) {
@@ -224,15 +230,19 @@ EOD;
 
         userCredentials:
 
-        // user
-        $this->user = $this->prompt('Database username:', [
-            'default' => $this->user ?: null,
-        ]);
+        // user & password
+        if ($isNitro) {
+            $this->user = 'nitro';
+            $this->password = 'nitro';
+        } else {
+            $this->user = $this->prompt('Database username:', [
+                'default' => $this->user ?: null,
+            ]);
 
-        // password
-        if ($this->interactive) {
-            $this->stdout('Database password: ');
-            $this->password = CliPrompt::hiddenPrompt(true);
+            if ($this->interactive) {
+                $this->stdout('Database password: ');
+                $this->password = CliPrompt::hiddenPrompt(true);
+            }
         }
 
         if ($badUserCredentials) {
@@ -400,6 +410,29 @@ EOD;
     }
 
     /**
+     * Creates a database table for storing DB caches.
+     *
+     * @return int
+     * @since 3.4.14
+     */
+    public function actionDbCacheTable(): int
+    {
+        if (Craft::$app->getDb()->tableExists(Table::CACHE)) {
+            $this->stdout('The `cache` table already exists.' . PHP_EOL . PHP_EOL, Console::FG_YELLOW);
+            return ExitCode::OK;
+        }
+
+        $migration = new CreateDbCacheTable();
+        if ($migration->up() === false) {
+            $this->stderr('An error occurred while creating the `cache` table.' . PHP_EOL . PHP_EOL, Console::FG_RED);
+            return ExitCode::UNSPECIFIED_ERROR;
+        }
+
+        $this->stdout('The `cache` table was created successfully.' . PHP_EOL . PHP_EOL, Console::FG_GREEN);
+        return ExitCode::OK;
+    }
+
+    /**
      * Outputs a terminal command.
      *
      * @param string $command
@@ -407,7 +440,7 @@ EOD;
     private function _outputCommand(string $command)
     {
         $script = FileHelper::normalizePath(Craft::$app->getRequest()->getScriptFile());
-        if (!Platform::isWindows() && ($home = getenv('HOME')) !== false) {
+        if (!Platform::isWindows() && ($home = App::env('HOME')) !== false) {
             $home = FileHelper::normalizePath($home);
             if (strpos($script, $home . DIRECTORY_SEPARATOR) === 0) {
                 $script = '~' . substr($script, strlen($home));

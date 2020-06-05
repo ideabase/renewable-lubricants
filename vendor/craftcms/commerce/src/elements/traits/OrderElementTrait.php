@@ -172,7 +172,8 @@ trait OrderElementTrait
             'shortNumber',
             'transactionReference',
             'username',
-            'reference'
+            'reference',
+            'skus',
         ];
     }
 
@@ -202,6 +203,8 @@ trait OrderElementTrait
                 return implode(' ', ArrayHelper::getColumn($this->getTransactions(), 'reference'));
             case 'username':
                 return $this->getUser()->username ?? '';
+            case 'skus':
+                return implode(' ', ArrayHelper::getColumn($this->getLineItems(), 'sku'));
             default:
                 return parent::getSearchKeywords($attribute);
         }
@@ -353,9 +356,9 @@ trait OrderElementTrait
             'number' => ['label' => Plugin::t('Number')],
             'id' => ['label' => Plugin::t('ID')],
             'orderStatus' => ['label' => Plugin::t('Status')],
-            'totals' => ['label' => Plugin::t('Totals')],
+            'totals' => ['label' => Plugin::t('All Totals')],
             'total' => ['label' => Plugin::t('Total')],
-            'totalPrice' => ['label' => Plugin::t('Total')],
+            'totalPrice' => ['label' => Plugin::t('Total Price')],
             'totalPaid' => ['label' => Plugin::t('Total Paid')],
             'totalDiscount' => ['label' => Plugin::t('Total Discount')],
             'totalShippingCost' => ['label' => Plugin::t('Total Shipping')],
@@ -414,7 +417,6 @@ trait OrderElementTrait
         return [
             'number' => Plugin::t('Number'),
             'reference' => Plugin::t('Reference'),
-            'id' => Plugin::t('ID'),
             'orderStatusId' => Plugin::t('Order Status'),
             'totalPrice' => Plugin::t('Total Payable'),
             'totalPaid' => Plugin::t('Total Paid'),
@@ -456,6 +458,11 @@ trait OrderElementTrait
             ],
             'datePaid' => Craft::t('commerce', 'Date Paid'),
             'couponCode' => Craft::t('commerce', 'Coupon Code'),
+            [
+                'label' => Craft::t('app', 'ID'),
+                'orderBy' => 'elements.id',
+                'attribute' => 'id',
+            ],
         ];
     }
 

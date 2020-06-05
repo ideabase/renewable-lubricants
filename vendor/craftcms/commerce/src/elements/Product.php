@@ -24,12 +24,14 @@ use craft\commerce\Plugin;
 use craft\commerce\records\Product as ProductRecord;
 use craft\db\Query;
 use craft\elements\actions\CopyReferenceTag;
+use craft\elements\actions\Duplicate;
 use craft\elements\actions\Restore;
 use craft\elements\actions\SetStatus;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\Db;
 use craft\helpers\UrlHelper;
 use craft\models\CategoryGroup;
 use craft\validators\DateTimeValidator;
@@ -154,11 +156,6 @@ class Product extends Element
      * @var Variant[] This product’s variants
      */
     private $_variants;
-
-    /**
-     * @var Variant This product's default variant
-     */
-    private $_defaultVariant;
 
     /**
      * @var Variant This product's cheapest variant
@@ -360,21 +357,15 @@ class Product extends Element
     /**
      * Returns the default variant.
      *
-     * @return Variant
+     * @return null|Variant
      */
-    public function getDefaultVariant(): Variant
+    public function getDefaultVariant()
     {
-        if ($this->_defaultVariant) {
-            return $this->_defaultVariant;
-        }
+        $variants = $this->getVariants();
 
-        foreach ($this->getVariants() as $variant) {
-            if (null === $this->_defaultVariant || $variant->isDefault) {
-                $this->_defaultVariant = $variant;
-            }
-        }
+        $defaultVariant = ArrayHelper::firstWhere($variants, 'isDefault', true, false);
 
-        return $this->_defaultVariant;
+        return $defaultVariant ?: ArrayHelper::firstValue($variants);
     }
 
     /**
@@ -408,6 +399,13 @@ class Product extends Element
      */
     public function getVariants(): array
     {
+        // If we are currently duplicating a product, we dont want to have any variants.
+        // We will be duplicating variants and adding them back.
+        if ($this->duplicateOf) {
+            $this->_variants = [];
+            return $this->_variants;
+        }
+
         if (null === $this->_variants) {
             if ($this->id) {
                 if ($this->getType()->hasVariants) {
@@ -420,13 +418,13 @@ class Product extends Element
                     }
                 }
             }
+        }
 
-            // Must have at least one
-            if (null === $this->_variants) {
-                $variant = new Variant();
-                $variant->isDefault = true;
-                $this->setVariants([$variant]);
-            }
+        if (empty($this->_variants) || null === $this->_variants) {
+            $variant = new Variant();
+            $variant->isDefault = true;
+            $this->setVariants([$variant]);
+            $this->_variants = [$variant];
         }
 
         return $this->_variants;
@@ -437,16 +435,11 @@ class Product extends Element
      *
      * @param Variant[]|array $variants
      */
-    public function setVariants(array $variants)
+    public function setVariants($variants)
     {
         $this->_variants = [];
+
         $count = 1;
-        $this->_defaultVariant = null;
-
-        if (empty($variants)) {
-            return;
-        }
-
         foreach ($variants as $key => $variant) {
             if (!$variant instanceof Variant) {
                 $variant = ProductHelper::populateProductVariantModel($this, $variant, $key);
@@ -454,15 +447,7 @@ class Product extends Element
             $variant->sortOrder = $count++;
             $variant->setProduct($this);
 
-            if ($variant->isDefault) {
-                $this->_defaultVariant = $variant;
-            }
-
             $this->_variants[] = $variant;
-        }
-
-        if ($this->_defaultVariant === null) {
-            $this->_variants[0]->isDefault = true;
         }
     }
 
@@ -552,7 +537,7 @@ class Product extends Element
 
     /**
      * @inheritdoc
-     * @since 3.3.0
+     * @since 3.0
      */
     public static function gqlScopesByContext($context): array
     {
@@ -693,18 +678,22 @@ class Product extends Element
         $record->postDate = $this->postDate;
         $record->expiryDate = $this->expiryDate;
         $record->typeId = $this->typeId;
-        $record->promotable = $this->promotable;
-        $record->availableForPurchase = $this->availableForPurchase;
-        $record->freeShipping = $this->freeShipping;
+        $record->promotable = (bool)$this->promotable;
+        $record->availableForPurchase = (bool)$this->availableForPurchase;
+        $record->freeShipping = (bool)$this->freeShipping;
         $record->taxCategoryId = $this->taxCategoryId;
         $record->shippingCategoryId = $this->shippingCategoryId;
 
-        $record->defaultSku = $this->getDefaultVariant()->sku;
-        $record->defaultPrice = (float)$this->getDefaultVariant()->price;
-        $record->defaultHeight = (float)$this->getDefaultVariant()->height;
-        $record->defaultLength = (float)$this->getDefaultVariant()->length;
-        $record->defaultWidth = (float)$this->getDefaultVariant()->width;
-        $record->defaultWeight = (float)$this->getDefaultVariant()->weight;
+        $record->defaultSku = $this->getDefaultVariant()->sku ?? '';
+        $record->defaultPrice = $this->getDefaultVariant()->price ?? 0;
+        $record->defaultHeight = $this->getDefaultVariant()->height ?? 0;
+        $record->defaultLength = $this->getDefaultVariant()->length ?? 0;
+        $record->defaultWidth = $this->getDefaultVariant()->width ?? 0;
+        $record->defaultWeight = $this->getDefaultVariant()->weight ?? 0;
+
+        // We want to always have the same date as the element table, based on the logic for updating these in the element service i.e resaving
+        $record->dateUpdated = $this->dateUpdated;
+        $record->dateCreated = $this->dateCreated;
 
         $record->save(false);
 
@@ -785,14 +774,23 @@ class Product extends Element
     public function afterDelete()
     {
         $variants = Variant::find()
-            ->productId($this->id)
+            ->productId([$this->id, ':empty:'])
             ->all();
 
         $elementsService = Craft::$app->getElements();
 
         foreach ($variants as $variant) {
+
+            $hardDelete = false;
             $variant->deletedWithProduct = true;
-            $elementsService->deleteElement($variant);
+
+            // The product ID is gone, so it has been hard deleted
+            if (!$variant->productId) {
+                $hardDelete = true;
+                $variant->deletedWithProduct = false;
+            }
+
+            $elementsService->deleteElement($variant, $hardDelete);
         }
 
         parent::afterDelete();
@@ -839,6 +837,15 @@ class Product extends Element
                 if (count(array_unique($skus)) < count($skus)) {
                     $this->addError('variants', Plugin::t('Not all SKUs are unique.'));
                 }
+
+                if (empty($this->getVariants())) {
+                    $this->addError('variants', Plugin::t('Must have at least one variant.'));
+                }
+            },
+            'skipOnEmpty' => false,
+            'when' => static function($model) {
+                /** @var Variant $model */
+                return !$model->duplicateOf;
             }
         ];
 
@@ -872,7 +879,7 @@ class Product extends Element
      */
     public function getFieldLayout()
     {
-        return $this->getType()->getFieldLayout();
+        return parent::getFieldLayout() ?? $this->getType()->getFieldLayout();
     }
 
     /**
@@ -888,14 +895,6 @@ class Product extends Element
         $shippingCategoryIds = array_keys($this->getType()->getShippingCategories());
         if (!in_array($this->shippingCategoryId, $shippingCategoryIds, false)) {
             $this->shippingCategoryId = $shippingCategoryIds[0];
-        }
-
-        $defaultVariant = null;
-        foreach ($this->getVariants() as $variant) {
-            // Make the first variant (or the last one that isDefault) the default.
-            if ($defaultVariant === null || $variant->isDefault) {
-                $this->_defaultVariant = $defaultVariant = $variant;
-            }
         }
 
         // Make sure the field layout is set correctly
@@ -951,7 +950,7 @@ class Product extends Element
 
             $sources[$key] = [
                 'key' => $key,
-                'label' => $productType->name,
+                'label' => Craft::t('site', $productType->name),
                 'data' => [
                     'handle' => $productType->handle,
                     'editable' => $canEditProducts
@@ -1017,6 +1016,9 @@ class Product extends Element
             }
 
             if ($canManage) {
+                // Duplicate
+                $actions[] = Duplicate::class;
+
                 // Allow deletion
                 $deleteAction = Craft::$app->getElements()->createAction([
                     'type' => DeleteProduct::class,
@@ -1117,6 +1119,11 @@ class Product extends Element
                 'label' => Craft::t('app', 'Date Updated'),
                 'orderBy' => 'elements.dateUpdated',
                 'attribute' => 'dateUpdated'
+            ],
+            [
+                'label' => Craft::t('app', 'ID'),
+                'orderBy' => 'elements.id',
+                'attribute' => 'id',
             ],
         ];
     }
@@ -1219,5 +1226,36 @@ class Product extends Element
                 return parent::tableAttributeHtml($attribute);
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setScenario($value)
+    {
+        foreach ($this->getVariants() as $variant) {
+            $variant->setScenario($value);
+        }
+
+        parent::setScenario($value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterPropagate(bool $isNew)
+    {
+        /** @var Product $original */
+        if ($original = $this->duplicateOf) {
+            $variants = Plugin::getInstance()->getVariants()->getAllVariantsByProductId($original->id, $original->siteId);
+            $newVariants = [];
+            foreach ($variants as $variant) {
+                $variant->sku .= '-1';
+                $variant = Craft::$app->getElements()->duplicateElement($variant, ['product' => $this]);
+                $newVariants[] = $variant;
+            }
+            $this->setVariants($newVariants);
+        }
+        parent::afterPropagate($isNew);
     }
 }

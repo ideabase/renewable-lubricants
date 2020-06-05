@@ -13,19 +13,23 @@ use craft\base\Field;
 use craft\commerce\base\Gateway;
 use craft\commerce\base\Purchasable;
 use craft\commerce\base\PurchasableInterface;
+use craft\commerce\db\Table;
 use craft\commerce\elements\Order;
 use craft\commerce\errors\CurrencyException;
 use craft\commerce\errors\RefundException;
 use craft\commerce\errors\TransactionException;
 use craft\commerce\gateways\MissingGateway;
+use craft\commerce\models\Address;
 use craft\commerce\models\Customer;
 use craft\commerce\models\OrderAdjustment;
 use craft\commerce\models\Transaction;
 use craft\commerce\Plugin;
+use craft\commerce\records\CustomerAddress;
 use craft\commerce\records\Transaction as TransactionRecord;
 use craft\commerce\web\assets\commercecp\CommerceCpAsset;
-use craft\commerce\web\assets\commerceui\CommerceUiAsset;
+use craft\commerce\web\assets\commerceui\CommerceOrderAsset;
 use craft\db\Query;
+use craft\db\Table as CraftTable;
 use craft\elements\User;
 use craft\errors\ElementNotFoundException;
 use craft\errors\MissingComponentException;
@@ -401,8 +405,18 @@ class OrdersController extends Controller
         // Typecast order attributes
         $order->typeCastAttributes();
 
-        $extraFields = ['lineItems.snapshot', 'availableShippingMethods'];
-        return $order->toArray($orderFields, $extraFields);
+        $extraFields = ['lineItems.snapshot', 'availableShippingMethods', 'billingAddress', 'shippingAddress'];
+
+        $orderArray = $order->toArray($orderFields, $extraFields);
+
+        if (!empty($orderArray['lineItems'])) {
+            foreach ($orderArray['lineItems'] as &$lineItem) {
+                $lineItem['showForm'] = ArrayHelper::isAssociative($lineItem['options']) || (is_array($lineItem['options']) && empty($lineItem['options']));
+            }
+            unset($lineItem);
+        }
+
+        return $orderArray;
     }
 
     /**
@@ -432,7 +446,7 @@ class OrdersController extends Controller
         $likeOperator = Craft::$app->getDb()->getIsPgsql() ? 'ILIKE' : 'LIKE';
         $sqlQuery = (new Query())
             ->select(['id', 'price', 'description', 'sku'])
-            ->from('{{%commerce_purchasables}}');
+            ->from(Table::PURCHASABLES);
 
         // Are they searching for a purchasable ID?
         if (is_numeric($query)) {
@@ -467,6 +481,64 @@ class OrdersController extends Controller
     }
 
     /**
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
+     * @throws InvalidConfigException
+     */
+    public function actionPurchasablesTable()
+    {
+        $this->requirePermission('commerce-editOrders');
+        $this->requireAcceptsJson();
+
+        $request = Craft::$app->getRequest();
+        $page = $request->getParam('page', 1);
+        $sort = $request->getParam('sort', null);
+        $limit = $request->getParam('per_page', 10);
+        $search = $request->getParam('search', null);
+        $offset = ($page - 1) * $limit;
+
+        // Prepare purchasables query
+        $likeOperator = Craft::$app->getDb()->getIsPgsql() ? 'ILIKE' : 'LIKE';
+        $sqlQuery = (new Query())
+            ->select(['id', 'price', 'description', 'sku'])
+            ->from(Table::PURCHASABLES);
+
+        // Are they searching for a SKU or purchasable description?
+        if ($search) {
+            $sqlQuery->where([
+                'or',
+                [$likeOperator, 'description', $search],
+                [$likeOperator, 'sku', $search]
+            ]);
+        }
+
+        $total = $sqlQuery->count();
+
+        $sqlQuery->limit($limit);
+        $sqlQuery->offset($offset);
+        $result = $sqlQuery->all();
+
+        $rows = [];
+
+        // Add the currency formatted price
+        $baseCurrency = Plugin::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
+        foreach ($result as $row) {
+            /** @var PurchasableInterface $purchasable */
+            if ($purchasable = Craft::$app->getElements()->getElementById($row['id'])) {
+                $row['priceAsCurrency'] = Craft::$app->getFormatter()->asCurrency($row['price'], $baseCurrency, [], [], true);
+                $row['isAvailable'] = $purchasable->getIsAvailable();
+                $rows[] = $row;
+            }
+        }
+
+        return $this->asJson([
+            'pagination' => AdminTable::paginationLinks($page, $total, $limit),
+            'data' => $rows,
+        ]);
+    }
+
+    /**
      * @param null $query
      * @return Response
      */
@@ -479,40 +551,15 @@ class OrdersController extends Controller
             return $this->asJson($customers);
         }
 
-        $likeOperator = Craft::$app->getDb()->getIsPgsql() ? 'ILIKE' : 'LIKE';
+        $customersQuery = Plugin::getInstance()->getCustomers()->getCustomersQuery($query);
 
-        // First look for a user
-        $sqlQuery = (new Query())
-            ->select([
-                '[[customers.id]] customerId',
-                '[[customers.id]] userId',
-                '[[users.email]] email'
-            ])
-            ->from('{{%commerce_customers}} customers')
-            ->innerJoin('{{%users}} users', '[[customers.userId]] = [[users.id]]')
-            ->andWhere([$likeOperator, '[[users.email]]', $query]);
+        $customersQuery->limit($limit);
 
-        $results = $sqlQuery->limit($limit)->all();
+        $customers = $customersQuery->all();
 
-        foreach ($results as $result) {
-            $customers[$result['customerId']] = $result;
-        }
+        $customers = $this->_prepCustomersArray($customers);
 
-        $sqlQuery = (new Query())
-            ->select([
-                '[[customers.id]] as customerId',
-                '[[orders.email]] as email',
-            ])
-            ->from('{{%commerce_customers}} customers')
-            ->innerJoin('{{%commerce_orders}} orders', '[[customers.id]] = [[orders.customerId]]')
-            ->andWhere(['[[orders.isCompleted]]' => 1])
-            ->andWhere([$likeOperator, '[[orders.email]]', $query]);
-
-        foreach ($sqlQuery->limit($limit)->all() as $result) {
-            $customers[$result['customerId']] = $result;
-        }
-
-        return $this->asJson(array_values($customers));
+        return $this->asJson($customers);
     }
 
     /**
@@ -607,7 +654,7 @@ class OrdersController extends Controller
     /**
      * @return Response
      * @throws BadRequestHttpException
-     * @since 3.x
+     * @since 3.0.11
      */
     public function actionGetIndexSourcesBadgeCounts(): Response
     {
@@ -772,8 +819,8 @@ class OrdersController extends Controller
             $amount = $transaction->getRefundableAmount();
         }
 
-        if ($amount > $transaction->paymentAmount) {
-            $error = Plugin::t('Can not refund amount greater than the original transaction');
+        if ($amount > $transaction->getRefundableAmount()) {
+            $error = Plugin::t('Can not refund amount greater than the remaining amount');
             if (Craft::$app->getRequest()->getAcceptsJson()) {
                 return $this->asErrorJson($error);
             } else {
@@ -917,7 +964,7 @@ class OrdersController extends Controller
      */
     private function _registerJavascript(array $variables)
     {
-        Craft::$app->getView()->registerAssetBundle(CommerceUiAsset::class);
+        Craft::$app->getView()->registerAssetBundle(CommerceOrderAsset::class);
 
         Craft::$app->getView()->registerJs('window.orderEdit = {};', View::POS_BEGIN);
 
@@ -946,6 +993,37 @@ class OrdersController extends Controller
         Craft::$app->getView()->registerJs('window.orderEdit.ordersIndexUrl = "' . UrlHelper::cpUrl('commerce/orders') . '"', View::POS_BEGIN);
         Craft::$app->getView()->registerJs('window.orderEdit.ordersIndexUrlHashed = "' . Craft::$app->getSecurity()->hashData('commerce/orders') . '"', View::POS_BEGIN);
         Craft::$app->getView()->registerJs('window.orderEdit.continueEditingUrl = "' . $variables['order']->cpEditUrl . '"', View::POS_BEGIN);
+        Craft::$app->getView()->registerJs('window.orderEdit.userPhotoFallback = "' . Craft::$app->getAssetManager()->getPublishedUrl('@app/web/assets/cp/dist', true, 'images/user.svg') . '"', View::POS_BEGIN);
+
+        $customer = null;
+        if ($variables['order']->customerId) {
+            $customerQuery = Plugin::getInstance()->getCustomers()->getCustomersQuery()->andWhere(['customers.id' => $variables['order']->customerId]);
+            $customers = $this->_prepCustomersArray($customerQuery->all());
+
+            if (!empty($customers)) {
+                $customer = ArrayHelper::firstValue($customers);
+            }
+        }
+        Craft::$app->getView()->registerJs('window.orderEdit.originalCustomer = ' . Json::encode($customer), View::POS_BEGIN);
+
+        $statesList = Plugin::getInstance()->getStates()->getAllEnabledStatesAsListGroupedByCountryId();
+
+        if (!empty($statesList)) {
+            foreach ($statesList as &$states) {
+                foreach ($states as $key => &$state) {
+                    $state = [
+                        'id' => $key,
+                        'name' => $state,
+                    ];
+                }
+                $states = array_values($states);
+            }
+        }
+
+        Craft::$app->getView()->registerJs('window.orderEdit.statesByCountryId = ' . Json::encode($statesList), View::POS_BEGIN);
+        $countries = Plugin::getInstance()->getCountries()->getAllEnabledCountries();
+        $countries = array_values(ArrayHelper::toArray($countries, ['id', 'name']));
+        Craft::$app->getView()->registerJs('window.orderEdit.countries = ' . Json::encode($countries), View::POS_BEGIN);
 
         // TODO when we support multiple PDF templates, retrieve them all from a service
         $pdfUrls = [
@@ -992,8 +1070,23 @@ class OrdersController extends Controller
         $order->message = $orderRequestData['order']['message'];
         $order->shippingMethodHandle = $orderRequestData['order']['shippingMethodHandle'];
 
-        if (($dateOrdered = $orderRequestData['order']['dateOrdered']) !== null) {
-            $order->dateOrdered = DateTimeHelper::toDateTime($dateOrdered) ?: null;
+        $dateOrdered = $orderRequestData['order']['dateOrdered'];
+        if ($dateOrdered !== null) {
+
+            if ($orderRequestData['order']['dateOrdered']['time'] == '') {
+                $dateTime = (new \DateTime('now', new \DateTimeZone($dateOrdered['timezone'])));
+                $dateOrdered['time'] = $dateTime->format('H:i');
+            }
+
+            if ($orderRequestData['order']['dateOrdered']['date'] == '' && $orderRequestData['order']['dateOrdered']['time'] == '') {
+                $order->dateOrdered = null;
+            } else {
+                $order->dateOrdered = DateTimeHelper::toDateTime($dateOrdered) ?: null;
+            }
+        }
+
+        if ($dateOrdered === null && $order->isCompleted) {
+            $order->dateOrdered = null;
         }
 
         // Only email set on the order
@@ -1020,6 +1113,70 @@ class OrdersController extends Controller
         } catch (\Exception $e) {
             $order->paymentSourceId = null;
             $order->gatewayId = null;
+        }
+
+        // Addresses
+        $billingAddressId = $orderRequestData['order']['billingAddressId'];
+        $shippingAddressId = $orderRequestData['order']['shippingAddressId'];
+        $billingAddress = null;
+        $shippingAddress = null;
+
+        // We need to create a new address if it belongs to a customer and the order is completed
+        if ($billingAddressId && $order->isCompleted) {
+            $belongsToCustomer = CustomerAddress::find()
+                ->where(['addressId' => $billingAddressId])
+                ->andWhere(['not', ['customerId' => null]])
+                ->exists();
+
+            if ($belongsToCustomer) {
+                $billingAddressId = 'new';
+            }
+        }
+
+        if ($shippingAddressId && $order->isCompleted) {
+            $belongsToCustomer = CustomerAddress::find()
+                ->where(['addressId' => $shippingAddressId])
+                ->andWhere(['not', ['customerId' => null]])
+                ->exists();
+
+            if ($belongsToCustomer) {
+                $shippingAddressId = 'new';
+            }
+        }
+
+        if ($billingAddressId == 'new' || (isset($orderRequestData['order']['billingAddress']['id']) && $billingAddressId == $orderRequestData['order']['billingAddress']['id'])) {
+            $billingAddress = Plugin::getInstance()->getAddresses()->removeReadOnlyAttributesFromArray($orderRequestData['order']['billingAddress']);
+            $billingAddress['isEstimated'] = false;
+            $billingAddress = new Address($billingAddress);
+
+            $billingAddress->id = ($billingAddressId == 'new') ? null : $billingAddress->id;
+
+            // TODO figure out if we need to validate at this point;
+            Plugin::getInstance()->getAddresses()->saveAddress($billingAddress, false);
+            $billingAddressId = $billingAddress->id;
+        }
+
+        if ($shippingAddressId == 'new' || (isset($orderRequestData['order']['shippingAddress']['id']) && $shippingAddressId == $orderRequestData['order']['shippingAddress']['id'])) {
+            $shippingAddress = Plugin::getInstance()->getAddresses()->removeReadOnlyAttributesFromArray($orderRequestData['order']['shippingAddress']);
+            $shippingAddress['isEstimated'] = false;
+            $shippingAddress = new Address($shippingAddress);
+
+            $shippingAddress->id = ($shippingAddressId == 'new') ? null : $shippingAddress->id;
+
+            // TODO figure out if we need to validate at this point;
+            Plugin::getInstance()->getAddresses()->saveAddress($shippingAddress, false);
+            $shippingAddressId = $shippingAddress->id;
+        }
+
+        $order->billingAddressId = $billingAddressId;
+        $order->shippingAddressId = $shippingAddressId;
+
+        if ($billingAddress) {
+            $order->setBillingAddress($billingAddress);
+        }
+
+        if ($shippingAddress) {
+            $order->setShippingAddress($shippingAddress);
         }
 
         $lineItems = [];
@@ -1052,6 +1209,8 @@ class OrdersController extends Controller
             $lineItem->privateNote = $privateNote;
             $lineItem->lineItemStatusId = $lineItemStatusId;
             $lineItem->setOptions($options);
+
+            $lineItem->setOrder($order);
 
             /** @var Purchasable $purchasable */
             if ($purchasable = Craft::$app->getElements()->getElementById($purchasableId)) {
@@ -1160,6 +1319,11 @@ class OrdersController extends Controller
                     );
                 }
 
+                $transactionResponse = Json::decodeIfJson($transaction->response);
+                if (is_array($transactionResponse)) {
+                    $transactionResponse = Json::htmlEncode($transactionResponse);
+                }
+
                 $return[] = [
                     'id' => $transaction->id,
                     'level' => $level,
@@ -1171,8 +1335,8 @@ class OrdersController extends Controller
                         'key' => $transaction->status,
                         'label' => Html::encode(Plugin::t(StringHelper::toTitleCase($transaction->status)))
                     ],
-                    'amount' => Plugin::getInstance()->getPaymentCurrencies()->convert($transaction->amount, $transaction->currency) . ' <small class="light">(' . $transaction->currency . ')</small>',
-                    'paymentAmount' => Plugin::getInstance()->getPaymentCurrencies()->convert($transaction->paymentAmount, $transaction->paymentCurrency) . ' <small class="light">(' . $transaction->currency . ')</small>',
+                    'paymentAmount' => Craft::$app->getFormatter()->asCurrency($transaction->paymentAmount, $transaction->paymentCurrency),
+                    'amount' => Craft::$app->getFormatter()->asCurrency($transaction->amount, $transaction->currency),
                     'gateway' => Html::encode($transaction->gateway->name ?? Plugin::t('Missing Gateway')),
                     'date' => $transaction->dateUpdated ? $transaction->dateUpdated->format('H:i:s (jS M Y)') : '',
                     'info' => [
@@ -1183,7 +1347,7 @@ class OrdersController extends Controller
                         ['label' => Html::encode(Plugin::t('Note')), 'type' => 'text', 'value' => $transaction->note ?? ''],
                         ['label' => Html::encode(Plugin::t('Gateway Code')), 'type' => 'code', 'value' => $transaction->code],
                         ['label' => Html::encode(Plugin::t('Converted Price')), 'type' => 'text', 'value' => Plugin::getInstance()->getPaymentCurrencies()->convert($transaction->paymentAmount, $transaction->paymentCurrency) . ' <small class="light">(' . $transaction->currency . ')</small>' . ' <small class="light">(1 ' . $transaction->currency . ' = ' . number_format($transaction->paymentRate) . ' ' . $transaction->paymentCurrency . ')</small>'],
-                        ['label' => Html::encode(Plugin::t('Gateway Response')), 'type' => 'response', 'value' => $transaction->response],
+                        ['label' => Html::encode(Plugin::t('Gateway Response')), 'type' => 'response', 'value' => $transactionResponse],
                     ],
                     'actions' => $refundCapture,
                 ];
@@ -1221,5 +1385,32 @@ class OrdersController extends Controller
             }
         }
         return $purchasables;
+    }
+
+    /**
+     * @param array $customers
+     * @return array
+     * @since 3.1.4
+     */
+    private function _prepCustomersArray(array $customers): array
+    {
+        if (empty($customers)) {
+            return [];
+        }
+
+        $currentUser = Craft::$app->getUser()->getIdentity();
+
+        foreach ($customers as &$customer) {
+            $user = $customer['userId'] ? Craft::$app->getUsers()->getUserById($customer['userId']) : null;
+            $customer['user'] = $user ? [
+                'title' => $user ? $user->__toString() : null,
+                'url' => $user && $currentUser->can('editUsers') ? $user->getCpEditUrl() : null,
+                'status' => $user ? $user->getStatus() : null,
+            ] : null;
+            $customer['photo'] = $user && $user->photoId ? $user->getThumbUrl(30) : null;
+            $customer['url'] = $currentUser->can('commerce-manageCustomers') ? UrlHelper::cpUrl('commerce/customers/' . $customer['id']) : null;
+        }
+
+        return $customers;
     }
 }

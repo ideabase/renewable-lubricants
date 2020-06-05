@@ -9,19 +9,19 @@
 
     {% set cartItemCount = cart.totalQty ?? 0 %}
     {% set cartItemTotal = cart.itemTotal ?? 0 %}
-    {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+    {% if cartItemCount > 0 %}
       <a class="header-cart-wrapper" href="{{ url('products/cart') }}">
         <div class="flex header-cart">
           <span>{{ cartItemCount ~ ' Item' }}{% if cartItemCount == 0 or cartItemCount > 1 %}{{ 's' }}{% endif %}{{ ' - ' ~ cartItemTotal|currency('USD') }}</span>
             <div>
-              <span>View Cart{# TODO: cart icon #}</span>
+              <span>View Cart</span>
             </div>
         </div>
       </a>
     {% endif %}
   </div>
 
-  {% if cartItemCount > -1 %} {# TODO: change to zero after testing #}
+  {% if cartItemCount > 0 %}
     <div class="header-cart-ext"></div>
   {% endif %}
 

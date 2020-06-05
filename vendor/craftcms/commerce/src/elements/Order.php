@@ -31,6 +31,7 @@ use craft\commerce\models\OrderStatus;
 use craft\commerce\models\PaymentSource;
 use craft\commerce\models\Settings;
 use craft\commerce\models\ShippingMethod;
+use craft\commerce\models\ShippingMethodOption;
 use craft\commerce\models\Transaction;
 use craft\commerce\Plugin;
 use craft\commerce\records\LineItem as LineItemRecord;
@@ -118,18 +119,55 @@ class Order extends Element
     use OrderElementTrait;
 
 
+    /**
+     * Payments exceed order total.
+     */
     const PAID_STATUS_OVERPAID = 'overPaid';
+
+    /**
+     * Payments equal order total.
+     */
     const PAID_STATUS_PAID = 'paid';
+
+    /**
+     * Payments less than order total.
+     */
     const PAID_STATUS_PARTIAL = 'partial';
+
+    /**
+     * Payments total zero on non-free order.
+     */
     const PAID_STATUS_UNPAID = 'unpaid';
 
-    const RECALCULATION_MODE_ALL = 'all'; // Recalculates line item sales, populates from purchasables, and regenerates adjustments
-    const RECALCULATION_MODE_NONE = 'none'; // Does not recalc sales, or populate from purchasable, or regenerate adjustments
-    const RECALCULATION_MODE_ADJUSTMENTS_ONLY = 'adjustmentsOnly'; // Does not recalc sales, or populate from purchasable, and only regenerate adjustments
+    /**
+     * Recalculates line items, populates from purchasables, and regenerates adjustments.
+     */
+    const RECALCULATION_MODE_ALL = 'all';
 
-    const ORIGIN_WEB = 'web'; // Did the order get created from the front-end
-    const ORIGIN_CP = 'cp'; // Did the order get created from the control panel
-    const ORIGIN_REMOTE = 'remote'; // Was the order created by a remote API
+    /**
+     * Recalculates adjustments only; does not recalculate line items or populate from purchasables.
+     */
+    const RECALCULATION_MODE_ADJUSTMENTS_ONLY = 'adjustmentsOnly';
+
+    /**
+     * Does not recalculate anything on the order.
+     */
+    const RECALCULATION_MODE_NONE = 'none';
+
+    /**
+     * Order created from the front end.
+     */
+    const ORIGIN_WEB = 'web';
+
+    /**
+     * Order created from the control panel.
+     */
+    const ORIGIN_CP = 'cp';
+
+    /**
+     * Order created by a remote source.
+     */
+    const ORIGIN_REMOTE = 'remote';
 
     /**
      * @event \yii\base\Event The event that is triggered before a new line item has been added to the order.
@@ -165,7 +203,7 @@ class Order extends Element
      * use craft\commerce\events\LineItemEvent;
      * use craft\commerce\models\LineItem;
      * use yii\base\Event;
-     * 
+     *
      * Event::on(
      *     Order::class,
      *     Order::EVENT_AFTER_ADD_LINE_ITEM,
@@ -177,6 +215,7 @@ class Order extends Element
      *         // ...
      *     }
      * );
+     * ```
      */
     const EVENT_AFTER_ADD_LINE_ITEM = 'afterAddLineItemToOrder';
 
@@ -251,7 +290,7 @@ class Order extends Element
      * ```php
      * use craft\commerce\elements\Order;
      * use yii\base\Event;
-     * 
+     *
      * Event::on(
      *     Order::class,
      *     Order::EVENT_AFTER_ORDER_PAID,
@@ -892,12 +931,12 @@ class Order extends Element
         // Set default addresses on the order
         if (!$this->isCompleted && Plugin::getInstance()->getSettings()->autoSetNewCartAddresses) {
             $hasPrimaryShippingAddress = !$this->shippingAddressId && $this->getCustomer() && $this->getCustomer()->primaryShippingAddressId;
-            if ($hasPrimaryShippingAddress && ($address = Plugin::getInstance()->getAddresses()->getAddressById($this->getCustomer()->primaryShippingAddressId)) !== null) {
-                $this->setShippingAddress($address);
+            if ($hasPrimaryShippingAddress && ($shippingAddress = Plugin::getInstance()->getAddresses()->getAddressByIdAndCustomerId($this->getCustomer()->primaryShippingAddressId, $this->customerId))) {
+                $this->setShippingAddress($shippingAddress);
             }
             $hasPrimaryBillingAddress = !$this->billingAddressId && $this->getCustomer() && $this->getCustomer()->primaryBillingAddressId;
-            if ($hasPrimaryBillingAddress && ($address = Plugin::getInstance()->getAddresses()->getAddressById($this->getCustomer()->primaryBillingAddressId)) !== null) {
-                $this->setBillingAddress($address);
+            if ($hasPrimaryBillingAddress && ($billingAddress = Plugin::getInstance()->getAddresses()->getAddressByIdAndCustomerId($this->getCustomer()->primaryBillingAddressId, $this->customerId))) {
+                $this->setBillingAddress($billingAddress);
             }
         }
 
@@ -1145,6 +1184,7 @@ class Order extends Element
     {
         $names = parent::extraFields();
         $names[] = 'availableShippingMethods';
+        $names[] = 'availableShippingMethodOptions';
         $names[] = 'adjustments';
         $names[] = 'billingAddress';
         $names[] = 'customer';
@@ -1537,6 +1577,7 @@ class Order extends Element
                 $this->setAdjustments(array_merge($this->getAdjustments(), $adjustments));
             }
         }
+
         // Since shipping adjusters run on the original price, pre discount, let's recalculate
         // if the currently selected shipping method is now not available after adjustments have run.
         $availableMethods = $this->getAvailableShippingMethods();
@@ -1556,6 +1597,30 @@ class Order extends Element
     public function getAvailableShippingMethods(): array
     {
         return Plugin::getInstance()->getShippingMethods()->getAvailableShippingMethods($this);
+    }
+
+    /**
+     * @return ShippingMethodOption[]
+     * @since 3.1
+     */
+    public function getAvailableShippingMethodOptions(): array
+    {
+        $methods = Plugin::getInstance()->getShippingMethods()->getAvailableShippingMethods($this);
+        $options = [];
+        $attributes = (new ShippingMethod())->attributes();
+
+        foreach ($methods as $method) {
+
+            $option = new ShippingMethodOption();
+            foreach ($attributes as $attribute) {
+                $option->$attribute = $method->$attribute;
+            }
+
+            $option->setOrder($this);
+            $options[$option->handle] = $option;
+        }
+
+        return $options;
     }
 
     /**
@@ -1595,7 +1660,13 @@ class Order extends Element
         $orderRecord->itemTotal = $this->getItemTotal();
         $orderRecord->email = $this->getEmail() ?: '';
         $orderRecord->isCompleted = $this->isCompleted;
-        $orderRecord->dateOrdered = $this->dateOrdered;
+
+        $dateOrdered = $this->dateOrdered;
+        if (!$dateOrdered && $orderRecord->isCompleted) {
+            $dateOrdered = Db::prepareDateForDb(new DateTime());
+        }
+        $orderRecord->dateOrdered = $dateOrdered;
+
         $orderRecord->datePaid = $this->datePaid ?: null;
         $orderRecord->dateAuthorized = $this->dateAuthorized ?: null;
         $orderRecord->shippingMethodHandle = $this->shippingMethodHandle;
@@ -1623,6 +1694,10 @@ class Order extends Element
         $orderRecord->paidStatus = $this->getPaidStatus();
         $orderRecord->recalculationMode = $this->getRecalculationMode();
 
+        // We want to always have the same date as the element table, based on the logic for updating these in the element service i.e resaving
+        $orderRecord->dateUpdated = $this->dateUpdated;
+        $orderRecord->dateCreated = $this->dateCreated;
+
         $customer = $this->getCustomer();
         $existingAddresses = $customer ? $customer->getAddresses() : [];
 
@@ -1634,7 +1709,8 @@ class Order extends Element
         // Save shipping address, it has already been validated.
         if ($shippingAddress = $this->getShippingAddress()) {
             // We need to only save the address to the customers address book while it is a cart and not being edited by another user
-            if ($customer && ($noCustomerUserOrCurrentUser || !$currentUserDoesntMatchCustomerUser) && !$this->isCompleted) {
+            // isCpRequest is checked to prevent duplication of address when marking an order as complete in the CP. This will be removed on cart addresses refactor
+            if ($customer && ($noCustomerUserOrCurrentUser || !$currentUserDoesntMatchCustomerUser) && !$this->isCompleted && !Craft::$app->getRequest()->isCpRequest) {
                 Plugin::getInstance()->getCustomers()->saveAddress($shippingAddress, $customer, false);
             } else {
                 Plugin::getInstance()->getAddresses()->saveAddress($shippingAddress, false);
@@ -1642,12 +1718,17 @@ class Order extends Element
 
             $orderRecord->shippingAddressId = $shippingAddress->id;
             $this->setShippingAddress($shippingAddress);
+        } else {
+            // Allow shipping address to be removed from an order/cart
+            $orderRecord->shippingAddressId = null;
+            $this->setShippingAddress(null);
         }
 
         // Save billing address, it has already been validated.
         if ($billingAddress = $this->getBillingAddress()) {
             // We need to only save the address to the customers address book while it is a cart and not being edited by another user
-            if ($customer && ($noCustomerUserOrCurrentUser || !$currentUserDoesntMatchCustomerUser) && !$this->isCompleted) {
+            // isCpRequest is checked to prevent duplication of address when marking an order as complete in the CP. This will be removed on cart addresses refactor
+            if ($customer && ($noCustomerUserOrCurrentUser || !$currentUserDoesntMatchCustomerUser) && !$this->isCompleted && !Craft::$app->getRequest()->isCpRequest) {
                 Plugin::getInstance()->getCustomers()->saveAddress($billingAddress, $customer, false);
             } else {
                 Plugin::getInstance()->getAddresses()->saveAddress($billingAddress, false);
@@ -1655,6 +1736,10 @@ class Order extends Element
 
             $orderRecord->billingAddressId = $billingAddress->id;
             $this->setBillingAddress($billingAddress);
+        } else {
+            // Allow shipping address to be removed from an order/cart
+            $orderRecord->billingAddressId = null;
+            $this->setBillingAddress(null);
         }
 
         if ($estimatedShippingAddress = $this->getEstimatedShippingAddress()) {
@@ -2300,16 +2385,27 @@ class Order extends Element
     }
 
     /**
-     * @param Address|array $address
+     * @param Address|array|null $address
      */
     public function setShippingAddress($address)
     {
-        if (!$address instanceof Address) {
-            $address = new Address($address);
+        if ($address === null) {
+            $this->shippingAddressId = null;
+            $this->_shippingAddress = null;
+        } else {
+            $address = is_array($address) ? new Address($address) : $address;
+            $this->shippingAddressId = $address->id;
+            $this->_shippingAddress = $address;
         }
+    }
 
-        $this->shippingAddressId = $address->id;
-        $this->_shippingAddress = $address;
+    /**
+     * @since 3.1
+     */
+    public function removeShippingAddress()
+    {
+        $this->shippingAddressId = null;
+        $this->_shippingAddress = null;
     }
 
     /**
@@ -2341,6 +2437,15 @@ class Order extends Element
     }
 
     /**
+     * @since 3.1
+     */
+    public function removeEstimatedShippingAddress()
+    {
+        $this->estimatedShippingAddressId = null;
+        $this->_estimatedShippingAddress = null;
+    }
+
+    /**
      * @return Address|null
      */
     public function getBillingAddress()
@@ -2357,12 +2462,23 @@ class Order extends Element
      */
     public function setBillingAddress($address)
     {
-        if (!$address instanceof Address) {
-            $address = new Address($address);
+        if ($address === null) {
+            $this->billingAddressId = null;
+            $this->_billingAddress = null;
+        } else {
+            $address = is_array($address) ? new Address($address) : $address;
+            $this->billingAddressId = $address->id;
+            $this->_billingAddress = $address;
         }
+    }
 
-        $this->billingAddressId = $address->id;
-        $this->_billingAddress = $address;
+    /**
+     * @since 3.1
+     */
+    public function removeBillingAddress()
+    {
+        $this->billingAddressId = null;
+        $this->_billingAddress = null;
     }
 
     /**
@@ -2392,6 +2508,16 @@ class Order extends Element
         $this->estimatedBillingAddressId = $address->id;
         $this->_estimatedBillingAddress = $address;
     }
+
+    /**
+     * @since 3.1
+     */
+    public function removeEstimatedBillingAddress()
+    {
+        $this->estimatedBillingAddressId = null;
+        $this->_estimatedBillingAddress = null;
+    }
+
 
     /**
      * @return int|null

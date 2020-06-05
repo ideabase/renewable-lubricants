@@ -18,6 +18,7 @@ use craft\commerce\records\LineItem as LineItemRecord;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Json;
+use LitEmoji\LitEmoji;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
@@ -126,7 +127,7 @@ class LineItems extends Component
      *         $lineItem = $event->lineItem;
      *         // @var bool $isNew
      *         $isNew = $event->isNew;
-     * 
+     *
      *         // Modify the price of a line item
      *         // ...
      *     }
@@ -257,8 +258,8 @@ class LineItems extends Component
         $lineItemRecord->height = $lineItem->height;
 
         $lineItemRecord->snapshot = $lineItem->snapshot;
-        $lineItemRecord->note = $lineItem->note;
-        $lineItemRecord->privateNote = $lineItem->privateNote ?? '';
+        $lineItemRecord->note = LitEmoji::unicodeToShortcode($lineItem->note);
+        $lineItemRecord->privateNote = LitEmoji::unicodeToShortcode($lineItem->privateNote ?? '');
         $lineItemRecord->lineItemStatusId = $lineItem->lineItemStatusId;
 
         $lineItemRecord->saleAmount = $lineItem->saleAmount;
@@ -293,6 +294,11 @@ class LineItems extends Component
                     'lineItem' => $lineItem,
                     'isNew' => $isNewLineItem,
                 ]));
+            }
+
+            // Clear cache on save
+            if (isset($this->_lineItemsByOrderId[$lineItem->orderId])) {
+                unset($this->_lineItemsByOrderId[$lineItem->orderId]);
             }
 
             return $success;
@@ -389,7 +395,6 @@ class LineItems extends Component
                 'id',
                 'options',
                 'price',
-                'saleAmount',
                 'salePrice',
                 'sku',
                 'description',

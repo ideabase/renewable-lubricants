@@ -36,7 +36,6 @@ use craft\records\AssetTransform as AssetTransformRecord;
 use DateTime;
 use yii\base\Application;
 use yii\base\Component;
-use yii\base\ErrorException;
 use yii\base\InvalidArgumentException;
 
 /**
@@ -511,7 +510,7 @@ class AssetTransforms extends Component
                 ->execute();
 
             // And the file.
-            $transformUri = $asset->getFolder()->path . $this->getTransformSubpath($asset, new AssetTransformIndex($result));
+            $transformUri = $asset->folderPath . $this->getTransformSubpath($asset, new AssetTransformIndex($result));
             $asset->getVolume()->deleteFile($transformUri);
         }
 
@@ -688,8 +687,8 @@ class AssetTransforms extends Component
         // If we have a match, copy the file.
         if ($matchFound) {
             /** @var array $matchFound */
-            $from = $asset->getFolder()->path . $this->getTransformSubpath($asset, new AssetTransformIndex($matchFound));
-            $to = $asset->getFolder()->path . $this->getTransformSubpath($asset, $index);
+            $from = $asset->folderPath . $this->getTransformSubpath($asset, new AssetTransformIndex($matchFound));
+            $to = $asset->folderPath . $this->getTransformSubpath($asset, $index);
 
             // Sanity check
             if ($volume->fileExists($to)) {
@@ -701,7 +700,7 @@ class AssetTransforms extends Component
             $this->_createTransformForAsset($asset, $index);
         }
 
-        return $volume->fileExists($asset->getFolder()->path . $this->getTransformSubpath($asset, $index));
+        return $volume->fileExists($asset->folderPath . $this->getTransformSubpath($asset, $index));
     }
 
     /**
@@ -847,8 +846,7 @@ class AssetTransforms extends Component
 
         $asset = Craft::$app->getAssets()->getAssetById($transformIndexModel->assetId);
 
-        return $this->getUrlForTransformByAssetAndTransformIndex($asset,
-            $transformIndexModel);
+        return $this->getUrlForTransformByAssetAndTransformIndex($asset, $transformIndexModel);
     }
 
     /**
@@ -860,7 +858,7 @@ class AssetTransforms extends Component
      */
     public function getUrlForTransformByAssetAndTransformIndex(Asset $asset, AssetTransformIndex $transformIndexModel): string
     {
-        return AssetsHelper::generateUrl($asset->getVolume(), $asset, $this->getTransformUri($asset, $transformIndexModel));
+        return AssetsHelper::generateUrl($asset->getVolume(), $asset, $this->getTransformUri($asset, $transformIndexModel), $transformIndexModel);
     }
 
     /**
@@ -905,10 +903,8 @@ class AssetTransforms extends Component
             if (!$volume instanceof LocalVolumeInterface) {
                 if (!is_file($imageSourcePath) || filesize($imageSourcePath) === 0) {
                     // Delete it just in case it's a 0-byter
-                    try {
-                        FileHelper::unlink($imageSourcePath);
-                    } catch (ErrorException $e) {
-                        Craft::warning("Unable to delete the file \"{$imageSourcePath}\": " . $e->getMessage(), __METHOD__);
+                    if (!FileHelper::unlink($imageSourcePath)) {
+                        Craft::warning("Unable to delete the file \"$imageSourcePath\".", __METHOD__);
                     }
 
                     $prefix = pathinfo($asset->filename, PATHINFO_FILENAME) . '.delimiter.';
@@ -933,10 +929,8 @@ class AssetTransforms extends Component
                     $volume->saveFileLocally($asset->getPath(), $tempFilePath);
 
                     if (!is_file($tempFilePath) || filesize($tempFilePath) === 0) {
-                        try {
-                            FileHelper::unlink($tempFilePath);
-                        } catch (ErrorException $e) {
-                            Craft::warning("Unable to delete the file \"{$tempFilePath}\": " . $e->getMessage(), __METHOD__);
+                        if (!FileHelper::unlink($tempFilePath)) {
+                            Craft::warning("Unable to delete the file \"$tempFilePath\".", __METHOD__);
                         }
                         throw new VolumeException(Craft::t('app', 'Tried to download the source file for image “{file}”, but it was 0 bytes long.',
                             ['file' => $asset->filename]));
@@ -946,10 +940,8 @@ class AssetTransforms extends Component
 
                     // Delete the leftover data.
                     $this->queueSourceForDeletingIfNecessary($imageSourcePath);
-                    try {
-                        FileHelper::unlink($tempFilePath);
-                    } catch (ErrorException $e) {
-                        Craft::warning("Unable to delete the file \"{$tempFilePath}\": " . $e->getMessage(), __METHOD__);
+                    if (!FileHelper::unlink($tempFilePath)) {
+                        Craft::warning("Unable to delete the file \"$tempFilePath\".", __METHOD__);
                     }
                 }
             }
@@ -1162,10 +1154,8 @@ class AssetTransforms extends Component
 
         $file = Craft::$app->getPath()->getAssetSourcesPath() . DIRECTORY_SEPARATOR . $asset->id . '.' . pathinfo($asset->filename, PATHINFO_EXTENSION);
 
-        try {
-            FileHelper::unlink($file);
-        } catch (ErrorException $e) {
-            Craft::warning("Unable to delete the file \"{$file}\": " . $e->getMessage(), __METHOD__);
+        if (!FileHelper::unlink($file)) {
+            Craft::warning("Unable to delete the file \"$file\".", __METHOD__);
         }
     }
 
@@ -1191,10 +1181,8 @@ class AssetTransforms extends Component
                 }
 
                 foreach ($files as $path) {
-                    try {
-                        FileHelper::unlink($path);
-                    } catch (ErrorException $e) {
-                        Craft::warning('Unable to delete asset thumbnails: ' . $e->getMessage(), __METHOD__);
+                    if (!FileHelper::unlink($path)) {
+                        Craft::warning("Unable to delete the asset thumbnail \"$path\".", __METHOD__);
                     }
                 }
             }
@@ -1222,7 +1210,7 @@ class AssetTransforms extends Component
                 ]));
             }
 
-            $volume->deleteFile($asset->getFolder()->path . $this->getTransformSubpath($asset, $transformIndex));
+            $volume->deleteFile($asset->folderPath . $this->getTransformSubpath($asset, $transformIndex));
 
             // Fire an 'afterDeleteTransforms' event
             if ($this->hasEventHandlers(self::EVENT_AFTER_DELETE_TRANSFORMS)) {
@@ -1381,7 +1369,7 @@ class AssetTransforms extends Component
         }
 
         $volume = $asset->getVolume();
-        $transformPath = $asset->getFolder()->path . $this->getTransformSubpath($asset, $index);
+        $transformPath = $asset->folderPath . $this->getTransformSubpath($asset, $index);
 
         // Already created. Relax, grasshopper!
         if ($volume->fileExists($transformPath)) {

@@ -429,6 +429,8 @@ class ProjectConfig extends Component
             $value = ProjectConfigHelper::cleanupConfig($value);
         }
 
+        $valueChanged = false;
+
         if ($value !== $this->get($path)) {
             if ($this->readOnly) {
                 // If we're applying yaml changes that are coming in via `project.yaml`, anyway, bail silently.
@@ -443,6 +445,8 @@ class ProjectConfig extends Component
                 $this->_timestampUpdated = true;
                 $this->set('dateModified', DateTimeHelper::currentTimeStamp(), 'Update timestamp for project config');
             }
+
+            $valueChanged = true;
         }
 
         // Mark this path (and its parent paths) as being processed, and store their current values
@@ -476,7 +480,12 @@ class ProjectConfig extends Component
         }
 
         $this->_traverseDataArray($config, $path, $value, $value === null);
-        $this->_saveConfig($config, $targetFilePath);
+
+        // Save config only if something actually changed.
+        if ($valueChanged) {
+            $this->_saveConfig($config, $targetFilePath);
+        }
+
         $this->processConfigChanges($path, true, $message);
     }
 
@@ -518,6 +527,9 @@ class ProjectConfig extends Component
         if (!$mutex->acquire($lockName, 15)) {
             throw new Exception('Could not acquire a lock for the syncing project config.');
         }
+
+        // Disable read/write splitting for the remainder of this request
+        Craft::$app->getDb()->enableSlaves = false;
 
         $this->_applyingYamlChanges = true;
         Craft::$app->getCache()->delete(self::CACHE_KEY);
@@ -598,7 +610,7 @@ class ProjectConfig extends Component
             $storedConfig = $this->_getStoredConfig();
             $oldValue = $this->_traverseDataArray($storedConfig, $path);
             $newValue = $this->get($path, true);
-            return Json::encode($oldValue) !== Json::encode($newValue);
+            return $this->encodeValueAsString($oldValue) !== $this->encodeValueAsString($newValue);
         }
 
         $changes = $this->_getPendingChanges();
@@ -651,7 +663,7 @@ class ProjectConfig extends Component
         }
 
         $newValue = $this->get($path, true);
-        $valueChanged = $triggerUpdate || $this->forceUpdate || Json::encode($oldValue) !== Json::encode($newValue);
+        $valueChanged = $triggerUpdate || $this->forceUpdate || $this->encodeValueAsString($oldValue) !== $this->encodeValueAsString($newValue);
 
         if ($valueChanged && !$this->muteEvents) {
             $event = new ConfigEvent(compact('path', 'oldValue', 'newValue'));
@@ -758,7 +770,7 @@ class ProjectConfig extends Component
 
                     foreach ($currentSet['added'] as $key => $value) {
                         // Prepare for storage
-                        $dbValue = Json::encode($value);
+                        $dbValue = $this->encodeValueAsString($value);
                         if (!mb_check_encoding($value, 'UTF-8') || ($isMysql && StringHelper::containsMb4($dbValue))) {
                             $dbValue = 'base64:' . base64_encode($dbValue);
                         }
@@ -828,8 +840,6 @@ class ProjectConfig extends Component
             }
         }
 
-        $info = Craft::$app->getInfo();
-
         if ($this->_updateConfigMap && $this->_useConfigFile()) {
             $configMap = $this->_generateConfigMap();
 
@@ -837,10 +847,10 @@ class ProjectConfig extends Component
                 $filePath = Craft::alias($filePath);
             }
 
-            $info->configMap = Json::encode($configMap);
+            $info = Craft::$app->getInfo();
+            $info->configMap = $this->encodeValueAsString($configMap);
+            Craft::$app->saveInfoAfterRequest();
         }
-
-        Craft::$app->saveInfoAfterRequest();
     }
 
     /**
@@ -1664,7 +1674,7 @@ class ProjectConfig extends Component
 
         $appliedChanges = [];
 
-        $modified = Json::encode($oldValue) !== Json::encode($newValue);
+        $modified = $this->encodeValueAsString($oldValue) !== $this->encodeValueAsString($newValue);
 
         if ($newValue !== null && ($oldValue === null || $modified)) {
             if (!is_scalar($newValue)) {
@@ -1735,7 +1745,7 @@ class ProjectConfig extends Component
 
         // See if we can get away with using the cached data
         $dependency = new DbQueryDependency([
-            'db' => Craft::$app->getDb(),
+            'db' => 'db',
             'query' => $this->_createProjectConfigQuery()
                 ->select(['value'])
                 ->where(['path' => 'dateModified']),
@@ -2508,6 +2518,7 @@ class ProjectConfig extends Component
             ->select([
                 'name',
                 'scope',
+                'isPublic',
                 'uid',
             ])
             ->from([Table::GQLSCHEMAS])
@@ -2516,10 +2527,11 @@ class ProjectConfig extends Component
 
         foreach ($scopeRows as &$row) {
             unset($row['uid']);
+            $row['isPublic'] = (bool) $row['isPublic'];
             $row['scope'] = Json::decodeIfJson($row['scope']);
         }
 
-        return ['scopes' => $scopeRows];
+        return ['schemas' => $scopeRows];
     }
 
     /**
@@ -2594,5 +2606,16 @@ class ProjectConfig extends Component
         }
 
         return $fieldLayouts;
+    }
+
+    /**
+     * Returns a project config compatible value encoded for storage.
+     *
+     * @param $value
+     * @return string
+     */
+    protected function encodeValueAsString($value): string
+    {
+        return  Json::encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
     }
 }

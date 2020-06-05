@@ -12,6 +12,7 @@ use craft\base\MissingComponentInterface;
 use craft\base\PluginInterface;
 use craft\elements\Asset;
 use craft\elements\db\ElementQuery;
+use craft\helpers\App;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
@@ -24,6 +25,7 @@ use craft\helpers\Sequence;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
 use craft\i18n\Locale;
+use craft\image\SvgAllowedAttributes;
 use craft\web\twig\nodevisitors\EventTagAdder;
 use craft\web\twig\nodevisitors\EventTagFinder;
 use craft\web\twig\nodevisitors\GetAttrAdjuster;
@@ -890,17 +892,17 @@ class Extension extends AbstractExtension implements GlobalsInterface
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('alias', [Craft::class, 'getAlias']),
             new TwigFunction('actionUrl', [UrlHelper::class, 'actionUrl']),
-            new TwigFunction('cpUrl', [UrlHelper::class, 'cpUrl']),
+            new TwigFunction('alias', [Craft::class, 'getAlias']),
             new TwigFunction('ceil', 'ceil'),
             new TwigFunction('className', 'get_class'),
             new TwigFunction('clone', [$this, 'cloneFunction']),
             new TwigFunction('combine', 'array_combine'),
+            new TwigFunction('cpUrl', [UrlHelper::class, 'cpUrl']),
             new TwigFunction('create', [Craft::class, 'createObject']),
             new TwigFunction('expression', [$this, 'expressionFunction']),
             new TwigFunction('floor', 'floor'),
-            new TwigFunction('getenv', 'getenv'),
+            new TwigFunction('getenv', [App::class, 'env']),
             new TwigFunction('gql', [$this, 'gqlFunction']),
             new TwigFunction('parseEnv', [Craft::class, 'parseEnv']),
             new TwigFunction('plugin', [$this, 'pluginFunction']),
@@ -1091,7 +1093,9 @@ class Extension extends AbstractExtension implements GlobalsInterface
 
         // Sanitize?
         if ($sanitize) {
-            $svg = (new Sanitizer())->sanitize($svg);
+            $sanitizer = new Sanitizer();
+            $sanitizer->setAllowedAttrs(new SvgAllowedAttributes());
+            $svg = $sanitizer->sanitize($svg);
             // Remove comments, title & desc
             $svg = preg_replace('/<!--.*?-->\s*/s', '', $svg);
             $svg = preg_replace('/<title>.*?<\/title>\s*/is', '', $svg);

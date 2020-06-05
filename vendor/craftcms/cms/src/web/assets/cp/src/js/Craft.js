@@ -1,5 +1,14 @@
 /** global: Craft */
 /** global: Garnish */
+
+// Use old jQuery prefilter behavior
+// see https://jquery.com/upgrade-guide/3.5/
+var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi;
+jQuery.htmlPrefilter = function( html ) {
+    return html.replace( rxhtmlTag, "<$1></$2>" );
+};
+
+
 // Set all the standard Craft.* stuff
 $.extend(Craft,
     {
@@ -595,7 +604,9 @@ $.extend(Craft,
                 options = options ? $.extend({}, options) : {};
                 options.method = method;
                 options.url = Craft.getActionUrl(action);
-                options.headers = $.extend({}, options.headers || {}, this._actionHeaders());
+                options.headers = $.extend({
+                    'X-Requested-With': 'XMLHttpRequest',
+                }, options.headers || {}, this._actionHeaders());
                 options.params = $.extend({}, options.params || {}, {
                     // Force Safari to not load from cache
                     v: new Date().getTime(),
@@ -603,6 +614,8 @@ $.extend(Craft,
                 axios.request(options).then(resolve).catch(reject);
             });
         },
+
+        _processedApiHeaders: false,
 
         /**
          * Sends a request to the Craftnet API.
@@ -615,31 +628,128 @@ $.extend(Craft,
         sendApiRequest: function(method, uri, options) {
             return new Promise((resolve, reject) => {
                 options = options ? $.extend({}, options) : {};
+                let cancelToken = options.cancelToken || null;
                 // Get the latest headers
-                this.sendActionRequest('POST', 'app/api-headers', {
-                    cancelToken: options.cancelToken || null,
-                }).then((headerResponse) => {
+                this.getApiHeaders(cancelToken).then(apiHeaders => {
                     options.method = method;
                     options.baseURL = Craft.baseApiUrl;
                     options.url = uri;
-                    options.headers = $.extend(headerResponse.data, options.headers || {});
+                    options.headers = $.extend(apiHeaders, options.headers || {});
                     options.params = $.extend(Craft.apiParams || {}, options.params || {}, {
                         // Force Safari to not load from cache
                         v: new Date().getTime(),
                     });
 
                     axios.request(options).then((apiResponse) => {
-                        this.sendActionRequest('POST', 'app/process-api-response-headers', {
-                            data: {
-                                headers: apiResponse.headers,
-                            },
-                            cancelToken: options.cancelToken || null,
-                        }).then(() => {
-                            resolve(apiResponse.data);
-                        }).catch(reject);
+                        // Send the API response back immediately
+                        resolve(apiResponse.data);
+
+                        if (!this._processedApiHeaders) {
+                            if (apiResponse.headers['x-craft-license-status']) {
+                                this._processedApiHeaders = true;
+                                this.sendActionRequest('POST', 'app/process-api-response-headers', {
+                                    data: {
+                                        headers: apiResponse.headers,
+                                    },
+                                    cancelToken: cancelToken,
+                                });
+
+                                // If we just got a new license key, set it and then resolve the header waitlist
+                                if (this._apiHeaders && this._apiHeaders['X-Craft-License'] === '__REQUEST__') {
+                                    this._apiHeaders['X-Craft-License'] = apiResponse.headers['x-craft-license'];
+                                    this._resolveHeaderWaitlist();
+                                }
+                            } else if (
+                                this._apiHeaders &&
+                                this._apiHeaders['X-Craft-License'] === '__REQUEST__' &&
+                                this._apiHeaderWaitlist.length
+                            ) {
+                                // The request didn't send headers. Go ahead and resolve the next request on the
+                                // header waitlist.
+                                let item = this._apiHeaderWaitlist.shift()
+                                item[0](this._apiHeaders);
+                            }
+                        }
                     }).catch(reject);
                 }).catch(reject);
             });
+        },
+
+        _loadingApiHeaders: false,
+        _apiHeaders: null,
+        _apiHeaderWaitlist: [],
+
+        /**
+         * Returns the headers that should be sent with API requests.
+         *
+         * @param {Object|null} cancelToken
+         * @return {Promise}
+         */
+        getApiHeaders: function(cancelToken) {
+            return new Promise((resolve, reject) => {
+                // Are we already loading them?
+                if (this._loadingApiHeaders) {
+                    this._apiHeaderWaitlist.push([resolve, reject]);
+                    return;
+                }
+
+                // Are the headers already cached?
+                if (this._apiHeaders) {
+                    resolve(this._apiHeaders);
+                    return;
+                }
+
+                this._loadingApiHeaders = true;
+                this.sendActionRequest('POST', 'app/api-headers', {
+                    cancelToken: cancelToken,
+                }).then(response => {
+                    // Make sure we even are waiting for these anymore
+                    if (!this._loadingApiHeaders) {
+                        reject(e);
+                        return;
+                    }
+
+                    this._apiHeaders = response.data;
+                    resolve(this._apiHeaders);
+
+                    // If we are requesting a new Craft license, hold off on
+                    // resolving other API requests until we have one
+                    if (response.data['X-Craft-License'] !== '__REQUEST__') {
+                        this._resolveHeaderWaitlist();
+                    }
+                }).catch(e => {
+                    this._loadingApiHeaders = false;
+                    reject(e)
+                    // Was anything else waiting for them?
+                    let item;
+                    while (item = this._apiHeaderWaitlist.shift()) {
+                        item[1](e);
+                    }
+                });
+            });
+        },
+
+        _resolveHeaderWaitlist: function() {
+            this._loadingApiHeaders = false;
+            // Was anything else waiting for them?
+            let item;
+            while (item = this._apiHeaderWaitlist.shift()) {
+                item[0](this._apiHeaders);
+            }
+        },
+
+        /**
+         * Clears the cached API headers.
+         */
+        clearCachedApiHeaders: function() {
+            this._apiHeaders = null;
+            this._processedApiHeaders = false;
+            this._loadingApiHeaders = false;
+
+            // Reject anything in the header waitlist
+            while (item = this._apiHeaderWaitlist.shift()) {
+                item[1]();
+            }
         },
 
         /**
@@ -1350,6 +1460,7 @@ $.extend(Craft,
             $('.pill', $container).pill();
             $('.formsubmit', $container).formsubmit();
             $('.menubtn', $container).menubtn();
+            $('.datetimewrapper', $container).datetime();
         },
 
         _elementIndexClasses: {},
@@ -1444,8 +1555,20 @@ $.extend(Craft,
          * @param {object} settings
          */
         createElementEditor: function(elementType, element, settings) {
-            var func;
+            // Param mapping
+            if (typeof settings === 'undefined' && $.isPlainObject(element)) {
+                // (settings)
+                settings = element;
+                element = null;
+            } else if (typeof settings !== 'object') {
+                settings = {};
+            }
 
+            if (!settings.elementType) {
+                settings.elementType = elementType;
+            }
+
+            var func;
             if (typeof this._elementEditorClasses[elementType] !== 'undefined') {
                 func = this._elementEditorClasses[elementType];
             } else {
@@ -1782,6 +1905,46 @@ $.extend($.fn,
                     new Garnish.MenuBtn($btn, settings);
                 }
             });
+        },
+
+        datetime: function() {
+            return this.each(function() {
+                let $wrapper = $(this);
+                let $inputs = $wrapper.find('input:not([name$="[timezone]"])');
+                let checkValue = () => {
+                    let hasValue = false;
+                    for (let i = 0; i < $inputs.length; i++) {
+                        if ($inputs.eq(i).val()) {
+                            hasValue = true;
+                            break;
+                        }
+                    }
+                    if (hasValue) {
+                        if (!$wrapper.children('.clear-btn').length) {
+                            let $btn = $('<div/>', {
+                                class: 'clear-btn',
+                                role: 'button',
+                                title: Craft.t('app', 'Clear'),
+                            })
+                                .appendTo($wrapper)
+                                .on('click', () => {
+                                    for (let i = 0; i < $inputs.length; i++) {
+                                        $inputs.eq(i).val('');
+                                    }
+                                    $btn.remove();
+                                })
+                        }
+                    } else {
+                        $wrapper.children('.clear-btn').remove();
+                    }
+                };
+                $inputs.on('change', checkValue);
+                checkValue();
+            });
+        },
+
+        checkDatetimeValue: function() {
+
         }
     });
 

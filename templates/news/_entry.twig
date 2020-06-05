@@ -3,11 +3,11 @@
 {% block content %}
 
 <section class="news-entry">
-  <h1>{{ entry.title }}</h1>
-
   {% if entry.featureImage|length %}
     <img src="{{ entry.featureImage.one().getUrl() }}">
   {% endif %}
+
+  <h1>{{ entry.title }}</h1>
 
   <div class="news-body-container">
     {{ entry.body }}

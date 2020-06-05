@@ -114,12 +114,16 @@ class DiscountsController extends BaseCpController
         $discount->totalDiscountUseLimit = $request->getBodyParam('totalDiscountUseLimit');
         $discount->ignoreSales = (bool)$request->getBodyParam('ignoreSales');
         $discount->categoryRelationshipType = $request->getBodyParam('categoryRelationshipType');
-        $discount->baseDiscountType = $request->getBodyParam('baseDiscountType');
+        $discount->baseDiscountType = $request->getBodyParam('baseDiscountType') ?: DiscountRecord::BASE_DISCOUNT_TYPE_VALUE;
+        $discount->appliedTo = $request->getBodyParam('appliedTo') ?: DiscountRecord::APPLIED_TO_MATCHING_LINE_ITEMS;
+        $discount->orderConditionFormula = $request->getBodyParam('orderConditionFormula');
 
-        $baseDiscount = Localization::normalizeNumber($request->getBodyParam('baseDiscount'));
+        $baseDiscount = $request->getBodyParam('baseDiscount') ?: 0;
+        $baseDiscount = Localization::normalizeNumber($baseDiscount);
         $discount->baseDiscount = $baseDiscount * -1;
 
-        $perItemDiscount = Localization::normalizeNumber($request->getBodyParam('perItemDiscount'));
+        $perItemDiscount = $request->getBodyParam('perItemDiscount') ?: 0;
+        $perItemDiscount = Localization::normalizeNumber($perItemDiscount);
         $discount->perItemDiscount = $perItemDiscount * -1;
 
         $discount->purchaseTotal = Localization::normalizeNumber($request->getBodyParam('purchaseTotal'));
@@ -303,16 +307,23 @@ class DiscountsController extends BaseCpController
             $variables['groups'] = [];
         }
 
-        if ($variables['discount']->baseDiscount != 0) {
-            $variables['discount']->baseDiscount = Craft::$app->formatter->asDecimal((float)$variables['discount']->baseDiscount * -1);
-        }
+        $localizedNumberAttributes = ['baseDiscount', 'perItemDiscount', 'purchaseTotal'];
+        $flipNegativeNumberAttributes = ['baseDiscount', 'perItemDiscount'];
+        foreach ($localizedNumberAttributes as $attr) {
+            if (!isset($variables['discount']->{$attr})) {
+                continue;
+            }
 
-        if ($variables['discount']->perItemDiscount != 0) {
-            $variables['discount']->perItemDiscount = Craft::$app->formatter->asDecimal((float)$variables['discount']->perItemDiscount * -1);
-        }
+            if ($variables['discount']->{$attr} != 0) {
+                $number = (float)$variables['discount']->{$attr};
+                if (in_array($attr, $flipNegativeNumberAttributes)) {
+                    $number *= -1;
+                }
 
-        if ($variables['discount']->purchaseTotal != 0) {
-            $variables['discount']->purchaseTotal = Craft::$app->formatter->asDecimal((float)$variables['discount']->purchaseTotal);
+                $variables['discount']->{$attr} = Craft::$app->formatter->asDecimal($number);
+            } else {
+                $variables['discount']->{$attr} = 0;
+            }
         }
 
         $variables['counterTypeTotal'] = self::DISCOUNT_COUNTER_TYPE_TOTAL;
@@ -332,11 +343,23 @@ class DiscountsController extends BaseCpController
 
         $variables['baseDiscountTypes'] = [
             DiscountRecord::BASE_DISCOUNT_TYPE_VALUE => Plugin::t($currencyName . ' value'),
-            DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_TOTAL => Plugin::t('(%) Percent off items total (original price) and shipping total'),
-            DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_TOTAL_DISCOUNTED => Plugin::t('(%) Percent off items total (discounted price) and shipping total'),
-            DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_ITEMS => Plugin::t('(%) Percent off items total (original price)'),
-            DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_ITEMS_DISCOUNTED => Plugin::t('(%) Percent off items total (discounted price)'),
         ];
+
+        if ($variables['discount']->baseDiscountType == DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_TOTAL) {
+            $variables['baseDiscountTypes'][DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_TOTAL] = Plugin::t('(%) off total original price and shipping total (Deprecated)');
+        }
+
+        if ($variables['discount']->baseDiscountType == DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_TOTAL_DISCOUNTED) {
+            $variables['baseDiscountTypes'][DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_TOTAL_DISCOUNTED] = Plugin::t('(%) off total discounted price and shipping total (Deprecated)');
+        }
+
+        if ($variables['discount']->baseDiscountType == DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_ITEMS) {
+            $variables['baseDiscountTypes'][DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_ITEMS] = Plugin::t('(%) off total original price (Deprecated)');
+        }
+
+        if ($variables['discount']->baseDiscountType == DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_ITEMS_DISCOUNTED) {
+            $variables['baseDiscountTypes'][DiscountRecord::BASE_DISCOUNT_TYPE_PERCENT_ITEMS_DISCOUNTED] = Plugin::t('(%) off total discounted price (Deprecated)');
+        }
 
         $variables['categoryElementType'] = Category::class;
         $variables['categories'] = null;
@@ -361,6 +384,11 @@ class DiscountsController extends BaseCpController
             DiscountRecord::CATEGORY_RELATIONSHIP_TYPE_BOTH => Plugin::t('Both'),
         ];
 
+        $variables['appliedTo'] = [
+            DiscountRecord::APPLIED_TO_MATCHING_LINE_ITEMS => Plugin::t('Discount the matching items only'),
+            DiscountRecord::APPLIED_TO_ALL_LINE_ITEMS => Plugin::t('Discount all line items')
+        ];
+
         $variables['purchasables'] = null;
 
         if (empty($variables['id']) && Craft::$app->getRequest()->getParam('purchasableIds')) {
@@ -369,7 +397,7 @@ class DiscountsController extends BaseCpController
             foreach ($purchasableIdsFromUrl as $purchasableId) {
                 $purchasable = Craft::$app->getElements()->getElementById((int)$purchasableId);
                 if ($purchasable && $purchasable instanceof Product) {
-                    $purchasableIds[] = $purchasable->defaultVariantId;
+                    $purchasableIds[] = $purchasable->defaultVariantId; // this would only be null if we are duplicating a variant, otherwise should never be null
                 } else {
                     $purchasableIds[] = $purchasableId;
                 }
@@ -377,6 +405,8 @@ class DiscountsController extends BaseCpController
         } else {
             $purchasableIds = $variables['discount']->getPurchasableIds();
         }
+
+        $purchasableIds = array_filter($purchasableIds);
 
         $purchasables = [];
         foreach ($purchasableIds as $purchasableId) {

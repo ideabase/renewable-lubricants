@@ -560,10 +560,9 @@ class Sections extends Component
                     foreach ($this->getEntryTypesBySectionId($section->id) as $entryType) {
                         if ($entryType->id == $entry->typeId) {
                             // This is *the* entry's type. Make sure its name & handle match the section's
-                            if (
-                                ($entryType->name !== ($entryType->name = $section->name)) ||
-                                ($entryType->handle !== ($entryType->handle = $section->handle))
-                            ) {
+                            if ($entryType->name !== $section->name || $entryType->handle !== $section->handle) {
+                                $entryType->name = $section->name;
+                                $entryType->handle = $section->handle;
                                 $this->saveEntryType($entryType);
                             }
 
@@ -735,6 +734,7 @@ class Sections extends Component
                         'elementType' => Entry::class,
                         'criteria' => [
                             'sectionId' => $sectionRecord->id,
+                            'structureId' => $sectionRecord->structureId,
                         ],
                     ]));
                 } else if ($this->autoResaveEntries) {
@@ -1607,7 +1607,7 @@ class Sections extends Component
 
         /** @var Entry $entry */
         foreach ($query->each() as $entry) {
-            $structuresService->appendToRoot($sectionRecord->structureId, $entry, 'insert');
+            $structuresService->appendToRoot($sectionRecord->structureId, $entry, Structures::MODE_INSERT);
         }
     }
 

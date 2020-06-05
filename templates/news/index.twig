@@ -13,7 +13,7 @@
   <div class="news-list">
     {% for entry in newsEntries %}
       <a class="news-img" href="{{ entry.url }}">
-        <img src="{{ entry.featureImage.one().getUrl() }}">
+        <img src="{{ entry.featureImage.one().getUrl('productImage') }}">
       </a>
 
       <a href="{{ entry.url }}">

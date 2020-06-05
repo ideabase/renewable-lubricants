@@ -8,7 +8,6 @@
 namespace craft\commerce;
 
 use Craft;
-use craft\base\Element;
 use craft\base\Plugin as BasePlugin;
 use craft\commerce\base\Purchasable;
 use craft\commerce\elements\Order;
@@ -19,8 +18,9 @@ use craft\commerce\exports\LineItemExport;
 use craft\commerce\exports\OrderExport;
 use craft\commerce\fields\Products;
 use craft\commerce\fields\Variants;
-use craft\commerce\gql\arguments\elements\Product as GqlProductArgument;
-use craft\commerce\gql\resolvers\elements\Product as GqlProductResolver;
+use craft\commerce\gql\interfaces\elements\Variant as GqlVariantInterface;
+use craft\commerce\gql\queries\Product as GqlProductQueries;
+use craft\commerce\gql\queries\Variant as GqlVariantQueries;
 use craft\commerce\gql\interfaces\elements\Product as GqlProductInterface;
 use craft\commerce\helpers\ProjectConfigData;
 use craft\commerce\migrations\Install;
@@ -80,7 +80,6 @@ use craft\web\twig\variables\CraftVariable;
 use yii\base\Event;
 use yii\base\Exception;
 use yii\web\User;
-use GraphQL\Type\Definition\Type as GqlTypeDefinition;
 
 /**
  * @property array $cpNavItem the control panel navigation menu
@@ -121,7 +120,8 @@ class Plugin extends BasePlugin
     /**
      * @inheritDoc
      */
-    public $schemaVersion = '3.0.9';
+
+    public $schemaVersion = '3.1.12';
 
     /**
      * @inheritdoc
@@ -136,7 +136,7 @@ class Plugin extends BasePlugin
     /**
      * @inheritdoc
      */
-    public $minVersionRequired = '1.2.1360';
+    public $minVersionRequired = '2.2.18';
 
     use CommerceServices;
     use Variables;
@@ -543,7 +543,7 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * Register the Gql things
+     * Register the Gql interfaces
      */
     private function _registerGqlInterfaces()
     {
@@ -551,30 +551,28 @@ class Plugin extends BasePlugin
             // Add my GraphQL types
             $types = $event->types;
             $types[] = GqlProductInterface::class;
+            $types[] = GqlVariantInterface::class;
             $event->types = $types;
         });
     }
 
     /**
-     * Register the Gql things
+     * Register the Gql queries
      */
     private function _registerGqlQueries()
     {
         Event::on(Gql::class, Gql::EVENT_REGISTER_GQL_QUERIES, function(RegisterGqlQueriesEvent $event) {
             // Add my GraphQL queries
-            $queries = $event->queries;
-            $queries['products'] = [
-                'type' => GqlTypeDefinition::listOf(GqlProductInterface::getType()),
-                'args' => GqlProductArgument::getArguments(),
-                'resolve' => GqlProductResolver::class . '::resolve'
-            ];
-
-            $event->queries = $queries;
+            $event->queries = array_merge(
+                $event->queries,
+                GqlProductQueries::getQueries(),
+                GqlVariantQueries::getQueries()
+            );
         });
     }
 
     /**
-     * Register the Gql things
+     * Register the Gql permissions
      */
     private function _registerGqlPermissions()
     {
@@ -589,7 +587,7 @@ class Plugin extends BasePlugin
 
                 foreach ($productTypes as $productType) {
                     $suffix = 'productTypes.' . $productType->uid;
-                    $productPermissions[$suffix . ':read'] = ['label' => Craft::t('app', 'View product type - {productType}', ['productType' => Craft::t('site', $productType->name)])];
+                    $productPermissions[$suffix . ':read'] = ['label' => self::t('View product type - {productType}', ['productType' => Craft::t('site', $productType->name)])];
                 }
 
                 $permissions[$label] = $productPermissions;

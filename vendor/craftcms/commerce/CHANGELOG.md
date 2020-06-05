@@ -1,5 +1,213 @@
 # Release Notes for Craft Commerce
 
+## 3.1.7 - 2020-06-02
+
+### Fixed
+- Fixed a bug where blank addresses were being automatically created on new carts. ([#1486](https://github.com/craftcms/commerce/issues/1486)) 
+- Fixed a SQL error that could occur during order consolidation on PostgreSQL. 
+
+## 3.1.6 - 2020-06-02
+
+### Changed
+- `craft\commerce\services\Customers::consolidateOrdersToUser()` is no longer deprecated.
+
+### Fixed
+- Fixed a bug where the “Purchase Total” and “Purchase Quantity” discount conditions weren’t being applied correctly. ([#1389](https://github.com/craftcms/commerce/issues/1389))
+- Fixed a bug where a customer could be deleted if `Order::$registerUserOnOrderComplete` was set to `true` on order completion. ([#1483](https://github.com/craftcms/commerce/issues/1483))
+- Fixed a bug where it wasn’t possible to save an order without addresses on the Edit Order page. ([#1484](https://github.com/craftcms/commerce/issues/1484))
+- Fixed a bug where addresses weren’t being set automatically when retrieving a cart. ([#1476](https://github.com/craftcms/commerce/issues/1476))
+- Fixed a bug where transaction information wasn’t being displayed correctly on the Edit Order page. ([#1467](https://github.com/craftcms/commerce/issues/1467))
+- Fixed a bug where `commerce/pay/*` and `commerce/customer-addresses/*` actions ignored the `updateCartSearchIndexes` config setting.
+- Fixed a deprecation warning. ([#1481](https://github.com/craftcms/commerce/issues/1481))
+
+## 3.1.5 - 2020-05-27
+
+### Added
+- Added the `updateCartSearchIndexes` config setting. ([#1416](https://github.com/craftcms/commerce/issues/1416))
+- Added `craft\commerce\services\Discounts::EVENT_DISCOUNT_MATCHES_ORDER`.
+- Renamed the `Totals` column to `All Totals` and `Total` to `Total Price` on the Orders index page. ([#1482](https://github.com/craftcms/commerce/issues/1482))
+
+### Deprecated
+- Deprecated `craft\commerce\services\Discounts::EVENT_BEFORE_MATCH_LINE_ITEM`. `EVENT_DISCOUNT_MATCHES_LINE_ITEM` should be used instead.
+
+### Fixed
+- Fixed a PHP error that could occur on Craft 3.5. ([#1471](https://github.com/craftcms/commerce/issues/1471))
+- Fixed a bug where the “Purchase Total” discount condition would show a negative value.
+- Fixed a bug where payment transaction amounts where not being formatted correctly on Edit Order pages. ([#1463](https://github.com/craftcms/commerce/issues/1463)) 
+- Fixed a bug where free shipping discounts could be applied incorrectly. ([#1473](https://github.com/craftcms/commerce/issues/1473))
+
+## 3.1.4 - 2020-05-18
+
+### Added
+- Added a “Duplicate” action to the Products index page.
+- It’s now possible to query for a single product or variant via GraphQL.
+- Address and line item notes now support emoji characters. ([#1426](https://github.com/craftcms/commerce/issues/1426))
+- Added `craft\commerce\fields\Products::getContentGqlType()`.
+- Added `craft\commerce\fields\Variants::getContentGqlType()`.
+- Added `craft\commerce\models\Address::getCountryIso()`. ([#1419](https://github.com/craftcms/commerce/issues/1419))
+- Added `craft\commerce\web\assets\commerceui\CommerceOrderAsset`.
+
+### Changed
+- It’s now possible to add multiple line items at a time on the Edit Order page. ([#1446](https://github.com/craftcms/commerce/issues/1446))
+- It’s now possible to copy the billing address over to the shipping address, and vise-versa, on Edit Order pages. ([#1412](https://github.com/craftcms/commerce/issues/1412))
+- Edit Order pages now link to the customer’s edit page. ([#1397](https://github.com/craftcms/commerce/issues/1397))
+- Improved the line item options layout on the Edit Order page.
+
+### Fixed
+- Fixed a bug where products weren’t getting duplicate correctly when the “Save as a new product” option was selected. ([#1442](https://github.com/craftcms/commerce/issues/1442))
+- Fixed a bug where addresses were being incorrectly duplicated when updating a cart from the Edit Order page. ([#1435](https://github.com/craftcms/commerce/issues/1435))
+- Fixed a bug where `product` and `variant` fields were returning the wrong type in GraphQL queries. ([#1434](https://github.com/craftcms/commerce/issues/1434))
+- Fixed a SQL error that could occur when saving a product. ([#1407](https://github.com/craftcms/commerce/pull/1407))
+- Fixed a bug where only admin users were allowed to add line item on the Edit Order page. ([#1424](https://github.com/craftcms/commerce/issues/1424))
+- Fixed a bug where it wasn’t possible to remove an address on the Edit Order page. ([#1436](https://github.com/craftcms/commerce/issues/1436))
+- Fixed a bug where user groups would be unset when saving a primary address on the Edit User page. ([#1421](https://github.com/craftcms/commerce/issues/1421))
+- Fixed a PHP error that could occur when saving an address. ([#1417](https://github.com/craftcms/commerce/issues/1417))
+- Fixed a bug where entering a localized number for a base discount value would save incorrectly. ([#1400](https://github.com/craftcms/commerce/issues/1400))
+- Fixed a bug where blank addresses were being set on orders from the Edit Order page. ([#1401](https://github.com/craftcms/commerce/issues/1401))
+- Fixed a bug where past orders weren’t being consolidated for new users. ([#1423](https://github.com/craftcms/commerce/issues/1423))
+- Fixed a bug where unnecessary order recalculation could occur during a payment request. ([#1431](https://github.com/craftcms/commerce/issues/1431))
+- Fixed a bug where variants weren’t getting resaved automatically if their field layout was removed from the product type settings. ([#1359](https://github.com/craftcms/commerce/issues/1359))
+- Fixed a PHP error that could occur when saving a discount.
+
+## 3.1.3 - 2020-04-22
+
+### Fixed
+- Fixed a PHP error that occurred when saving variants. ([#1403](https://github.com/craftcms/commerce/pull/1403))
+- Fixed an error that could occur when processing Project Config changes that also included new sites. ([#1390](https://github.com/craftcms/commerce/issues/1390))
+- Fixed a bug where “Purchase Total” and “Purchase Quantity” discount conditions weren’t being applied correctly. ([#1389](https://github.com/craftcms/commerce/issues/1389))
+
+## 3.1.2 - 2020-04-17
+
+### Added
+- It’s now possible to query for products and variants by their custom field values via GraphQL.
+- Added the `variants` field to GraphQL product queries.
+- Added `craft\commerce\service\Variants::getVariantGqlContentArguments()`.
+
+### Changed
+- It’s now possible to query for orders using multiple email addresses. ([#1361](https://github.com/craftcms/commerce/issues/1361))
+- `craft\commerce\controllers\CartController::$_cart` is now protected.
+- `craft\commerce\controllers\CartController::$_cartVariable` is now protected.
+
+### Deprecated
+- Deprecated `craft\commerce\queue\jobs\ConsolidateGuestOrders::consolidate()`. `craft\commerce\services\Customers::consolidateGuestOrdersByEmail()` should be used instead.
+
+### Fixed
+- Fixed a bug where orders weren’t marked as complete when using an offsite gateway and the “authorize” payment type.
+- Fixed an error that occurred when attempting to pay for an order from the control panel. ([#1362](https://github.com/craftcms/commerce/issues/1362))
+- Fixed a PHP error that occurred when using a custom shipping method during checkout. ([#1378](https://github.com/craftcms/commerce/issues/1378))
+- Fixed a bug where Edit Address pages weren’t redirecting back to the Edit User page on save. ([#1368](https://github.com/craftcms/commerce/issues/1368))
+- Fixed a bug where selecting the “All Orders” source on the Orders index page wouldn’t update the browser’s history. ([#1367](https://github.com/craftcms/commerce/issues/1367))
+- Fixed a bug where the Orders index page wouldn’t work as expected after cancelling an order status update. ([#1375](https://github.com/craftcms/commerce/issues/1375))
+- Fixed a bug where the Edit Order pages would continue showing the previous order status message after it had been changed. ([#1366](https://github.com/craftcms/commerce/issues/1366))
+- Fixed a race condition that could occur when consolidating guest orders.
+- Fixed a bug where the Edit Order page was showing order-level adjustments’ “Edit” links for incomplete orders. ([#1374](https://github.com/craftcms/commerce/issues/1374))
+- Fixed a PHP error that could occur when viewing a disabled country in the control panel.
+- Fixed a bug where `craft\commerce\models\LineItem::$saleAmount` was being incorrectly validated. ([#1365](https://github.com/craftcms/commerce/issues/1365))
+- Fixed a bug where variants weren’t getting deleted when a product was hard-deleted. ([#1186](https://github.com/craftcms/commerce/issues/1186))
+- Fixed a bug where the `cp.commerce.product.edit.details` template hook was getting called in the wrong place in Edit Product pages. ([#1376](https://github.com/craftcms/commerce/issues/1376))
+- Fixed a bug where line items’ caches were not being invalidated on save. ([#1377](https://github.com/craftcms/commerce/issues/1377))
+
+## 3.1.1 - 2020-04-03
+
+### Changed
+- Line items’ sale amounts are now calculated automatically.
+
+### Fixed
+- Fixed a bug where orders weren’t saving properly during payment.
+- Fixed a bug where it wasn’t obvious how to set shipping and billing addresses on a new order. ([#1354](https://github.com/craftcms/commerce/issues/1354))
+- Fixed a bug where variant blocks were getting extra padding above their fields.
+- Fixed an error that could occur when using the `|commerceCurrency` Twig filter if the Intl extension wasn’t enabled. ([#1353](https://github.com/craftcms/commerce/issues/1353))
+- Fixed a bug where the `hasSales` variant query param could override most other params.
+- Fixed a SQL error that could occur when querying for variants using the `hasStock` param on PostgreSQL. ([#1356](https://github.com/craftcms/commerce/issues/1356))
+- Fixed a SQL error that could occur when querying for orders using the `isPaid` or `isUnpaid` params on PostgreSQL.
+- Fixed a bug where passing `false` to a subscription query’s `isCanceled` or `isExpired` params would do nothing.
+
+## 3.1.0.1 - 2020-04-02
+
+### Fixed
+- Fixed a bug where the `commerce_discounts` table was missing an `orderConditionFormula` column on fresh installs. ([#1351](https://github.com/craftcms/commerce/issues/1351))
+
+## 3.1.0 - 2020-04-02
+
+### Added
+- It’s now possible to set dynamic condition formulas on discounts. ([#470](https://github.com/craftcms/commerce/issues/470))
+- It’s now possible to reorder states. ([#1284](https://github.com/craftcms/commerce/issues/1284))
+- It’s now possible to load a previous cart into the current session. ([#1348](https://github.com/craftcms/commerce/issues/1348))
+- Customers can now pay the outstanding balance on a cart or completed order.
+- It’s now possible to pass a `paymentSourceId` param on `commerce/payments/pay` requests, to set the desired payment gateway at the time of payment. ([#1283](https://github.com/craftcms/commerce/issues/1283))
+- Edit Order pages now automatically populate the billing and shipping addresses when a new customer is selected. ([#1295](https://github.com/craftcms/commerce/issues/1295))
+- It’s now possible to populate the billing and shipping addresses on an order based on existing addresses in the customer’s address book. ([#990](https://github.com/craftcms/commerce/issues/990))
+- JSON responses for `commerce/cart/*` actions now include an `availableShippingMethodOptions` array, which lists all available shipping method options and their prices.
+- It’s now possible to query for variants via GraphQL. ([#1315](https://github.com/craftcms/commerce/issues/1315))
+- It’s now possible to set an `availableForPurchase` argument when querying for products via GraphQL.
+- It’s now possible to set a `defaultPrice` argument when querying for products via GraphQL.
+- Products now have an `availableForPurchase` field when queried via GraphQL.
+- Products now have a `defaultPrice` field when queried via GraphQL.
+- Added `craft\commerce\adjusters\Tax::_getTaxAmount()`.
+- Added `craft\commerce\base\TaxEngineInterface`.
+- Added `craft\commerce\controllers\AddressesController::actionValidate()`.
+- Added `craft\commerce\controllers\AddressesController::getAddressById()`.
+- Added `craft\commerce\controllers\AddressesController::getCustomerAddress()`.
+- Added `craft\commerce\controllers\CartController::actionLoadCart()`.
+- Added `craft\commerce\elements\Order::getAvailableShippingMethodsOptions()`.
+- Added `craft\commerce\elements\Order::removeBillingAddress()`.
+- Added `craft\commerce\elements\Order::removeEstimateBillingAddress()`.
+- Added `craft\commerce\elements\Order::removeEstimateShippingAddress()`.
+- Added `craft\commerce\elements\Order::removeShippingAddress()`.
+- Added `craft\commerce\elements\Variant::getGqlTypeName()`.
+- Added `craft\commerce\elements\Variant::gqlScopesByContext()`.
+- Added `craft\commerce\elements\Variant::gqlTypeNameByContext()`.
+- Added `craft\commerce\engines\TaxEngine`.
+- Added `craft\commerce\gql\arguments\elements\Variant`.
+- Added `craft\commerce\gql\arguments\interfaces\Variant`.
+- Added `craft\commerce\gql\arguments\queries\Variant`.
+- Added `craft\commerce\gql\arguments\resolvers\Variant`.
+- Added `craft\commerce\gql\arguments\types\elements\Variant`.
+- Added `craft\commerce\gql\arguments\types\generators\VariantType`.
+- Added `craft\commerce\models\Settings::$loadCartRedirectUrl`.
+- Added `craft\commerce\models\ShippingMethodOption`.
+- Added `craft\commerce\services\Addresses::removeReadOnlyAttributesFromArray()`.
+- Added `craft\commerce\services\Carts::getCartName()`.
+- Added `craft\commerce\services\Customers::getCustomersQuery()`.
+- Added `craft\commerce\services\Taxes`.
+
+### Changed
+- Improved performance for installations with millions of orders.
+- Improved the “Add a line item” behavior and styling on the Edit Order page.
+- Discount adjustments are now only applied to line items, not the whole order. The “Base discount” amount is now spread across all line items.
+- Line items’ sale prices are now rounded before being multiplied by the quantity.
+- Improved the consistency of discount and tax calculations and rounding logic across the system.
+- Products and subscriptions can now be sorted by their IDs in the control panel.
+- Improved the styling and behavior of the example templates.
+
+### Deprecated
+- Deprecated the ability to create percentage-based order-level discounts.
+
+### Fixed
+- Fixed an error that could occur when querying for products by type via GraphQL. 
+- Fixed a bug where it was possible to issue refunds for more than the remaining transaction amount. ([#1098](https://github.com/craftcms/commerce/issues/1098))
+- Fixed a bug where order queries could return orders in the wrong sequence when ordered by `dateUpdated`. ([#1345](https://github.com/craftcms/commerce/issues/1345))
+- Fixed a PHP error that could occur on the Edit Order page if the customer had been deleted. ([#1347](https://github.com/craftcms/commerce/issues/1347))
+- Fixed a bug where shipping rules and discounts weren’t properly supporting localized number formats. ([#1332](https://github.com/craftcms/commerce/issues/1332), [#1174](https://github.com/craftcms/commerce/issues/1174))
+- Fixed an error that could occur while updating an order status message, if the order was being recalculated at the same time. ([#1309](https://github.com/craftcms/commerce/issues/1309))
+- Fixed an error that could occur when deleting an address on the front end.
+
+## 3.0.12 - 2020-03-20
+
+### Added
+- Added the `validateCartCustomFieldsOnSubmission` config setting. ([#1292](https://github.com/craftcms/commerce/issues/1292))
+- It is now possible to search orders by the SKUs being purchased. ([#1328](https://github.com/craftcms/commerce/issues/1328))
+- Added `craft\commerce\services\Carts::restorePreviousCartForCurrentUser()`.
+
+### Changed
+- Updated the minimum required version to upgrade to `2.2.18`.
+
+### Fixed
+- Fixed a bug where “Purchase Total” and “Purchase Quantity” discount conditions were not checked when removing shipping costs. ([#1321](https://github.com/craftcms/commerce/issues/1321))
+- Fixed an error that could occur when eager loading `product` on a variant query.
+- Fixed an PHP error that could occur when all countries are disabled. ([#1314](https://github.com/craftcms/commerce/issues/1314))
+- Fixed a bug that could occur for logged in users when removing all items from the cart. ([#1319](https://github.com/craftcms/commerce/issues/1319))
+
 ## 3.0.11 - 2020-02-25
 
 ### Added
@@ -35,6 +243,8 @@
 - Added `craft\commerce\models\LineItem::$description`.
 - Added `craft\commerce\elements\Order::$dateAuthorized`.
 - Added `craft\commerce\elements\Order::EVENT_AFTER_ORDER_AUTHORIZED`.
+- Added `craft\commerce\models\LineItem::$sku`.
+- Added `craft\commerce\models\LineItem::$description`.
 
 ### Changed
 - Line items now store their purchasable’s SKU and description directly, in addition to within the snapshot.
@@ -235,7 +445,7 @@
 
 ## Deprecated
 - Deprecated `craft\commerce\elements\Order::getShouldRecalculateAdjustments()` and `setShouldRecalculateAdjustments()`. `craft\commerce\elements\Order::$recalculationMode` should be used instead.
-- Deprecated `craft\commerce\serviced\Customers::consolidateOrdersToUser()`. `craft\commerce\queue\ConsolidateGuestOrders` job should be used instead.
+- Deprecated `craft\commerce\serviced\Customers::consolidateOrdersToUser()`. `craft\commerce\queue\ConsolidateGuestOrders` jobs should be used instead.
 - Deprecated `craft\commerce\services\Orders::cartArray()`. `craft\commerce\elements\Order::toArray()` should be used instead.
 
 ## Removed
@@ -270,6 +480,8 @@
 - Removed `craft\commerce\models\Discount::getFreeShipping()`.
 - Removed `craft\commerce\models\Discount::setFreeShipping()`.
 - Removed `craft\commerce\models\LineItem::fillFromPurchasable()`.
+- Removed `craft\commerce\models\LineItem::getDescription()`. Use `craft\commerce\models\LineItem::$description` instead. 
+- Removed `craft\commerce\models\LineItem::getSku()`. Use `craft\commerce\models\LineItem::$sku` instead. 
 - Removed `craft\commerce\models\Order::getDiscount()`.
 - Removed `craft\commerce\models\Order::getShippingCost()`.
 - Removed `craft\commerce\models\Order::getTax()`.
@@ -286,9 +498,25 @@
 - Removed `craft\commerce\widgets\Revenue`. Use `craft\commerce\widgets\TotalRevenue` instead.
 - Removed the `phpoffice/phpspreadsheet` package dependency.
 
+## 2.2.19 - 2020-04-15
+
+### Fixed
+- Fixed a bug where “Purchase Total” and “Purchase Quantity” discount conditions were not checked when removing shipping costs. ([#1321](https://github.com/craftcms/commerce/issues/1321))
+
+## 2.2.18 - 2020-03-05
+
+### Fixed
+- Fixed an error that occurred when editing a product from a Products field. ([#1291](https://github.com/craftcms/commerce/pull/1291))
+- Fixed an error that could occur when editing a variant’s stock value. ([#1306](https://github.com/craftcms/commerce/issues/1306))
+
+## 2.2.17 - 2020-02-12
+
+### Changed
+- Improved the performance of the Orders index page.
+
 ## 2.2.16 - 2020-02-10
 
-### Change
+### Changed
 - Improved the performance of the Orders index page.
 
 ### Fixed
@@ -1454,7 +1682,7 @@
 - Updated the Stripe gateway library to 2.4.1.
 
 ### Deprecated
-- Deprecated the `update` variable in email templates. Use `orderHistory` instead, which returns the same `Commerce_OrderHistoryModel`.
+- Deprecated the `update` variable in email templates. The `orderHistory` variable should be used instead.
 
 ### Fixed
 - Fixed a bug where `Commerce_OrderService::completeOrder()` was not checking to make sure the order was not already completed before doing its thing.
@@ -1698,9 +1926,9 @@
 - `Commerce_PaymentsService::processPayment()` and `completePayment()` no longer respond to the request directly, unless the gateway requires a redirect via POST. They now return `true` or `false` indicating whether the operation was successful, and leave it up to the controller to handle the client response.
 
 ### Deprecated
-- The “commerce/cartPayment/pay” controller action has been deprecated. Templates should be updated to use “commerce/payments/pay” instead.
-- The “commerce/cartPayment/completePayment” controller action has been deprecated. Templates should be updated to use “commerce/payments/completePayment” instead.
-- The “withVariant” product criteria parameter has been deprecated. Templates should be updated to use “hasVariant” instead.
+- The `commerce/cartPayment/pay` action has been deprecated. `commerce/payments/pay` should be used instead.
+- The `commerce/cartPayment/completePayment` action has been deprecated. `commerce/payments/completePayment` should be used instead.
+- The `withVariant` product criteria parameter has been deprecated. `hasVariant` should be used instead.
 
 ## 1.0.1190 - 2016-02-26
 

@@ -4,9 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>{{ "Craft Commerce"|t }}</title>
-
-  <meta name="description" content="{{ "The example templates for Craft Commerce"|t }}">
+  <title>Renewable Lubricants</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script type="application/javascript">{% include 'products/jquery.js' %}</script>
@@ -31,7 +29,9 @@
 
   <div class="bg-grey-lighter">
     <div id="header" class="container mx-auto md:flex justify-between items-center p-6 text-center">
-      <a href="{{ url('products') }}" class="brand mb-6 md:mb-0 block">{%- include 'products/_images/logo' with {'class': 'logo'} -%}</a>
+      <a class="header-img-a" href="{{ url('products') }}">
+        <img class="header-img" src="{{ header.logo.one().getUrl() }}">
+      </a>
 
       {% if showNav %}
         {% include 'products/_includes/nav' %}
@@ -90,15 +90,6 @@
 
   <footer>
     <div class="container mx-auto p-6">
-      <h3>Welcome!</h3>
-      <p>These are the Craft Commerce example templates.</p>
-      <p>Resources:</p>
-      <ul>
-        <li><a href="https://craftcommerce.com/docs">Craft Commerce Documentation</a>.</li>
-        <li><a href="https://craftcms.com/docs/introduction">Craft CMS Documentation</a>.</li>
-        <li><a href="http://craftcms.stackexchange.com">Craft CMS Stack Exchange</a>. Use the <code>plugin-craftcommerce</code> tag.</li>
-        <li><a href="https://craftcms.com/discord">Craft Discord Community</a>. Use the <code>#commerce2</code> channel.</li>
-      </ul>
     </div>
   </footer>
 </body>

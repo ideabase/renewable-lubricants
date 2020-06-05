@@ -55,6 +55,7 @@ use yii\base\Behavior;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\base\NotSupportedException;
 use yii\db\Exception as DbException;
 
 /**
@@ -127,7 +128,7 @@ class Elements extends Component
      * use craft\services\Elements;
      *
      * Craft::$app->elements->on(Elements::EVENT_BEFORE_SAVE_ELEMENT, function(ElementEvent $e) {
-     *     if (ElementHelper::isDraftOrRevision($e->element) {
+     *     if (ElementHelper::isDraftOrRevision($e->element)) {
      *         return;
      *     }
      *
@@ -149,7 +150,7 @@ class Elements extends Component
      * use craft\services\Elements;
      *
      * Craft::$app->elements->on(Elements::EVENT_AFTER_SAVE_ELEMENT, function(ElementEvent $e) {
-     *     if (ElementHelper::isDraftOrRevision($e->element) {
+     *     if (ElementHelper::isDraftOrRevision($e->element)) {
      *         return;
      *     }
      *
@@ -283,12 +284,12 @@ class Elements extends Component
      *
      * @param int $elementId The element’s ID.
      * @param string|null $elementType The element class.
-     * @param int|null $siteId The site to fetch the element in.
+     * @param int|int[]|string|null $siteId The site(s) to fetch the element in.
      * Defaults to the current site.
      * @param array $criteria
      * @return ElementInterface|null The matching element, or `null`.
      */
-    public function getElementById(int $elementId, string $elementType = null, int $siteId = null, array $criteria = [])
+    public function getElementById(int $elementId, string $elementType = null, $siteId = null, array $criteria = [])
     {
         if (!$elementId) {
             return null;
@@ -628,9 +629,9 @@ class Elements extends Component
      * Propagates all elements that match a given element query to another site(s).
      *
      * @param ElementQueryInterface $query The element query to fetch elements with
+     * @param int|int[]|null $siteIds The site ID(s) that the elements should be propagated to. If null, elements will be
      * @param bool $continueOnError Whether to continue going if an error occurs
      * @throws \Throwable if reasons
-     * @var int|int[]|null The site ID(s) that the elements should be propagated to. If null, elements will be
      * propagated to all supported sites, except the one they were queried in.
      * @since 3.2.0
      */
@@ -679,10 +680,14 @@ class Elements extends Component
                             /** @var Element $siteElement */
                             $siteElement = $this->getElementById($element->id, $elementType, $siteId);
                             if ($siteElement === null || $siteElement->dateUpdated < $element->dateUpdated) {
-                                $this->propagateElement($element, $siteId, $siteElement);
+                                $this->propagateElement($element, $siteId, $siteElement ?? false);
                             }
                         }
                     }
+
+                    // It's now fully duplicated and propagated
+                    $element->markAsDirty();
+                    $element->afterPropagate(false);
                 } catch (\Throwable $e) {
                     if (!$continueOnError) {
                         throw $e;
@@ -736,6 +741,10 @@ class Elements extends Component
         $mainClone->id = null;
         $mainClone->uid = null;
         $mainClone->contentId = null;
+        $mainClone->root = null;
+        $mainClone->lft = null;
+        $mainClone->rgt = null;
+        $mainClone->level = null;
         $mainClone->dateCreated = null;
         $mainClone->duplicateOf = $element;
 
@@ -777,6 +786,30 @@ class Elements extends Component
             // Start with $element's site
             if (!$this->_saveElementInternal($mainClone, false, false)) {
                 throw new InvalidElementException($mainClone, 'Element ' . $element->id . ' could not be duplicated for site ' . $element->siteId);
+            }
+
+            // Is this a structured element?
+            if ($element->structureId && $element->root) {
+                // See if we've cloned the source element's parent
+                // (we can't use getParent() here because there's a chance that the parent doesn't exist in the same
+                //site as the source element anymore, if this is coming from an ApplyNewPropagationMethod job)
+                if (
+                    $element->level != 1 &&
+                    ($parentId = $element
+                        ->getAncestors(1)
+                        ->select(['elements.id'])
+                        ->siteId('*')
+                        ->unique()
+                        ->scalar()
+                    ) !== false &&
+                    isset(static::$duplicatedElementIds[$parentId])
+                ) {
+                    // Append the clone to the parent's clone
+                    $mode = $mainClone->root === null ? Structures::MODE_INSERT : Structures::MODE_AUTO;
+                    Craft::$app->getStructures()->append($element->structureId, $mainClone, static::$duplicatedElementIds[$parentId], $mode);
+                } else if (!$mainClone->root) {
+                    Craft::$app->getStructures()->appendToRoot($element->structureId, $mainClone, Structures::MODE_INSERT);
+                }
             }
 
             // Map it
@@ -1871,16 +1904,13 @@ class Elements extends Component
      *
      * @param ElementInterface $element The element to propagate
      * @param int $siteId The site ID that the element should be propagated to
-     * @param ElementInterface|null $siteElement The element loaded for the propagated site (only pass this if you
-     * already had a reason to load it)
+     * @param ElementInterface|false|null $siteElement The element loaded for the propagated site (only pass this if you
+     * already had a reason to load it). Set to `false` if it is known to not exist yet.
      * @throws Exception if the element couldn't be propagated
      * @since 3.0.13
      */
-    public function propagateElement(ElementInterface $element, int $siteId, ElementInterface $siteElement = null)
+    public function propagateElement(ElementInterface $element, int $siteId, $siteElement = null)
     {
-        /** @var Element $element */
-        $isNewElement = !$element->id;
-
         // Get the sites supported by this element
         if (empty($supportedSites = ElementHelper::supportedSitesForElement($element))) {
             throw new Exception('All elements must have at least one site associated with them.');
@@ -1893,7 +1923,7 @@ class Elements extends Component
             throw new Exception('Attempting to propagate an element to an unsupported site.');
         }
 
-        $this->_propagateElement($element, $isNewElement, $siteInfo, $siteElement);
+        $this->_propagateElement($element, $siteInfo, $siteElement);
     }
 
     /**
@@ -1970,8 +2000,9 @@ class Elements extends Component
         }
 
         // If the element only supports a single site, ensure it's enabled for that site
-        if (count($supportedSites) === 1) {
-            $element->enabledForSite = true;
+        if (count($supportedSites) === 1 && !$element->getEnabledForSite()) {
+            $element->enabled = false;
+            $element->setEnabledForSite(true);
         }
 
         // Set a dummy title if there isn't one already and the element type has titles
@@ -2129,7 +2160,7 @@ class Elements extends Component
                 foreach ($supportedSites as $siteInfo) {
                     // Skip the master site
                     if ($siteInfo['siteId'] != $element->siteId) {
-                        $this->_propagateElement($element, $isNewElement, $siteInfo);
+                        $this->_propagateElement($element, $siteInfo, $isNewElement ? false : null);
                     }
                 }
             }
@@ -2192,12 +2223,19 @@ class Elements extends Component
             if (Craft::$app->getRequest()->getIsConsoleRequest()) {
                 Craft::$app->getSearch()->indexElementAttributes($element);
             } else {
-                Craft::$app->getQueue()->push(new UpdateSearchIndex([
+                $queue = Craft::$app->getQueue();
+                $job = new UpdateSearchIndex([
                     'elementType' => get_class($element),
                     'elementId' => $element->id,
                     'siteId' => $propagate ? '*' : $element->siteId,
                     'fieldHandles' => $element->getDirtyFields(),
-                ]));
+                ]);
+                try {
+                    $queue->priority(2048)->push($job);
+                } catch (NotSupportedException $e) {
+                    // The queue probably doesn't support custom push priorities. Try again without one.
+                    $queue->push($job);
+                }
             }
         }
 
@@ -2258,18 +2296,19 @@ class Elements extends Component
      * Propagates an element to a different site
      *
      * @param ElementInterface $element
-     * @param bool $isNewElement
      * @param array $siteInfo
-     * @param ElementInterface|null $siteElement The element loaded for the propagated site
+     * @param ElementInterface|false|null $siteElement The element loaded for the propagated site
      * @throws Exception if the element couldn't be propagated
      */
-    private function _propagateElement(ElementInterface $element, bool $isNewElement, array $siteInfo, ElementInterface $siteElement = null)
+    private function _propagateElement(ElementInterface $element, array $siteInfo, $siteElement = null)
     {
         /** @var Element $element */
         // Try to fetch the element in this site
         /** @var Element|null $siteElement */
-        if ($siteElement === null && !$isNewElement) {
+        if ($siteElement === null && $element->id) {
             $siteElement = $this->getElementById($element->id, get_class($element), $siteInfo['siteId']);
+        } else if (!$siteElement) {
+            $siteElement = null;
         }
 
         // If it doesn't exist yet, just clone the master site

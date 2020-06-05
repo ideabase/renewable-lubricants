@@ -11,6 +11,8 @@
 
 namespace doublesecretagency\smartmap;
 
+use craft\base\Element;
+use doublesecretagency\smartmap\exports\AddressExport;
 use yii\base\Event;
 
 use Craft;
@@ -54,7 +56,7 @@ class SmartMap extends Plugin
     public $hasCpSettings = true;
 
     /** @var bool $schemaVersion Current schema version of the plugin. */
-    public $schemaVersion = '3.2.2';
+    public $schemaVersion = '3.2.3';
 
     /** @inheritDoc */
     public function init()
@@ -87,6 +89,15 @@ class SmartMap extends Plugin
             function (Event $event) {
                 $variable = $event->sender;
                 $variable->set('smartMap', SmartMapVariable::class);
+            }
+        );
+
+        // Register exporter
+        Event::on(
+            Element::class,
+            Element::EVENT_REGISTER_EXPORTERS,
+            function (Event $event) {
+                $event->exporters[] = AddressExport::class;
             }
         );
 

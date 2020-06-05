@@ -14,15 +14,16 @@ use craft\commerce\elements\Order;
 use craft\commerce\models\Address;
 use craft\commerce\models\Customer;
 use craft\commerce\Plugin;
-use craft\commerce\queue\jobs\ConsolidateGuestOrders;
 use craft\commerce\records\Customer as CustomerRecord;
 use craft\commerce\records\CustomerAddress as CustomerAddressRecord;
 use craft\commerce\web\assets\commercecp\CommerceCpAsset;
 use craft\db\Query;
+use craft\db\Table as CraftTable;
 use craft\elements\User;
 use craft\elements\User as UserElement;
 use craft\errors\ElementNotFoundException;
 use craft\events\ModelEvent;
+use craft\events\UserEvent as CraftUserEvent;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -288,6 +289,8 @@ class Customers extends Component
         if ($impersonating) {
             Plugin::getInstance()->getCarts()->forgetCart();
         }
+
+        Plugin::getInstance()->getCarts()->restorePreviousCartForCurrentUser();
     }
 
     /**
@@ -309,7 +312,6 @@ class Customers extends Component
      * @param User $user
      * @param Order[]|null the orders con consolidate. If null, all guest orders associated with the user's email will be fetched
      * @return bool
-     * @deprecated in 3.0 use ConsolidateGuestOrders job instead
      */
     public function consolidateOrdersToUser(User $user, array $orders = null): bool
     {
@@ -345,7 +347,12 @@ class Customers extends Component
 
                 if ($order->isCompleted && !$belongsToAnotherUser) {
                     $order->customerId = $toCustomer->id;
-                    Craft::$app->getElements()->saveElement($order);
+
+                    // We only want to update search indexes if the order is a cart and the developer wants to keep cart search indexes updated.
+                    $updateCartSearchIndexes = Plugin::getInstance()->getSettings()->updateCartSearchIndexes;
+                    $updateSearchIndex = ($order->isCompleted || $updateCartSearchIndexes);
+
+                    Craft::$app->getElements()->saveElement($order, false, false, $updateSearchIndex);
                 }
             }
 
@@ -420,13 +427,12 @@ class Customers extends Component
         $this->_createUserFromOrder($order);
 
         if ($orderAddressesMutated) {
-            Craft::$app->getElements()->saveElement($order, false);
+            // We don't need to update search indexes since the addresses are the same.
+            Craft::$app->getElements()->saveElement($order, false, false, false);
         }
 
         // Consolidate guest orders
-        Craft::$app->getQueue()->push(new ConsolidateGuestOrders([
-            'emails' => [$order->email]
-        ]));
+        $this->consolidateGuestOrdersByEmail($order->email, $order);
     }
 
     /**
@@ -466,6 +472,138 @@ class Customers extends Component
         }
     }
 
+    /**
+     * Retrieve customer query with the option to specify a search term
+     *
+     * @param string|null $search
+     * @return Query
+     * @since 3.1
+     */
+    public function getCustomersQuery($search = null): Query
+    {
+        $customersQuery = (new Query())
+            ->select([
+                'customers.id as id',
+                'userId',
+                'orders.email as email',
+                'primaryBillingAddressId',
+                'billing.firstName as billingFirstName',
+                'billing.lastName as billingLastName',
+                'billing.fullName as billingFullName',
+                'billing.address1 as billingAddress',
+                'shipping.firstName as shippingFirstName',
+                'shipping.lastName as shippingLastName',
+                'shipping.fullName as shippingFullName',
+                'shipping.address1 as shippingAddress',
+                'primaryShippingAddressId',
+            ])
+            ->from(Table::CUSTOMERS . ' customers')
+            ->innerJoin(Table::ORDERS . ' orders' , '[[orders.customerId]] = [[customers.id]]')
+            ->leftJoin(CraftTable::USERS . ' users', '[[users.id]] = [[customers.userId]]')
+            ->leftJoin(Table::ADDRESSES . ' billing', '[[billing.id]] = [[customers.primaryBillingAddressId]]')
+            ->leftJoin(Table::ADDRESSES . ' shipping', '[[shipping.id]] = [[customers.primaryShippingAddressId]]')
+            ->groupBy([
+                'customers.id',
+                'orders.email',
+                'billing.firstName',
+                'billing.lastName',
+                'billing.fullName',
+                'billing.address1',
+                'shipping.firstName',
+                'shipping.lastName',
+                'shipping.fullName',
+                'shipping.address1',
+            ])
+
+            // Exclude customer records without a user or where there isn't any data
+            ->where(['or',
+                ['not', ['userId' => null]],
+                ['and',
+                    ['userId' => null],
+                    ['or',
+                        ['not', ['primaryBillingAddressId' => null]],
+                        ['not', ['primaryShippingAddressId' => null]],
+                    ]
+                ]
+            ])->andWhere(['[[orders.isCompleted]]' => 1]);
+
+        if ($search) {
+            $likeOperator = Craft::$app->getDb()->getIsPgsql() ? 'ILIKE' : 'LIKE';
+            $customersQuery->andWhere([
+                'or',
+                [$likeOperator, '[[billing.address1]]', $search],
+                [$likeOperator, '[[billing.firstName]]', $search],
+                [$likeOperator, '[[billing.fullName]]', $search],
+                [$likeOperator, '[[billing.lastName]]', $search],
+                [$likeOperator, '[[orders.email]]', $search],
+                [$likeOperator, '[[orders.reference]]', $search],
+                [$likeOperator, '[[orders.number]]', $search],
+                [$likeOperator, '[[shipping.address1]]', $search],
+                [$likeOperator, '[[shipping.firstName]]', $search],
+                [$likeOperator, '[[shipping.fullName]]', $search],
+                [$likeOperator, '[[shipping.lastName]]', $search],
+                [$likeOperator, '[[users.username]]', $search],
+            ]);
+        }
+
+        return $customersQuery;
+    }
+
+    /**
+     * Consolidate all guest orders for this email address to use one customer record.
+     *
+     * @param string $email
+     * @param Order|null $order
+     * @throws \yii\db\Exception
+     * @since 3.1.4
+     */
+    public function consolidateGuestOrdersByEmail(string $email, $order = null)
+    {
+        $customerId = (new Query())
+            ->select('orders.customerId')
+            ->from(Table::ORDERS . ' orders')
+            ->innerJoin(Table::CUSTOMERS . ' customers', '[[customers.id]] = [[orders.customerId]]')
+            ->where(['orders.email' => $email])
+            ->andWhere(['orders.isCompleted' => true])
+            // we want the customers related to a userId to be listed first, then by their latest order
+            ->orderBy('[[customers.userId]] DESC, [[orders.dateOrdered]] ASC')
+            ->scalar(); // get the first customerId in the result
+
+        if (!$customerId) {
+            return;
+        }
+
+        // Get completed orders for other customers with the same email but not the same customer
+        $orders = (new Query())
+            ->select([
+                'id' => 'orders.id',
+                'userId' => 'customers.userId'
+            ])
+            ->where(['and', ['[[orders.email]]' => $email, '[[orders.isCompleted]]' => true], ['not', ['[[orders.customerId]]' => $customerId]]])
+            ->leftJoin(Table::CUSTOMERS . ' customers', '[[orders.customerId]] = [[customers.id]]')
+            ->from(Table::ORDERS . ' orders')
+            ->all();
+
+        foreach ($orders as $orderRow) {
+            $userId = $orderRow['userId'];
+            $orderId = $orderRow['id'];
+
+            if (!$userId) {
+                // Dont use element save, just update DB directly
+                if ($order && $order instanceof Order) {
+                    $order->customerId = $customerId;
+                }
+
+                Craft::$app->getDb()->createCommand()
+                    ->update(Table::ORDERS, [
+                        'customerId' => $customerId,
+                    ], [
+                        'id' => $orderId,
+                    ])
+                    ->execute();
+            }
+        }
+    }
 
     /**
      * Get the current customer.
@@ -634,7 +772,7 @@ class Customers extends Component
         }
 
         // already a user?
-        $user = User::find()->email($order->email)->one();
+        $user = User::find()->email($order->email)->status(null)->one();
         if ($user) {
             return;
         }
@@ -664,11 +802,12 @@ class Customers extends Component
                 Craft::warning('User saved, but couldn’t send activation email. Check your email settings.', __METHOD__);
             }
 
-            // Delete auto generated customer from $this->afterSaveUserHandler()
+            // Saving a user *can* create a customer using $this->afterSaveUserHandler()
             $autoGeneratedCustomer = $this->getCustomerByUserId($user->id);
-
-            if ($autoGeneratedCustomer) {
-                $this->deleteCustomer($autoGeneratedCustomer);
+            // We dont want to have two customers with the same related user ID
+            if ($autoGeneratedCustomer && $customer->id != $autoGeneratedCustomer->id) {
+                $autoGeneratedCustomer->userId = null;
+                Plugin::getInstance()->getCustomers()->saveCustomer($autoGeneratedCustomer, false);
             }
 
             $customer->userId = $user->id;
@@ -734,8 +873,22 @@ class Customers extends Component
         $customer = $this->getCustomerByUserId($event->sender->id);
 
         // Create a new customer for a user that does not have a customer
-        if (!$customer) {
-            $customer = new Customer(['userId' => $event->sender->id]);
+        if (!$customer && $event->sender->email) {
+            $existingCustomerIdByEmail = (new Query())
+                ->select('orders.customerId')
+                ->from(Table::ORDERS . ' orders')
+                ->innerJoin(Table::CUSTOMERS . ' customers', '[[customers.id]] = [[orders.customerId]]')
+                ->where(['orders.email' => $event->sender->email])
+                ->andWhere(['orders.isCompleted' => true])
+                ->orderBy('[[orders.dateOrdered]] ASC')
+                ->scalar(); // get the first customerId in the result
+
+            if ($customer = $this->getCustomerById($existingCustomerIdByEmail)) {
+                $customer->userId = $event->sender->id;
+            } else {
+                $customer = new Customer(['userId' => $event->sender->id]);
+            }
+
             $this->saveCustomer($customer);
         }
     }

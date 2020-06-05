@@ -1,0 +1,132 @@
+{# data sheets search results #}
+
+{% extends '_layouts/main' %}
+
+{% block content %}
+
+<div class="h1-wrapper-top">
+  <h1>Data Sheets</h1>
+</div>
+
+{# search form #}
+<form action="{{ url('data-sheets/results') }}" name="data-sheets-search">
+  <input type="search" id="search-form-input" name="q" placeholder="Search" autofocus required>
+  <input type="submit" value="Go">
+</form>
+
+{# filter checkboxes #}
+<div class="data-sheets-filter">
+  <input type="checkbox" id="sds-checkbox" name="sds" checked>
+  <label for="sds">SDS</label>
+  &nbsp;
+  <input type="checkbox" id="tds-checkbox" name="tds" checked>
+  <label for="tds">TDS</label>
+</div>
+
+{# get the search query and use it to search in data sheets assets #}
+{% set searchQuery = craft.app.request.getParam('q') %}
+{% set sds = craft.assets.volume('sds').search(searchQuery).orderBy('score').all() %}
+{% set tds = craft.assets.volume('tds').search(searchQuery).orderBy('score').all() %}
+
+<section class="data-sheets">
+  {# sds search results #}
+  {% if searchQuery|length and sds|length %}
+    <div class="data-sheets-sds">
+      <h2>SDS</h2>
+      <p>{{ sds|length }} result{% if sds|length > 1 %}{{ 's' }}{% endif %}:</p>
+
+      {% for asset in sds %}
+        <div><a href="{{ asset.getUrl() }}">{{ asset.title }}</a></div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {# tds search results #}
+  {% if searchQuery|length and tds|length %}
+    <div class="data-sheets-tds">
+      <h2>TDS</h2>
+      <p>{{ tds|length }} result{% if tds|length > 1 %}{{ 's' }}{% endif %}:</p>
+
+      {% for asset in tds %}
+        <div><a href="{{ asset.getUrl() }}">{{ asset.title }}</a></div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
+  {# if no results, return a message to the user #}
+  {% if searchQuery|length and not sds|length and not tds|length %}
+    <p class="data-sheets-no-results">Your search for "{{ searchQuery }}" didn’t return any results.</p>
+  {% endif %}
+</section>
+
+{% endblock %}
+
+{% js %}
+
+{# fill the search input with the previous query #}
+var query = {{ craft.app.request.getParam('q')|json_encode|raw }};
+if (query.length > 0) {
+  document.getElementById('search-form-input').value = query;
+}
+
+{# checkbox event listeners #}
+var sdsElements = document.getElementsByClassName('data-sheets-sds')
+var tdsElements = document.getElementsByClassName('data-sheets-tds')
+
+document.getElementById('sds-checkbox').addEventListener('change', function() {
+  if (this.checked) {
+    for (var i = 0; i < sdsElements.length; i++) {
+      sdsElements[i].style.display = 'unset';
+    }
+  } else {
+    for (var i = 0; i < sdsElements.length; i++) {
+      sdsElements[i].style.display = 'none';
+    }
+  }
+});
+
+document.getElementById('tds-checkbox').addEventListener('change', function() {
+  if (this.checked) {
+    for (var i = 0; i < tdsElements.length; i++) {
+      tdsElements[i].style.display = 'unset';
+    }
+  } else {
+    for (var i = 0; i < tdsElements.length; i++) {
+      tdsElements[i].style.display = 'none';
+    }
+  }
+});
+
+{% endjs %}
+
+{% js %}
+
+var sdsElements = document.getElementsByClassName('data-sheets-sds')
+var tdsElements = document.getElementsByClassName('data-sheets-tds')
+
+document.getElementById('sds-checkbox').addEventListener('change', function() {
+  if (this.checked) {
+    for (var i = 0; i < sdsElements.length; i++) {
+      sdsElements[i].style.display = 'unset';
+    }
+  } else {
+    for (var i = 0; i < sdsElements.length; i++) {
+      sdsElements[i].style.display = 'none';
+    }
+  }
+});
+
+document.getElementById('tds-checkbox').addEventListener('change', function() {
+  if (this.checked) {
+    for (var i = 0; i < tdsElements.length; i++) {
+      tdsElements[i].style.display = 'unset';
+    }
+  } else {
+    for (var i = 0; i < tdsElements.length; i++) {
+      tdsElements[i].style.display = 'none';
+    }
+  }
+});
+
+{% endjs %}

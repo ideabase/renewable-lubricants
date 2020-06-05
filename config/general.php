@@ -41,6 +41,10 @@ return [
 
     // Dev Mode (see https://craftcms.com/support/dev-mode)
     'devMode' => true,
+
+    // Backup and restore commands for MAMP
+    'backupCommand' => getenv('BACKUP_COMMAND'),
+    'restoreCommand' => getenv('RESTORE_COMMAND'),
   ],
 
   // Staging environment settings

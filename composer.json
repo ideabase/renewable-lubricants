@@ -1,13 +1,13 @@
 {
   "require": {
-    "craftcms/cms": "3.4.9",
+    "craftcms/cms": "3.4.22.1",
     "vlucas/phpdotenv": "^2.4.0",
-    "craftcms/redactor": "2.6.0.1",
-    "craftcms/commerce": "3.0.11",
-    "craftcms/contact-form": "2.2.6",
-    "rias/craft-contact-form-extensions": "1.2.0",
-    "doublesecretagency/craft-smartmap": "3.2.2.1",
-    "digital-pros/commerce-authorize": "1.0.11"
+    "craftcms/redactor": "2.6.1",
+    "craftcms/commerce": "3.1.7",
+    "craftcms/contact-form": "2.2.7",
+    "doublesecretagency/craft-smartmap": "3.3.2",
+    "digital-pros/commerce-authorize": "1.0.12",
+    "hybridinteractive/craft-contact-form-extensions": "1.2.1"
   },
   "autoload": {
     "psr-4": {

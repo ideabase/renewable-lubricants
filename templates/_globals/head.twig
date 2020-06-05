@@ -1,7 +1,15 @@
 {% cache %}
 
 <meta charset="utf-8">
-<title>{% if entry|default() %}{{ entry.title }}{% elseif product|default() %}{{ product.title }}{% else %}{{ 'Renewable Lubricants' }}{% endif %}</title>
+<title>
+	{% if entry|default() %}
+		{{ entry.title }}
+	{% elseif product|default() %}
+		{{ product.title }}
+	{% else %}
+		{{ 'Renewable Lubricants' }}
+	{% endif %}
+</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -10,7 +18,7 @@
 
 {# <style>{{ source('_globals/critical.css') }}</style> #}
 
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-<link href="{{ url('assets/css/global.css') }}" type="text/css" rel="stylesheet" media="screen">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+<link href="{{ url('assets/css/global.css') }}" type="text/css" rel="stylesheet">
 
 {% endcache %}

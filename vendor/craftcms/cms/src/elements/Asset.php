@@ -30,6 +30,7 @@ use craft\errors\FileException;
 use craft\errors\VolumeObjectNotFoundException;
 use craft\events\AssetEvent;
 use craft\helpers\ArrayHelper;
+use craft\helpers\Assets;
 use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\FileHelper;
 use craft\helpers\Html;
@@ -47,6 +48,7 @@ use DateTime;
 use Twig\Markup;
 use yii\base\ErrorHandler;
 use yii\base\Exception;
+use yii\base\InvalidArgumentException;
 use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
@@ -414,6 +416,7 @@ class Asset extends Element
             'size',
             'dateModified',
             'uploader',
+            'link',
         ];
     }
 
@@ -934,7 +937,7 @@ class Asset extends Element
         /** @var Volume $volume */
         $volume = $this->getVolume();
 
-        if (!$volume->hasUrls) {
+        if (!$volume->hasUrls || !$this->folderId) {
             return null;
         }
 
@@ -972,7 +975,13 @@ class Asset extends Element
      */
     public function getThumbUrl(int $size)
     {
-        return Craft::$app->getAssets()->getThumbUrl($this, $size, $size, false);
+        if ($this->width && $this->height) {
+            list($width, $height) = Assets::scaledDimensions($this->width, $this->height, $size, $size);
+        } else {
+            $width = $height = $size;
+        }
+
+        return Craft::$app->getAssets()->getThumbUrl($this, $width, $height, false);
     }
 
     /**
@@ -988,6 +997,7 @@ class Asset extends Element
     {
         $assetsService = Craft::$app->getAssets();
         $srcsets = [];
+        list($width, $height) = Assets::scaledDimensions($this->width ?? 0, $this->height ?? 0, $width, $height);
         $thumbSizes = [
             [$width, $height],
             [$width * 2, $height * 2],
@@ -1057,7 +1067,7 @@ class Asset extends Element
 
     public function getHeight($transform = null)
     {
-        return $this->_getDimension('height', $transform);
+        return $this->_dimensions($transform)[1];
     }
 
     /**
@@ -1078,7 +1088,7 @@ class Asset extends Element
      */
     public function getWidth($transform = null)
     {
-        return $this->_getDimension('width', $transform);
+        return $this->_dimensions($transform)[0];
     }
 
     /**
@@ -1559,7 +1569,10 @@ class Asset extends Element
         // Set the field layout
         /** @var Volume $volume */
         $volume = Craft::$app->getAssets()->getFolderById($folderId)->getVolume();
-        $this->fieldLayoutId = $volume->fieldLayoutId;
+
+        if (!$volume instanceof Temp) {
+            $this->fieldLayoutId = $volume->fieldLayoutId;
+        }
 
         return parent::beforeSave($isNew);
     }
@@ -1729,50 +1742,44 @@ class Asset extends Element
     }
 
     /**
-     * Return a dimension of the image.
+     * Returns the width and height of the image.
      *
-     * @param string $dimension 'height' or 'width'
      * @param AssetTransform|string|array|null $transform
-     * @return int|float|null
+     * @return array
      */
-    private function _getDimension(string $dimension, $transform)
+    private function _dimensions($transform): array
     {
         if ($this->kind !== self::KIND_IMAGE) {
-            return null;
+            return [null, null];
+        }
+
+        if (!$this->_width || !$this->_height) {
+            Craft::warning("Asset {$this->id} is missing its width or height", __METHOD__);
+            return [null, null];
         }
 
         $transform = $transform ?? $this->_transform;
 
-        if ($transform !== null && !Image::canManipulateAsImage($this->getExtension())) {
-            $transform = null;
-        }
-
-        if ($transform === null) {
-            return $this->{'_' . $dimension};
+        if ($transform === null || !Image::canManipulateAsImage($this->getExtension())) {
+            return [$this->_width, $this->_height];
         }
 
         $transform = Craft::$app->getAssetTransforms()->normalizeTransform($transform);
 
-        $dimensions = [
-            'width' => $transform->width,
-            'height' => $transform->height
-        ];
-
-        if (!$transform->width || !$transform->height) {
-            // Fill in the blank
-            $dimensionArray = Image::calculateMissingDimension($dimensions['width'], $dimensions['height'], $this->_width, $this->_height);
-            $dimensions['width'] = (int)$dimensionArray[0];
-            $dimensions['height'] = (int)$dimensionArray[1];
+        if ($this->_width < $transform->width && $this->_height < $transform->height && !Craft::$app->getConfig()->getGeneral()->upscaleImages) {
+            return [$this->_width, $this->_height];
         }
+
+        list($width, $height) = Image::calculateMissingDimension($transform->width, $transform->height, $this->_width, $this->_height);
 
         // Special case for 'fit' since that's the only one whose dimensions vary from the transform dimensions
         if ($transform->mode === 'fit') {
-            $factor = max($this->_width / $dimensions['width'], $this->_height / $dimensions['height']);
-            $dimensions['width'] = (int)round($this->_width / $factor);
-            $dimensions['height'] = (int)round($this->_height / $factor);
+            $factor = max($this->_width / $width, $this->_height / $height);
+            $width = (int)round($this->_width / $factor);
+            $height = (int)round($this->_height / $factor);
         }
 
-        return $dimensions[$dimension];
+        return [$width, $height];
     }
 
     /**
@@ -1850,6 +1857,7 @@ class Asset extends Element
         $this->folderId = $folderId;
         $this->folderPath = $newFolder->path;
         $this->filename = $filename;
+        $this->_volume = $newVolume;
 
         // If there was a new file involved, update file data.
         if ($tempPath) {
